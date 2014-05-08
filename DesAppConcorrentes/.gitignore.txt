@@ -1,6 +1,0 @@
-/**/.metadata
-
-/**/.settings
-
-/**/bin
-*.class

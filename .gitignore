@@ -19,3 +19,12 @@ Thumbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
+
+
+#java
+**/.metadata
+
+**/.settings
+
+**/bin
+*.class
