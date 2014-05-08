@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entregas", "Entregas\Entregas.csproj", "{14D239FA-73D3-4F90-99C8-C095EF44B773}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entregas.Core", "Entregas.Core\Entregas.Core.csproj", "{FECF4AC7-B505-4018-9E0E-500E4E42183E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14D239FA-73D3-4F90-99C8-C095EF44B773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D239FA-73D3-4F90-99C8-C095EF44B773}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D239FA-73D3-4F90-99C8-C095EF44B773}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D239FA-73D3-4F90-99C8-C095EF44B773}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECF4AC7-B505-4018-9E0E-500E4E42183E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECF4AC7-B505-4018-9E0E-500E4E42183E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECF4AC7-B505-4018-9E0E-500E4E42183E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECF4AC7-B505-4018-9E0E-500E4E42183E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
