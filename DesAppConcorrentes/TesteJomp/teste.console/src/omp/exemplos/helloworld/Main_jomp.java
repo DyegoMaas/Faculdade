@@ -1,4 +1,4 @@
-package omp.exemplos;
+package omp.exemplos.helloworld;
 
 import jomp.runtime.*;
 public class Main_jomp {
