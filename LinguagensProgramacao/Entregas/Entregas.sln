@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entregas", "Entregas\Entregas.csproj", "{14D239FA-73D3-4F90-99C8-C095EF44B773}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entregas.WPF", "Entregas\Entregas.WPF.csproj", "{14D239FA-73D3-4F90-99C8-C095EF44B773}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entregas.Core", "Entregas.Core\Entregas.Core.csproj", "{FECF4AC7-B505-4018-9E0E-500E4E42183E}"
 EndProject
