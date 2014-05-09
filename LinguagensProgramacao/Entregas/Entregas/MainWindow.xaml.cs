@@ -77,14 +77,13 @@ namespace Entregas
                     }
                 });
 
+                var duracaoLoopGrafico = TimeSpan.FromMilliseconds(50);
                 var visualizar = new Task(() =>
                 {
-                    var duracaoLoop = TimeSpan.FromMilliseconds(50);
-                    while (true)
+                    while (filaEntrega.QuantidadeEntregue < configuracoes.NumeroTotalProdutos)
                     {
-
-                        AtualizarGraficos(filaEntrega.ObterQuantidadeEntregasPendentes(), duracaoLoop);
-                        Thread.Sleep(duracaoLoop.Milliseconds);
+                        AtualizarGraficos(filaEntrega.ObterQuantidadeEntregasPendentes(), duracaoLoopGrafico);
+                        Thread.Sleep(duracaoLoopGrafico.Milliseconds);
                     }
                 });
 
@@ -93,11 +92,7 @@ namespace Entregas
                 visualizar.Start();
 
                 Task.WaitAll(produzir, consumir, visualizar);
-
-                Dispatcher.BeginInvoke(new Action(() => 
-                {
-                    MessageBox.Show("concluido com {0} itens".FormatWith(filaEntrega.ObterQuantidadeEntregasPendentes()), "concluido");
-                }));
+                AtualizarGraficos(filaEntrega.ObterQuantidadeEntregasPendentes(), duracaoLoopGrafico);
             }
         }
 
@@ -119,6 +114,12 @@ namespace Entregas
 
                 var animacao = new DoubleAnimation(BarraCapacidade.Height, alturaBarra, new Duration(duracaoLoop));
                 BarraCapacidade.BeginAnimation(Rectangle.HeightProperty, animacao);
+            }));
+
+            LblContador.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                string descricaoCapacidade = "{0}/{1}".FormatWith(aguardandoEntrega.ToString("D3"), configuracoes.CapacidadeMaxima.ToString("D3"));
+                LblContador.Content = descricaoCapacidade;
             }));
         }
 

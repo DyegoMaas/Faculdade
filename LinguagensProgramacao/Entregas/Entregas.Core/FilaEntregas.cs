@@ -10,15 +10,20 @@ namespace Entregas.Core
 {
     public class FilaEntregas : IDisposable
     {
-        private readonly int capacidadeEntrega;
         private readonly TimeSpan intervaloTentativasAgendamento;
         private readonly TimeSpan intervaloTentativasEntrega;
 
         private readonly BlockingCollection<Produto> entregas;
 
+        private int quantidadeEntregue;
+
+        public int QuantidadeEntregue
+        {
+            get { return quantidadeEntregue; }
+        }
+
         public FilaEntregas(int capacidadeEntrega, TimeSpan intervaloTentativasAgendamento, TimeSpan intervaloTentativasEntrega)
         {
-            this.capacidadeEntrega = capacidadeEntrega;
             this.intervaloTentativasAgendamento = intervaloTentativasAgendamento;
             this.intervaloTentativasEntrega = intervaloTentativasEntrega;
             entregas = new BlockingCollection<Produto>(new ConcurrentQueue<Produto>(), capacidadeEntrega);
@@ -41,20 +46,25 @@ namespace Entregas.Core
                 Thread.Sleep(intervaloTentativasEntrega);
             }
             Console.WriteLine("item OBTIDO");
+            Interlocked.Increment(ref quantidadeEntregue);
 
             return produtoParaEntrega;
         }
 
         public int ObterQuantidadeEntregasPendentes()
         {
-            lock (entregas)
+            //lock (entregas)
             {
-                return entregas.Count;
+                if (!disposed)
+                    return entregas.Count;
+                return 0;
             }    
         }
 
+        private bool disposed;
         public void Dispose()
         {
+            disposed = true;
             entregas.Dispose();
         }
     }

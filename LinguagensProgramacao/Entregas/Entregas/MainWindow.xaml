@@ -14,7 +14,8 @@
         <Label Content="Capacidade&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Height="26"/>
 
         <Canvas HorizontalAlignment="Left" Height="273" Margin="10,106,0,0" VerticalAlignment="Top" Width="528" Background="Black" Grid.ColumnSpan="3">
-            <Rectangle Name="BarraCapacidade" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="238" Stroke="Black" VerticalAlignment="Bottom" Width="100" Canvas.Left="42" Canvas.Top="34" RadiusY="13.5" RadiusX="13.5" RenderTransformOrigin="0.51,1"/>
+            <Rectangle Name="BarraCapacidade" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="238" Stroke="Black" VerticalAlignment="Bottom" Width="97" Canvas.Left="45" Canvas.Top="35" RadiusY="23.5" RadiusX="23.5" RenderTransformOrigin="0.51,1"/>
+            <Label Name="LblContador" Content="0/10" Foreground="Black" Canvas.Left="64" Canvas.Top="35" FontWeight="Bold" Width="56"></Label>
             <Label Content="Capacidade utilizada" Canvas.Left="30" Canvas.Top="3" Foreground="White" Width="125" RenderTransformOrigin="0.48,-0.115" />
         </Canvas>
 
