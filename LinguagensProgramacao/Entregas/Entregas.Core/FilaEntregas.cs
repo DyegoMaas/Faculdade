@@ -11,13 +11,16 @@ namespace Entregas.Core
     public class FilaEntregas : IDisposable
     {
         private readonly int capacidadeEntrega;
-        private readonly TimeSpan intervaloTentativas;
+        private readonly TimeSpan intervaloTentativasAgendamento;
+        private readonly TimeSpan intervaloTentativasEntrega;
+
         private readonly BlockingCollection<Produto> entregas;
 
-        public FilaEntregas(int capacidadeEntrega, TimeSpan intervaloTentativas)
+        public FilaEntregas(int capacidadeEntrega, TimeSpan intervaloTentativasAgendamento, TimeSpan intervaloTentativasEntrega)
         {
             this.capacidadeEntrega = capacidadeEntrega;
-            this.intervaloTentativas = intervaloTentativas;
+            this.intervaloTentativasAgendamento = intervaloTentativasAgendamento;
+            this.intervaloTentativasEntrega = intervaloTentativasEntrega;
             entregas = new BlockingCollection<Produto>(new ConcurrentQueue<Produto>(), capacidadeEntrega);
         }
 
@@ -25,7 +28,7 @@ namespace Entregas.Core
         {
             while(!entregas.TryAdd(produto))
             {
-                Thread.Sleep(intervaloTentativas);
+                Thread.Sleep(intervaloTentativasAgendamento);
             }
             Console.WriteLine("item INSERIDO");
         }
@@ -35,7 +38,7 @@ namespace Entregas.Core
             Produto produtoParaEntrega;
             while (!entregas.TryTake(out produtoParaEntrega))
             {
-                Thread.Sleep(intervaloTentativas);
+                Thread.Sleep(intervaloTentativasEntrega);
             }
             Console.WriteLine("item OBTIDO");
 
