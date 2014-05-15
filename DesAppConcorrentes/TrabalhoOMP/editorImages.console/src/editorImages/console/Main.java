@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import editorImagens.core.EditorImagens;
 
 public class Main {
-	public static void Main(String[] args){
+	public static void main(String[] args){
 		ProcessadorEntradas processadorEntradas = new ProcessadorEntradas();
 		
 		try{
