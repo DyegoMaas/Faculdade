@@ -1,4 +1,4 @@
-package omp.exemplos.exemplo3_2;
+package omp.exemplos.exemplo3_3;
 
 import java.util.Random;
 
