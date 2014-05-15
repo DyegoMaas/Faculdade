@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,8 @@ namespace Entregas
         private class Configuracoes{
             public int CapacidadeMaxima { get; set; }
             public int NumeroTotalProdutos { get; set; }
+            public int NumeroProdutores { get; set; }
+            public int NumeroConsumidores { get; set; }
             public TimeSpan DelayAgendamento { get; set; }
             public TimeSpan DelayEntregas { get; set; }
         }
@@ -48,6 +51,8 @@ namespace Entregas
             configuracoes = new Configuracoes {
                 CapacidadeMaxima = ValorInteiro(TbCapacidade),
                 NumeroTotalProdutos = ValorInteiro(TbItens),
+                NumeroProdutores = ValorInteiro(TbProdutores),
+                NumeroConsumidores = ValorInteiro(TbConsumidores),
                 DelayAgendamento = TimeSpan.FromMilliseconds(ValorInteiro(TbDelayAgendamento)),
                 DelayEntregas = TimeSpan.FromMilliseconds(ValorInteiro(TbDelayEntrega)),
             };
@@ -57,49 +62,100 @@ namespace Entregas
         
         private void Executar(Configuracoes configuracoes)
         {
-            using (var filaEntrega = new FilaEntregas(configuracoes.CapacidadeMaxima, configuracoes.DelayAgendamento, configuracoes.DelayEntregas))
+            //using (var filaEntrega = new FilaEntregas(configuracoes.CapacidadeMaxima, configuracoes.DelayAgendamento, configuracoes.DelayEntregas))
+            //{
+            //    var produzir = new Task(() =>
+            //    {
+            //        for (int i = 0; i < configuracoes.NumeroTotalProdutos; i++)
+            //        {
+            //            var produto = new Produto(NomeAleatorio());
+            //            filaEntrega.AgendarEntrega(produto);
+            //        }
+            //    });
+
+            //    var consumir = new Task(() =>
+            //    {
+            //        for (int i = 0; i < configuracoes.NumeroTotalProdutos; i++)
+            //        {
+            //            Produto produtoEntrege = filaEntrega.EfetuarEntrega();
+            //            Console.WriteLine("Produto {0} entregue.", produtoEntrege);
+            //        }
+            //    });
+
+            //    var duracaoLoopGrafico = TimeSpan.FromMilliseconds(50);
+            //    var visualizar = new Task(() =>
+            //    {
+            //        while (filaEntrega.QuantidadeEntregue < configuracoes.NumeroTotalProdutos)
+            //        {
+            //            AtualizarGraficos(filaEntrega.ObterQuantidadeEntregasPendentes(), duracaoLoopGrafico);
+            //            Thread.Sleep(duracaoLoopGrafico.Milliseconds);
+            //        }
+            //    });
+
+            //    produzir.Start();
+            //    consumir.Start();
+            //    visualizar.Start();
+
+            //    Task.WaitAll(produzir, consumir, visualizar);
+            //    AtualizarGraficos(filaEntrega.ObterQuantidadeEntregasPendentes(), duracaoLoopGrafico);
+            //}
+
+            using (var filaEntregas = new BlockingCollection<Produto>(new ConcurrentQueue<Produto>(), configuracoes.CapacidadeMaxima))
             {
-                var produzir = new Task(() =>
+                var produzir = new Action(() =>
                 {
                     for (int i = 0; i < configuracoes.NumeroTotalProdutos; i++)
                     {
                         var produto = new Produto(NomeAleatorio());
-                        filaEntrega.AgendarEntrega(produto);
+                        filaEntregas.Add(produto);
+                        Console.WriteLine("Produto {0} agendado para entrega.", produto);
+                        Thread.Sleep(configuracoes.DelayAgendamento);
                     }
+                    filaEntregas.CompleteAdding();
                 });
 
-                var consumir = new Task(() =>
+                var consumir = new Action(() =>
                 {
-                    for (int i = 0; i < configuracoes.NumeroTotalProdutos; i++)
+                    foreach (var produto in filaEntregas.GetConsumingEnumerable())
                     {
-                        Produto produtoEntrege = filaEntrega.EfetuarEntrega();
+                        Produto produtoEntrege = filaEntregas.Take();
                         Console.WriteLine("Produto {0} entregue.", produtoEntrege);
+                        Thread.Sleep(configuracoes.DelayEntregas);
                     }
                 });
 
                 var duracaoLoopGrafico = TimeSpan.FromMilliseconds(50);
-                var visualizar = new Task(() =>
+                var visualizador = new Task(() =>
                 {
-                    while (filaEntrega.QuantidadeEntregue < configuracoes.NumeroTotalProdutos)
+                    int pendentes = 0;
+                    while ((pendentes = filaEntregas.Count) < configuracoes.NumeroTotalProdutos)
                     {
-                        AtualizarGraficos(filaEntrega.ObterQuantidadeEntregasPendentes(), duracaoLoopGrafico);
+                        AtualizarGraficos(pendentes, duracaoLoopGrafico);
                         Thread.Sleep(duracaoLoopGrafico.Milliseconds);
                     }
                 });
 
-                produzir.Start();
-                consumir.Start();
-                visualizar.Start();
+                var tasks = new List<Task>();
+                for (int i = 0; i < configuracoes.NumeroProdutores; i++)
+                {
+                    tasks.Add(new Task(produzir));
+                }
+                for (int i = 0; i < configuracoes.NumeroConsumidores; i++)
+                {
+                    tasks.Add(new Task(consumir));
+                }
+                tasks.Add(visualizador);
 
-                Task.WaitAll(produzir, consumir, visualizar);
-                AtualizarGraficos(filaEntrega.ObterQuantidadeEntregasPendentes(), duracaoLoopGrafico);
+                tasks.ForEach(t => t.Start());
+                Task.WaitAll(tasks.ToArray());
+                AtualizarGraficos(0, duracaoLoopGrafico);
             }
         }
 
         private string NomeAleatorio()
         {
             var random = new Random(DateTime.Now.Millisecond);
-            return random.Next(1000).ToRoman();
+            return random.Next(1, 1000).ToRoman();
         }
 
         private void AtualizarGraficos(int aguardandoEntrega, TimeSpan duracaoLoop)

@@ -1,4 +1,4 @@
-package omp.exemplos.exemplo3_1;
+package omp.exemplos.exemplo3_2;
 
 import java.util.Random;
 
@@ -9,19 +9,17 @@ public class Main {
 	public static void main(String[] args) {
 
 		int[][] array = arrayValoresAleatorios(100, 25);
-		
-		int coluna = 0;
+	
 		OMP.setNumThreads(15);
 		
 		int somaTotal = 0;
-		//omp parallel private(meuId) reduction(+:somaTotal)
-		{
-			coluna = OMP.getThreadNum();
-			
-			int[] linha = array[coluna];
-			for (int i = 0; i < linha.length; i++) {
-				somaTotal += linha[i];
-			}
+		int coluna = 0;
+		
+		//omp parallel for private(coluna) reduction(+:somaTotal)
+		for (coluna = 0; coluna < array.length; coluna++) {
+			for (int linha = 0; linha < array[coluna].length; linha++) {
+				somaTotal += array[coluna][linha];	
+			}			
 		}
 		
 		System.out.println("Soma total: " + somaTotal);

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Entregas.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Gerenciador de entregas" Height="419" Width="556">
+        Title="Escoamento de entregas" Height="419" Width="556">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="126*"/>
@@ -36,6 +36,12 @@
             </Label.Content>
         </Label>
         <TextBox x:Name="TbDelayEntrega" HorizontalAlignment="Left" Height="23" Margin="195,56,0,0" TextWrapping="Wrap" Text="10&#xA;" VerticalAlignment="Top" Width="67" Grid.Column="2" PreviewTextInput="TbDelayEntrega_PreviewTextInput"/>
+        
+        <TextBox x:Name="TbProdutores" HorizontalAlignment="Left" Height="23" Margin="97,54,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="67" Grid.ColumnSpan="2" PreviewTextInput="TbCapacidade_PreviewTextInput"/>
+        <Label Content="Produtores" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Height="26"/>
+
+        <TextBox x:Name="TbConsumidores" HorizontalAlignment="Left" Height="23" Margin="97,82,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="67" Grid.ColumnSpan="2" PreviewTextInput="TbCapacidade_PreviewTextInput"/>
+        <Label Content="Consumidores" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Height="26"/>
 
     </Grid>
 </Window>

@@ -9,8 +9,7 @@ public class Main_jomp {
 
 	public static void main(String[] args) {
 
-//		int[][] array = arrayValoresAleatorios(100, 25);
-		int[][] array = arrayValoresAleatorios(1, 3);
+		int[][] array = arrayValoresAleatorios(100, 25);
 	
 		OMP.setNumThreads(15);
 		

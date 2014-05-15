@@ -40,6 +40,7 @@ namespace Entregas.Core
 
         public Produto EfetuarEntrega()
         {
+            
             Produto produtoParaEntrega;
             while (!entregas.TryTake(out produtoParaEntrega))
             {
