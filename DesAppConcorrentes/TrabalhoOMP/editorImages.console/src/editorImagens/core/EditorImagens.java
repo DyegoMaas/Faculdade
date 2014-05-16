@@ -1,21 +1,18 @@
 package editorImagens.core;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 public class EditorImagens {
 
-	public static BufferedImage carregarImagem(String caminho) {
-		BufferedImage bimg = null;
-		try {
-
-			bimg = ImageIO.read(new File(caminho));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return bimg;
+	public void avacalharImagem(String input, String output){
+		BufferedImage imagem = ImageUtil.carregarImagem(input);
+		
+		Graphics g = imagem.getGraphics();
+		g.setColor(Color.GREEN);
+		g.fillOval(10, 20, 300, 100);
+		g.drawOval(10, 10, 300, 100);
 	}
 
 }
