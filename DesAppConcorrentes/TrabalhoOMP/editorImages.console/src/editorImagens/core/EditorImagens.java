@@ -6,9 +6,7 @@ import java.awt.image.BufferedImage;
 
 public class EditorImagens {
 
-	public void avacalharImagem(String input, String output){
-		BufferedImage imagem = ImageUtil.carregarImagem(input);
-		
+	public void avacalharImagem(BufferedImage imagem){
 		Graphics g = imagem.getGraphics();
 		g.setColor(Color.GREEN);
 		g.fillOval(10, 20, 300, 100);

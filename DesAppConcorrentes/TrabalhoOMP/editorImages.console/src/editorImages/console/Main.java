@@ -1,9 +1,14 @@
 package editorImages.console;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.towel.swing.img.JImagePanel;
 
@@ -20,26 +25,39 @@ public class Main {
 		
 		try{
 			Entradas entradas = processadorEntradas.ProcessarEntradas(args);
-			
-//			 editor.carregarImagem(entradas.getCaminhoArquivo());
-//			
-//			System.out.printf("%dx%d", imagem.getWidth(), imagem.getHeight());
-			
-			
-			JFrame frame = new JFrame("Tutorials");
-			main.loadAndDisplayImage(frame, entradas);			
+						
+			main.loadAndDisplayImage(entradas);			
 		}
 		catch(Exception excecao){
 			System.out.println("Erro: " + excecao);
 		}
 	}	
 	
-	public void loadAndDisplayImage(JFrame frame, Entradas entradas) {
-		BufferedImage imagem = ImageUtil.carregarImagem(entradas.getCaminhoArquivo());
-
+	public void loadAndDisplayImage(Entradas entradas) {
+		final BufferedImage imagem = ImageUtil.carregarImagem(entradas.getCaminhoArquivo());
+		
+		JPanel panelGeral = new JPanel();
+		
+		JFrame frame = new JFrame("Tutorials");
+		panelGeral.setLayout(new BoxLayout(panelGeral, BoxLayout.Y_AXIS));
+		frame.add(panelGeral);
+		
+		JButton btAvacalhar = new JButton("Avacalhar");
+		btAvacalhar.setPreferredSize(new Dimension(100, 30));
+		panelGeral.add(btAvacalhar);
+		btAvacalhar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editor.avacalharImagem(imagem);				
+			}
+		});
+		
 		JImagePanel panel = new JImagePanel(imagem);
-        frame.setPreferredSize(new Dimension(imagem.getWidth(), imagem.getHeight()));
-        frame.add(panel);
+		panelGeral.add(panel);
+		
+        frame.setPreferredSize(new Dimension(imagem.getWidth(), imagem.getHeight() + 50));
+        frame.add(panelGeral);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
