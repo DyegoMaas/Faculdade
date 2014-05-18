@@ -42,6 +42,9 @@ public class Main {
 		panelGeral.setLayout(new BoxLayout(panelGeral, BoxLayout.Y_AXIS));
 		frame.add(panelGeral);
 		
+		final JImagePanel imagePanel = new JImagePanel(imagem);
+		panelGeral.add(imagePanel);
+		
 		JButton btAvacalhar = new JButton("Avacalhar");
 		btAvacalhar.setPreferredSize(new Dimension(100, 30));
 		panelGeral.add(btAvacalhar);
@@ -49,12 +52,11 @@ public class Main {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				editor.avacalharImagem(imagem);				
+				editor.avacalharImagem(imagem);	
+				imagePanel.repaint();
 			}
-		});
-		
-		JImagePanel panel = new JImagePanel(imagem);
-		panelGeral.add(panel);
+		});		
+
 		
         frame.setPreferredSize(new Dimension(imagem.getWidth(), imagem.getHeight() + 50));
         frame.add(panelGeral);
