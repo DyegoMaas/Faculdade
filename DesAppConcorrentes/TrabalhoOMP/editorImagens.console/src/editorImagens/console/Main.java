@@ -12,12 +12,13 @@ import javax.swing.JPanel;
 
 import com.towel.swing.img.JImagePanel;
 
-import editorImagens.core.EditorImagens;
+import editorImagens.core.EditorImagensFactory;
+import editorImagens.core.IEditorImagens;
 import editorImagens.core.ImageUtil;
 
 public class Main {
 	
-	private EditorImagens editor = new EditorImagens();
+	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(true);
 	
 	public static void main(String[] args){
 		Main main = new Main();

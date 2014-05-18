@@ -1,11 +1,22 @@
 package editorImagens.core;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import jomp.runtime.OMP;
 
-public class EditorImagens implements IEditorImagens{
+public class EditorImagens_jomp {
+
+	public void avacalharImagem(BufferedImage imagem){
+		Graphics g = imagem.getGraphics();
+		g.setColor(Color.GREEN);
+		g.fillOval(10, 20, 300, 100);
+		g.drawOval(10, 10, 300, 100);
+	}
 
 	public void mediana(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
