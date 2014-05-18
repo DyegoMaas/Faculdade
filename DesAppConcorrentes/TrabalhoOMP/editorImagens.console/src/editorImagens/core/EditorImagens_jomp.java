@@ -8,7 +8,7 @@ import jomp.runtime.OMP;
 public class EditorImagens_jomp implements IEditorImagens {
 
 
-	public void mediana(BufferedImage imagem, int windowWidth, int windowHeight){
+	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
 		
 		int imageWidth = imagem.getWidth();
@@ -164,6 +164,12 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
   }
 }
 // OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
+
+@Override
+public void mediana(BufferedImage imagem) {
+	// TODO Auto-generated method stub
+	
+}
 
 }
 

@@ -8,8 +8,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.towel.swing.img.JImagePanel;
@@ -20,7 +18,7 @@ import editorImagens.core.ImageUtil;
 
 public class Main {
 	
-	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(true);
+	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(false);
 	
 	public static void main(String[] args){
 		Main main = new Main();
@@ -48,26 +46,25 @@ public class Main {
 		final JImagePanel imagePanel = new JImagePanel(imagem);
 		panelGeral.add(imagePanel);
 		
-		JButton btAvacalhar = new JButton("Mediana");
-		btAvacalhar.setPreferredSize(new Dimension(100, 30));
-		panelGeral.add(btAvacalhar);
-		btAvacalhar.addActionListener(new ActionListener() {
-			
+		JPanel panelBotoes = new JPanel();
+		panelBotoes.setLayout(new BoxLayout(panelBotoes, BoxLayout.X_AXIS));
+		panelGeral.add(panelBotoes);
+		
+		criarBotao(panelBotoes, imagem, imagePanel, "Blur", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.mediana(imagem, 9, 9);	
+				editor.blur(imagem, 9, 9);	
 				imagePanel.repaint();
 			}
-		});		
+		});
 		
-		JMenuBar menuBar = new JMenuBar();
-		JMenuItem item = new JMenuItem("Teste");
-		menuBar.add(item);
-		
-		JMenuItem item2 = new JMenuItem("Teste 2");
-		menuBar.add(item2);
-		panelGeral.add(menuBar);
-
+		criarBotao(panelBotoes, imagem, imagePanel, "Mediana", new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				editor.mediana(imagem);	
+				imagePanel.repaint();
+			}
+		});
 		
         frame.setPreferredSize(new Dimension(imagem.getWidth(), imagem.getHeight() + 50));
         frame.add(panelGeral);
@@ -77,4 +74,11 @@ public class Main {
         frame.setVisible(true);
 	}
 	
+	private void criarBotao(JPanel panel, final BufferedImage imagem, final JImagePanel imagePanel, String texto, ActionListener acao){
+		JButton btAvacalhar = new JButton(texto);
+		btAvacalhar.setPreferredSize(new Dimension(100, 30));		
+		btAvacalhar.addActionListener(acao);
+		
+		panel.add(btAvacalhar);
+	}
 }

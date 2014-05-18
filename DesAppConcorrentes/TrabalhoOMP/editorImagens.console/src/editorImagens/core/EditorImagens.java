@@ -7,7 +7,7 @@ import jomp.runtime.OMP;
 
 public class EditorImagens implements IEditorImagens{
 
-	public void mediana(BufferedImage imagem, int windowWidth, int windowHeight){
+	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
 		
 		int imageWidth = imagem.getWidth();
@@ -53,6 +53,12 @@ public class EditorImagens implements IEditorImagens{
 //				                   colorArray[fx][fy] := inputPixelValue[x + fx - edgex][y + fy - edgey]
 //				           sort all entries in colorArray[][]
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
+	}
+
+	@Override
+	public void mediana(BufferedImage imagem) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
