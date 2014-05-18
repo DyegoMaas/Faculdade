@@ -32,18 +32,16 @@ public class EditorImagens {
 					}
 				}
 				
-				for (int[] array : colorArray) {
-					java.util.Arrays.sort(array);	
-				}
-				
 				Arrays.sort(colorArray, new Comparator<int[]>() {
-		            @Override
-		            public int compare(final int[] entry1, final int[] entry2) {
-		                final Integer time1 = entry1[0];
-		                final Integer time2 = entry2[0];
-		                return time1.compareTo(time2);
-		            }
-		        });
+				    public int compare(int[] a, int[] b) {
+				        return Integer.compare(a[0], b[0]);
+				    }
+				});
+				
+				//TODO não deveria ser necessário fazer essa ordenação
+				for (int[] array : colorArray) {
+					Arrays.sort(array);	
+				}
 				
 				int mediana = colorArray[windowWidth / 2][windowHeight / 2];
 				imagem.setRGB(x, y, mediana);
