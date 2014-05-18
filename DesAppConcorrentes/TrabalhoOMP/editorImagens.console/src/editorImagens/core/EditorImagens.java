@@ -17,15 +17,20 @@ public class EditorImagens implements IEditorImagens{
 		int edgeY = (windowHeight / 2); //rounded down
 
 		int xJomp = 0;
-		//omp parallel for private(xJomp)
+		int y = 0;
+		
+		//variáveis do algoritmo que devem ser declaradas aqui fora (do contrário as threads ficam travadas e ocorre uso excessivo de CPU)
+		int[][] colorArray = new int[windowWidth][windowHeight];		
+		int fx = 0, fy = 0;
+		int iArrays = 0;
+		int mediana = 0;				
+		
+		//omp parallel for private(xJomp, y, colorArray, fx, fy, iArrays, mediana)
 		for (xJomp = 0; xJomp < (imageWidth - edgeX * 2); xJomp++) {
 			int x = xJomp + edgeX;
-			for (int y = edgeY; y < (imageHeight - edgeY); y++) {
-				int[][] colorArray = new int[windowWidth][windowHeight];
-				
-				int fx = 0;
+			for (y = edgeY; y < (imageHeight - edgeY); y++) {
 				for (fx = 0; fx < windowWidth; fx++) {
-					for (int fy = 0; fy < windowHeight; fy++) {
+					for (fy = 0; fy < windowHeight; fy++) {
 						colorArray[fx][fy] = imagem.getRGB(x + fx - edgeX, y + fy - edgeY); //&0xff 
 					}
 				}
@@ -33,11 +38,11 @@ public class EditorImagens implements IEditorImagens{
 				Arrays.sort(colorArray, ImageUtil.getIntArrayComparator());
 				
 				//TODO não deveria ser necessário fazer essa ordenação
-				for (int i = 0; i < colorArray.length; i++) {
-					Arrays.sort(colorArray[i]);
+				for (iArrays = 0; iArrays < colorArray.length; iArrays++) {
+					Arrays.sort(colorArray[iArrays]);
 				}
 				
-				int mediana = colorArray[windowWidth / 2][windowHeight / 2];
+				mediana = colorArray[windowWidth / 2][windowHeight / 2];
 				imagem.setRGB(x, y, mediana);
 			}	
 		}		
@@ -55,9 +60,16 @@ public class EditorImagens implements IEditorImagens{
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 
-	@Override
 	public void mediana(BufferedImage imagem) {
-		// TODO Auto-generated method stub
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		for (int x = 0; x < imageWidth; x++) {
+			for (int y = 0; y < imageHeight; y++) {
+								
+			}
+			
+		}
 		
 	}
 }

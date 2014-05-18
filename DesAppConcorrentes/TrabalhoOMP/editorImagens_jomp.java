@@ -8,7 +8,7 @@ import jomp.runtime.OMP;
 public class EditorImagens_jomp implements IEditorImagens_jomp {
 
 
-	public void mediana(BufferedImage imagem, int windowWidth, int windowHeight){
+	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
 		
 		int imageWidth = imagem.getWidth();
@@ -18,6 +18,15 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 		int edgeY = (windowHeight / 2); //rounded down
 
 		int xJomp = 0;
+		int y = 0;
+		int[][] colorArray = new int[windowWidth][windowHeight];
+		
+		int fx = 0;
+		int fy = 0;
+		
+		int mediana = 0;
+		
+		int iArrays = 0;
 
 // OMP PARALLEL BLOCK BEGINS
 {
@@ -63,6 +72,19 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 
+	public void mediana(BufferedImage imagem) {
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		for (int x = 0; x < imageWidth; x++) {
+			for (int y = 0; y < imageHeight; y++) {
+								
+			}
+			
+		}
+		
+	}
+
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class0 extends jomp.runtime.BusyTask {
   // shared variables
@@ -80,6 +102,12 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
   // firstprivate variables + init
   // private variables
   int xJomp;
+  int y;
+  int [ ] [ ] colorArray;
+  int fx;
+  int fy;
+  int iArrays;
+  int mediana;
   // reduction variables, init to default
     // OMP USER CODE BEGINS
 
@@ -112,12 +140,11 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                                 // OMP USER CODE BEGINS
  {
 			int x = xJomp + edgeX;
-			for (int y = edgeY; y < (imageHeight - edgeY); y++) {
-				int[][] colorArray = new int[windowWidth][windowHeight];
-				
-				int fx = 0;
+			for (y = edgeY; y < (imageHeight - edgeY); y++) {
+				//int[][] colorArray = new int[windowWidth][windowHeight];
+								
 				for (fx = 0; fx < windowWidth; fx++) {
-					for (int fy = 0; fy < windowHeight; fy++) {
+					for (fy = 0; fy < windowHeight; fy++) {
 						colorArray[fx][fy] = imagem.getRGB(x + fx - edgeX, y + fy - edgeY); //&0xff 
 					}
 				}
@@ -125,11 +152,11 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
 				Arrays.sort(colorArray, ImageUtil.getIntArrayComparator());
 				
 				//TODO n\u00e3o deveria ser necess\u00e1rio fazer essa ordena\u00e7\u00e3o
-				for (int i = 0; i < colorArray.length; i++) {
-					Arrays.sort(colorArray[i]);
+				for (iArrays = 0; iArrays < colorArray.length; iArrays++) {
+					Arrays.sort(colorArray[iArrays]);
 				}
 				
-				int mediana = colorArray[windowWidth / 2][windowHeight / 2];
+				mediana = colorArray[windowWidth / 2][windowHeight / 2];
 				imagem.setRGB(x, y, mediana);
 			}	
 		}
