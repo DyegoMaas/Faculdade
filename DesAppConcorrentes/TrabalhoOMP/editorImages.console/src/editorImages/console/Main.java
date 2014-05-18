@@ -1,4 +1,4 @@
-package editorImages.console;
+package editorImagens.console;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
