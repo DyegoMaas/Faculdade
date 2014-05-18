@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.towel.swing.img.JImagePanel;
@@ -53,10 +55,18 @@ public class Main {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.mediana(imagem, 5, 5);	
+				editor.mediana(imagem, 9, 9);	
 				imagePanel.repaint();
 			}
 		});		
+		
+		JMenuBar menuBar = new JMenuBar();
+		JMenuItem item = new JMenuItem("Teste");
+		menuBar.add(item);
+		
+		JMenuItem item2 = new JMenuItem("Teste 2");
+		menuBar.add(item2);
+		panelGeral.add(menuBar);
 
 		
         frame.setPreferredSize(new Dimension(imagem.getWidth(), imagem.getHeight() + 50));

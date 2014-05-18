@@ -16,12 +16,14 @@ public class EditorImagens implements IEditorImagens{
 		int edgeX = (windowWidth / 2); //rounded down
 		int edgeY = (windowHeight / 2); //rounded down
 
-		for (int x = edgeX; x < (imageWidth - edgeX); x++) {
+		int xJomp = 0;
+		//omp parallel for private(xJomp)
+		for (xJomp = 0; xJomp < (imageWidth - edgeX * 2); xJomp++) {
+			int x = xJomp + edgeX;
 			for (int y = edgeY; y < (imageHeight - edgeY); y++) {
 				int[][] colorArray = new int[windowWidth][windowHeight];
 				
 				int fx = 0;
-				//omp parallel for private(fx)
 				for (fx = 0; fx < windowWidth; fx++) {
 					for (int fy = 0; fy < windowHeight; fy++) {
 						colorArray[fx][fy] = imagem.getRGB(x + fx - edgeX, y + fy - edgeY); //&0xff 
