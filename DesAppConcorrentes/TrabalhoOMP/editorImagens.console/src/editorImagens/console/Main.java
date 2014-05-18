@@ -21,6 +21,11 @@ public class Main {
 	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(false);
 	
 	public static void main(String[] args){
+		args = new String[]{
+				"C:\\Users\\Dyego\\Pictures\\wallpaper2835791.jpg"
+		};
+		
+		
 		Main main = new Main();
 		ProcessadorEntradas processadorEntradas = new ProcessadorEntradas();
 		
@@ -61,7 +66,7 @@ public class Main {
 		criarBotao(panelBotoes, imagem, imagePanel, "Mediana", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.mediana(imagem);	
+				editor.media(imagem);	
 				imagePanel.repaint();
 			}
 		});

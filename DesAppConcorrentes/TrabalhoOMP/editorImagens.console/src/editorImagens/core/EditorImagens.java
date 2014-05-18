@@ -1,5 +1,6 @@
 package editorImagens.core;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -60,17 +61,38 @@ public class EditorImagens implements IEditorImagens{
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 
-	public void mediana(BufferedImage imagem) {
+	public void media(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
+		int somaComponenteR = 0;
+		int somaComponenteG = 0;
+		int somaComponenteB = 0;
+		for (int x = 0; x < imageWidth; x++) {
+			
+			for (int y = 0; y < imageHeight; y++) {
+				int rgb = imagem.getRGB(x, y);
+				int r = (rgb >> 16) & 0xFF;
+				int g = (rgb >> 8) & 0xFF;
+				int b = (rgb & 0xFF);
+				
+				somaComponenteR += r;
+				somaComponenteG += g;
+				somaComponenteB += b;
+			}						
+		}	
+		
+		int numPixels = imageWidth * imageHeight;
+		int mediaR = somaComponenteR /= numPixels;
+		int mediaG = somaComponenteG /= numPixels;
+		int mediaB = somaComponenteB /= numPixels;
+		
 		for (int x = 0; x < imageWidth; x++) {
 			for (int y = 0; y < imageHeight; y++) {
-								
+				Color corMedia = new Color(mediaR, mediaG, mediaB);
+				imagem.setRGB(x, y, corMedia.getRGB());
 			}
-			
 		}
-		
 	}
 }
 

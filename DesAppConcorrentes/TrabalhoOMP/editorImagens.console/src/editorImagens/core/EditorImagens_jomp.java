@@ -72,7 +72,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 
-	public void mediana(BufferedImage imagem) {
+	public void media(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
