@@ -45,14 +45,14 @@ public class Main {
 		final JImagePanel imagePanel = new JImagePanel(imagem);
 		panelGeral.add(imagePanel);
 		
-		JButton btAvacalhar = new JButton("Avacalhar");
+		JButton btAvacalhar = new JButton("Mediana");
 		btAvacalhar.setPreferredSize(new Dimension(100, 30));
 		panelGeral.add(btAvacalhar);
 		btAvacalhar.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				editor.avacalharImagem(imagem);	
+			public void actionPerformed(ActionEvent e) {				
+				editor.mediana(imagem, 5, 5);	
 				imagePanel.repaint();
 			}
 		});		
