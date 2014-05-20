@@ -8,6 +8,7 @@ import jomp.runtime.OMP;
 
 public class EditorImagens implements IEditorImagens{
 
+	//NOK
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
 		
@@ -21,15 +22,16 @@ public class EditorImagens implements IEditorImagens{
 		int y = 0;
 		
 		//variáveis do algoritmo que devem ser declaradas aqui fora (do contrário as threads ficam travadas e ocorre uso excessivo de CPU)
-		int[][] colorArray = new int[windowWidth][windowHeight];		
 		int fx = 0, fy = 0;
 		int iArrays = 0;
 		int mediana = 0;				
 		
-		//omp parallel for private(xJomp, y, colorArray, fx, fy, iArrays, mediana)
+		//omp parallel for private(xJomp, y, fx, fy, iArrays, mediana)
 		for (xJomp = 0; xJomp < (imageWidth - edgeX * 2); xJomp++) {
 			int x = xJomp + edgeX;
 			for (y = edgeY; y < (imageHeight - edgeY); y++) {
+				int[][] colorArray = new int[windowWidth][windowHeight];
+				
 				for (fx = 0; fx < windowWidth; fx++) {
 					for (fy = 0; fy < windowHeight; fy++) {
 						colorArray[fx][fy] = imagem.getRGB(x + fx - edgeX, y + fy - edgeY); //&0xff 
@@ -61,6 +63,7 @@ public class EditorImagens implements IEditorImagens{
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 
+	//OK
 	public void media(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -68,26 +71,51 @@ public class EditorImagens implements IEditorImagens{
 		int somaComponenteR = 0;
 		int somaComponenteG = 0;
 		int somaComponenteB = 0;
-		for (int x = 0; x < imageWidth; x++) {
-			
-			for (int y = 0; y < imageHeight; y++) {
-				int rgb = imagem.getRGB(x, y);
+		int x = 0, y = 0;
+		int rgb = 0;
+//		Color corMedia = Color.black;
+		
+		int numPixels = 0;
+		int mediaR = 0;
+		int mediaG = 0;
+		int mediaB = 0;
+		//omp parallel private(somaComponenteR,somaComponenteG,somaComponenteB,x,y,rgb,numPixels,mediaR,mediaG,mediaB)
+		{
+			//omp sections
+			{
+				//omp section
+				{
+					for (x = 0; x < imageWidth; x++) {			
+						for (y = 0; y < imageHeight; y++) {
+							rgb = imagem.getRGB(x, y);
+							
+							//omp critical
+							{
+								somaComponenteR += Colors.red(rgb);
+								somaComponenteG += Colors.green(rgb);
+								somaComponenteB += Colors.blue(rgb);
+							}
+						}						
+					}					
 				
-				somaComponenteR += Colors.red(rgb);
-				somaComponenteG += Colors.green(rgb);
-				somaComponenteB += Colors.blue(rgb);
-			}						
-		}	
-		
-		int numPixels = imageWidth * imageHeight;
-		int mediaR = somaComponenteR /= numPixels;
-		int mediaG = somaComponenteG /= numPixels;
-		int mediaB = somaComponenteB /= numPixels;
-		
-		for (int x = 0; x < imageWidth; x++) {
-			for (int y = 0; y < imageHeight; y++) {
-				Color corMedia = new Color(mediaR, mediaG, mediaB);
-				imagem.setRGB(x, y, corMedia.getRGB());
+					//omp critical
+					{
+						numPixels = imageWidth * imageHeight;
+						mediaR = somaComponenteR /= numPixels;
+						mediaG = somaComponenteG /= numPixels;
+						mediaB = somaComponenteB /= numPixels;
+					}
+				}
+				
+				//omp section
+				{
+					for (x = 0; x < imageWidth; x++) {
+						for (y = 0; y < imageHeight; y++) {
+							Color corMedia = new Color(mediaR, mediaG, mediaB);
+							imagem.setRGB(x, y, corMedia.getRGB());
+						}
+					}
+				}
 			}
 		}
 	}

@@ -18,14 +18,13 @@ import editorImagens.core.ImageUtil;
 
 public class Main {
 	
-	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(false);
+	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(true);
 	
 	public static void main(String[] args){
 		args = new String[]{
 				"C:\\Users\\Dyego\\Pictures\\wallpaper2835791.jpg"
 		};
-		
-		
+				
 		Main main = new Main();
 		ProcessadorEntradas processadorEntradas = new ProcessadorEntradas();
 		
@@ -48,12 +47,10 @@ public class Main {
 		panelGeral.setLayout(new BoxLayout(panelGeral, BoxLayout.Y_AXIS));
 		frame.add(panelGeral);
 		
-		final JImagePanel imagePanel = new JImagePanel(imagem);
-		panelGeral.add(imagePanel);
+		final JImagePanel imagePanel = new JImagePanel(imagem);		
 		
 		JPanel panelBotoes = new JPanel();
-		panelBotoes.setLayout(new BoxLayout(panelBotoes, BoxLayout.X_AXIS));
-		panelGeral.add(panelBotoes);
+		panelBotoes.setLayout(new BoxLayout(panelBotoes, BoxLayout.X_AXIS));		
 		
 		criarBotao(panelBotoes, imagem, imagePanel, "Blur", new ActionListener() {			
 			@Override
@@ -63,13 +60,16 @@ public class Main {
 			}
 		});
 		
-		criarBotao(panelBotoes, imagem, imagePanel, "Mediana", new ActionListener() {			
+		criarBotao(panelBotoes, imagem, imagePanel, "Média", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
 				editor.media(imagem);	
 				imagePanel.repaint();
 			}
 		});
+		
+		panelGeral.add(panelBotoes);
+		panelGeral.add(imagePanel);
 		
         frame.setPreferredSize(new Dimension(imagem.getWidth(), imagem.getHeight() + 50));
         frame.add(panelGeral);
