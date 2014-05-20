@@ -9,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import com.towel.swing.img.JImagePanel;
 
@@ -16,21 +17,21 @@ import editorImagens.core.EditorImagensFactory;
 import editorImagens.core.IEditorImagens;
 import editorImagens.core.ImageUtil;
 
-public class Main {
+public class Main {	
 	
-	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(true);
-	
+	private JRadioButton rbUsarJomp;
+
 	public static void main(String[] args){
 		args = new String[]{
-				"C:\\Users\\Dyego\\Pictures\\wallpaper2835791.jpg"
+				//"C:\\Users\\Dyego\\Pictures\\wallpaper2835791.jpg"
+				"C:\\imagensTeste\\mass-effect.jpg"
 		};
 				
 		Main main = new Main();
 		ProcessadorEntradas processadorEntradas = new ProcessadorEntradas();
 		
 		try{
-			Entradas entradas = processadorEntradas.ProcessarEntradas(args);
-						
+			Entradas entradas = processadorEntradas.ProcessarEntradas(args);						
 			main.loadAndDisplayImage(entradas);			
 		}
 		catch(Exception excecao){
@@ -38,11 +39,16 @@ public class Main {
 		}
 	}	
 	
+	private IEditorImagens getEditorImagens(){
+		boolean usarJomp = rbUsarJomp.isSelected();
+		return new EditorImagensFactory().getEditorImagens(usarJomp);
+	}
+	
 	public void loadAndDisplayImage(Entradas entradas) {
 		final BufferedImage imagem = ImageUtil.carregarImagem(entradas.getCaminhoArquivo());
 		
 		JPanel panelGeral = new JPanel();
-		
+			
 		JFrame frame = new JFrame("Editor de imagens - JOMP");
 		panelGeral.setLayout(new BoxLayout(panelGeral, BoxLayout.Y_AXIS));
 		frame.add(panelGeral);
@@ -50,12 +56,15 @@ public class Main {
 		final JImagePanel imagePanel = new JImagePanel(imagem);		
 		
 		JPanel panelBotoes = new JPanel();
-		panelBotoes.setLayout(new BoxLayout(panelBotoes, BoxLayout.X_AXIS));		
+		panelBotoes.setLayout(new BoxLayout(panelBotoes, BoxLayout.X_AXIS));
+		
+		rbUsarJomp = new JRadioButton("JOMP");
+		panelBotoes.add(rbUsarJomp);
 		
 		criarBotao(panelBotoes, imagem, imagePanel, "Blur", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.blur(imagem, 9, 9);	
+				getEditorImagens().blur(imagem, 9, 9);	
 				imagePanel.repaint();
 			}
 		});
@@ -63,7 +72,7 @@ public class Main {
 		criarBotao(panelBotoes, imagem, imagePanel, "Média", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.media(imagem);	
+				getEditorImagens().media(imagem);	
 				imagePanel.repaint();
 			}
 		});
@@ -71,7 +80,7 @@ public class Main {
 		criarBotao(panelBotoes, imagem, imagePanel, "Média invertida", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.mediaInvertida(imagem);	
+				getEditorImagens().mediaInvertida(imagem);	
 				imagePanel.repaint();
 			}
 		});
@@ -79,7 +88,7 @@ public class Main {
 		criarBotao(panelBotoes, imagem, imagePanel, "Inverter", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.inverterCores(imagem);	
+				getEditorImagens().inverterCores(imagem);	
 				imagePanel.repaint();
 			}
 		});
@@ -87,7 +96,7 @@ public class Main {
 		criarBotao(panelBotoes, imagem, imagePanel, "Desaturar cor média", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				editor.desaturarCorMedia(imagem);	
+				getEditorImagens().desaturarCorMedia(imagem);	
 				imagePanel.repaint();
 			}
 		});

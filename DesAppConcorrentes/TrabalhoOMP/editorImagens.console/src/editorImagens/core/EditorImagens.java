@@ -66,16 +66,20 @@ public class EditorImagens implements IEditorImagens{
 
 	//OK
 	public void media(BufferedImage imagem) {
-		int imageWidth = imagem.getWidth();
-		int imageHeight = imagem.getHeight();
+//		int imageWidth = imagem.getWidth();
+//		int imageHeight = imagem.getHeight();
 		
 		Color corMedia = calcularCorMedia(imagem);
-		int x = 0, y = 0;
-		for (x = 0; x < imageWidth; x++) {
-			for (y = 0; y < imageHeight; y++) {				
-				imagem.setRGB(x, y, corMedia.getRGB());
-			}
-		}
+		Graphics g = imagem.getGraphics();
+		g.setColor(corMedia);
+		g.fillRect(0, 0, 0, 0);
+		
+//		int x = 0, y = 0;
+//		for (x = 0; x < imageWidth; x++) {
+//			for (y = 0; y < imageHeight; y++) {				
+//				imagem.setRGB(x, y, corMedia.getRGB());
+//			}
+//		}
 	}
 	
 	private Color calcularCorMedia(BufferedImage imagem){
@@ -113,7 +117,24 @@ public class EditorImagens implements IEditorImagens{
 	public void inverterCores(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
+			
+//		int primeiroQuadranteX = imageWidth / 2;
+//		int primeiroQuadranteY = imageHeight / 2;
 		
+////		int segundoQuadrante X = ima
+//		
+//		//omp sections
+//		{
+//			
+//			
+//			//omp section
+//			{
+//				for (int x = 0; x < primeiroQuadranteX; x++) {
+//					
+//				}
+//			}
+//		}
+//		imagem.getTile(tileX, tileY)(x, y, w, h)
 		int x = 0, y = 0;
 		for (x = 0; x < imageWidth; x++) {
 			for (y = 0; y < imageHeight; y++) {
