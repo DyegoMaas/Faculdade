@@ -7,4 +7,5 @@ public interface IEditorImagens {
 	void media(BufferedImage imagem);
 	void inverterCores(BufferedImage imagem);
 	void mediaInvertida(BufferedImage imagem);
+	void desaturarCorMedia(BufferedImage imagem);
 }

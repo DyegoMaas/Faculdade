@@ -1,6 +1,8 @@
 package editorImagens.core;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -11,8 +13,6 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 
 	//OK
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
-		OMP.setNumThreads(windowWidth);
-		
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
@@ -25,7 +25,9 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 		//vari\u00e1veis do algoritmo que devem ser declaradas aqui fora (do contr\u00e1rio as threads ficam travadas e ocorre uso excessivo de CPU)
 		int fx = 0, fy = 0;
 		int iArrays = 0;
-		int mediana = 0;
+		int mediana = 0;				
+		
+		OMP.setNumThreads(windowWidth);
 
 // OMP PARALLEL BLOCK BEGINS
 {
@@ -76,6 +78,19 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
+		Color corMedia = calcularCorMedia(imagem);
+		int x = 0, y = 0;
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {				
+				imagem.setRGB(x, y, corMedia.getRGB());
+			}
+		}
+	}
+	
+	private Color calcularCorMedia(BufferedImage imagem){
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
 		int somaComponenteR = 0;
 		int somaComponenteG = 0;
 		int somaComponenteB = 0;
@@ -114,13 +129,9 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 		int mediaR = somaComponenteR /= numPixels;
 		int mediaG = somaComponenteG /= numPixels;
 		int mediaB = somaComponenteB /= numPixels;
+		Color corMedia = new Color(mediaR, mediaG, mediaB);
 		
-		for (x = 0; x < imageWidth; x++) {
-			for (y = 0; y < imageHeight; y++) {
-				Color corMedia = new Color(mediaR, mediaG, mediaB);
-				imagem.setRGB(x, y, corMedia.getRGB());
-			}
-		}
+		return corMedia;
 	}
 
 	public void inverterCores(BufferedImage imagem) {
@@ -130,13 +141,8 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 		int x = 0, y = 0;
 		for (x = 0; x < imageWidth; x++) {
 			for (y = 0; y < imageHeight; y++) {
-				int rgb = imagem.getRGB(x, y);
-				
-				int red = 255 - Colors.red(rgb);
-				int green = 255 - Colors.green(rgb);
-				int blue = 255 - Colors.blue(rgb);
-				Color corInvertida = new Color(red, green, blue);
-				imagem.setRGB(x, y, corInvertida.getRGB());
+				int rgb = imagem.getRGB(x, y);				
+				imagem.setRGB(x, y, inverterCor(rgb));
 			}
 		}
 	}
@@ -144,6 +150,52 @@ public class EditorImagens_jomp implements IEditorImagens_jomp {
 	public void mediaInvertida(BufferedImage imagem) {
 		media(imagem);
 		inverterCores(imagem);
+	}
+	
+	private int inverterCor(int rgb){
+		int red = 255 - Colors.red(rgb);
+		int green = 255 - Colors.green(rgb);
+		int blue = 255 - Colors.blue(rgb);
+		
+		Color corInvertida = new Color(red, green, blue);		
+		return corInvertida.getRGB();
+	}
+
+	//NOK
+	public void desaturarCorMedia(BufferedImage imagem) {
+		BufferedImage copia = new BufferedImage(imagem.getWidth(), imagem.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = copia.createGraphics();
+		
+		int corMediaInvertida = inverterCor(calcularCorMedia(imagem).getRGB());
+		g.setXORMode(new Color(
+				Colors.red(corMediaInvertida), 
+				Colors.green(corMediaInvertida), 
+				Colors.blue(corMediaInvertida), 0));
+		g.drawImage(imagem, null, 0, 0);
+		g.dispose();
+		
+		Graphics g2 = imagem.getGraphics();
+		g2.drawImage(copia, 0, 0, null);
+		
+//		mediaInvertida(copia);
+//		
+//		int imageWidth = imagem.getWidth();
+//		int imageHeight = imagem.getHeight();
+//		
+//		int x = 0, y = 0;
+//		for (x = 0; x < imageWidth; x++) {
+//			for (y = 0; y < imageHeight; y++) {				
+//				int rgb = imagem.getRGB(x, y);
+//				int rgbCopia = copia.getRGB(x, y);
+//				
+//				int red = Colors.red(rgb) + Colors.red(rgbCopia);
+//				int green = Colors.green(rgb) + Colors.green(rgbCopia);
+//				int blue = Colors.blue(rgb) + Colors.blue(rgbCopia);
+//				
+//				Color novaCor = new Color(red, green, blue);				
+//				imagem.setRGB(x, y, novaCor.getRGB());
+//			}
+//		}
 	}
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS

@@ -43,7 +43,7 @@ public class Main {
 		
 		JPanel panelGeral = new JPanel();
 		
-		JFrame frame = new JFrame("Tutorials");
+		JFrame frame = new JFrame("Editor de imagens - JOMP");
 		panelGeral.setLayout(new BoxLayout(panelGeral, BoxLayout.Y_AXIS));
 		frame.add(panelGeral);
 		
@@ -80,6 +80,14 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {				
 				editor.inverterCores(imagem);	
+				imagePanel.repaint();
+			}
+		});
+		
+		criarBotao(panelBotoes, imagem, imagePanel, "Desaturar cor média", new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				editor.desaturarCorMedia(imagem);	
 				imagePanel.repaint();
 			}
 		});
