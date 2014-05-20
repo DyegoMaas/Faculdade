@@ -117,4 +117,9 @@ public class EditorImagens implements IEditorImagens{
 			}
 		}
 	}
+
+	public void mediaInvertida(BufferedImage imagem) {
+		media(imagem);
+		inverterCores(imagem);
+	}
 }

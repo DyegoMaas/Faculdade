@@ -9,7 +9,7 @@ import jomp.runtime.OMP;
 public class EditorImagens_jomp implements IEditorImagens {
 
 
-	//NOK
+	//OK
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
 		
@@ -81,23 +81,13 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int somaComponenteB = 0;
 		int x = 0, y = 0;
 		int rgb = 0;
-//		Color corMedia = Color.black;
-		
-		int numPixels = 0;
-		int mediaR = 0;
-		int mediaG = 0;
-		int mediaB = 0;
-		
+				
 		OMP.setNumThreads(imageWidth);
 
 // OMP PARALLEL BLOCK BEGINS
 {
   __omp_Class4 __omp_Object4 = new __omp_Class4();
   // shared variables
-  __omp_Object4.mediaB = mediaB;
-  __omp_Object4.mediaG = mediaG;
-  __omp_Object4.mediaR = mediaR;
-  __omp_Object4.numPixels = numPixels;
   __omp_Object4.imageHeight = imageHeight;
   __omp_Object4.imageWidth = imageWidth;
   __omp_Object4.imagem = imagem;
@@ -113,10 +103,6 @@ public class EditorImagens_jomp implements IEditorImagens {
   somaComponenteG  += __omp_Object4._rd_somaComponenteG;
   somaComponenteB  += __omp_Object4._rd_somaComponenteB;
   // shared variables
-  mediaB = __omp_Object4.mediaB;
-  mediaG = __omp_Object4.mediaG;
-  mediaR = __omp_Object4.mediaR;
-  numPixels = __omp_Object4.numPixels;
   imageHeight = __omp_Object4.imageHeight;
   imageWidth = __omp_Object4.imageWidth;
   imagem = __omp_Object4.imagem;
@@ -124,10 +110,10 @@ public class EditorImagens_jomp implements IEditorImagens {
 // OMP PARALLEL BLOCK ENDS
 
 		
-		numPixels = imageWidth * imageHeight;
-		mediaR = somaComponenteR /= numPixels;
-		mediaG = somaComponenteG /= numPixels;
-		mediaB = somaComponenteB /= numPixels;
+		int numPixels = imageWidth * imageHeight;
+		int mediaR = somaComponenteR /= numPixels;
+		int mediaG = somaComponenteG /= numPixels;
+		int mediaB = somaComponenteB /= numPixels;
 		
 		for (x = 0; x < imageWidth; x++) {
 			for (y = 0; y < imageHeight; y++) {
@@ -137,13 +123,32 @@ public class EditorImagens_jomp implements IEditorImagens {
 		}
 	}
 
+	public void inverterCores(BufferedImage imagem) {
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		int x = 0, y = 0;
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {
+				int rgb = imagem.getRGB(x, y);
+				
+				int red = 255 - Colors.red(rgb);
+				int green = 255 - Colors.green(rgb);
+				int blue = 255 - Colors.blue(rgb);
+				Color corInvertida = new Color(red, green, blue);
+				imagem.setRGB(x, y, corInvertida.getRGB());
+			}
+		}
+	}
+
+	public void mediaInvertida(BufferedImage imagem) {
+		media(imagem);
+		inverterCores(imagem);
+	}
+
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class4 extends jomp.runtime.BusyTask {
   // shared variables
-  int mediaB;
-  int mediaG;
-  int mediaR;
-  int numPixels;
   int imageHeight;
   int imageWidth;
   BufferedImage imagem;
@@ -166,8 +171,6 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
     // OMP USER CODE BEGINS
 
 		{			
-			
-//			for (x = 0; x < imageWidth; x++) {
 			x = OMP.getThreadNum();
 			for (y = 0; y < imageHeight; y++) {
 				rgb = imagem.getRGB(x, y);
@@ -176,7 +179,6 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
 				somaComponenteG += Colors.green(rgb);
 				somaComponenteB += Colors.blue(rgb);
 			}						
-//			}					
 		}
     // OMP USER CODE ENDS
   // call reducer
@@ -300,13 +302,6 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
   }
 }
 // OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
-
-
-
-public void inverterCores(BufferedImage imagem) {
-	// TODO Auto-generated method stub
-	
-}
 
 }
 

@@ -18,7 +18,7 @@ import editorImagens.core.ImageUtil;
 
 public class Main {
 	
-	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(false);
+	private IEditorImagens editor = EditorImagensFactory.getEditorImagens(true);
 	
 	public static void main(String[] args){
 		args = new String[]{
@@ -64,6 +64,14 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {				
 				editor.media(imagem);	
+				imagePanel.repaint();
+			}
+		});
+		
+		criarBotao(panelBotoes, imagem, imagePanel, "Média invertida", new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				editor.mediaInvertida(imagem);	
 				imagePanel.repaint();
 			}
 		});

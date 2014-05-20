@@ -8,7 +8,7 @@ import jomp.runtime.OMP;
 
 public class EditorImagens_jomp implements IEditorImagens_jomp{
 
-	//NOK
+	//OK
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
 		
@@ -73,18 +73,10 @@ public class EditorImagens_jomp implements IEditorImagens_jomp{
 		int somaComponenteB = 0;
 		int x = 0, y = 0;
 		int rgb = 0;
-//		Color corMedia = Color.black;
-		
-		int numPixels = 0;
-		int mediaR = 0;
-		int mediaG = 0;
-		int mediaB = 0;
-		
+				
 		OMP.setNumThreads(imageWidth);
 		//omp parallel private(x,y,rgb) reduction(+:somaComponenteR,somaComponenteG,somaComponenteB)
 		{			
-			
-//			for (x = 0; x < imageWidth; x++) {
 			x = OMP.getThreadNum();
 			for (y = 0; y < imageHeight; y++) {
 				rgb = imagem.getRGB(x, y);
@@ -93,13 +85,12 @@ public class EditorImagens_jomp implements IEditorImagens_jomp{
 				somaComponenteG += Colors.green(rgb);
 				somaComponenteB += Colors.blue(rgb);
 			}						
-//			}					
 		}
 		
-		numPixels = imageWidth * imageHeight;
-		mediaR = somaComponenteR /= numPixels;
-		mediaG = somaComponenteG /= numPixels;
-		mediaB = somaComponenteB /= numPixels;
+		int numPixels = imageWidth * imageHeight;
+		int mediaR = somaComponenteR /= numPixels;
+		int mediaG = somaComponenteG /= numPixels;
+		int mediaB = somaComponenteB /= numPixels;
 		
 		for (x = 0; x < imageWidth; x++) {
 			for (y = 0; y < imageHeight; y++) {
@@ -107,5 +98,28 @@ public class EditorImagens_jomp implements IEditorImagens_jomp{
 				imagem.setRGB(x, y, corMedia.getRGB());
 			}
 		}
+	}
+
+	public void inverterCores(BufferedImage imagem) {
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		int x = 0, y = 0;
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {
+				int rgb = imagem.getRGB(x, y);
+				
+				int red = 255 - Colors.red(rgb);
+				int green = 255 - Colors.green(rgb);
+				int blue = 255 - Colors.blue(rgb);
+				Color corInvertida = new Color(red, green, blue);
+				imagem.setRGB(x, y, corInvertida.getRGB());
+			}
+		}
+	}
+
+	public void mediaInvertida(BufferedImage imagem) {
+		media(imagem);
+		inverterCores(imagem);
 	}
 }
