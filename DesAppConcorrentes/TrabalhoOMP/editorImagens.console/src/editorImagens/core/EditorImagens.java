@@ -72,13 +72,10 @@ public class EditorImagens implements IEditorImagens{
 			
 			for (int y = 0; y < imageHeight; y++) {
 				int rgb = imagem.getRGB(x, y);
-				int r = (rgb >> 16) & 0xFF;
-				int g = (rgb >> 8) & 0xFF;
-				int b = (rgb & 0xFF);
 				
-				somaComponenteR += r;
-				somaComponenteG += g;
-				somaComponenteB += b;
+				somaComponenteR += Colors.red(rgb);
+				somaComponenteG += Colors.green(rgb);
+				somaComponenteB += Colors.blue(rgb);
 			}						
 		}	
 		
@@ -95,8 +92,3 @@ public class EditorImagens implements IEditorImagens{
 		}
 	}
 }
-
-/*int rgb = img.getRGB(x, y);
-int r = (rgb >> 16) & 0xFF;
-int g = (rgb >> 8) & 0xFF;
-int b = (rgb & 0xFF);*/
