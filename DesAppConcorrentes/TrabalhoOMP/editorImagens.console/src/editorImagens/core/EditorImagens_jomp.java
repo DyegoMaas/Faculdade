@@ -87,11 +87,17 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int mediaR = 0;
 		int mediaG = 0;
 		int mediaB = 0;
+		
+		OMP.setNumThreads(imageWidth);
 
 // OMP PARALLEL BLOCK BEGINS
 {
   __omp_Class4 __omp_Object4 = new __omp_Class4();
   // shared variables
+  __omp_Object4.mediaB = mediaB;
+  __omp_Object4.mediaG = mediaG;
+  __omp_Object4.mediaR = mediaR;
+  __omp_Object4.numPixels = numPixels;
   __omp_Object4.imageHeight = imageHeight;
   __omp_Object4.imageWidth = imageWidth;
   __omp_Object4.imagem = imagem;
@@ -103,134 +109,85 @@ public class EditorImagens_jomp implements IEditorImagens {
     System.err.println(__omp_exception);
   }
   // reduction variables
+  somaComponenteR  += __omp_Object4._rd_somaComponenteR;
+  somaComponenteG  += __omp_Object4._rd_somaComponenteG;
+  somaComponenteB  += __omp_Object4._rd_somaComponenteB;
   // shared variables
+  mediaB = __omp_Object4.mediaB;
+  mediaG = __omp_Object4.mediaG;
+  mediaR = __omp_Object4.mediaR;
+  numPixels = __omp_Object4.numPixels;
   imageHeight = __omp_Object4.imageHeight;
   imageWidth = __omp_Object4.imageWidth;
   imagem = __omp_Object4.imagem;
 }
 // OMP PARALLEL BLOCK ENDS
 
+		
+		numPixels = imageWidth * imageHeight;
+		mediaR = somaComponenteR /= numPixels;
+		mediaG = somaComponenteG /= numPixels;
+		mediaB = somaComponenteB /= numPixels;
+		
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {
+				Color corMedia = new Color(mediaR, mediaG, mediaB);
+				imagem.setRGB(x, y, corMedia.getRGB());
+			}
+		}
 	}
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class4 extends jomp.runtime.BusyTask {
   // shared variables
+  int mediaB;
+  int mediaG;
+  int mediaR;
+  int numPixels;
   int imageHeight;
   int imageWidth;
   BufferedImage imagem;
   // firstprivate variables
   // variables to hold results of reduction
+  int _rd_somaComponenteR;
+  int _rd_somaComponenteG;
+  int _rd_somaComponenteB;
 
   public void go(int __omp_me) throws Throwable {
   // firstprivate variables + init
   // private variables
-  int somaComponenteR = 0;
-  int somaComponenteG = 0;
-  int somaComponenteB = 0;
   int x;
   int y;
   int rgb;
-  int numPixels;
-  int mediaR = 0;
-  int mediaG = 0;
-  int mediaB = 0;
   // reduction variables, init to default
+  int somaComponenteR = 0;
+  int somaComponenteG = 0;
+  int somaComponenteB = 0;
     // OMP USER CODE BEGINS
 
-		{
-                         { // OMP SECTIONS BLOCK BEGINS
-                         // copy of firstprivate variables, initialized
-                         // copy of lastprivate variables
-                         // variables to hold result of reduction
-                         boolean amLast=false;
-                         {
-                           // firstprivate variables + init
-                           // [last]private variables
-                           // reduction variables + init to default
-                           // -------------------------------------
-                           __ompName_5: while(true) {
-                           switch((int)jomp.runtime.OMP.getTicket(__omp_me)) {
-                           // OMP SECTION BLOCK 0 BEGINS
-                             case 0: {
-                           // OMP USER CODE BEGINS
-
-				{
-					for (x = 0; x < imageWidth; x++) {			
-						for (y = 0; y < imageHeight; y++) {
-							rgb = imagem.getRGB(x, y);
-                                                         // OMP CRITICAL BLOCK BEGINS
-                                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
-                                                         // OMP USER CODE BEGINS
-
-							{
-								somaComponenteR += Colors.red(rgb);
-								somaComponenteG += Colors.green(rgb);
-								somaComponenteB += Colors.blue(rgb);
-							}
-                                                         // OMP USER CODE ENDS
-                                                         }
-                                                         // OMP CRITICAL BLOCK ENDS
-
-						}						
-					}
-                                         // OMP CRITICAL BLOCK BEGINS
-                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
-                                         // OMP USER CODE BEGINS
-
-					{
-						numPixels = imageWidth * imageHeight;
-						mediaR = somaComponenteR /= numPixels;
-						mediaG = somaComponenteG /= numPixels;
-						mediaB = somaComponenteB /= numPixels;
-					}
-                                         // OMP USER CODE ENDS
-                                         }
-                                         // OMP CRITICAL BLOCK ENDS
-
-				}
-                           // OMP USER CODE ENDS
-                             };  break;
-                           // OMP SECTION BLOCK 0 ENDS
-                           // OMP SECTION BLOCK 1 BEGINS
-                             case 1: {
-                           // OMP USER CODE BEGINS
-
-				{
-					for (x = 0; x < imageWidth; x++) {
-						for (y = 0; y < imageHeight; y++) {
-							Color corMedia = new Color(mediaR, mediaG, mediaB);
-							imagem.setRGB(x, y, corMedia.getRGB());
-						}
-					}
-				}
-                           // OMP USER CODE ENDS
-                           amLast = true;
-                             };  break;
-                           // OMP SECTION BLOCK 1 ENDS
-
-                             default: break __ompName_5;
-                           } // of switch
-                           } // of while
-                           // call reducer
-                           jomp.runtime.OMP.resetTicket(__omp_me);
-                           jomp.runtime.OMP.doBarrier(__omp_me);
-                           // copy lastprivate variables out
-                           if (amLast) {
-                           }
-                         }
-                         // update lastprivate variables
-                         if (amLast) {
-                         }
-                         // update reduction variables
-                         if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
-                         }
-                         } // OMP SECTIONS BLOCK ENDS
-
+		{			
+			
+//			for (x = 0; x < imageWidth; x++) {
+			x = OMP.getThreadNum();
+			for (y = 0; y < imageHeight; y++) {
+				rgb = imagem.getRGB(x, y);
+				
+				somaComponenteR += Colors.red(rgb);
+				somaComponenteG += Colors.green(rgb);
+				somaComponenteB += Colors.blue(rgb);
+			}						
+//			}					
 		}
     // OMP USER CODE ENDS
   // call reducer
+  somaComponenteR = (int) jomp.runtime.OMP.doPlusReduce(__omp_me, somaComponenteR);
+  somaComponenteG = (int) jomp.runtime.OMP.doPlusReduce(__omp_me, somaComponenteG);
+  somaComponenteB = (int) jomp.runtime.OMP.doPlusReduce(__omp_me, somaComponenteB);
   // output to _rd_ copy
   if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
+    _rd_somaComponenteR = somaComponenteR;
+    _rd_somaComponenteG = somaComponenteG;
+    _rd_somaComponenteB = somaComponenteB;
   }
   }
 }

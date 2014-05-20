@@ -79,43 +79,32 @@ public class EditorImagens_jomp implements IEditorImagens_jomp{
 		int mediaR = 0;
 		int mediaG = 0;
 		int mediaB = 0;
-		//omp parallel private(somaComponenteR,somaComponenteG,somaComponenteB,x,y,rgb,numPixels,mediaR,mediaG,mediaB)
-		{
-			//omp sections
-			{
-				//omp section
-				{
-					for (x = 0; x < imageWidth; x++) {			
-						for (y = 0; y < imageHeight; y++) {
-							rgb = imagem.getRGB(x, y);
-							
-							//omp critical
-							{
-								somaComponenteR += Colors.red(rgb);
-								somaComponenteG += Colors.green(rgb);
-								somaComponenteB += Colors.blue(rgb);
-							}
-						}						
-					}					
+		
+		OMP.setNumThreads(imageWidth);
+		//omp parallel private(x,y,rgb) reduction(+:somaComponenteR,somaComponenteG,somaComponenteB)
+		{			
+			
+//			for (x = 0; x < imageWidth; x++) {
+			x = OMP.getThreadNum();
+			for (y = 0; y < imageHeight; y++) {
+				rgb = imagem.getRGB(x, y);
 				
-					//omp critical
-					{
-						numPixels = imageWidth * imageHeight;
-						mediaR = somaComponenteR /= numPixels;
-						mediaG = somaComponenteG /= numPixels;
-						mediaB = somaComponenteB /= numPixels;
-					}
-				}
-				
-				//omp section
-				{
-					for (x = 0; x < imageWidth; x++) {
-						for (y = 0; y < imageHeight; y++) {
-							Color corMedia = new Color(mediaR, mediaG, mediaB);
-							imagem.setRGB(x, y, corMedia.getRGB());
-						}
-					}
-				}
+				somaComponenteR += Colors.red(rgb);
+				somaComponenteG += Colors.green(rgb);
+				somaComponenteB += Colors.blue(rgb);
+			}						
+//			}					
+		}
+		
+		numPixels = imageWidth * imageHeight;
+		mediaR = somaComponenteR /= numPixels;
+		mediaG = somaComponenteG /= numPixels;
+		mediaB = somaComponenteB /= numPixels;
+		
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {
+				Color corMedia = new Color(mediaR, mediaG, mediaB);
+				imagem.setRGB(x, y, corMedia.getRGB());
 			}
 		}
 	}

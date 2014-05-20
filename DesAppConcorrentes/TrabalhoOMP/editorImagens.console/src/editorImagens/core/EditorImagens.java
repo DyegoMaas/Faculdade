@@ -8,7 +8,7 @@ import jomp.runtime.OMP;
 
 public class EditorImagens implements IEditorImagens{
 
-	//NOK
+	//OK
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		OMP.setNumThreads(windowWidth);
 		
@@ -73,49 +73,29 @@ public class EditorImagens implements IEditorImagens{
 		int somaComponenteB = 0;
 		int x = 0, y = 0;
 		int rgb = 0;
-//		Color corMedia = Color.black;
+				
+		OMP.setNumThreads(imageWidth);
+		//omp parallel private(x,y,rgb) reduction(+:somaComponenteR,somaComponenteG,somaComponenteB)
+		{			
+			x = OMP.getThreadNum();
+			for (y = 0; y < imageHeight; y++) {
+				rgb = imagem.getRGB(x, y);
+				
+				somaComponenteR += Colors.red(rgb);
+				somaComponenteG += Colors.green(rgb);
+				somaComponenteB += Colors.blue(rgb);
+			}						
+		}
 		
-		int numPixels = 0;
-		int mediaR = 0;
-		int mediaG = 0;
-		int mediaB = 0;
-		//omp parallel private(somaComponenteR,somaComponenteG,somaComponenteB,x,y,rgb,numPixels,mediaR,mediaG,mediaB)
-		{
-			//omp sections
-			{
-				//omp section
-				{
-					for (x = 0; x < imageWidth; x++) {			
-						for (y = 0; y < imageHeight; y++) {
-							rgb = imagem.getRGB(x, y);
-							
-							//omp critical
-							{
-								somaComponenteR += Colors.red(rgb);
-								somaComponenteG += Colors.green(rgb);
-								somaComponenteB += Colors.blue(rgb);
-							}
-						}						
-					}					
-				
-					//omp critical
-					{
-						numPixels = imageWidth * imageHeight;
-						mediaR = somaComponenteR /= numPixels;
-						mediaG = somaComponenteG /= numPixels;
-						mediaB = somaComponenteB /= numPixels;
-					}
-				}
-				
-				//omp section
-				{
-					for (x = 0; x < imageWidth; x++) {
-						for (y = 0; y < imageHeight; y++) {
-							Color corMedia = new Color(mediaR, mediaG, mediaB);
-							imagem.setRGB(x, y, corMedia.getRGB());
-						}
-					}
-				}
+		int numPixels = imageWidth * imageHeight;
+		int mediaR = somaComponenteR /= numPixels;
+		int mediaG = somaComponenteG /= numPixels;
+		int mediaB = somaComponenteB /= numPixels;
+		
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {
+				Color corMedia = new Color(mediaR, mediaG, mediaB);
+				imagem.setRGB(x, y, corMedia.getRGB());
 			}
 		}
 	}
