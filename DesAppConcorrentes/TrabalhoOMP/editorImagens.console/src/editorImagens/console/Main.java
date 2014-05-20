@@ -3,6 +3,8 @@ package editorImagens.console;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BoxLayout;
@@ -19,8 +21,8 @@ import editorImagens.core.ImageUtil;
 
 public class Main {	
 	
-	private JRadioButton rbUsarJomp;
-
+	private boolean usarJomp = false;
+	
 	public static void main(String[] args){
 		args = new String[]{
 				//"C:\\Users\\Dyego\\Pictures\\wallpaper2835791.jpg"
@@ -40,7 +42,6 @@ public class Main {
 	}	
 	
 	private IEditorImagens getEditorImagens(){
-		boolean usarJomp = rbUsarJomp.isSelected();
 		return new EditorImagensFactory().getEditorImagens(usarJomp);
 	}
 	
@@ -58,7 +59,14 @@ public class Main {
 		JPanel panelBotoes = new JPanel();
 		panelBotoes.setLayout(new BoxLayout(panelBotoes, BoxLayout.X_AXIS));
 		
-		rbUsarJomp = new JRadioButton("JOMP");
+		JRadioButton rbUsarJomp = new JRadioButton("JOMP");
+		rbUsarJomp.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				usarJomp = (e.getStateChange() == ItemEvent.SELECTED);				
+			}
+		});
 		panelBotoes.add(rbUsarJomp);
 		
 		criarBotao(panelBotoes, imagem, imagePanel, "Blur", new ActionListener() {			
