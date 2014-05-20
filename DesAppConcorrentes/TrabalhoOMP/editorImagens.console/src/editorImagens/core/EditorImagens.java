@@ -99,4 +99,22 @@ public class EditorImagens implements IEditorImagens{
 			}
 		}
 	}
+
+	public void inverterCores(BufferedImage imagem) {
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		int x = 0, y = 0;
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {
+				int rgb = imagem.getRGB(x, y);
+				
+				int red = 255 - Colors.red(rgb);
+				int green = 255 - Colors.green(rgb);
+				int blue = 255 - Colors.blue(rgb);
+				Color corInvertida = new Color(red, green, blue);
+				imagem.setRGB(x, y, corInvertida.getRGB());
+			}
+		}
+	}
 }

@@ -301,5 +301,12 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
 }
 // OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
 
+
+
+public void inverterCores(BufferedImage imagem) {
+	// TODO Auto-generated method stub
+	
+}
+
 }
 
