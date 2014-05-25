@@ -25,7 +25,7 @@ import com.towel.swing.img.JImagePanel;
 
 import editorImagens.core.EditorImagensFactory;
 import editorImagens.core.IFachadaEdicaoImagens;
-import editorImagens.core.ImageUtil;
+import editorImagens.core.utils.ImageUtil;
 
 public class Main {	
 	

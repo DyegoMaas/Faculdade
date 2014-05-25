@@ -1,4 +1,4 @@
-package editorImagens.core;
+package editorImagens.core.utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

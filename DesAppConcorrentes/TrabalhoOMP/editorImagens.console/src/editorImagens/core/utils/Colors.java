@@ -1,4 +1,4 @@
-package editorImagens.core;
+package editorImagens.core.utils;
 
 public class Colors {
 	public static int red(int rgb){

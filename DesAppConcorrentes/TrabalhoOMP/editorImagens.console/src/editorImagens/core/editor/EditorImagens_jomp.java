@@ -6,14 +6,15 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import editorImagens.core.Colors;
-import editorImagens.core.ImageUtil;
+import editorImagens.core.utils.Colors;
+import editorImagens.core.utils.ImageUtil;
 import jomp.runtime.OMP;
 
 
 /**
- * IMPORTANTE: de prefer\u00eancia manter a implementa\u00e7\u00e3o original como coment\u00e1rio para servir de refer\u00eancia 
- *
+ * Esta classe centraliza as opera\u00e7\u00f5es complexas de edi\u00e7\u00e3o de imagem
+ * 
+ * IMPORTANTE: de prefer\u00eancia manter a implementa\u00e7\u00e3o original como coment\u00e1rio para servir de refer\u00eancia
  */
 public class EditorImagens_jomp implements IEditorImagens {
 
@@ -80,28 +81,6 @@ public class EditorImagens_jomp implements IEditorImagens {
 //				           sort all entries in colorArray[][]
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
-
-//		int imageWidth = imagem.getWidth();
-//		int imageHeight = imagem.getHeight();
-////		int imageWidth = imagem.getWidth();
-////		int imageHeight = imagem.getHeight();
-//	
-//		int x = 0, y = 0;
-//		for (x = 0; x < imageWidth; x++) {
-//			for (y = 0; y < imageHeight; y++) {				
-//				imagem.setRGB(x, y, corMedia.getRGB());
-//			}
-//		}
-//		Graphics g = imagem.getGraphics();
-//		g.setColor(corMedia);
-//		g.fillRect(0, 0, 0, 0);
-//		
-////		int x = 0, y = 0;
-////		for (x = 0; x < imageWidth; x++) {
-////			for (y = 0; y < imageHeight; y++) {				
-////				imagem.setRGB(x, y, corMedia.getRGB());
-////			}
-////		}
 	
 	public Color calcularCorMedia(BufferedImage imagem){
 		int imageWidth = imagem.getWidth();
@@ -150,48 +129,17 @@ public class EditorImagens_jomp implements IEditorImagens {
 		return corMedia;
 	}
 
+	//TODO: paralelizar
 	public void inverterCores(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
-			
-//		int primeiroQuadranteX = imageWidth / 2;
-//		int primeiroQuadranteY = imageHeight / 2;
-		
-////		int segundoQuadrante X = ima
-//		
-//		//omp sections
-//		{
-//			
-//			
-//			//omp section
-//			{
-//				for (int x = 0; x < primeiroQuadranteX; x++) {
-//					
-//				}
-//			}
-//		}
-//		imagem.getTile(tileX, tileY)(x, y, w, h)
 		int x = 0, y = 0;
 		for (x = 0; x < imageWidth; x++) {
 			for (y = 0; y < imageHeight; y++) {
 				int rgb = imagem.getRGB(x, y);				
-				imagem.setRGB(x, y, inverterCor(rgb));
+				imagem.setRGB(x, y, ImageUtil.inverterCor(rgb));
 			}
 		}
-	}
-	
-	public Color inverterCor(Color cor){
-		int corInvertida = inverterCor(cor.getRGB());		
-		return new Color(Colors.red(corInvertida), Colors.green(corInvertida), Colors.blue(corInvertida));
-	}
-	
-	public int inverterCor(int rgb){
-		int red = 255 - Colors.red(rgb);
-		int green = 255 - Colors.green(rgb);
-		int blue = 255 - Colors.blue(rgb);
-		
-		Color corInvertida = new Color(red, green, blue);		
-		return corInvertida.getRGB();
 	}
 
 	//NOK
@@ -199,7 +147,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 		BufferedImage copia = new BufferedImage(imagem.getWidth(), imagem.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = copia.createGraphics();
 		
-		int corMediaInvertida = inverterCor(calcularCorMedia(imagem).getRGB());
+		int corMediaInvertida = ImageUtil.inverterCor(calcularCorMedia(imagem).getRGB());
 		g.setXORMode(new Color(
 				Colors.red(corMediaInvertida), 
 				Colors.green(corMediaInvertida), 

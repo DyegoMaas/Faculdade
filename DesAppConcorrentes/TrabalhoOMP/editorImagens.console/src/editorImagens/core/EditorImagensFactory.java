@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import editorImagens.core.editor.EditorImagens_jomp;
 import editorImagens.core.editor.EditorImagens_normal;
 import editorImagens.core.editor.IEditorImagens;
+import editorImagens.core.utils.ImageUtil;
 
 public class EditorImagensFactory {
 	
