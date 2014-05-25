@@ -77,23 +77,16 @@ public class EditorImagens_normal implements IEditorImagens{
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
-//		int numCelulasX = (int)Math.ceil(imageWidth / (float)tamanhoCelulas);
-//		int numCelulasY = (int)Math.ceil(imageHeight / (float)tamanhoCelulas);
-		
-		try {
-			for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
-				for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
-					int w = (x + tamanhoCelulas > imageWidth)  ? (x + tamanhoCelulas) - imageWidth : tamanhoCelulas;
-					int h = (y + tamanhoCelulas > imageHeight)  ? (y + tamanhoCelulas) - imageHeight : tamanhoCelulas;					
-					System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
-					
-					BufferedImage subimage = imagem.getSubimage(x, y, w, h);
-					Color corMedia = calcularCorMediaSingleThread(subimage);
-					setarCor(imagem, corMedia, x, y, w, h);
-				}
-			}			
-		} catch (Exception e) {
-			
+		for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
+			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
+				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
+				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
+				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
+				
+				BufferedImage subimage = imagem.getSubimage(x, y, w, h);
+				Color corMedia = calcularCorMediaSingleThread(subimage);
+				setarCor(imagem, corMedia, x, y, w, h);
+			}
 		}
 	}
 	
