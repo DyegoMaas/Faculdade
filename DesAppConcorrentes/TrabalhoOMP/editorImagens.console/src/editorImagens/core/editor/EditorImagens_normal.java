@@ -73,6 +73,30 @@ public class EditorImagens_normal implements IEditorImagens{
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 	
+	public void mosaico(BufferedImage imagem, int tamanhoCelulas){
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+//		int numCelulasX = (int)Math.ceil(imageWidth / (float)tamanhoCelulas);
+//		int numCelulasY = (int)Math.ceil(imageHeight / (float)tamanhoCelulas);
+		
+		try {
+			for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
+				for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
+					int w = (x + tamanhoCelulas > imageWidth)  ? (x + tamanhoCelulas) - imageWidth : tamanhoCelulas;
+					int h = (y + tamanhoCelulas > imageHeight)  ? (y + tamanhoCelulas) - imageHeight : tamanhoCelulas;					
+					System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
+					
+					BufferedImage subimage = imagem.getSubimage(x, y, w, h);
+					Color corMedia = calcularCorMediaSingleThread(subimage);
+					setarCor(imagem, corMedia, x, y, w, h);
+				}
+			}			
+		} catch (Exception e) {
+			
+		}
+	}
+	
 	public Color calcularCorMedia(BufferedImage imagem){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -105,6 +129,34 @@ public class EditorImagens_normal implements IEditorImagens{
 		return corMedia;
 	}
 
+	private Color calcularCorMediaSingleThread(BufferedImage imagem){
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		int somaComponenteR = 0;
+		int somaComponenteG = 0;
+		int somaComponenteB = 0;
+				
+		for(int x = 0; x < imageWidth; x++)
+		{			
+			for (int y = 0; y < imageHeight; y++) {
+				int rgb = imagem.getRGB(x, y);
+				
+				somaComponenteR += Colors.red(rgb);
+				somaComponenteG += Colors.green(rgb);
+				somaComponenteB += Colors.blue(rgb);
+			}						
+		}
+		
+		int numPixels = imageWidth * imageHeight;
+		int mediaR = somaComponenteR /= numPixels;
+		int mediaG = somaComponenteG /= numPixels;
+		int mediaB = somaComponenteB /= numPixels;
+		Color corMedia = new Color(mediaR, mediaG, mediaB);
+		
+		return corMedia;
+	}
+	
 	//TODO: paralelizar
 	public void inverterCores(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
@@ -136,8 +188,12 @@ public class EditorImagens_normal implements IEditorImagens{
 	}
 
 	public void setarCor(BufferedImage imagem, Color novaCor) {
+		setarCor(imagem, novaCor, 0, 0, imagem.getWidth(), imagem.getHeight());
+	}
+	
+	public void setarCor(BufferedImage imagem, Color novaCor, int x, int y, int w, int h){
 		Graphics g = imagem.getGraphics();
 		g.setColor(novaCor);
-		g.fillRect(0, 0, imagem.getWidth(), imagem.getHeight());
+		g.fillRect(x, y, w, h);
 	}
 }

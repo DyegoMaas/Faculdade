@@ -68,8 +68,13 @@ public class EditorImagensFactory {
 			editor(versaoJomp).desaturarCorMedia(imagem);
 		}
 
+		@Override
+		public void mosaico(BufferedImage imagem, int tamanhoCelulas) {
+			editor(versaoJomp).mosaico(imagem, tamanhoCelulas);			
+		}
+		
 		private IEditorImagens editor(boolean versaoJomp){
-			return versaoJomp ? editorNormal : editorJomp;
+			return versaoJomp ? editorJomp : editorNormal;
 		}
 	}
 }

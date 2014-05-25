@@ -15,5 +15,7 @@ public interface IFachadaEdicaoImagens {
 	public abstract Color mediaInvertida(BufferedImage imagem);
 
 	public abstract void desaturarCorMedia(BufferedImage imagem);
+	
+	public abstract void mosaico(BufferedImage imagem, int tamanhoCelulas);
 
 }

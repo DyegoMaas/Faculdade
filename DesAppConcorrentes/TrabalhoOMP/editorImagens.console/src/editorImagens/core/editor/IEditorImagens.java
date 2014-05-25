@@ -8,5 +8,6 @@ public interface IEditorImagens {
 	void setarCor(BufferedImage imagem, Color novaCor);
 	void inverterCores(BufferedImage imagem);
 	void desaturarCorMedia(BufferedImage imagem);
-	Color calcularCorMedia(BufferedImage imagem);	
+	Color calcularCorMedia(BufferedImage imagem);
+	void mosaico(BufferedImage imagem, int tamanhoCelulas);
 }

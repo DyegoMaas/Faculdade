@@ -18,8 +18,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 import com.towel.swing.img.JImagePanel;
 
@@ -126,6 +128,22 @@ public class Main {
 			@Override
 			public void actionPerformed(ActionEvent e) {				
 				getEditorImagens().desaturarCorMedia(imagem);	
+				imagePanel.repaint();
+			}
+		});
+		
+		criarBotao(panelBotoes, imagem, imagePanel, "Mosaico", new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {				
+				int tamanhoCelulas = 20;
+				String input = JOptionPane.showInputDialog("Tamanho das células: ");
+				try {
+					tamanhoCelulas = Integer.parseInt(input);
+				} catch (Exception e2) {
+					System.out.println(e2);
+				}				
+				
+				getEditorImagens().mosaico(imagem, tamanhoCelulas);	
 				imagePanel.repaint();
 			}
 		});
