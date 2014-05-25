@@ -1,4 +1,4 @@
-package editorImagens.console;
+package editorImagens.view;
 
 public class Entradas{
 	private String caminhoArquivo;

@@ -1,4 +1,4 @@
-package editorImagens.console;
+package editorImagens.view;
 
 import java.awt.Color;
 import java.awt.Dialog;
