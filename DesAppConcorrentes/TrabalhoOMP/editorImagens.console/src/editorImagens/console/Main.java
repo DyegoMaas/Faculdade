@@ -1,5 +1,6 @@
 package editorImagens.console;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import com.towel.swing.img.JImagePanel;
 
 import editorImagens.core.EditorImagensFactory;
 import editorImagens.core.IEditorImagens;
+import editorImagens.core.IFachadaEdicaoImagens;
 import editorImagens.core.ImageUtil;
 
 public class Main {	
@@ -41,7 +43,7 @@ public class Main {
 		}
 	}	
 	
-	private IEditorImagens getEditorImagens(){
+	private IFachadaEdicaoImagens getEditorImagens(){
 		return new EditorImagensFactory().getEditorImagens(usarJomp);
 	}
 	
@@ -79,16 +81,10 @@ public class Main {
 		
 		criarBotao(panelBotoes, imagem, imagePanel, "Média", new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent e) {				
-				getEditorImagens().media(imagem);	
-				imagePanel.repaint();
-			}
-		});
-		
-		criarBotao(panelBotoes, imagem, imagePanel, "Média invertida", new ActionListener() {			
-			@Override
-			public void actionPerformed(ActionEvent e) {				
-				getEditorImagens().mediaInvertida(imagem);	
+			public void actionPerformed(ActionEvent e) {	
+				Color corMedia = getEditorImagens().calcularCorMedia(imagem);
+				
+				System.out.println("cor média " + corMedia);
 				imagePanel.repaint();
 			}
 		});

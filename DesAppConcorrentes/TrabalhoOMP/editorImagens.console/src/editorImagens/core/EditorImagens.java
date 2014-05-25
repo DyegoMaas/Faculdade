@@ -8,9 +8,14 @@ import java.util.Arrays;
 
 import jomp.runtime.OMP;
 
+
+/**
+ * IMPORTANTE: de preferência manter a implementação original como comentário para servir de referência 
+ *
+ */
 public class EditorImagens implements IEditorImagens{
 
-	//OK
+	//NOK
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -51,6 +56,7 @@ public class EditorImagens implements IEditorImagens{
 			}	
 		}		
 		
+		//PSEUDO CÓDIGO
 //		allocate outputPixelValue[image width][image height]
 //				   edgex := (window width / 2) rounded down
 //				   edgey := (window height / 2) rounded down
@@ -64,25 +70,29 @@ public class EditorImagens implements IEditorImagens{
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 
-	//OK
-	public void media(BufferedImage imagem) {
 //		int imageWidth = imagem.getWidth();
 //		int imageHeight = imagem.getHeight();
-		
-		Color corMedia = calcularCorMedia(imagem);
-		Graphics g = imagem.getGraphics();
-		g.setColor(corMedia);
-		g.fillRect(0, 0, 0, 0);
-		
+////		int imageWidth = imagem.getWidth();
+////		int imageHeight = imagem.getHeight();
+//	
 //		int x = 0, y = 0;
 //		for (x = 0; x < imageWidth; x++) {
 //			for (y = 0; y < imageHeight; y++) {				
 //				imagem.setRGB(x, y, corMedia.getRGB());
 //			}
 //		}
-	}
+//		Graphics g = imagem.getGraphics();
+//		g.setColor(corMedia);
+//		g.fillRect(0, 0, 0, 0);
+//		
+////		int x = 0, y = 0;
+////		for (x = 0; x < imageWidth; x++) {
+////			for (y = 0; y < imageHeight; y++) {				
+////				imagem.setRGB(x, y, corMedia.getRGB());
+////			}
+////		}
 	
-	private Color calcularCorMedia(BufferedImage imagem){
+	public Color calcularCorMedia(BufferedImage imagem){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
@@ -143,13 +153,13 @@ public class EditorImagens implements IEditorImagens{
 			}
 		}
 	}
-
-	public void mediaInvertida(BufferedImage imagem) {
-		media(imagem);
-		inverterCores(imagem);
+	
+	public Color inverterCor(Color cor){
+		int corInvertida = inverterCor(cor.getRGB());		
+		return new Color(Colors.red(corInvertida), Colors.green(corInvertida), Colors.blue(corInvertida));
 	}
 	
-	private int inverterCor(int rgb){
+	public int inverterCor(int rgb){
 		int red = 255 - Colors.red(rgb);
 		int green = 255 - Colors.green(rgb);
 		int blue = 255 - Colors.blue(rgb);
@@ -174,4 +184,25 @@ public class EditorImagens implements IEditorImagens{
 		Graphics g2 = imagem.getGraphics();
 		g2.drawImage(copia, 0, 0, null);
 	}
+
+	@Override
+	public void setarCor(BufferedImage imagem, Color novaCor) {
+		Graphics g = imagem.getGraphics();
+		g.setColor(novaCor);
+		g.fillRect(0, 0, imagem.getWidth(), imagem.getHeight());
+	}
+	
+	/*//OK
+	public void media(BufferedImage imagem) {
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		Color corMedia = calcularCorMedia(imagem);
+		int x = 0, y = 0;
+		for (x = 0; x < imageWidth; x++) {
+			for (y = 0; y < imageHeight; y++) {				
+				imagem.setRGB(x, y, corMedia.getRGB());
+			}
+		}
+	}*/
 }

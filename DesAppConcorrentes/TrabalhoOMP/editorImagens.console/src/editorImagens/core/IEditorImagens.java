@@ -1,11 +1,16 @@
 package editorImagens.core;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public interface IEditorImagens {
 	void blur(BufferedImage imagem, int windowWidth, int windowHeight);
-	void media(BufferedImage imagem);
+	void setarCor(BufferedImage imagem, Color novaCor);
 	void inverterCores(BufferedImage imagem);
-	void mediaInvertida(BufferedImage imagem);
 	void desaturarCorMedia(BufferedImage imagem);
+	Color calcularCorMedia(BufferedImage imagem);
+	
+	Color inverterCor(Color cor);
+	int inverterCor(int rgb);
+	
 }

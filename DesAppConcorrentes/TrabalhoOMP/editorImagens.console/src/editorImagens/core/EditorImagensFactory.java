@@ -1,17 +1,18 @@
 package editorImagens.core;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public class EditorImagensFactory {
 	
-	public IEditorImagens getEditorImagens(boolean versaoJomp){
-		EditorImagensX editorImagensX = new EditorImagensX(new EditorImagens(), new EditorImagens_jomp(), versaoJomp);
+	public IFachadaEdicaoImagens getEditorImagens(boolean versaoJomp){
+		IFachadaEdicaoImagens editorImagensX = new EditorImagensX(new EditorImagens(), new EditorImagens_jomp(), versaoJomp);
 		return editorImagensX;
 	}
 	
-	private class EditorImagensX implements IEditorImagens{
-		private EditorImagens editor;
-		private EditorImagens_jomp editorJomp;
+	private class EditorImagensX implements IFachadaEdicaoImagens {
+		private IEditorImagens editor;
+		private IEditorImagens editorJomp;
 		private boolean versaoJomp;
 
 		public EditorImagensX(EditorImagens editor, EditorImagens_jomp editorJomp, boolean versaoJomp) {
@@ -20,45 +21,51 @@ public class EditorImagensFactory {
 			this.versaoJomp = versaoJomp;
 		}
 		
+		/* (non-Javadoc)
+		 * @see editorImagens.core.IFachadaEdicaoImagens#blur(java.awt.image.BufferedImage, int, int)
+		 */
 		@Override
-		public void blur(BufferedImage imagem, int windowWidth, int windowHeight) {
-			if(versaoJomp)
-				editorJomp.blur(imagem, windowWidth, windowHeight);
-			else
-				editor.blur(imagem, windowWidth, windowHeight);
+		public void blur(BufferedImage imagem, int windowWidth, int windowHeight) {			
+			editor(versaoJomp).blur(imagem, windowWidth, windowHeight);
 		}
 
+		/* (non-Javadoc)
+		 * @see editorImagens.core.IFachadaEdicaoImagens#calcularCorMedia(java.awt.image.BufferedImage)
+		 */
 		@Override
-		public void media(BufferedImage imagem) {
-			if(versaoJomp)
-				editorJomp.media(imagem);
-			else
-				editor.media(imagem);
+		public Color calcularCorMedia(BufferedImage imagem) {			
+			Color corMedia = editor(versaoJomp).calcularCorMedia(imagem);
+			return corMedia;
 		}
 
+		/* (non-Javadoc)
+		 * @see editorImagens.core.IFachadaEdicaoImagens#inverterCores(java.awt.image.BufferedImage)
+		 */
 		@Override
 		public void inverterCores(BufferedImage imagem) {
-			if(versaoJomp)
-				editorJomp.inverterCores(imagem);
-			else
-				editor.inverterCores(imagem);
+			editor(versaoJomp).inverterCores(imagem);
 		}
 
+		/* (non-Javadoc)
+		 * @see editorImagens.core.IFachadaEdicaoImagens#mediaInvertida(java.awt.image.BufferedImage)
+		 */
 		@Override
-		public void mediaInvertida(BufferedImage imagem) {
-			if(versaoJomp)
-				editorJomp.mediaInvertida(imagem);
-			else
-				editor.mediaInvertida(imagem);
+		public Color mediaInvertida(BufferedImage imagem) {
+			Color corMedia = editor(versaoJomp).calcularCorMedia(imagem);
+			Color corMediaInvertida = editor(versaoJomp).inverterCor(corMedia);
+			return corMediaInvertida;
 		}
 
+		/* (non-Javadoc)
+		 * @see editorImagens.core.IFachadaEdicaoImagens#desaturarCorMedia(java.awt.image.BufferedImage)
+		 */
 		@Override
 		public void desaturarCorMedia(BufferedImage imagem) {
-			if(versaoJomp)
-				editorJomp.desaturarCorMedia(imagem);
-			else
-				editor.desaturarCorMedia(imagem);
+			editor(versaoJomp).desaturarCorMedia(imagem);
 		}
-		
+
+		private IEditorImagens editor(boolean versaoJomp){
+			return versaoJomp ? editor : editorJomp;
+		}
 	}
 }
