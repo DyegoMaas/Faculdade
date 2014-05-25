@@ -6,17 +6,17 @@ import java.awt.image.BufferedImage;
 public class EditorImagensFactory {
 	
 	public IFachadaEdicaoImagens getEditorImagens(boolean versaoJomp){
-		IFachadaEdicaoImagens editorImagensX = new EditorImagensX(new EditorImagens(), new EditorImagens_jomp(), versaoJomp);
+		IFachadaEdicaoImagens editorImagensX = new EditorImagensX(new EditorImagens_normal(), new EditorImagens_jomp(), versaoJomp);
 		return editorImagensX;
 	}
 	
 	private class EditorImagensX implements IFachadaEdicaoImagens {
-		private IEditorImagens editor;
+		private IEditorImagens editorNormal;
 		private IEditorImagens editorJomp;
 		private boolean versaoJomp;
 
-		public EditorImagensX(EditorImagens editor, EditorImagens_jomp editorJomp, boolean versaoJomp) {
-			this.editor = editor;
+		public EditorImagensX(EditorImagens_normal editor, EditorImagens_jomp editorJomp, boolean versaoJomp) {
+			this.editorNormal = editor;
 			this.editorJomp = editorJomp;
 			this.versaoJomp = versaoJomp;
 		}
@@ -34,8 +34,7 @@ public class EditorImagensFactory {
 		 */
 		@Override
 		public Color calcularCorMedia(BufferedImage imagem) {			
-			Color corMedia = editor(versaoJomp).calcularCorMedia(imagem);
-			return corMedia;
+			return editor(versaoJomp).calcularCorMedia(imagem);
 		}
 
 		/* (non-Javadoc)
@@ -52,8 +51,7 @@ public class EditorImagensFactory {
 		@Override
 		public Color mediaInvertida(BufferedImage imagem) {
 			Color corMedia = editor(versaoJomp).calcularCorMedia(imagem);
-			Color corMediaInvertida = editor(versaoJomp).inverterCor(corMedia);
-			return corMediaInvertida;
+			return editor(versaoJomp).inverterCor(corMedia);
 		}
 
 		/* (non-Javadoc)
@@ -65,7 +63,7 @@ public class EditorImagensFactory {
 		}
 
 		private IEditorImagens editor(boolean versaoJomp){
-			return versaoJomp ? editor : editorJomp;
+			return versaoJomp ? editorNormal : editorJomp;
 		}
 	}
 }

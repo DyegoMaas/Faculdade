@@ -13,7 +13,7 @@ import jomp.runtime.OMP;
  * IMPORTANTE: de preferência manter a implementação original como comentário para servir de referência 
  *
  */
-public class EditorImagens implements IEditorImagens{
+public class EditorImagens_normal implements IEditorImagens{
 
 	//NOK
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
@@ -185,7 +185,6 @@ public class EditorImagens implements IEditorImagens{
 		g2.drawImage(copia, 0, 0, null);
 	}
 
-	@Override
 	public void setarCor(BufferedImage imagem, Color novaCor) {
 		Graphics g = imagem.getGraphics();
 		g.setColor(novaCor);

@@ -1,15 +1,22 @@
 package editorImagens.console;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -17,7 +24,6 @@ import javax.swing.JRadioButton;
 import com.towel.swing.img.JImagePanel;
 
 import editorImagens.core.EditorImagensFactory;
-import editorImagens.core.IEditorImagens;
 import editorImagens.core.IFachadaEdicaoImagens;
 import editorImagens.core.ImageUtil;
 
@@ -27,8 +33,7 @@ public class Main {
 	
 	public static void main(String[] args){
 		args = new String[]{
-				//"C:\\Users\\Dyego\\Pictures\\wallpaper2835791.jpg"
-				"C:\\imagensTeste\\mass-effect.jpg"
+				"C:\\dev\\java\\OMP\\imagemTeste01.jpg"
 		};
 				
 		Main main = new Main();
@@ -43,6 +48,12 @@ public class Main {
 		}
 	}	
 	
+	private static WindowListener closeWindow = new WindowAdapter() {
+        public void windowClosing(WindowEvent e) {
+            e.getWindow().dispose();
+        }
+    };
+	
 	private IFachadaEdicaoImagens getEditorImagens(){
 		return new EditorImagensFactory().getEditorImagens(usarJomp);
 	}
@@ -52,7 +63,7 @@ public class Main {
 		
 		JPanel panelGeral = new JPanel();
 			
-		JFrame frame = new JFrame("Editor de imagens - JOMP");
+		final JFrame frame = new JFrame("Editor de imagens - JOMP");
 		panelGeral.setLayout(new BoxLayout(panelGeral, BoxLayout.Y_AXIS));
 		frame.add(panelGeral);
 		
@@ -84,8 +95,22 @@ public class Main {
 			public void actionPerformed(ActionEvent e) {	
 				Color corMedia = getEditorImagens().calcularCorMedia(imagem);
 				
-				System.out.println("cor média " + corMedia);
-				imagePanel.repaint();
+				BufferedImage imagemCor = new BufferedImage(220, 100, BufferedImage.TYPE_INT_RGB);
+				Graphics g = imagemCor.getGraphics();
+				g.setColor(corMedia);
+				g.fillRect(0, 0, imagemCor.getWidth(), imagemCor.getHeight());
+				
+				exibirCaixaCor(imagemCor);
+			}
+			
+			private void exibirCaixaCor(BufferedImage imagemCor){
+				final JImagePanel imagePanel = new JImagePanel(imagemCor);
+				
+				JDialog dialogCor = new JDialog(frame, "Cor média", Dialog.ModalityType.MODELESS);
+				dialogCor.add(imagePanel);
+				dialogCor.setBounds(new Rectangle(imagemCor.getWidth(), imagemCor.getHeight()));
+				dialogCor.addWindowListener(closeWindow);
+				dialogCor.setVisible(true);
 			}
 		});
 		
