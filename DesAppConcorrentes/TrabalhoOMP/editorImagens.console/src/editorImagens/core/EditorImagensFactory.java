@@ -3,6 +3,10 @@ package editorImagens.core;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import editorImagens.core.editor.EditorImagens_jomp;
+import editorImagens.core.editor.EditorImagens_normal;
+import editorImagens.core.editor.IEditorImagens;
+
 public class EditorImagensFactory {
 	
 	public IFachadaEdicaoImagens getEditorImagens(boolean versaoJomp){

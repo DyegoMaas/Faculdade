@@ -1,4 +1,4 @@
-package editorImagens.core;
+package editorImagens.core.editor;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
+import editorImagens.core.Colors;
+import editorImagens.core.ImageUtil;
 import jomp.runtime.OMP;
 
 
