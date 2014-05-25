@@ -22,6 +22,7 @@ public class EditorImagensFactory {
 		public EditorImagensX(EditorImagens_normal editor, EditorImagens_jomp editorJomp, boolean versaoJomp) {
 			this.editorNormal = editor;
 			this.editorJomp = editorJomp;
+			
 			this.versaoJomp = versaoJomp;
 		}
 		
@@ -55,7 +56,7 @@ public class EditorImagensFactory {
 		@Override
 		public Color mediaInvertida(BufferedImage imagem) {
 			Color corMedia = editor(versaoJomp).calcularCorMedia(imagem);
-			return editor(versaoJomp).inverterCor(corMedia);
+			return ImageUtil.inverterCor(corMedia);
 		}
 
 		/* (non-Javadoc)

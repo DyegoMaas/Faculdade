@@ -1,5 +1,6 @@
 package editorImagens.core;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Comparator;
@@ -24,5 +25,19 @@ public class ImageUtil {
 		        return Integer.compare(a[0], b[0]);
 		    }
 		};
+	}
+		
+	public static Color inverterCor(Color cor){
+		int corInvertida = inverterCor(cor.getRGB());		
+		return new Color(Colors.red(corInvertida), Colors.green(corInvertida), Colors.blue(corInvertida));
+	}
+	
+	public static int inverterCor(int rgb){
+		int red = 255 - Colors.red(rgb);
+		int green = 255 - Colors.green(rgb);
+		int blue = 255 - Colors.blue(rgb);
+		
+		Color corInvertida = new Color(red, green, blue);		
+		return corInvertida.getRGB();
 	}
 }

@@ -8,9 +8,5 @@ public interface IEditorImagens {
 	void setarCor(BufferedImage imagem, Color novaCor);
 	void inverterCores(BufferedImage imagem);
 	void desaturarCorMedia(BufferedImage imagem);
-	Color calcularCorMedia(BufferedImage imagem);
-	
-	Color inverterCor(Color cor);
-	int inverterCor(int rgb);
-	
+	Color calcularCorMedia(BufferedImage imagem);	
 }
