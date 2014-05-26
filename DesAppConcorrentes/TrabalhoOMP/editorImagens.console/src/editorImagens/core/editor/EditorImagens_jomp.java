@@ -83,26 +83,34 @@ public class EditorImagens_jomp implements IEditorImagens {
 	}
 	
 	public void mosaico(BufferedImage imagem, int tamanhoCelulas){
+//		int imageWidth = imagem.getWidth();
+//		int imageHeight = imagem.getHeight();
+//		
+//		for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
+//			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
+//				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
+//				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
+//				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
+//				
+//				BufferedImage subimage = imagem.getSubimage(x, y, w, h);
+//				Color corMedia = calcularCorMediaSingleThread(subimage);
+//				setarCor(imagem, corMedia, x, y, w, h);
+//			}
+//		}
+		
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
-//		int numCelulasX = (int)Math.ceil(imageWidth / (float)tamanhoCelulas);
-//		int numCelulasY = (int)Math.ceil(imageHeight / (float)tamanhoCelulas);
-		
-		try {
-			for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
-				for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
-					int w = (x + tamanhoCelulas > imageWidth)  ? (x + tamanhoCelulas) - imageWidth : tamanhoCelulas;
-					int h = (y + tamanhoCelulas > imageHeight)  ? (y + tamanhoCelulas) - imageHeight : tamanhoCelulas;					
-					System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
-					
-					BufferedImage subimage = imagem.getSubimage(x, y, w, h);
-					Color corMedia = calcularCorMediaSingleThread(subimage);
-					setarCor(imagem, corMedia, x, y, w, h);
-				}
-			}			
-		} catch (Exception e) {
-			
+		for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
+			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
+				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
+				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
+				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
+				
+				BufferedImage subimage = imagem.getSubimage(x, y, w, h);
+				Color corMedia = calcularCorMediaSingleThread(subimage);
+				setarCor(imagem, corMedia, x, y, w, h);
+			}
 		}
 	}
 	
@@ -115,13 +123,17 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int somaComponenteB = 0;
 		int x = 0, y = 0;
 		int rgb = 0;
-				
-		OMP.setNumThreads(imageWidth);
+		int threadId = 0;
+		int larguraBloco = imageWidth / 10;
+		int inicioX = 0;
+		
+		OMP.setNumThreads(10);
 
 // OMP PARALLEL BLOCK BEGINS
 {
   __omp_Class4 __omp_Object4 = new __omp_Class4();
   // shared variables
+  __omp_Object4.larguraBloco = larguraBloco;
   __omp_Object4.imageHeight = imageHeight;
   __omp_Object4.imageWidth = imageWidth;
   __omp_Object4.imagem = imagem;
@@ -137,6 +149,7 @@ public class EditorImagens_jomp implements IEditorImagens {
   somaComponenteG  += __omp_Object4._rd_somaComponenteG;
   somaComponenteB  += __omp_Object4._rd_somaComponenteB;
   // shared variables
+  larguraBloco = __omp_Object4.larguraBloco;
   imageHeight = __omp_Object4.imageHeight;
   imageWidth = __omp_Object4.imageWidth;
   imagem = __omp_Object4.imagem;
@@ -224,6 +237,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class4 extends jomp.runtime.BusyTask {
   // shared variables
+  int larguraBloco;
   int imageHeight;
   int imageWidth;
   BufferedImage imagem;
@@ -236,6 +250,8 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
   public void go(int __omp_me) throws Throwable {
   // firstprivate variables + init
   // private variables
+  int inicioX;
+  int threadId;
   int x;
   int y;
   int rgb;
@@ -246,7 +262,11 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
     // OMP USER CODE BEGINS
 
 		{			
-			x = OMP.getThreadNum();
+			threadId = OMP.getThreadNum();
+			inicioX = threadId * larguraBloco;
+			
+			System.out.printf("threadId: %d, bloco: %d, x(inicial): %d\n", threadId, larguraBloco, inicioX);			
+			for(x = inicioX; x < inicioX + larguraBloco; x++)			
 			for (y = 0; y < imageHeight; y++) {
 				rgb = imagem.getRGB(x, y);
 				

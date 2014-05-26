@@ -74,6 +74,21 @@ public class EditorImagens_normal implements IEditorImagens{
 	}
 	
 	public void mosaico(BufferedImage imagem, int tamanhoCelulas){
+//		int imageWidth = imagem.getWidth();
+//		int imageHeight = imagem.getHeight();
+//		
+//		for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
+//			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
+//				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
+//				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
+//				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
+//				
+//				BufferedImage subimage = imagem.getSubimage(x, y, w, h);
+//				Color corMedia = calcularCorMediaSingleThread(subimage);
+//				setarCor(imagem, corMedia, x, y, w, h);
+//			}
+//		}
+		
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
@@ -90,6 +105,9 @@ public class EditorImagens_normal implements IEditorImagens{
 		}
 	}
 	
+	/**
+	 * Uso de um bloco paralelo com redução de soma dos componentes das cores da imagem 
+	 */
 	public Color calcularCorMedia(BufferedImage imagem){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -99,11 +117,18 @@ public class EditorImagens_normal implements IEditorImagens{
 		int somaComponenteB = 0;
 		int x = 0, y = 0;
 		int rgb = 0;
-				
-		OMP.setNumThreads(imageWidth);
-		//omp parallel private(x,y,rgb) reduction(+:somaComponenteR,somaComponenteG,somaComponenteB)
+		int threadId = 0;
+		int larguraBloco = imageWidth / 10;
+		int inicioX = 0;
+		
+		OMP.setNumThreads(10);
+		//omp parallel private(inicioX,threadId,x,y,rgb) reduction(+:somaComponenteR,somaComponenteG,somaComponenteB)
 		{			
-			x = OMP.getThreadNum();
+			threadId = OMP.getThreadNum();
+			inicioX = threadId * larguraBloco;
+			
+			//System.out.printf("threadId: %d, bloco: %d, x(inicial): %d\n", threadId, larguraBloco, inicioX);			
+			for(x = inicioX; x < inicioX + larguraBloco; x++)			
 			for (y = 0; y < imageHeight; y++) {
 				rgb = imagem.getRGB(x, y);
 				
