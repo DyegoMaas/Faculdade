@@ -101,17 +101,37 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
-		for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
-			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
-				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
-				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
-				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
-				
-				BufferedImage subimage = imagem.getSubimage(x, y, w, h);
-				Color corMedia = calcularCorMediaSingleThread(subimage);
-				setarCor(imagem, corMedia, x, y, w, h);
-			}
-		}
+		int x = 0;
+		
+		int numThreads = imageWidth / tamanhoCelulas + 1;
+		OMP.setNumThreads(numThreads);
+
+// OMP PARALLEL BLOCK BEGINS
+{
+  __omp_Class4 __omp_Object4 = new __omp_Class4();
+  // shared variables
+  __omp_Object4.numThreads = numThreads;
+  __omp_Object4.imageHeight = imageHeight;
+  __omp_Object4.imageWidth = imageWidth;
+  __omp_Object4.tamanhoCelulas = tamanhoCelulas;
+  __omp_Object4.imagem = imagem;
+  // firstprivate variables
+  try {
+    jomp.runtime.OMP.doParallel(__omp_Object4);
+  } catch(Throwable __omp_exception) {
+    System.err.println("OMP Warning: Illegal thread exception ignored!");
+    System.err.println(__omp_exception);
+  }
+  // reduction variables
+  // shared variables
+  numThreads = __omp_Object4.numThreads;
+  imageHeight = __omp_Object4.imageHeight;
+  imageWidth = __omp_Object4.imageWidth;
+  tamanhoCelulas = __omp_Object4.tamanhoCelulas;
+  imagem = __omp_Object4.imagem;
+}
+// OMP PARALLEL BLOCK ENDS
+
 	}
 	
 	/**
@@ -134,28 +154,28 @@ public class EditorImagens_jomp implements IEditorImagens {
 
 // OMP PARALLEL BLOCK BEGINS
 {
-  __omp_Class4 __omp_Object4 = new __omp_Class4();
+  __omp_Class5 __omp_Object5 = new __omp_Class5();
   // shared variables
-  __omp_Object4.larguraBloco = larguraBloco;
-  __omp_Object4.imageHeight = imageHeight;
-  __omp_Object4.imageWidth = imageWidth;
-  __omp_Object4.imagem = imagem;
+  __omp_Object5.larguraBloco = larguraBloco;
+  __omp_Object5.imageHeight = imageHeight;
+  __omp_Object5.imageWidth = imageWidth;
+  __omp_Object5.imagem = imagem;
   // firstprivate variables
   try {
-    jomp.runtime.OMP.doParallel(__omp_Object4);
+    jomp.runtime.OMP.doParallel(__omp_Object5);
   } catch(Throwable __omp_exception) {
     System.err.println("OMP Warning: Illegal thread exception ignored!");
     System.err.println(__omp_exception);
   }
   // reduction variables
-  somaComponenteR  += __omp_Object4._rd_somaComponenteR;
-  somaComponenteG  += __omp_Object4._rd_somaComponenteG;
-  somaComponenteB  += __omp_Object4._rd_somaComponenteB;
+  somaComponenteR  += __omp_Object5._rd_somaComponenteR;
+  somaComponenteG  += __omp_Object5._rd_somaComponenteG;
+  somaComponenteB  += __omp_Object5._rd_somaComponenteB;
   // shared variables
-  larguraBloco = __omp_Object4.larguraBloco;
-  imageHeight = __omp_Object4.imageHeight;
-  imageWidth = __omp_Object4.imageWidth;
-  imagem = __omp_Object4.imagem;
+  larguraBloco = __omp_Object5.larguraBloco;
+  imageHeight = __omp_Object5.imageHeight;
+  imageWidth = __omp_Object5.imageWidth;
+  imagem = __omp_Object5.imagem;
 }
 // OMP PARALLEL BLOCK ENDS
 
@@ -293,8 +313,12 @@ public class EditorImagens_jomp implements IEditorImagens {
 		}	
 	}
 
-	
-	public void distorcerCores(BufferedImage imagem){		
+	/**
+	 * Cada bloco distorce um dos componentes de cor da imagem. As se\u00e7\u00f5es cr\u00edticas s\u00e3o utilizadas para 
+	 * evitar que duas se\u00e7\u00f5es atuem sobre a cor original de um pixel. Isto porque a inten\u00e7\u00e3o \u00e9 que cada 
+	 * pixel resultante tenha cada um de seus componentes distorcidos. 
+	 */
+	public void distorcerCores(BufferedImage imagem, float distorcaoR, float distorcaoG, float distorcaoB){		
 		OMP.setNumThreads(3);
 		
 		int imageWidth = imagem.getWidth();
@@ -306,23 +330,29 @@ public class EditorImagens_jomp implements IEditorImagens {
 
 // OMP PARALLEL BLOCK BEGINS
 {
-  __omp_Class5 __omp_Object5 = new __omp_Class5();
+  __omp_Class6 __omp_Object6 = new __omp_Class6();
   // shared variables
-  __omp_Object5.imageHeight = imageHeight;
-  __omp_Object5.imageWidth = imageWidth;
-  __omp_Object5.imagem = imagem;
+  __omp_Object6.imageHeight = imageHeight;
+  __omp_Object6.imageWidth = imageWidth;
+  __omp_Object6.distorcaoB = distorcaoB;
+  __omp_Object6.distorcaoG = distorcaoG;
+  __omp_Object6.distorcaoR = distorcaoR;
+  __omp_Object6.imagem = imagem;
   // firstprivate variables
   try {
-    jomp.runtime.OMP.doParallel(__omp_Object5);
+    jomp.runtime.OMP.doParallel(__omp_Object6);
   } catch(Throwable __omp_exception) {
     System.err.println("OMP Warning: Illegal thread exception ignored!");
     System.err.println(__omp_exception);
   }
   // reduction variables
   // shared variables
-  imageHeight = __omp_Object5.imageHeight;
-  imageWidth = __omp_Object5.imageWidth;
-  imagem = __omp_Object5.imagem;
+  imageHeight = __omp_Object6.imageHeight;
+  imageWidth = __omp_Object6.imageWidth;
+  distorcaoB = __omp_Object6.distorcaoB;
+  distorcaoG = __omp_Object6.distorcaoG;
+  distorcaoR = __omp_Object6.distorcaoR;
+  imagem = __omp_Object6.imagem;
 }
 // OMP PARALLEL BLOCK ENDS
 		
@@ -339,10 +369,13 @@ public class EditorImagens_jomp implements IEditorImagens {
 	}
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
-private class __omp_Class5 extends jomp.runtime.BusyTask {
+private class __omp_Class6 extends jomp.runtime.BusyTask {
   // shared variables
   int imageHeight;
   int imageWidth;
+  float distorcaoB;
+  float distorcaoG;
+  float distorcaoR;
   BufferedImage imagem;
   // firstprivate variables
   // variables to hold results of reduction
@@ -370,7 +403,7 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
                            // [last]private variables
                            // reduction variables + init to default
                            // -------------------------------------
-                           __ompName_6: while(true) {
+                           __ompName_7: while(true) {
                            switch((int)jomp.runtime.OMP.getTicket(__omp_me)) {
                            // OMP SECTION BLOCK 0 BEGINS
                              case 0: {
@@ -384,7 +417,8 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
 							g = Colors.green(rgb);
 							b = Colors.blue(rgb);
 							
-							r = Math.max(0, (int)(r * .2f));							
+							//distor\u00e7\u00e3o do vermelho
+							r = Math.min(255, Math.max(0, (int)(r * distorcaoR)));							
 							rgb = new Color(r, g, b).getRGB();
                                                          // OMP CRITICAL BLOCK BEGINS
                                                          synchronized (jomp.runtime.OMP.getLockByName("")) {
@@ -415,7 +449,8 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
 							g = Colors.green(rgb);
 							b = Colors.blue(rgb);
 							
-							g = Math.min(255, (int)(g * 1.5f));							
+							//distor\u00e7\u00e3o do verde
+							g = Math.min(255, Math.max(0, (int)(g * distorcaoG)));							
 							rgb = new Color(r, g, b).getRGB();
                                                          // OMP CRITICAL BLOCK BEGINS
                                                          synchronized (jomp.runtime.OMP.getLockByName("")) {
@@ -446,7 +481,8 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
 							g = Colors.green(rgb);
 							b = Colors.blue(rgb);
 							
-							b = Math.max(0, (int)(b * .8f));							
+							//distor\u00e7\u00e3o do azul
+							b = Math.min(255, Math.max(0, (int)(b * distorcaoB)));							
 							rgb = new Color(r, g, b).getRGB();
                                                          // OMP CRITICAL BLOCK BEGINS
                                                          synchronized (jomp.runtime.OMP.getLockByName("")) {
@@ -467,7 +503,7 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
                              };  break;
                            // OMP SECTION BLOCK 2 ENDS
 
-                             default: break __ompName_6;
+                             default: break __ompName_7;
                            } // of switch
                            } // of while
                            // call reducer
@@ -498,7 +534,7 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
 
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
-private class __omp_Class4 extends jomp.runtime.BusyTask {
+private class __omp_Class5 extends jomp.runtime.BusyTask {
   // shared variables
   int larguraBloco;
   int imageHeight;
@@ -548,6 +584,47 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
     _rd_somaComponenteR = somaComponenteR;
     _rd_somaComponenteG = somaComponenteG;
     _rd_somaComponenteB = somaComponenteB;
+  }
+  }
+}
+// OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
+
+
+
+// OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
+private class __omp_Class4 extends jomp.runtime.BusyTask {
+  // shared variables
+  int numThreads;
+  int imageHeight;
+  int imageWidth;
+  int tamanhoCelulas;
+  BufferedImage imagem;
+  // firstprivate variables
+  // variables to hold results of reduction
+
+  public void go(int __omp_me) throws Throwable {
+  // firstprivate variables + init
+  // private variables
+  int x;
+  // reduction variables, init to default
+    // OMP USER CODE BEGINS
+
+		{
+			x = OMP.getThreadNum() * tamanhoCelulas;	
+			System.out.println("x: " + x);
+			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
+				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
+				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
+				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
+				
+				setarCor(imagem, calcularCorMediaSingleThread(imagem.getSubimage(x, y, w, h)),
+						x, y, w, h);
+			}
+		}
+    // OMP USER CODE ENDS
+  // call reducer
+  // output to _rd_ copy
+  if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
   }
   }
 }

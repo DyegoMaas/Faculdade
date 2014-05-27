@@ -79,8 +79,8 @@ public class EditorImagensFactory {
 		}		
 
 		@Override
-		public void estatisticasImagem(BufferedImage imagem) {
-			editor(versaoJomp).distorcerCores(imagem);	
+		public void distorcerCores(BufferedImage imagem, float distorcaoR, float distorcaoG, float distorcaoB) {
+			editor(versaoJomp).distorcerCores(imagem, distorcaoR, distorcaoG, distorcaoB);			
 		}
 		
 		private IEditorImagens editor(boolean versaoJomp){

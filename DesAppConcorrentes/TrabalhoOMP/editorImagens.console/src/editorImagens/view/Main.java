@@ -153,7 +153,7 @@ public class Main {
 		criarBotao(panelBotoes, imagem, imagePanel, "Estatísticas", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getEditorImagens().estatisticasImagem(imagem);	
+				getEditorImagens().distorcerCores(imagem, .8f, 1.2f, .2f);	
 				imagePanel.repaint();
 			}
 		});

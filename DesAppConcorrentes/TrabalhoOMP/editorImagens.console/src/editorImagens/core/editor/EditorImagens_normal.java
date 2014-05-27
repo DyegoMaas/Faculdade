@@ -93,15 +93,21 @@ public class EditorImagens_normal implements IEditorImagens{
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
-		for (int x = 0; x < imageWidth; x += tamanhoCelulas) {
+		int x = 0;
+		
+		int numThreads = imageWidth / tamanhoCelulas + 1;
+		OMP.setNumThreads(numThreads);
+		//omp parallel private(x)
+		{
+			x = OMP.getThreadNum() * tamanhoCelulas;	
+			System.out.println("x: " + x);
 			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
 				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
 				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
 				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
 				
-				BufferedImage subimage = imagem.getSubimage(x, y, w, h);
-				Color corMedia = calcularCorMediaSingleThread(subimage);
-				setarCor(imagem, corMedia, x, y, w, h);
+				setarCor(imagem, calcularCorMediaSingleThread(imagem.getSubimage(x, y, w, h)),
+						x, y, w, h);
 			}
 		}
 	}
@@ -277,7 +283,7 @@ public class EditorImagens_normal implements IEditorImagens{
 	 * evitar que duas seções atuem sobre a cor original de um pixel. Isto porque a intenção é que cada 
 	 * pixel resultante tenha cada um de seus componentes distorcidos. 
 	 */
-	public void distorcerCores(BufferedImage imagem){		
+	public void distorcerCores(BufferedImage imagem, float distorcaoR, float distorcaoG, float distorcaoB){		
 		OMP.setNumThreads(3);
 		
 		int imageWidth = imagem.getWidth();
@@ -301,7 +307,7 @@ public class EditorImagens_normal implements IEditorImagens{
 							b = Colors.blue(rgb);
 							
 							//distorção do vermelho
-							r = Math.max(0, (int)(r * .2f));							
+							r = Math.min(255, Math.max(0, (int)(r * distorcaoR)));							
 							rgb = new Color(r, g, b).getRGB();
 							
 							//omp critical
@@ -322,7 +328,7 @@ public class EditorImagens_normal implements IEditorImagens{
 							b = Colors.blue(rgb);
 							
 							//distorção do verde
-							g = Math.min(255, (int)(g * 1.5f));							
+							g = Math.min(255, Math.max(0, (int)(g * distorcaoG)));							
 							rgb = new Color(r, g, b).getRGB();
 							
 							//omp critical
@@ -343,7 +349,7 @@ public class EditorImagens_normal implements IEditorImagens{
 							b = Colors.blue(rgb);
 							
 							//distorção do azul
-							b = Math.max(0, (int)(b * .8f));							
+							b = Math.min(255, Math.max(0, (int)(b * distorcaoB)));							
 							rgb = new Color(r, g, b).getRGB();
 							
 							//omp critical

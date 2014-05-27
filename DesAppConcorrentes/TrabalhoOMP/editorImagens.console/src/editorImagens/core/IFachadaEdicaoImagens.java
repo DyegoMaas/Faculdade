@@ -20,6 +20,6 @@ public interface IFachadaEdicaoImagens {
 	
 	public abstract void desaturar(BufferedImage imagem, float percentual);
 	
-	public abstract void estatisticasImagem(BufferedImage imagem);
+	public abstract void distorcerCores(BufferedImage imagem, float distorcaoR, float distorcaoG, float distorcaoB);
 
 }
