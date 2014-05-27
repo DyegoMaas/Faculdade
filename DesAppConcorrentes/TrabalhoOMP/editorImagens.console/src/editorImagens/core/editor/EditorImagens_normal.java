@@ -272,50 +272,85 @@ public class EditorImagens_normal implements IEditorImagens{
 		}	
 	}
 
-	
-	public void estatisticasImagem(BufferedImage imagem){		
-		OMP.setNumThreads(2);
+	/**
+	 * Cada bloco distorce um dos componentes de cor da imagem. As seções críticas são utilizadas para 
+	 * evitar que duas seções atuem sobre a cor original de um pixel. Isto porque a intenção é que cada 
+	 * pixel resultante tenha cada um de seus componentes distorcidos. 
+	 */
+	public void distorcerCores(BufferedImage imagem){		
+		OMP.setNumThreads(3);
 		
-		int i = 0;
-		//omp parallel private(i)
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		int x = 0, y = 0;
+		int rgb = 0;
+		int r = 0, g = 0, b = 0;
+		
+		//omp parallel private(x,y,rgb,r,g,b)
 		{
 			//omp sections
 			{
 				//omp section
 				{
-					//Color corMedia = calcularCorMediaSingleThread(imagem);
-					
-					for (i = 0; i < 100; i++) {
-						System.out.println("corMedia");
-						try {
-							Thread.sleep(5);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					for (x = 0; x < imageWidth; x++) {
+						for (y = 0; y < imageHeight; y++) {
+							rgb = imagem.getRGB(x, y);
+							r = Colors.red(rgb);
+							g = Colors.green(rgb);
+							b = Colors.blue(rgb);
+							
+							//distorção do vermelho
+							r = Math.max(0, (int)(r * .2f));							
+							rgb = new Color(r, g, b).getRGB();
+							
+							//omp critical
+							{
+								imagem.setRGB(x, y, rgb);
+							}
 						}
-					}					
-					
-					//omp critical
-					{
-						
 					}
 				}
 				
 				//omp section
 				{
-					for (i = 0; i < 100; i++) {
-						System.out.println("outra coisa");
-						try {
-							Thread.sleep(5);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					for (x = 0; x < imageWidth; x++) {
+						for (y = 0; y < imageHeight; y++) {
+							rgb = imagem.getRGB(x, y);
+							r = Colors.red(rgb);
+							g = Colors.green(rgb);
+							b = Colors.blue(rgb);
+							
+							//distorção do verde
+							g = Math.min(255, (int)(g * 1.5f));							
+							rgb = new Color(r, g, b).getRGB();
+							
+							//omp critical
+							{
+								imagem.setRGB(x, y, rgb);
+							}
 						}
-					}	
-					
-					//omp critical
-					{
-						
+					}
+				}
+				
+				//omp section
+				{
+					for (x = 0; x < imageWidth; x++) {
+						for (y = 0; y < imageHeight; y++) {
+							rgb = imagem.getRGB(x, y);
+							r = Colors.red(rgb);
+							g = Colors.green(rgb);
+							b = Colors.blue(rgb);
+							
+							//distorção do azul
+							b = Math.max(0, (int)(b * .8f));							
+							rgb = new Color(r, g, b).getRGB();
+							
+							//omp critical
+							{
+								imagem.setRGB(x, y, rgb);
+							}
+						}
 					}
 				}
 			}

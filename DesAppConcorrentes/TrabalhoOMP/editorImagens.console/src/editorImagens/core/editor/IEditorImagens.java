@@ -12,5 +12,5 @@ public interface IEditorImagens {
 	void mosaico(BufferedImage imagem, int tamanhoCelulas);
 	void desaturar(BufferedImage imagem, float percentual);
 	
-	void estatisticasImagem(BufferedImage imagem);
+	void distorcerCores(BufferedImage imagem);
 }

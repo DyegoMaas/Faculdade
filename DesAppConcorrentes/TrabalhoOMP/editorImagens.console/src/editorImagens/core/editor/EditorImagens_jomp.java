@@ -294,15 +294,22 @@ public class EditorImagens_jomp implements IEditorImagens {
 	}
 
 	
-	public void estatisticasImagem(BufferedImage imagem){		
-		OMP.setNumThreads(4);
+	public void distorcerCores(BufferedImage imagem){		
+		OMP.setNumThreads(3);
 		
-		int i = 0;
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+		
+		int x = 0, y = 0;
+		int rgb = 0;
+		int r = 0, g = 0, b = 0;
 
 // OMP PARALLEL BLOCK BEGINS
 {
   __omp_Class5 __omp_Object5 = new __omp_Class5();
   // shared variables
+  __omp_Object5.imageHeight = imageHeight;
+  __omp_Object5.imageWidth = imageWidth;
   __omp_Object5.imagem = imagem;
   // firstprivate variables
   try {
@@ -313,6 +320,8 @@ public class EditorImagens_jomp implements IEditorImagens {
   }
   // reduction variables
   // shared variables
+  imageHeight = __omp_Object5.imageHeight;
+  imageWidth = __omp_Object5.imageWidth;
   imagem = __omp_Object5.imagem;
 }
 // OMP PARALLEL BLOCK ENDS
@@ -332,6 +341,8 @@ public class EditorImagens_jomp implements IEditorImagens {
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class5 extends jomp.runtime.BusyTask {
   // shared variables
+  int imageHeight;
+  int imageWidth;
   BufferedImage imagem;
   // firstprivate variables
   // variables to hold results of reduction
@@ -339,7 +350,12 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
   public void go(int __omp_me) throws Throwable {
   // firstprivate variables + init
   // private variables
-  int i;
+  int x;
+  int y;
+  int rgb;
+  int r;
+  int g;
+  int b;
   // reduction variables, init to default
     // OMP USER CODE BEGINS
 
@@ -361,28 +377,28 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
                            // OMP USER CODE BEGINS
 
 				{
-					//Color corMedia = calcularCorMediaSingleThread(imagem);
-					
-					for (i = 0; i < 100; i++) {
-						System.out.println("corMedia");
-						try {
-							Thread.sleep(5);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					for (x = 0; x < imageWidth; x++) {
+						for (y = 0; y < imageHeight; y++) {
+							rgb = imagem.getRGB(x, y);
+							r = Colors.red(rgb);
+							g = Colors.green(rgb);
+							b = Colors.blue(rgb);
+							
+							r = Math.max(0, (int)(r * .2f));							
+							rgb = new Color(r, g, b).getRGB();
+                                                         // OMP CRITICAL BLOCK BEGINS
+                                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
+                                                         // OMP USER CODE BEGINS
+
+							{
+								imagem.setRGB(x, y, rgb);
+							}
+                                                         // OMP USER CODE ENDS
+                                                         }
+                                                         // OMP CRITICAL BLOCK ENDS
+
 						}
 					}
-                                         // OMP CRITICAL BLOCK BEGINS
-                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
-                                         // OMP USER CODE BEGINS
-
-					{
-						
-					}
-                                         // OMP USER CODE ENDS
-                                         }
-                                         // OMP CRITICAL BLOCK ENDS
-
 				}
                            // OMP USER CODE ENDS
                              };  break;
@@ -392,31 +408,64 @@ private class __omp_Class5 extends jomp.runtime.BusyTask {
                            // OMP USER CODE BEGINS
 
 				{
-					for (i = 0; i < 100; i++) {
-						System.out.println("outra coisa");
-						try {
-							Thread.sleep(5);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					for (x = 0; x < imageWidth; x++) {
+						for (y = 0; y < imageHeight; y++) {
+							rgb = imagem.getRGB(x, y);
+							r = Colors.red(rgb);
+							g = Colors.green(rgb);
+							b = Colors.blue(rgb);
+							
+							g = Math.min(255, (int)(g * 1.5f));							
+							rgb = new Color(r, g, b).getRGB();
+                                                         // OMP CRITICAL BLOCK BEGINS
+                                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
+                                                         // OMP USER CODE BEGINS
+
+							{
+								imagem.setRGB(x, y, rgb);
+							}
+                                                         // OMP USER CODE ENDS
+                                                         }
+                                                         // OMP CRITICAL BLOCK ENDS
+
 						}
 					}
-                                         // OMP CRITICAL BLOCK BEGINS
-                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
-                                         // OMP USER CODE BEGINS
+				}
+                           // OMP USER CODE ENDS
+                             };  break;
+                           // OMP SECTION BLOCK 1 ENDS
+                           // OMP SECTION BLOCK 2 BEGINS
+                             case 2: {
+                           // OMP USER CODE BEGINS
 
-					{
-						
+				{
+					for (x = 0; x < imageWidth; x++) {
+						for (y = 0; y < imageHeight; y++) {
+							rgb = imagem.getRGB(x, y);
+							r = Colors.red(rgb);
+							g = Colors.green(rgb);
+							b = Colors.blue(rgb);
+							
+							b = Math.max(0, (int)(b * .8f));							
+							rgb = new Color(r, g, b).getRGB();
+                                                         // OMP CRITICAL BLOCK BEGINS
+                                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
+                                                         // OMP USER CODE BEGINS
+
+							{
+								imagem.setRGB(x, y, rgb);
+							}
+                                                         // OMP USER CODE ENDS
+                                                         }
+                                                         // OMP CRITICAL BLOCK ENDS
+
+						}
 					}
-                                         // OMP USER CODE ENDS
-                                         }
-                                         // OMP CRITICAL BLOCK ENDS
-
 				}
                            // OMP USER CODE ENDS
                            amLast = true;
                              };  break;
-                           // OMP SECTION BLOCK 1 ENDS
+                           // OMP SECTION BLOCK 2 ENDS
 
                              default: break __ompName_6;
                            } // of switch

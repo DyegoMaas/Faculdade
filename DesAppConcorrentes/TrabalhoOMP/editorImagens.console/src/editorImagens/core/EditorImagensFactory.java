@@ -80,7 +80,7 @@ public class EditorImagensFactory {
 
 		@Override
 		public void estatisticasImagem(BufferedImage imagem) {
-			editor(versaoJomp).estatisticasImagem(imagem);	
+			editor(versaoJomp).distorcerCores(imagem);	
 		}
 		
 		private IEditorImagens editor(boolean versaoJomp){
