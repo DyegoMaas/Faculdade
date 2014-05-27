@@ -40,4 +40,16 @@ public class ImageUtil {
 		Color corInvertida = new Color(red, green, blue);		
 		return corInvertida.getRGB();
 	}
+	
+	public static int[] arrayComponentes(int rgb){
+		return new int[]{
+				Colors.red(rgb),
+				Colors.green(rgb),
+				Colors.blue(rgb)
+		};
+	}
+	
+	public static Color converterParaRGB(int[] componentes){
+		return new Color(componentes[0], componentes[1], componentes[2]);
+	}
 }

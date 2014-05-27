@@ -228,10 +228,10 @@ public class EditorImagens_jomp implements IEditorImagens {
 		g2.drawImage(copia, 0, 0, null);
 	}
 
-	public void desaturar(BufferedImage imagem, float percentual){
-		Color corMedia = calcularCorMedia(imagem);
-		
-		int[] componentes = arrayComponentes(corMedia.getRGB());		
+	public void desaturar(BufferedImage imagem, float percentual){		
+		//descobrir o componente de cor saturado
+		Color corMedia = calcularCorMedia(imagem);		
+		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
 		int maxValue = -1;
 		int indexCorSaturada = 0;
 		for (int i = 0; i < componentes.length; i++) {
@@ -248,30 +248,17 @@ public class EditorImagens_jomp implements IEditorImagens {
 			for (int y = 0; y < imageHeight; y++) {
 				
 				int rgb = imagem.getRGB(x, y);
-				componentes = arrayComponentes(rgb);
+				componentes = ImageUtil.arrayComponentes(rgb);
 				
-				int componenteDesaturado = (int)(componentes[indexCorSaturada] * percentual);
+				int componenteDesaturado = (int)(componentes[indexCorSaturada] * (1f - percentual));
 				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
 				
-				Color corDesaturada = converterParaRGB(componentes);
+				Color corDesaturada = ImageUtil.converterParaRGB(componentes);
 				rgb = corDesaturada.getRGB();
 				
 				imagem.setRGB(x, y, rgb);
 			}
-		}
-				
-	}
-	
-	private int[] arrayComponentes(int rgb){
-		return new int[]{
-				Colors.red(rgb),
-				Colors.green(rgb),
-				Colors.blue(rgb)
-		};
-	}
-	
-	private Color converterParaRGB(int[] componentes){
-		return new Color(componentes[0], componentes[1], componentes[2]);
+		}				
 	}
 
 	public void setarCor(BufferedImage imagem, Color novaCor) {
