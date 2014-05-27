@@ -20,7 +20,7 @@ public class EditorImagens_normal implements IEditorImagens{
 	
 	/**
 	 * Foi utilizado o algoritmo de blur baseado no cálculo da mediana.
-	 * Utilizamos um for paralelo com 50 threads e agendamento para no mínimo 3 execuções por
+	 * Utilizamos um for paralelo com 10 threads e agendamento dinâmico em chuncks de 5 execuções por thread
 	 */
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		int imageWidth = imagem.getWidth();
@@ -100,17 +100,18 @@ public class EditorImagens_normal implements IEditorImagens{
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
-		int x = 0;
+		int x = 0, y = 0;
+		int w = 0, h = 0;
 		
 		int numThreads = imageWidth / tamanhoCelulas + 1;
 		OMP.setNumThreads(numThreads);
-		//omp parallel private(x)
+		//omp parallel private(x,y,w,h)
 		{
 			x = OMP.getThreadNum() * tamanhoCelulas;	
 			System.out.println("x: " + x);
-			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
-				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
-				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
+			for (y = 0; y < imageHeight; y += tamanhoCelulas) {
+				w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
+				h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
 				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
 				
 				setarCor(imagem, calcularCorMediaSingleThread(imagem.getSubimage(x, y, w, h)),

@@ -108,7 +108,8 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 		
-		int x = 0;
+		int x = 0, y = 0;
+		int w = 0, h = 0;
 		
 		int numThreads = imageWidth / tamanhoCelulas + 1;
 		OMP.setNumThreads(numThreads);
@@ -615,15 +616,18 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
   // firstprivate variables + init
   // private variables
   int x;
+  int y;
+  int w;
+  int h;
   // reduction variables, init to default
     // OMP USER CODE BEGINS
 
 		{
 			x = OMP.getThreadNum() * tamanhoCelulas;	
 			System.out.println("x: " + x);
-			for (int y = 0; y < imageHeight; y += tamanhoCelulas) {
-				int w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
-				int h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
+			for (y = 0; y < imageHeight; y += tamanhoCelulas) {
+				w = (x + tamanhoCelulas > imageWidth)  ? imageWidth - x : tamanhoCelulas;
+				h = (y + tamanhoCelulas > imageHeight)  ? imageHeight - y : tamanhoCelulas;		
 				//System.out.printf("x: %d, w: %d, y: %d, h: %d \n", x, w, y, h);
 				
 				setarCor(imagem, calcularCorMediaSingleThread(imagem.getSubimage(x, y, w, h)),
