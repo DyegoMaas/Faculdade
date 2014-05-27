@@ -76,6 +76,11 @@ public class EditorImagensFactory {
 		@Override
 		public void desaturar(BufferedImage imagem, float percentual) {
 			editor(versaoJomp).desaturar(imagem, percentual);	
+		}		
+
+		@Override
+		public void estatisticasImagem(BufferedImage imagem) {
+			editor(versaoJomp).estatisticasImagem(imagem);	
 		}
 		
 		private IEditorImagens editor(boolean versaoJomp){

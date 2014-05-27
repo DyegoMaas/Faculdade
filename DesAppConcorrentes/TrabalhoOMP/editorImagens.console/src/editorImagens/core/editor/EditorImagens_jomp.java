@@ -211,7 +211,6 @@ public class EditorImagens_jomp implements IEditorImagens {
 		}
 	}
 
-	//NOK
 	public void xorBlendingComCorMedia(BufferedImage imagem) {
 		BufferedImage copia = new BufferedImage(imagem.getWidth(), imagem.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = copia.createGraphics();
@@ -229,6 +228,38 @@ public class EditorImagens_jomp implements IEditorImagens {
 	}
 
 	public void desaturar(BufferedImage imagem, float percentual){		
+//		//descobrir o componente de cor saturado
+//		Color corMedia = calcularCorMedia(imagem);		
+//		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
+//		int maxValue = -1;
+//		int indexCorSaturada = 0;
+//		for (int i = 0; i < componentes.length; i++) {
+//			if(componentes[i] > maxValue){
+//				maxValue = componentes[i];
+//				indexCorSaturada = i;
+//			}
+//		}
+//		
+//		int imageWidth = imagem.getWidth();
+//		int imageHeight = imagem.getHeight();
+//				
+//		//desaturando a imagem
+//		for (int x = 0; x < imageWidth; x++) {
+//			for (int y = 0; y < imageHeight; y++) {
+//				
+//				int rgb = imagem.getRGB(x, y);
+//				componentes = ImageUtil.arrayComponentes(rgb);
+//				
+//				int componenteDesaturado = (int)(componentes[indexCorSaturada] * (1f - percentual));
+//				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
+//				
+//				Color corDesaturada = ImageUtil.converterParaRGB(componentes);
+//				rgb = corDesaturada.getRGB();
+//				
+//				imagem.setRGB(x, y, rgb);
+//			}
+//		}	
+		
 		//descobrir o componente de cor saturado
 		Color corMedia = calcularCorMedia(imagem);		
 		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
@@ -244,6 +275,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 				
+		//desaturando a imagem
 		for (int x = 0; x < imageWidth; x++) {
 			for (int y = 0; y < imageHeight; y++) {
 				
@@ -258,9 +290,35 @@ public class EditorImagens_jomp implements IEditorImagens {
 				
 				imagem.setRGB(x, y, rgb);
 			}
-		}				
+		}	
 	}
 
+	
+	public void estatisticasImagem(BufferedImage imagem){		
+		OMP.setNumThreads(4);
+		
+		int i = 0;
+
+// OMP PARALLEL BLOCK BEGINS
+{
+  __omp_Class5 __omp_Object5 = new __omp_Class5();
+  // shared variables
+  __omp_Object5.imagem = imagem;
+  // firstprivate variables
+  try {
+    jomp.runtime.OMP.doParallel(__omp_Object5);
+  } catch(Throwable __omp_exception) {
+    System.err.println("OMP Warning: Illegal thread exception ignored!");
+    System.err.println(__omp_exception);
+  }
+  // reduction variables
+  // shared variables
+  imagem = __omp_Object5.imagem;
+}
+// OMP PARALLEL BLOCK ENDS
+		
+	}
+	
 	public void setarCor(BufferedImage imagem, Color novaCor) {
 		setarCor(imagem, novaCor, 0, 0, imagem.getWidth(), imagem.getHeight());
 	}
@@ -270,6 +328,125 @@ public class EditorImagens_jomp implements IEditorImagens {
 		g.setColor(novaCor);
 		g.fillRect(x, y, w, h);
 	}
+
+// OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
+private class __omp_Class5 extends jomp.runtime.BusyTask {
+  // shared variables
+  BufferedImage imagem;
+  // firstprivate variables
+  // variables to hold results of reduction
+
+  public void go(int __omp_me) throws Throwable {
+  // firstprivate variables + init
+  // private variables
+  int i;
+  // reduction variables, init to default
+    // OMP USER CODE BEGINS
+
+		{
+                         { // OMP SECTIONS BLOCK BEGINS
+                         // copy of firstprivate variables, initialized
+                         // copy of lastprivate variables
+                         // variables to hold result of reduction
+                         boolean amLast=false;
+                         {
+                           // firstprivate variables + init
+                           // [last]private variables
+                           // reduction variables + init to default
+                           // -------------------------------------
+                           __ompName_6: while(true) {
+                           switch((int)jomp.runtime.OMP.getTicket(__omp_me)) {
+                           // OMP SECTION BLOCK 0 BEGINS
+                             case 0: {
+                           // OMP USER CODE BEGINS
+
+				{
+					//Color corMedia = calcularCorMediaSingleThread(imagem);
+					
+					for (i = 0; i < 100; i++) {
+						System.out.println("corMedia");
+						try {
+							Thread.sleep(5);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+                                         // OMP CRITICAL BLOCK BEGINS
+                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
+                                         // OMP USER CODE BEGINS
+
+					{
+						
+					}
+                                         // OMP USER CODE ENDS
+                                         }
+                                         // OMP CRITICAL BLOCK ENDS
+
+				}
+                           // OMP USER CODE ENDS
+                             };  break;
+                           // OMP SECTION BLOCK 0 ENDS
+                           // OMP SECTION BLOCK 1 BEGINS
+                             case 1: {
+                           // OMP USER CODE BEGINS
+
+				{
+					for (i = 0; i < 100; i++) {
+						System.out.println("outra coisa");
+						try {
+							Thread.sleep(5);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+                                         // OMP CRITICAL BLOCK BEGINS
+                                         synchronized (jomp.runtime.OMP.getLockByName("")) {
+                                         // OMP USER CODE BEGINS
+
+					{
+						
+					}
+                                         // OMP USER CODE ENDS
+                                         }
+                                         // OMP CRITICAL BLOCK ENDS
+
+				}
+                           // OMP USER CODE ENDS
+                           amLast = true;
+                             };  break;
+                           // OMP SECTION BLOCK 1 ENDS
+
+                             default: break __ompName_6;
+                           } // of switch
+                           } // of while
+                           // call reducer
+                           jomp.runtime.OMP.resetTicket(__omp_me);
+                           jomp.runtime.OMP.doBarrier(__omp_me);
+                           // copy lastprivate variables out
+                           if (amLast) {
+                           }
+                         }
+                         // update lastprivate variables
+                         if (amLast) {
+                         }
+                         // update reduction variables
+                         if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
+                         }
+                         } // OMP SECTIONS BLOCK ENDS
+
+		}
+    // OMP USER CODE ENDS
+  // call reducer
+  // output to _rd_ copy
+  if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
+  }
+  }
+}
+// OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
+
+
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class4 extends jomp.runtime.BusyTask {

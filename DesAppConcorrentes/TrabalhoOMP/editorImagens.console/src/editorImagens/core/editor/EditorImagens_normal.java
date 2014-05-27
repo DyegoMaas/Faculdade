@@ -207,6 +207,38 @@ public class EditorImagens_normal implements IEditorImagens{
 	}
 
 	public void desaturar(BufferedImage imagem, float percentual){		
+//		//descobrir o componente de cor saturado
+//		Color corMedia = calcularCorMedia(imagem);		
+//		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
+//		int maxValue = -1;
+//		int indexCorSaturada = 0;
+//		for (int i = 0; i < componentes.length; i++) {
+//			if(componentes[i] > maxValue){
+//				maxValue = componentes[i];
+//				indexCorSaturada = i;
+//			}
+//		}
+//		
+//		int imageWidth = imagem.getWidth();
+//		int imageHeight = imagem.getHeight();
+//				
+//		//desaturando a imagem
+//		for (int x = 0; x < imageWidth; x++) {
+//			for (int y = 0; y < imageHeight; y++) {
+//				
+//				int rgb = imagem.getRGB(x, y);
+//				componentes = ImageUtil.arrayComponentes(rgb);
+//				
+//				int componenteDesaturado = (int)(componentes[indexCorSaturada] * (1f - percentual));
+//				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
+//				
+//				Color corDesaturada = ImageUtil.converterParaRGB(componentes);
+//				rgb = corDesaturada.getRGB();
+//				
+//				imagem.setRGB(x, y, rgb);
+//			}
+//		}	
+		
 		//descobrir o componente de cor saturado
 		Color corMedia = calcularCorMedia(imagem);		
 		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
@@ -237,9 +269,59 @@ public class EditorImagens_normal implements IEditorImagens{
 				
 				imagem.setRGB(x, y, rgb);
 			}
-		}				
+		}	
 	}
 
+	
+	public void estatisticasImagem(BufferedImage imagem){		
+		OMP.setNumThreads(2);
+		
+		int i = 0;
+		//omp parallel private(i)
+		{
+			//omp sections
+			{
+				//omp section
+				{
+					//Color corMedia = calcularCorMediaSingleThread(imagem);
+					
+					for (i = 0; i < 100; i++) {
+						System.out.println("corMedia");
+						try {
+							Thread.sleep(5);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}					
+					
+					//omp critical
+					{
+						
+					}
+				}
+				
+				//omp section
+				{
+					for (i = 0; i < 100; i++) {
+						System.out.println("outra coisa");
+						try {
+							Thread.sleep(5);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}	
+					
+					//omp critical
+					{
+						
+					}
+				}
+			}
+		}		
+	}
+	
 	public void setarCor(BufferedImage imagem, Color novaCor) {
 		setarCor(imagem, novaCor, 0, 0, imagem.getWidth(), imagem.getHeight());
 	}

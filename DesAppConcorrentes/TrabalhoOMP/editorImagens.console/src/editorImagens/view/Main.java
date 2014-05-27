@@ -150,6 +150,14 @@ public class Main {
 			}
 		});
 		
+		criarBotao(panelBotoes, imagem, imagePanel, "Estatísticas", new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getEditorImagens().estatisticasImagem(imagem);	
+				imagePanel.repaint();
+			}
+		});
+		
 		panelGeral.add(panelBotoes);
 		panelGeral.add(imagePanel);
 		

@@ -11,4 +11,6 @@ public interface IEditorImagens {
 	Color calcularCorMedia(BufferedImage imagem);
 	void mosaico(BufferedImage imagem, int tamanhoCelulas);
 	void desaturar(BufferedImage imagem, float percentual);
+	
+	void estatisticasImagem(BufferedImage imagem);
 }

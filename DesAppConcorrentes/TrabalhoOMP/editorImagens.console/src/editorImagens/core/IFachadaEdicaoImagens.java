@@ -19,5 +19,7 @@ public interface IFachadaEdicaoImagens {
 	public abstract void mosaico(BufferedImage imagem, int tamanhoCelulas);
 	
 	public abstract void desaturar(BufferedImage imagem, float percentual);
+	
+	public abstract void estatisticasImagem(BufferedImage imagem);
 
 }
