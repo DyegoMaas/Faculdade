@@ -123,10 +123,10 @@ public class Main {
 			}
 		});
 		
-		criarBotao(panelBotoes, imagem, imagePanel, "Desaturar cor média", new ActionListener() {			
+		criarBotao(panelBotoes, imagem, imagePanel, "XOR com a cor média", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				getEditorImagens().desaturarCorMedia(imagem);	
+				getEditorImagens().xorBlendingComCorMedia(imagem);	
 				imagePanel.repaint();
 			}
 		});
@@ -134,15 +134,18 @@ public class Main {
 		criarBotao(panelBotoes, imagem, imagePanel, "Mosaico", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				
-				int tamanhoCelulas = 20;
-				String input = JOptionPane.showInputDialog("Tamanho das células: ");
-				try {
-					tamanhoCelulas = Integer.parseInt(input);
-				} catch (Exception e2) {
-					System.out.println(e2);
-				}				
+				int tamanhoCelulas = showInputDialog("Tamanho das células: ");			
 				
 				getEditorImagens().mosaico(imagem, tamanhoCelulas);	
+				imagePanel.repaint();
+			}
+		});
+		
+		criarBotao(panelBotoes, imagem, imagePanel, "Desaturar", new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int percentual = showInputDialog("Percentual de desaturação (inteiro): ");
+				getEditorImagens().desaturar(imagem, percentual / 100f);	
 				imagePanel.repaint();
 			}
 		});
@@ -164,5 +167,16 @@ public class Main {
 		btAvacalhar.addActionListener(acao);
 		
 		panel.add(btAvacalhar);
+	}
+	
+	private int showInputDialog(String titulo){
+		int saida = 0;
+		String entrada = JOptionPane.showInputDialog(titulo);
+		try {
+			saida = Integer.parseInt(entrada);
+		} catch (Exception e2) {
+			System.out.println(e2);
+		}		
+		return saida;
 	}
 }

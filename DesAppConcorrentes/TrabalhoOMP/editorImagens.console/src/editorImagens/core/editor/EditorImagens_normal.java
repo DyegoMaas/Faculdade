@@ -34,7 +34,7 @@ public class EditorImagens_normal implements IEditorImagens{
 		int iArrays = 0;
 		int mediana = 0;				
 		
-		OMP.setNumThreads(windowWidth);
+		OMP.setNumThreads(10);
 		//omp parallel for private(xJomp, y, fx, fy, iArrays, mediana)
 		for (xJomp = 0; xJomp < (imageWidth - edgeX * 2); xJomp++) {
 			int x = xJomp + edgeX;
@@ -47,9 +47,10 @@ public class EditorImagens_normal implements IEditorImagens{
 					}
 				}
 				
+				//ordenação horizontal
 				Arrays.sort(colorArray, ImageUtil.getIntArrayComparator());
 				
-				//TODO não deveria ser necessário fazer essa ordenação
+				//ordenação vertical
 				for (iArrays = 0; iArrays < colorArray.length; iArrays++) {
 					Arrays.sort(colorArray[iArrays]);
 				}
@@ -179,6 +180,7 @@ public class EditorImagens_normal implements IEditorImagens{
 	public void inverterCores(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
+		
 		int x = 0, y = 0;
 		for (x = 0; x < imageWidth; x++) {
 			for (y = 0; y < imageHeight; y++) {
@@ -189,7 +191,7 @@ public class EditorImagens_normal implements IEditorImagens{
 	}
 
 	//NOK
-	public void desaturarCorMedia(BufferedImage imagem) {
+	public void xorBlendingComCorMedia(BufferedImage imagem) {
 		BufferedImage copia = new BufferedImage(imagem.getWidth(), imagem.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = copia.createGraphics();
 		
@@ -203,6 +205,52 @@ public class EditorImagens_normal implements IEditorImagens{
 		
 		Graphics g2 = imagem.getGraphics();
 		g2.drawImage(copia, 0, 0, null);
+	}
+
+	public void desaturar(BufferedImage imagem, float percentual){
+		Color corMedia = calcularCorMedia(imagem);
+		
+		int[] componentes = arrayComponentes(corMedia.getRGB());		
+		int maxValue = -1;
+		int indexCorSaturada = 0;
+		for (int i = 0; i < componentes.length; i++) {
+			if(componentes[i] > maxValue){
+				maxValue = componentes[i];
+				indexCorSaturada = i;
+			}
+		}
+		
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+				
+		for (int x = 0; x < imageWidth; x++) {
+			for (int y = 0; y < imageHeight; y++) {
+				
+				int rgb = imagem.getRGB(x, y);
+				componentes = arrayComponentes(rgb);
+				
+				int componenteDesaturado = (int)(componentes[indexCorSaturada] * (1f - percentual));
+				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
+				
+				Color corDesaturada = converterParaRGB(componentes);
+				rgb = corDesaturada.getRGB();
+				
+				imagem.setRGB(x, y, rgb);
+			}
+		}
+				
+	}
+	
+	private int[] arrayComponentes(int rgb){
+		return new int[]{
+				Colors.red(rgb),
+				Colors.green(rgb),
+				Colors.blue(rgb)
+		};
+	}
+	
+	private Color converterParaRGB(int[] componentes){
+		return new Color(componentes[0], componentes[1], componentes[2]);
 	}
 
 	public void setarCor(BufferedImage imagem, Color novaCor) {

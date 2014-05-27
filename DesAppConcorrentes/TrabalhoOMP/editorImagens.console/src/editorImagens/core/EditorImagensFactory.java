@@ -64,13 +64,18 @@ public class EditorImagensFactory {
 		 * @see editorImagens.core.IFachadaEdicaoImagens#desaturarCorMedia(java.awt.image.BufferedImage)
 		 */
 		@Override
-		public void desaturarCorMedia(BufferedImage imagem) {
-			editor(versaoJomp).desaturarCorMedia(imagem);
+		public void xorBlendingComCorMedia(BufferedImage imagem) {
+			editor(versaoJomp).xorBlendingComCorMedia(imagem);
 		}
 
 		@Override
 		public void mosaico(BufferedImage imagem, int tamanhoCelulas) {
 			editor(versaoJomp).mosaico(imagem, tamanhoCelulas);			
+		}
+
+		@Override
+		public void desaturar(BufferedImage imagem, float percentual) {
+			editor(versaoJomp).desaturar(imagem, percentual);	
 		}
 		
 		private IEditorImagens editor(boolean versaoJomp){

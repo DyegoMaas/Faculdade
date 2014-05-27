@@ -7,7 +7,8 @@ public interface IEditorImagens {
 	void blur(BufferedImage imagem, int windowWidth, int windowHeight);
 	void setarCor(BufferedImage imagem, Color novaCor);
 	void inverterCores(BufferedImage imagem);
-	void desaturarCorMedia(BufferedImage imagem);
+	void xorBlendingComCorMedia(BufferedImage imagem);
 	Color calcularCorMedia(BufferedImage imagem);
 	void mosaico(BufferedImage imagem, int tamanhoCelulas);
+	void desaturar(BufferedImage imagem, float percentual);
 }

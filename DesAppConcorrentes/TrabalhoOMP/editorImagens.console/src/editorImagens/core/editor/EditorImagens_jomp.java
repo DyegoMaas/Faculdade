@@ -35,7 +35,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int iArrays = 0;
 		int mediana = 0;				
 		
-		OMP.setNumThreads(windowWidth);
+		OMP.setNumThreads(10);
 
 // OMP PARALLEL BLOCK BEGINS
 {
@@ -114,6 +114,9 @@ public class EditorImagens_jomp implements IEditorImagens {
 		}
 	}
 	
+	/**
+	 * Uso de um bloco paralelo com redu\u00e7\u00e3o de soma dos componentes das cores da imagem 
+	 */
 	public Color calcularCorMedia(BufferedImage imagem){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -198,6 +201,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 	public void inverterCores(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
+		
 		int x = 0, y = 0;
 		for (x = 0; x < imageWidth; x++) {
 			for (y = 0; y < imageHeight; y++) {
@@ -208,7 +212,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 	}
 
 	//NOK
-	public void desaturarCorMedia(BufferedImage imagem) {
+	public void xorBlendingComCorMedia(BufferedImage imagem) {
 		BufferedImage copia = new BufferedImage(imagem.getWidth(), imagem.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = copia.createGraphics();
 		
@@ -222,6 +226,52 @@ public class EditorImagens_jomp implements IEditorImagens {
 		
 		Graphics g2 = imagem.getGraphics();
 		g2.drawImage(copia, 0, 0, null);
+	}
+
+	public void desaturar(BufferedImage imagem, float percentual){
+		Color corMedia = calcularCorMedia(imagem);
+		
+		int[] componentes = arrayComponentes(corMedia.getRGB());		
+		int maxValue = -1;
+		int indexCorSaturada = 0;
+		for (int i = 0; i < componentes.length; i++) {
+			if(componentes[i] > maxValue){
+				maxValue = componentes[i];
+				indexCorSaturada = i;
+			}
+		}
+		
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();
+				
+		for (int x = 0; x < imageWidth; x++) {
+			for (int y = 0; y < imageHeight; y++) {
+				
+				int rgb = imagem.getRGB(x, y);
+				componentes = arrayComponentes(rgb);
+				
+				int componenteDesaturado = (int)(componentes[indexCorSaturada] * percentual);
+				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
+				
+				Color corDesaturada = converterParaRGB(componentes);
+				rgb = corDesaturada.getRGB();
+				
+				imagem.setRGB(x, y, rgb);
+			}
+		}
+				
+	}
+	
+	private int[] arrayComponentes(int rgb){
+		return new int[]{
+				Colors.red(rgb),
+				Colors.green(rgb),
+				Colors.blue(rgb)
+		};
+	}
+	
+	private Color converterParaRGB(int[] componentes){
+		return new Color(componentes[0], componentes[1], componentes[2]);
 	}
 
 	public void setarCor(BufferedImage imagem, Color novaCor) {
@@ -265,7 +315,7 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
 			threadId = OMP.getThreadNum();
 			inicioX = threadId * larguraBloco;
 			
-			System.out.printf("threadId: %d, bloco: %d, x(inicial): %d\n", threadId, larguraBloco, inicioX);			
+			//System.out.printf("threadId: %d, bloco: %d, x(inicial): %d\n", threadId, larguraBloco, inicioX);			
 			for(x = inicioX; x < inicioX + larguraBloco; x++)			
 			for (y = 0; y < imageHeight; y++) {
 				rgb = imagem.getRGB(x, y);
@@ -355,9 +405,10 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
 					}
 				}
 				
+				//ordena\u00e7\u00e3o horizontal
 				Arrays.sort(colorArray, ImageUtil.getIntArrayComparator());
 				
-				//TODO n\u00e3o deveria ser necess\u00e1rio fazer essa ordena\u00e7\u00e3o
+				//ordena\u00e7\u00e3o vertical
 				for (iArrays = 0; iArrays < colorArray.length; iArrays++) {
 					Arrays.sort(colorArray[iArrays]);
 				}
