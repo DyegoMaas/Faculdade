@@ -18,8 +18,11 @@ import jomp.runtime.OMP;
  */
 public class EditorImagens_jomp implements IEditorImagens {
 
-
-	//NOK
+	
+	/**
+	 * Foi utilizado o algoritmo de blur baseado no c\u00e1lculo da mediana.
+	 * Utilizamos um for paralelo com 50 threads e agendamento para no m\u00ednimo 3 execu\u00e7\u00f5es por
+	 */
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -82,6 +85,10 @@ public class EditorImagens_jomp implements IEditorImagens {
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 	
+	/**
+	 * Utiliza\u00e7\u00e3o de um bloco paralelo simples para o c\u00e1lculo do mosaico. Cada coluna de quadrados
+	 * do mosaico \u00e9 executada por uma thread.
+	 */
 	public void mosaico(BufferedImage imagem, int tamanhoCelulas){
 //		int imageWidth = imagem.getWidth();
 //		int imageHeight = imagem.getHeight();
@@ -189,6 +196,9 @@ public class EditorImagens_jomp implements IEditorImagens {
 		return corMedia;
 	}
 
+	/**
+	 * Vers\u00e3o single thread do c\u00e1lculo de cor m\u00e9dia para ser utilizado em outros algoritmos paralelizados.
+	 */
 	private Color calcularCorMediaSingleThread(BufferedImage imagem){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -217,7 +227,6 @@ public class EditorImagens_jomp implements IEditorImagens {
 		return corMedia;
 	}
 	
-	//TODO: paralelizar
 	public void inverterCores(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -672,16 +681,9 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                             __omp_WholeData2.start = (long)( 0);
                             __omp_WholeData2.stop = (long)( (imageWidth - edgeX * 2));
                             __omp_WholeData2.step = (long)(1);
-                            jomp.runtime.OMP.setChunkStatic(__omp_WholeData2);
-                            while(!__omp_ChunkData1.isLast && jomp.runtime.OMP.getLoopStatic(__omp_me, __omp_WholeData2, __omp_ChunkData1)) {
-                            for(;;) {
-                              if(__omp_WholeData2.step > 0) {
-                                 if(__omp_ChunkData1.stop > __omp_WholeData2.stop) __omp_ChunkData1.stop = __omp_WholeData2.stop;
-                                 if(__omp_ChunkData1.start >= __omp_WholeData2.stop) break;
-                              } else {
-                                 if(__omp_ChunkData1.stop < __omp_WholeData2.stop) __omp_ChunkData1.stop = __omp_WholeData2.stop;
-                                 if(__omp_ChunkData1.start > __omp_WholeData2.stop) break;
-                              }
+                            __omp_WholeData2.chunkSize = (long)( 5);
+                            jomp.runtime.OMP.initTicket(__omp_me, __omp_WholeData2);
+                            while(!__omp_ChunkData1.isLast && jomp.runtime.OMP.getLoopDynamic(__omp_me, __omp_WholeData2, __omp_ChunkData1)) {
                               for( xJomp = (int)__omp_ChunkData1.start; xJomp < __omp_ChunkData1.stop; xJomp += __omp_ChunkData1.step) {
                                 // OMP USER CODE BEGINS
  {
@@ -710,13 +712,9 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                                 // OMP USER CODE ENDS
                                 if (xJomp == (__omp_WholeData2.stop-1)) amLast = true;
                               } // of for 
-                              if(__omp_ChunkData1.startStep == 0)
-                                break;
-                              __omp_ChunkData1.start += __omp_ChunkData1.startStep;
-                              __omp_ChunkData1.stop += __omp_ChunkData1.startStep;
-                            } // of for(;;)
                             } // of while
                             // call reducer
+                            jomp.runtime.OMP.resetTicket(__omp_me);
                             jomp.runtime.OMP.doBarrier(__omp_me);
                             // copy lastprivate variables out
                             if (amLast) {

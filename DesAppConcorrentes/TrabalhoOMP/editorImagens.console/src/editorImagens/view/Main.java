@@ -150,7 +150,7 @@ public class Main {
 			}
 		});
 		
-		criarBotao(panelBotoes, imagem, imagePanel, "Estatísticas", new ActionListener() {			
+		criarBotao(panelBotoes, imagem, imagePanel, "Distorcer cores", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				getEditorImagens().distorcerCores(imagem, .8f, 1.2f, .2f);	

@@ -17,8 +17,11 @@ import jomp.runtime.OMP;
  * IMPORTANTE: de preferência manter a implementação original como comentário para servir de referência
  */
 public class EditorImagens_normal implements IEditorImagens{
-
-	//NOK
+	
+	/**
+	 * Foi utilizado o algoritmo de blur baseado no cálculo da mediana.
+	 * Utilizamos um for paralelo com 50 threads e agendamento para no mínimo 3 execuções por
+	 */
 	public void blur(BufferedImage imagem, int windowWidth, int windowHeight){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -35,7 +38,7 @@ public class EditorImagens_normal implements IEditorImagens{
 		int mediana = 0;				
 		
 		OMP.setNumThreads(10);
-		//omp parallel for private(xJomp, y, fx, fy, iArrays, mediana)
+		//omp parallel for private(xJomp, y, fx, fy, iArrays, mediana) schedule(dynamic, 5)
 		for (xJomp = 0; xJomp < (imageWidth - edgeX * 2); xJomp++) {
 			int x = xJomp + edgeX;
 			for (y = edgeY; y < (imageHeight - edgeY); y++) {
@@ -74,6 +77,10 @@ public class EditorImagens_normal implements IEditorImagens{
 //				           outputPixelValue[x][y] := colorArray[window width / 2][window height / 2]
 	}
 	
+	/**
+	 * Utilização de um bloco paralelo simples para o cálculo do mosaico. Cada coluna de quadrados
+	 * do mosaico é executada por uma thread.
+	 */
 	public void mosaico(BufferedImage imagem, int tamanhoCelulas){
 //		int imageWidth = imagem.getWidth();
 //		int imageHeight = imagem.getHeight();
@@ -154,6 +161,9 @@ public class EditorImagens_normal implements IEditorImagens{
 		return corMedia;
 	}
 
+	/**
+	 * Versão single thread do cálculo de cor média para ser utilizado em outros algoritmos paralelizados.
+	 */
 	private Color calcularCorMediaSingleThread(BufferedImage imagem){
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
@@ -182,7 +192,6 @@ public class EditorImagens_normal implements IEditorImagens{
 		return corMedia;
 	}
 	
-	//TODO: paralelizar
 	public void inverterCores(BufferedImage imagem) {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
