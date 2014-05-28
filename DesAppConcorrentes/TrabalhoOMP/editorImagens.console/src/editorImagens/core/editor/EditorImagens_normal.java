@@ -222,67 +222,31 @@ public class EditorImagens_normal implements IEditorImagens{
 		g2.drawImage(copia, 0, 0, null);
 	}
 
-	public void desaturar(BufferedImage imagem, float percentual){		
-//		//descobrir o componente de cor saturado
-//		Color corMedia = calcularCorMedia(imagem);		
-//		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
-//		int maxValue = -1;
-//		int indexCorSaturada = 0;
-//		for (int i = 0; i < componentes.length; i++) {
-//			if(componentes[i] > maxValue){
-//				maxValue = componentes[i];
-//				indexCorSaturada = i;
-//			}
-//		}
-//		
-//		int imageWidth = imagem.getWidth();
-//		int imageHeight = imagem.getHeight();
-//				
-//		//desaturando a imagem
-//		for (int x = 0; x < imageWidth; x++) {
-//			for (int y = 0; y < imageHeight; y++) {
-//				
-//				int rgb = imagem.getRGB(x, y);
-//				componentes = ImageUtil.arrayComponentes(rgb);
-//				
-//				int componenteDesaturado = (int)(componentes[indexCorSaturada] * (1f - percentual));
-//				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
-//				
-//				Color corDesaturada = ImageUtil.converterParaRGB(componentes);
-//				rgb = corDesaturada.getRGB();
-//				
-//				imagem.setRGB(x, y, rgb);
-//			}
-//		}	
+	public void desaturar(BufferedImage imagem, float fatorDesaturacao){		
+		Color corMedia = calcularCorMedia(imagem);
+		int rgb = corMedia.getRGB();
+		int r = Colors.red(rgb);
+		int g = Colors.green(rgb);
+		int b = Colors.blue(rgb);
 		
-		//descobrir o componente de cor saturado
-		Color corMedia = calcularCorMedia(imagem);		
-		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
-		int maxValue = -1;
-		int indexCorSaturada = 0;
-		for (int i = 0; i < componentes.length; i++) {
-			if(componentes[i] > maxValue){
-				maxValue = componentes[i];
-				indexCorSaturada = i;
-			}
-		}
+		int rDiff = (int)(r * fatorDesaturacao);
+		int gDiff = (int)(g * fatorDesaturacao);
+		int bDiff = (int)(b * fatorDesaturacao);
 		
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
-				
+
+		//TODO: poderia ser um parallel for
 		//desaturando a imagem
 		for (int x = 0; x < imageWidth; x++) {
 			for (int y = 0; y < imageHeight; y++) {
 				
-				int rgb = imagem.getRGB(x, y);
-				componentes = ImageUtil.arrayComponentes(rgb);
+				rgb = imagem.getRGB(x, y);
+				r = Math.max(0, Colors.red(rgb) - rDiff);
+				g = Math.max(0, Colors.green(rgb) - gDiff);
+				b = Math.max(0, Colors.blue(rgb) - bDiff);
 				
-				int componenteDesaturado = (int)(componentes[indexCorSaturada] * (1f - percentual));
-				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
-				
-				Color corDesaturada = ImageUtil.converterParaRGB(componentes);
-				rgb = corDesaturada.getRGB();
-				
+				rgb = new Color(r, g, b).getRGB();
 				imagem.setRGB(x, y, rgb);
 			}
 		}	
