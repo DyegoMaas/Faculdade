@@ -1,6 +1,7 @@
 package editorImagens.core.utils;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Comparator;
@@ -17,6 +18,16 @@ public class ImageUtil {
 			e.printStackTrace();
 		}
 		return bimg;
+	}
+	
+	public static BufferedImage criarCopia(BufferedImage imagem){
+		BufferedImage copia = new BufferedImage(imagem.getWidth(), imagem.getHeight(), BufferedImage.TYPE_INT_RGB);
+		
+		Graphics g = copia.getGraphics();
+		g.drawImage(imagem, 0, 0, null);
+		g.dispose();
+		
+		return copia;
 	}
 	
 	public static Comparator<int[]> getIntArrayComparator(){	

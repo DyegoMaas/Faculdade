@@ -82,6 +82,11 @@ public class EditorImagensFactory {
 		public void distorcerCores(BufferedImage imagem, float distorcaoR, float distorcaoG, float distorcaoB) {
 			editor(versaoJomp).distorcerCores(imagem, distorcaoR, distorcaoG, distorcaoB);			
 		}
+
+		@Override
+		public void outraDistorcao(BufferedImage imagem) {
+			editor(versaoJomp).outraDistorcao(imagem);
+		}
 		
 		private IEditorImagens editor(boolean versaoJomp){
 			return versaoJomp ? editorJomp : editorNormal;

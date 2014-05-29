@@ -151,7 +151,8 @@ public class EditorImagens_normal implements IEditorImagens{
 				somaComponenteG += Colors.green(rgb);
 				somaComponenteB += Colors.blue(rgb);
 			}						
-		}
+		}		
+		//atingida uma barreira implicita onde todas as threads sincronizam
 		
 		int numPixels = imageWidth * imageHeight;
 		int mediaR = somaComponenteR /= numPixels;
@@ -222,8 +223,10 @@ public class EditorImagens_normal implements IEditorImagens{
 		g2.drawImage(copia, 0, 0, null);
 	}
 
-	public void desaturar(BufferedImage imagem, float fatorDesaturacao){		
+	public void desaturar(BufferedImage imagem, float fatorDesaturacao){	
+		//calculo paralelo
 		Color corMedia = calcularCorMedia(imagem);
+				
 		int rgb = corMedia.getRGB();
 		int r = Colors.red(rgb);
 		int g = Colors.green(rgb);
@@ -250,6 +253,76 @@ public class EditorImagens_normal implements IEditorImagens{
 				imagem.setRGB(x, y, rgb);
 			}
 		}	
+	}
+
+	/**
+	 * Uma das threads calcula a cor media da imagem original. 
+	 * Enquanto isso, as outras threads distorcem a cor original da imagem para deixa-la avermelhada.
+	 * Em seguida, todas as threads sincronizam e entao a cor media da imagem original eh utilizada 
+	 * para distorcer a cor da imagem.
+	 */
+	public void outraDistorcao(BufferedImage imagem){		
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();	
+	
+		int larguraBloco = imageWidth / 10;
+		
+		int corMedia = 0;
+		int threadId = 0;
+		int inicioX = 0;
+		int x = 0, y = 0;
+		int rgb = 0;
+		int r = 0, g = 0, b = 0;
+		
+		BufferedImage copiaImagem = ImageUtil.criarCopia(imagem);
+		
+		OMP.setNumThreads(10);
+		//omp parallel private(corMedia,threadId,inicioX,x,y,rgb,r,g,b)
+		{
+			
+			//tem que estar em um
+			//omp single
+			{
+				corMedia = calcularCorMediaSingleThread(copiaImagem).getRGB();
+			}
+			
+			threadId = OMP.getThreadNum();
+			inicioX = threadId * larguraBloco;
+			
+			for(x = inicioX; x < inicioX + larguraBloco; x++){			
+				for (y = 0; y < imageHeight; y++) {
+					//pixel avermelhado
+					rgb = distorcerCor(imagem.getRGB(x, y), .5f, 1f, .5f);
+					imagem.setRGB(x, y, rgb);					
+				}
+			}
+			
+			//omp barrier
+
+			//calculo resultante
+			for(x = inicioX; x < inicioX + larguraBloco; x++){			
+				for (y = 0; y < imageHeight; y++) {
+					rgb = imagem.getRGB(x, y);
+
+					//componentes da cor avermelhada
+					r = Colors.red(rgb);
+					g = Colors.green(rgb);
+					b = Colors.blue(rgb);
+					
+					//inversao da cor media
+					rgb = ImageUtil.inverterCor(corMedia);
+					
+					//subtracao da media invertida da cor avermelhada
+					r = Math.abs(r - (int)(Colors.red(rgb)));
+					g = Math.abs(g - (int)(Colors.green(rgb)));
+					b = Math.abs(b - (int)(Colors.blue(rgb)));
+					
+					//criacao da nova cor
+					rgb = new Color(r, g, b).getRGB();
+					imagem.setRGB(x, y, rgb);					
+				}
+			}
+		}
 	}
 
 	/**
@@ -335,6 +408,23 @@ public class EditorImagens_normal implements IEditorImagens{
 				}
 			}
 		}		
+	}
+	
+	private int distorcerCor(int rgb, float distorcaoR, float distorcaoG, float distorcaoB){
+		int r = Colors.red(rgb);
+		int g = Colors.green(rgb);
+		int b = Colors.blue(rgb);
+		
+		//distorção do vermelho
+		r = Math.min(255, Math.max(0, (int)(r * distorcaoR)));
+		
+		//distorção do verde
+		g = Math.min(255, Math.max(0, (int)(g * distorcaoG)));							
+		
+		//distorção do azul
+		b = Math.min(255, Math.max(0, (int)(b * distorcaoB)));
+		
+		return new Color(r, g, b).getRGB();
 	}
 	
 	public void setarCor(BufferedImage imagem, Color novaCor) {

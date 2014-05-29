@@ -158,6 +158,14 @@ public class Main {
 			}
 		});
 		
+		criarBotao(panelBotoes, imagem, imagePanel, "Distorcer cores 2", new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getEditorImagens().outraDistorcao(imagem);	
+				imagePanel.repaint();
+			}
+		});
+		
 		panelGeral.add(panelBotoes);
 		panelGeral.add(imagePanel);
 		

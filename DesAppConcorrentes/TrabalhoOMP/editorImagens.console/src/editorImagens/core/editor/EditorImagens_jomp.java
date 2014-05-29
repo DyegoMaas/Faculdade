@@ -186,7 +186,8 @@ public class EditorImagens_jomp implements IEditorImagens {
   imagem = __omp_Object5.imagem;
 }
 // OMP PARALLEL BLOCK ENDS
-
+		
+		//atingida uma barreira implicita onde todas as threads sincronizam
 		
 		int numPixels = imageWidth * imageHeight;
 		int mediaR = somaComponenteR /= numPixels;
@@ -257,52 +258,10 @@ public class EditorImagens_jomp implements IEditorImagens {
 		g2.drawImage(copia, 0, 0, null);
 	}
 
-	public void desaturar(BufferedImage imagem, float fatorDesaturacao){		
-//		//descobrir o componente de cor saturado
-//		Color corMedia = calcularCorMedia(imagem);		
-//		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
-//		int maxValue = -1;
-//		int indexCorSaturada = 0;
-//		for (int i = 0; i < componentes.length; i++) {
-//			if(componentes[i] > maxValue){
-//				maxValue = componentes[i];
-//				indexCorSaturada = i;
-//			}
-//		}
-//		
-//		int imageWidth = imagem.getWidth();
-//		int imageHeight = imagem.getHeight();
-//				
-//		//desaturando a imagem
-//		for (int x = 0; x < imageWidth; x++) {
-//			for (int y = 0; y < imageHeight; y++) {
-//				
-//				int rgb = imagem.getRGB(x, y);
-//				componentes = ImageUtil.arrayComponentes(rgb);
-//				
-//				int componenteDesaturado = (int)(componentes[indexCorSaturada] * (1f - percentual));
-//				componentes[indexCorSaturada] = Math.max(0, componenteDesaturado);
-//				
-//				Color corDesaturada = ImageUtil.converterParaRGB(componentes);
-//				rgb = corDesaturada.getRGB();
-//				
-//				imagem.setRGB(x, y, rgb);
-//			}
-//		}	
-		
-//		//descobrir o componente de cor saturado
-//		Color corMedia = calcularCorMedia(imagem);		
-//		int[] componentes = ImageUtil.arrayComponentes(corMedia.getRGB());		
-//		int maxValue = -1;
-//		int indexCorSaturada = 0;
-//		for (int i = 0; i < componentes.length; i++) {
-//			if(componentes[i] > maxValue){
-//				maxValue = componentes[i];
-//				indexCorSaturada = i;
-//			}
-//		}
-		
+	public void desaturar(BufferedImage imagem, float fatorDesaturacao){	
+		//calculo paralelo
 		Color corMedia = calcularCorMedia(imagem);
+				
 		int rgb = corMedia.getRGB();
 		int r = Colors.red(rgb);
 		int g = Colors.green(rgb);
@@ -315,6 +274,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 		int imageWidth = imagem.getWidth();
 		int imageHeight = imagem.getHeight();
 
+		//TODO: poderia ser um parallel for
 		//desaturando a imagem
 		for (int x = 0; x < imageWidth; x++) {
 			for (int y = 0; y < imageHeight; y++) {
@@ -328,6 +288,57 @@ public class EditorImagens_jomp implements IEditorImagens {
 				imagem.setRGB(x, y, rgb);
 			}
 		}	
+	}
+
+	/**
+	 * Uma das threads calcula a cor media da imagem original. 
+	 * Enquanto isso, as outras threads distorcem a cor original da imagem para deixa-la avermelhada.
+	 * Em seguida, todas as threads sincronizam e entao a cor media da imagem original eh utilizada 
+	 * para distorcer a cor da imagem.
+	 */
+	public void outraDistorcao(BufferedImage imagem){		
+		int imageWidth = imagem.getWidth();
+		int imageHeight = imagem.getHeight();	
+	
+		int larguraBloco = imageWidth / 10;
+		
+		int corMedia = 0;
+		int threadId = 0;
+		int inicioX = 0;
+		int x = 0, y = 0;
+		int rgb = 0;
+		int r = 0, g = 0, b = 0;
+		
+		BufferedImage copiaImagem = ImageUtil.criarCopia(imagem);
+		
+		OMP.setNumThreads(10);
+
+// OMP PARALLEL BLOCK BEGINS
+{
+  __omp_Class6 __omp_Object6 = new __omp_Class6();
+  // shared variables
+  __omp_Object6.copiaImagem = copiaImagem;
+  __omp_Object6.larguraBloco = larguraBloco;
+  __omp_Object6.imageHeight = imageHeight;
+  __omp_Object6.imageWidth = imageWidth;
+  __omp_Object6.imagem = imagem;
+  // firstprivate variables
+  try {
+    jomp.runtime.OMP.doParallel(__omp_Object6);
+  } catch(Throwable __omp_exception) {
+    System.err.println("OMP Warning: Illegal thread exception ignored!");
+    System.err.println(__omp_exception);
+  }
+  // reduction variables
+  // shared variables
+  copiaImagem = __omp_Object6.copiaImagem;
+  larguraBloco = __omp_Object6.larguraBloco;
+  imageHeight = __omp_Object6.imageHeight;
+  imageWidth = __omp_Object6.imageWidth;
+  imagem = __omp_Object6.imagem;
+}
+// OMP PARALLEL BLOCK ENDS
+
 	}
 
 	/**
@@ -347,32 +358,49 @@ public class EditorImagens_jomp implements IEditorImagens {
 
 // OMP PARALLEL BLOCK BEGINS
 {
-  __omp_Class6 __omp_Object6 = new __omp_Class6();
+  __omp_Class7 __omp_Object7 = new __omp_Class7();
   // shared variables
-  __omp_Object6.imageHeight = imageHeight;
-  __omp_Object6.imageWidth = imageWidth;
-  __omp_Object6.distorcaoB = distorcaoB;
-  __omp_Object6.distorcaoG = distorcaoG;
-  __omp_Object6.distorcaoR = distorcaoR;
-  __omp_Object6.imagem = imagem;
+  __omp_Object7.imageHeight = imageHeight;
+  __omp_Object7.imageWidth = imageWidth;
+  __omp_Object7.distorcaoB = distorcaoB;
+  __omp_Object7.distorcaoG = distorcaoG;
+  __omp_Object7.distorcaoR = distorcaoR;
+  __omp_Object7.imagem = imagem;
   // firstprivate variables
   try {
-    jomp.runtime.OMP.doParallel(__omp_Object6);
+    jomp.runtime.OMP.doParallel(__omp_Object7);
   } catch(Throwable __omp_exception) {
     System.err.println("OMP Warning: Illegal thread exception ignored!");
     System.err.println(__omp_exception);
   }
   // reduction variables
   // shared variables
-  imageHeight = __omp_Object6.imageHeight;
-  imageWidth = __omp_Object6.imageWidth;
-  distorcaoB = __omp_Object6.distorcaoB;
-  distorcaoG = __omp_Object6.distorcaoG;
-  distorcaoR = __omp_Object6.distorcaoR;
-  imagem = __omp_Object6.imagem;
+  imageHeight = __omp_Object7.imageHeight;
+  imageWidth = __omp_Object7.imageWidth;
+  distorcaoB = __omp_Object7.distorcaoB;
+  distorcaoG = __omp_Object7.distorcaoG;
+  distorcaoR = __omp_Object7.distorcaoR;
+  imagem = __omp_Object7.imagem;
 }
 // OMP PARALLEL BLOCK ENDS
 		
+	}
+	
+	private int distorcerCor(int rgb, float distorcaoR, float distorcaoG, float distorcaoB){
+		int r = Colors.red(rgb);
+		int g = Colors.green(rgb);
+		int b = Colors.blue(rgb);
+		
+		//distor\u00e7\u00e3o do vermelho
+		r = Math.min(255, Math.max(0, (int)(r * distorcaoR)));
+		
+		//distor\u00e7\u00e3o do verde
+		g = Math.min(255, Math.max(0, (int)(g * distorcaoG)));							
+		
+		//distor\u00e7\u00e3o do azul
+		b = Math.min(255, Math.max(0, (int)(b * distorcaoB)));
+		
+		return new Color(r, g, b).getRGB();
 	}
 	
 	public void setarCor(BufferedImage imagem, Color novaCor) {
@@ -386,7 +414,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 	}
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
-private class __omp_Class6 extends jomp.runtime.BusyTask {
+private class __omp_Class7 extends jomp.runtime.BusyTask {
   // shared variables
   int imageHeight;
   int imageWidth;
@@ -420,7 +448,7 @@ private class __omp_Class6 extends jomp.runtime.BusyTask {
                            // [last]private variables
                            // reduction variables + init to default
                            // -------------------------------------
-                           __ompName_7: while(true) {
+                           __ompName_8: while(true) {
                            switch((int)jomp.runtime.OMP.getTicket(__omp_me)) {
                            // OMP SECTION BLOCK 0 BEGINS
                              case 0: {
@@ -520,7 +548,7 @@ private class __omp_Class6 extends jomp.runtime.BusyTask {
                              };  break;
                            // OMP SECTION BLOCK 2 ENDS
 
-                             default: break __ompName_7;
+                             default: break __ompName_8;
                            } // of switch
                            } // of while
                            // call reducer
@@ -538,6 +566,102 @@ private class __omp_Class6 extends jomp.runtime.BusyTask {
                          }
                          } // OMP SECTIONS BLOCK ENDS
 
+		}
+    // OMP USER CODE ENDS
+  // call reducer
+  // output to _rd_ copy
+  if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
+  }
+  }
+}
+// OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
+
+
+
+// OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
+private class __omp_Class6 extends jomp.runtime.BusyTask {
+  // shared variables
+  BufferedImage copiaImagem;
+  int larguraBloco;
+  int imageHeight;
+  int imageWidth;
+  BufferedImage imagem;
+  // firstprivate variables
+  // variables to hold results of reduction
+
+  public void go(int __omp_me) throws Throwable {
+  // firstprivate variables + init
+  // private variables
+  int corMedia = 0;
+  int threadId;
+  int inicioX;
+  int x;
+  int y;
+  int rgb;
+  int r;
+  int g;
+  int b;
+  // reduction variables, init to default
+    // OMP USER CODE BEGINS
+
+		{
+                         { // OMP SINGLE BLOCK BEGINS
+                         if(jomp.runtime.OMP.getTicket(__omp_me) == 0) {
+                         // copy of firstprivate variables, initialized
+                         {
+                           // firstprivate variables + init
+                           // private variables
+                            // OMP USER CODE BEGINS
+
+			{
+				corMedia = calcularCorMediaSingleThread(copiaImagem).getRGB();
+			}
+                            // OMP USER CODE ENDS
+                         }
+                         }
+                         jomp.runtime.OMP.resetTicket(__omp_me);
+                         jomp.runtime.OMP.doBarrier(__omp_me);
+                         } // OMP SINGLE BLOCK ENDS
+
+			
+			threadId = OMP.getThreadNum();
+			inicioX = threadId * larguraBloco;
+			
+			for(x = inicioX; x < inicioX + larguraBloco; x++){			
+				for (y = 0; y < imageHeight; y++) {
+					//pixel avermelhado
+					rgb = distorcerCor(imagem.getRGB(x, y), .5f, 1f, .5f);
+					imagem.setRGB(x, y, rgb);					
+				}
+			}
+                         // OMP BARRIER BLOCK BEGINS
+                         jomp.runtime.OMP.doBarrier(__omp_me);
+                         // OMP BARRIER BLOCK ENDS
+
+
+			//calculo resultante
+			for(x = inicioX; x < inicioX + larguraBloco; x++){			
+				for (y = 0; y < imageHeight; y++) {
+					rgb = imagem.getRGB(x, y);
+
+					//componentes da cor avermelhada
+					r = Colors.red(rgb);
+					g = Colors.green(rgb);
+					b = Colors.blue(rgb);
+					
+					//inversao da cor media
+					rgb = ImageUtil.inverterCor(corMedia);
+					
+					//subtracao da media invertida da cor avermelhada
+					r = Math.abs(r - (int)(Colors.red(rgb)));
+					g = Math.abs(g - (int)(Colors.green(rgb)));
+					b = Math.abs(b - (int)(Colors.blue(rgb)));
+					
+					//criacao da nova cor
+					rgb = new Color(r, g, b).getRGB();
+					imagem.setRGB(x, y, rgb);					
+				}
+			}
 		}
     // OMP USER CODE ENDS
   // call reducer
