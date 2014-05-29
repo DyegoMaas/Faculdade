@@ -74,6 +74,7 @@ public class Main {
 		panelBotoes.setLayout(new BoxLayout(panelBotoes, BoxLayout.X_AXIS));
 		
 		JRadioButton rbUsarJomp = new JRadioButton("JOMP");
+		rbUsarJomp.setSelected(true);
 		rbUsarJomp.addItemListener(new ItemListener() {
 
 			@Override
