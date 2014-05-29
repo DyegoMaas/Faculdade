@@ -10,7 +10,7 @@ public interface IEditorImagens {
 	void xorBlendingComCorMedia(BufferedImage imagem);
 	Color calcularCorMedia(BufferedImage imagem);
 	void mosaico(BufferedImage imagem, int tamanhoCelulas);
-	void desaturar(BufferedImage imagem, float percentual);	
+	void dessaturar(BufferedImage imagem, float percentual);	
 	void distorcerCores(BufferedImage imagem, float distorcaoR, float distorcaoG, float distorcaoB);
 	void outraDistorcao(BufferedImage imagem);
 }

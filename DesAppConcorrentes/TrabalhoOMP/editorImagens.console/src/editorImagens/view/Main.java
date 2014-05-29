@@ -141,11 +141,11 @@ public class Main {
 			}
 		});
 		
-		criarBotao(panelBotoes, imagem, imagePanel, "Desaturar", new ActionListener() {			
+		criarBotao(panelBotoes, imagem, imagePanel, "Dessaturar", new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int percentual = showInputDialog("Percentual de desaturação (inteiro): ");
-				getEditorImagens().desaturar(imagem, percentual / 100f);	
+				getEditorImagens().dessaturar(imagem, percentual / 100f);	
 				imagePanel.repaint();
 			}
 		});

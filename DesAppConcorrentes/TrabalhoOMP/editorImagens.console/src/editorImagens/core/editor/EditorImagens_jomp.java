@@ -258,7 +258,7 @@ public class EditorImagens_jomp implements IEditorImagens {
 		g2.drawImage(copia, 0, 0, null);
 	}
 
-	public void desaturar(BufferedImage imagem, float fatorDesaturacao){	
+	public void dessaturar(BufferedImage imagem, float fatorDesaturacao){	
 		//calculo paralelo
 		Color corMedia = calcularCorMedia(imagem);
 				
@@ -630,7 +630,7 @@ private class __omp_Class6 extends jomp.runtime.BusyTask {
 			for(x = inicioX; x < inicioX + larguraBloco; x++){			
 				for (y = 0; y < imageHeight; y++) {
 					//pixel avermelhado
-					rgb = distorcerCor(imagem.getRGB(x, y), .5f, 1f, .5f);
+					rgb = distorcerCor(imagem.getRGB(x, y), 1f, .5f, .5f);
 					imagem.setRGB(x, y, rgb);					
 				}
 			}
