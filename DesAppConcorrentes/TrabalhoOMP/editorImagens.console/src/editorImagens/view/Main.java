@@ -34,7 +34,7 @@ public class Main {
 	
 	public static void main(String[] args){
 		args = new String[]{
-				"C:\\dev\\java\\OMP\\imagemTeste01.jpg"
+				"C:\\dev\\java\\OMP\\imagemTeste02.jpg"
 		};
 				
 		Main main = new Main();

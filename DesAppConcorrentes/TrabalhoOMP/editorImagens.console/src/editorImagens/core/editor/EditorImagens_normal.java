@@ -289,6 +289,7 @@ public class EditorImagens_normal implements IEditorImagens{
 			threadId = OMP.getThreadNum();
 			inicioX = threadId * larguraBloco;
 			
+			//TODO converter para omp for
 			for(x = inicioX; x < inicioX + larguraBloco; x++){			
 				for (y = 0; y < imageHeight; y++) {
 					//pixel avermelhado
@@ -299,7 +300,7 @@ public class EditorImagens_normal implements IEditorImagens{
 			
 			//omp barrier
 
-			//calculo resultante
+			//TODO converter para omp for
 			for(x = inicioX; x < inicioX + larguraBloco; x++){			
 				for (y = 0; y < imageHeight; y++) {
 					rgb = imagem.getRGB(x, y);
