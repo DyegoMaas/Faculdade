@@ -40,8 +40,7 @@ class hello_other {
 	
 		// envia mensagem para meu pai...
 		jpvmBuffer buf = new jpvmBuffer();
-		buf.pack("Hello from jpvm task, id: "+
-			jpvm.pvm_mytid().toString());
+		buf.pack("Hello from jpvm task, id: "+ jpvm.pvm_mytid().toString());
 		jpvm.pvm_send(buf,parent,12345);
 
 		// sai do jpvm

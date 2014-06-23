@@ -19,7 +19,7 @@ public class exemplo_jpvm {
 			System.out.println("task id = " + myid.toString());
 			
 			//definir se eh o master, ou se eh algum escravo.
-			if (masterTaskId==jpvm.PvmNoParent) {
+			if (masterTaskId!=jpvm.PvmNoParent) {
 				//é o master
 				System.out.println("inicializado como master");
 				jpvmTaskId tids[] = new jpvmTaskId[num_workers];
@@ -45,7 +45,7 @@ public class exemplo_jpvm {
 							message.sourceTid.toString());
 				}
 				
-			} else {
+//			} else {
 				//é o escravo.
 				System.out.println("inicializado como escravo.");
 				
@@ -58,7 +58,7 @@ public class exemplo_jpvm {
 				
 				System.out.println("preparando resposta.");
 				jpvmBuffer buf = new jpvmBuffer();
-				buf.pack(str + " cliente : " + jpvm.pvm_mytid().toString());
+				buf.pack(str + " CLIENTE : " + jpvm.pvm_mytid().toString());
 				jpvm.pvm_send(buf, masterTaskId, 0);
 				System.out.println("mando resposta.");
 			}
