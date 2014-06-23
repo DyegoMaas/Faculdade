@@ -26,6 +26,12 @@ public class ProcessadorGrafos {
 		
 		File diretorioEntrada = new File(caminhoDiretorioEntrada);
 		final File[] arquivosParaProcessar = diretorioEntrada.listFiles();
+		
+		if(arquivosParaProcessar == null){
+			System.out.println("Nenhum arquivo para processar");
+			return;
+		}
+		
 		Thread processadorEntrada = new Thread(new Runnable() {
 			@Override
 			public void run() {
