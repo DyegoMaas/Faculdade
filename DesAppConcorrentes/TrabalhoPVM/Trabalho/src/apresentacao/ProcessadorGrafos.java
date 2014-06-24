@@ -9,12 +9,15 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.thoughtworks.xstream.XStream;
+
 import jpvm.jpvmEnvironment;
 import jpvm.jpvmException;
 import comunicacao.ComandosProcessamento;
 import comunicacao.ComandosResposta;
 import comunicacao.Mestre;
 import comunicacao.Resposta;
+import comunicacao.pacotes.matrizes.MatrizesProcessar;
 
 public class ProcessadorGrafos {
 	
