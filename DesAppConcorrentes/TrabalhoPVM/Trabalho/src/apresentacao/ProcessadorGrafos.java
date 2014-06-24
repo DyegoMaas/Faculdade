@@ -21,7 +21,6 @@ public class ProcessadorGrafos {
 	private static String caminhoDiretorioEntrada = "C:\\pvm\\entrada";
 	private static String caminhoDiretorioSaida = "C:\\pvm\\saida";
 
-	//TODO utilizar wait/signal para controlar o processamento dos arquivos
 	//TODO criar objeto Mensagem cop cabecalho para encapsular o conteúdo dos arquivos 
 	public static void main(String[] args) throws Exception, jpvmException, IOException {		
 		File diretorioEntrada = new File(caminhoDiretorioEntrada);
@@ -40,9 +39,9 @@ public class ProcessadorGrafos {
 				for (File file : arquivosParaProcessar) {					
 					try {
 						ComandosProcessamento comando = ComandosProcessamento.getComandoPorExtensao(getExtensao(file));
-						String conteudoArquivo = getConteudo(file);
+						String conteudoArquivo = getConteudo(file);		
 						
-						
+						//empacotar conteudo arquivo
 						
 						mestre.Enviar(comando, conteudoArquivo);
 						
