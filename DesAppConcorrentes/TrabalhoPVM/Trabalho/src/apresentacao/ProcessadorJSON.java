@@ -14,7 +14,7 @@ public class ProcessadorJSON {
 		if(respostaJSON == null)
 			return;
 
-		//TODO processar a resposta
+		//TODO processar a entrada
 		
 		escravo.Enviar(ComandosResposta.RespostaJSON, "resposta processamento JSON");
 	}

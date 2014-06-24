@@ -23,18 +23,16 @@ public class ProcessadorGrafos {
 
 	//TODO utilizar wait/signal para controlar o processamento dos arquivos
 	//TODO criar objeto Mensagem cop cabecalho para encapsular o conteúdo dos arquivos 
-	public static void main(String[] args) throws Exception, jpvmException, IOException {
-		final Mestre mestre = new Mestre(new jpvmEnvironment());
-		
+	public static void main(String[] args) throws Exception, jpvmException, IOException {		
 		File diretorioEntrada = new File(caminhoDiretorioEntrada);
 		final File[] arquivosParaProcessar = diretorioEntrada.listFiles();
 		
 		if(arquivosParaProcessar == null){
 			System.out.println("Nenhum arquivo para processar");
 			return;
-		}
-				
-		configurarMestre(mestre, arquivosParaProcessar);
+		}				
+		
+		final Mestre mestre = construirMestre(arquivosParaProcessar);
 		
 		Thread processadorEntrada = new Thread(new Runnable() {
 			@Override
@@ -74,12 +72,15 @@ public class ProcessadorGrafos {
 		processadorSaida.start();
 	}
 
-	private static void configurarMestre(final Mestre mestre, final File[] arquivosParaProcessar) throws jpvmException, IOException, Exception {
-		List<Configuracao> configuracoes = obterConfiguracoes(arquivosParaProcessar);
+	private static Mestre construirMestre(final File[] arquivosParaProcessar) throws jpvmException, IOException, Exception {
+		final Mestre mestre = new Mestre(new jpvmEnvironment());
 		
+		List<Configuracao> configuracoes = obterConfiguracoes(arquivosParaProcessar);		
 		for (Configuracao configuracao : configuracoes) {
 			mestre.Adicionar(configuracao.getComando(), configuracao.getNumTarefas());	
 		}
+		
+		return mestre;
 	}
 	
 	private static String getExtensao(File arquivo) throws IOException{
