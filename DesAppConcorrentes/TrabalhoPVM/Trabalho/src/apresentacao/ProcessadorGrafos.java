@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import jpvm.jpvmEnvironment;
 import jpvm.jpvmException;
@@ -31,16 +33,18 @@ public class ProcessadorGrafos {
 			System.out.println("Nenhum arquivo para processar");
 			return;
 		}
+				
+		configurarMestre(mestre, arquivosParaProcessar);
 		
 		Thread processadorEntrada = new Thread(new Runnable() {
 			@Override
-			public void run() {
+			public void run() {				
 				for (File file : arquivosParaProcessar) {					
 					try {
 						ComandosProcessamento comando = ComandosProcessamento.getComandoPorExtensao(getExtensao(file));
 						String conteudoArquivo = getConteudo(file);
 						
-						//
+						
 						
 						mestre.Enviar(comando, conteudoArquivo);
 						
@@ -69,10 +73,18 @@ public class ProcessadorGrafos {
 		processadorEntrada.start();
 		processadorSaida.start();
 	}
+
+	private static void configurarMestre(final Mestre mestre, final File[] arquivosParaProcessar) throws jpvmException, IOException, Exception {
+		List<Configuracao> configuracoes = obterConfiguracoes(arquivosParaProcessar);
+		
+		for (Configuracao configuracao : configuracoes) {
+			mestre.Adicionar(configuracao.getComando(), configuracao.getNumTarefas());	
+		}
+	}
 	
 	private static String getExtensao(File arquivo) throws IOException{
 		String caminho = arquivo.getCanonicalPath();
-		return caminho.substring(caminho.lastIndexOf('.'));
+		return caminho.substring(caminho.lastIndexOf('.') + 1);
 	}
 	
 	private static String getConteudo(File arquivo) throws IOException{	
@@ -86,4 +98,32 @@ public class ProcessadorGrafos {
          
          return buffer.toString();
 	}
+	
+	private static List<Configuracao> obterConfiguracoes(File[] arquivos) throws IOException, Exception{
+		ArrayList<Configuracao> configuracoes = new ArrayList<Configuracao>();
+				
+		Configuracao configXml = new Configuracao(ComandosProcessamento.ProcessarXML);
+		Configuracao configJson = new Configuracao(ComandosProcessamento.ProcessarJSON);
+		
+		for (File arquivo : arquivos) {
+			ComandosProcessamento comando = ComandosProcessamento.getComandoPorExtensao(getExtensao(arquivo));
+			
+			switch (comando) {
+			case ProcessarJSON:
+				configJson.incNumTarefas();
+				break;
+			case ProcessarXML:
+				configXml.incNumTarefas();
+			default:
+				break;
+			}
+		}
+		
+		configuracoes.add(configJson);
+		configuracoes.add(configXml);
+		
+		return configuracoes;
+	}
+	
+	
 }

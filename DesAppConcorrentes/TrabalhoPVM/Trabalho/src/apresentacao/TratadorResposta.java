@@ -38,5 +38,7 @@ public class TratadorResposta {
 		BufferedWriter bw = new BufferedWriter(fw);
 		bw.write(conteudo);
 		bw.close();
+		
+		System.out.printf("[MESTRE] Conteudo: %s\n", conteudo);
 	}
 }

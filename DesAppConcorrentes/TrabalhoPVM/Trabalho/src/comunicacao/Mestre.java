@@ -41,7 +41,7 @@ public class Mestre {
 	public Resposta Receber() throws jpvmException, Exception {
 		jpvmMessage mensagem = jpvmEnvironment.pvm_recv();
 
-		System.out.printf("[MESTRE] Recebido comando %d\n", mensagem.messageTag);
+		System.out.printf("[MESTRE] Recebido comando %d\n", mensagem.messageTag);		
 
 		return new Resposta(
 				ComandosResposta.getComandoRespostaPorTag(mensagem.messageTag),
