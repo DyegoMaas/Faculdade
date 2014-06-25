@@ -112,6 +112,7 @@ public class ProcessadorGrafos {
 	}
 
 	private static List<Configuracao> obterConfiguracoes(File[] arquivos) throws IOException, Exception {
+			throws IOException, Exception {
 		ArrayList<Configuracao> configuracoes = new ArrayList<Configuracao>();
 
 		Configuracao configXml = new Configuracao(
