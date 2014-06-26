@@ -38,6 +38,7 @@ public class TratadorResposta {
 		bw.write(conteudo);
 		bw.close();
 		
-		System.out.printf("[MESTRE] Conteudo: %s\n", conteudo);
+		System.out.printf("[MESTRE] Arquivo processado em %s\n", arquivoDestino.getCanonicalPath());
+		//System.out.printf("[MESTRE] Conteudo: %s\n", conteudo);
 	}
 }
