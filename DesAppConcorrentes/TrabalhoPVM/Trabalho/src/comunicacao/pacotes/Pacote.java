@@ -1,6 +1,8 @@
 package comunicacao.pacotes;
 
-public class Pacote {
+import java.io.Serializable;
+
+public class Pacote implements Serializable{
 	public Cabecalho cabecalho;
 	public String conteudo;
 }

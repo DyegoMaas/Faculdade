@@ -1,5 +1,7 @@
 package apresentacao;
 
+import com.google.gson.Gson;
+
 import matematica.CalculadoraMatrizes;
 import comunicacao.ComandosProcessamento;
 import comunicacao.ComandosResposta;
@@ -19,17 +21,23 @@ public class ProcessadorXML {
 		Pacote pacoteRecebido = escravo.Receber();
 		if(pacoteRecebido == null)
 			return;
-		
+				
 		ObjectSerializationToXML serializador = new ObjectSerializationToXML();
 		MatrizesProcessar processar = (MatrizesProcessar)serializador.fromXML(pacoteRecebido.conteudo);
-				
-		CalculadoraMatrizes calculadora = new CalculadoraMatrizes();
-		MatrizResposta matrizResultante = calculadora.multiplicarMatrizes(processar.matriz1, processar.matriz2);
+						
+		CalculadoraMatrizes calculadora = new CalculadoraMatrizes();		
+		MatrizResposta matrizResultante = calculadora.multiplicarMatrizes(processar.matriz1, processar.matriz2);		
 		
 		Pacote pacoteResposta = new Pacote();
 		pacoteResposta.cabecalho = pacoteRecebido.cabecalho;
-		pacoteResposta.conteudo = serializador.toXML(matrizResultante);
-
+		pacoteResposta.conteudo = serializador.toXML(matrizResultante);		
+		
 		escravo.Enviar(ComandosResposta.RespostaXML, pacoteResposta);	
 	}
+	
+//	private static Pacote dummy(String msg) {
+//		Pacote p = new Pacote();
+//		p.conteudo = msg;
+//		return p;
+//	}
 }

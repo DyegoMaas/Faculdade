@@ -17,12 +17,19 @@ public class ProcessadorJSON {
 	public static void main(String[] args) throws jpvmException, Exception {
 		Escravo escravo = new Escravo(ComandosProcessamento.ProcessarJSON, new jpvmEnvironment());
 
-		Pacote pacoteRecebido = escravo.Receber();
+		Pacote pacoteRecebido = escravo.Receber();		
 		if(pacoteRecebido == null)
-			return;
+			return;		
 
-		Gson gson = new Gson();
-		MatrizesProcessar matrizesProcessar = gson.fromJson(pacoteRecebido.conteudo, MatrizesProcessar.class);
+//		try{			
+//			Gson gson = new Gson();
+//			escravo.Enviar(ComandosResposta.RespostaJSON, dummy("x"));//TODO remover
+//		}catch(Exception e){
+//			escravo.Enviar(ComandosResposta.RespostaJSON, dummy(e.getMessage()));//TODO remover
+//		}
+		
+		Gson gson = new Gson();		
+		MatrizesProcessar matrizesProcessar = gson.fromJson(pacoteRecebido.conteudo, MatrizesProcessar.class);		
 
 		CalculadoraMatrizes calculadora = new CalculadoraMatrizes();
 		MatrizResposta matrizResposta = calculadora.multiplicarMatrizes(matrizesProcessar.matriz1, matrizesProcessar.matriz2);
@@ -35,4 +42,10 @@ public class ProcessadorJSON {
 
 		escravo.Enviar(ComandosResposta.RespostaJSON, pacoteResposta);
 	}
+
+//	private static Pacote dummy(String msg) {
+//		Pacote p = new Pacote();
+//		p.conteudo = msg;
+//		return p;
+//	}
 }

@@ -682,7 +682,7 @@ public class jpvmDaemon {
 		args[3] = "-Djpvm.parport="+parent.getPort();
 		args[4] = "-Djpvm.taskname="+name;
 		args[5] = "-Djpvm.regnum="+nextCreateOrder;
-		args[6] = "-Djava.library.path=C:/libs";
+		args[6] = "-Djava.library.path=./lib";
 		args[7] = name; 
 		if(debug_on)
 			log("exec( "+args[0]+" "+args[1]+" "+args[2]+" "+

@@ -27,6 +27,8 @@ public class Escravo {
 	}
 
 	public void Enviar(ComandosResposta comandoRecepcao, Pacote pacote) throws jpvmException, Exception {
+		System.out.printf("[ESCRAVO] Enviando comandoRecepcao %d\n", comandoRecepcao.getValor());
+		
 		jpvmBuffer buffer = new jpvmBuffer();
 		String conteudo = serializeObjectToString(pacote);
 		buffer.pack(conteudo);
@@ -34,10 +36,11 @@ public class Escravo {
 		jpvmTaskId idMestre = jpvmEnvironment.pvm_parent();
 		jpvmEnvironment.pvm_send(buffer, idMestre, comandoRecepcao.getValor());
 
-		System.out.printf("[MESTRE] Enviando comando %d\n", comando.getValor());
+		System.out.printf("[ESCRAVO] Enviando comando %d\n", comando.getValor());
 	}
 
 	public Pacote Receber() throws jpvmException, Exception {
+		System.out.printf("[ESCRAVO] Recebendo\n");
 		jpvmMessage mensagem = jpvmEnvironment.pvm_recv();
 
 		if (souResponsavel(mensagem)) {

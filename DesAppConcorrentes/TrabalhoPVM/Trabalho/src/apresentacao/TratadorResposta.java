@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import comunicacao.Resposta;
+import comunicacao.pacotes.Pacote;
 
 public class TratadorResposta {
 
@@ -16,14 +17,12 @@ public class TratadorResposta {
 	}
 
 	public void Tratar(Resposta resposta) throws Exception {
-		// TODO imlememntar maneira de informar nome do arquivo para o escravo
-		// para que seja retornado e criado de acordo
+		Pacote pacote = resposta.getPacote();
+		
 		switch (resposta.getTipoResposta()) {
 		case RespostaJSON:
-			GravarConteudo("nome.json", resposta.getPacote().conteudo);
-			break;
 		case RespostaXML:
-			GravarConteudo("nome.xml", resposta.getPacote().conteudo);
+			GravarConteudo(pacote.cabecalho.nomeArquivo, resposta.getPacote().conteudo);
 			break;
 		default:
 			throw new Exception("tipo de resposta não reconhecida: " + resposta.getTipoResposta());

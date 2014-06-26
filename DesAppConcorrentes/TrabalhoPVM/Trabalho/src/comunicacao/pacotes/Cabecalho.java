@@ -1,5 +1,7 @@
 package comunicacao.pacotes;
 
-public class Cabecalho {
+import java.io.Serializable;
+
+public class Cabecalho implements Serializable{
 	public String nomeArquivo;
 }
