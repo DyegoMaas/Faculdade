@@ -1,9 +1,6 @@
 package apresentacao;
 
 import Jama.Matrix;
-
-import com.thoughtworks.xstream.XStream;
-
 import comunicacao.ComandosProcessamento;
 import comunicacao.ComandosResposta;
 import comunicacao.Escravo;
@@ -16,48 +13,38 @@ import jpvm.jpvmException;
 
 public class ProcessadorXML {
 
-	public static void main(String[] args) throws jpvmException {
+	public static void main(String[] args) throws jpvmException, Exception {
 		Escravo escravo = new Escravo(ComandosProcessamento.ProcessarXML, new jpvmEnvironment());
 
-		//retorna um Pacote???
-		String respostaXML = escravo.Receber();
-		if(respostaXML == null)
+		Pacote pacote = escravo.Receber();
+		if(pacote == null)
 			return;
 		
-		escravo.Enviar(ComandosResposta.RespostaXML, "resposta");
+		ObjectSerializationToXML serializador = new ObjectSerializationToXML();
+		MatrizesProcessar processar = (MatrizesProcessar)serializador.fromXML(pacote.conteudo);
 		
+		Matrix matrizResultante = multiplicarMatrizes(processar);
+					
+		MatrizesReposta resposta = new MatrizesReposta();
+		resposta.matriz = matrizResultante.getArray();	
 		
-//		Pacote pacote = new Pacote();
-//		
-//		ObjectSerializationToXML serializador = new ObjectSerializationToXML();
-//		MatrizesProcessar pacotinho = null;
-//		try {
-//			pacotinho = (MatrizesProcessar)serializador.fromXML(pacote.conteudo);
-//		} catch (Exception e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-////		XStream xstream = new XStream();
-////		MatrizesProcessar pacotinho = (MatrizesProcessar)xstream.fromXML(pacote.conteudo);
-//		
-//		Matrix matriz1 = new Matrix(pacotinho.matriz1);
-//		Matrix matriz2 = new Matrix(pacotinho.matriz2);
-//		Matrix matrizResultante = matriz1.times(matriz2);
-//		
-//		MatrizesReposta resposta = new MatrizesReposta();
-//		resposta.matriz = matrizResultante.getArray();
-//		
-//		
-//		Pacote pacoteResposta = new Pacote();
-//		
-//		try {
-//			String xml = serializador.toXML(pacoteResposta);
-//			pacoteResposta.conteudo = xml;
-//			escravo.Enviar(ComandosResposta.RespostaXML, xml);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}		
+		Pacote pacoteResposta = serializarResposta(resposta);
+		escravo.Enviar(ComandosResposta.RespostaXML, pacoteResposta);	
+	}
+
+	private static Matrix multiplicarMatrizes(MatrizesProcessar processar) {
+		Matrix matriz1 = new Matrix(processar.matriz1);
+		Matrix matriz2 = new Matrix(processar.matriz2);
+		return matriz1.times(matriz2);
+	}
+
+	private static Pacote serializarResposta(Object objeto) throws Exception {		
+		ObjectSerializationToXML serializador = new ObjectSerializationToXML();
+		String xml = serializador.toXML(objeto);
+		
+		Pacote pacote = new Pacote();
+		pacote.conteudo = xml;
+		
+		return pacote;
 	}
 }

@@ -1,19 +1,21 @@
 package comunicacao;
 
+import comunicacao.pacotes.Pacote;
+
 public class Resposta {
 	private ComandosResposta comandosResposta;
-	private String conteudo;
+	private Pacote pacote;
 	
-	public Resposta(ComandosResposta comandosReposta, String conteudo){
+	public Resposta(ComandosResposta comandosReposta, Pacote pacote){
 		this.comandosResposta = comandosReposta;
-		this.conteudo = conteudo;
+		this.pacote = pacote;
 	}
-	
+
 	public ComandosResposta getTipoResposta(){
 		return comandosResposta;
 	}
 	
-	public String getConteudo(){
-		return conteudo;
+	public Pacote getPacote(){
+		return pacote;
 	}
 }

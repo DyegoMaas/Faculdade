@@ -1,61 +1,67 @@
 package apresentacao;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.thoughtworks.xstream.XStream;
-
 import jpvm.jpvmEnvironment;
 import jpvm.jpvmException;
 import comunicacao.ComandosProcessamento;
-import comunicacao.ComandosResposta;
 import comunicacao.Mestre;
 import comunicacao.Resposta;
+import comunicacao.pacotes.Cabecalho;
 import comunicacao.pacotes.matrizes.MatrizesProcessar;
+import comunicacao.pacotes.Pacote;
 
 public class ProcessadorGrafos {
-	
+
 	private static String caminhoDiretorioEntrada = "C:\\pvm\\entrada";
 	private static String caminhoDiretorioSaida = "C:\\pvm\\saida";
 
-	//TODO criar objeto Mensagem cop cabecalho para encapsular o conteúdo dos arquivos 
-	public static void main(String[] args) throws Exception, jpvmException, IOException {		
+	public static void main(String[] args) throws Exception, jpvmException,
+			IOException {
 		File diretorioEntrada = new File(caminhoDiretorioEntrada);
 		final File[] arquivosParaProcessar = diretorioEntrada.listFiles();
-		
-		if(arquivosParaProcessar == null){
+
+		if (arquivosParaProcessar == null) {
 			System.out.println("Nenhum arquivo para processar");
 			return;
-		}				
-		
+		}
+
 		final Mestre mestre = construirMestre(arquivosParaProcessar);
-		
+
 		Thread processadorEntrada = new Thread(new Runnable() {
 			@Override
-			public void run() {				
-				for (File file : arquivosParaProcessar) {					
+			public void run() {
+				for (File file : arquivosParaProcessar) {
 					try {
-						ComandosProcessamento comando = ComandosProcessamento.getComandoPorExtensao(getExtensao(file));
-						String conteudoArquivo = getConteudo(file);		
-						
-						//empacotar conteudo arquivo
-						
-						mestre.Enviar(comando, conteudoArquivo);
-						
+						ComandosProcessamento comando = ComandosProcessamento
+								.getComandoPorExtensao(getExtensao(file));
+
+						Pacote pacote = new Pacote();
+						pacote.cabecalho = new Cabecalho();
+						pacote.cabecalho.nomeArquivo = file.getName();
+						pacote.conteudo = getConteudo(file);
+
+						byte[] bytesPacote = prepararPacoteParaEnvio(pacote);
+						// empacotar conteudo arquivo
+
+						mestre.Enviar(comando, bytesPacote);
+
 					} catch (Exception | jpvmException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		});
-		
-		final TratadorResposta tratadorResposta = new TratadorResposta(new File(caminhoDiretorioSaida));
+
+		final TratadorResposta tratadorResposta = new TratadorResposta(
+				new File(caminhoDiretorioSaida));
 		Thread processadorSaida = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -68,49 +74,54 @@ public class ProcessadorGrafos {
 					}
 				}
 			}
-		});		
-		
+		});
+
 		processadorEntrada.start();
 		processadorSaida.start();
 	}
 
-	private static Mestre construirMestre(final File[] arquivosParaProcessar) throws jpvmException, IOException, Exception {
+	private static Mestre construirMestre(final File[] arquivosParaProcessar)
+			throws jpvmException, IOException, Exception {
 		final Mestre mestre = new Mestre(new jpvmEnvironment());
-		
-		List<Configuracao> configuracoes = obterConfiguracoes(arquivosParaProcessar);		
+
+		List<Configuracao> configuracoes = obterConfiguracoes(arquivosParaProcessar);
 		for (Configuracao configuracao : configuracoes) {
-			mestre.Adicionar(configuracao.getComando(), configuracao.getNumTarefas());	
+			mestre.Adicionar(configuracao.getComando(),
+					configuracao.getNumTarefas());
 		}
-		
+
 		return mestre;
 	}
-	
-	private static String getExtensao(File arquivo) throws IOException{
+
+	private static String getExtensao(File arquivo) throws IOException {
 		String caminho = arquivo.getCanonicalPath();
 		return caminho.substring(caminho.lastIndexOf('.') + 1);
 	}
-	
-	private static String getConteudo(File arquivo) throws IOException{	
+
+	private static String getConteudo(File arquivo) throws IOException {
 		StringBuffer buffer = new StringBuffer();
-		
-		 BufferedReader br = new BufferedReader(new FileReader(arquivo));  
-         while(br.ready()){  
-             buffer.append(br.readLine());
-         }  
-         br.close();
-         
-         return buffer.toString();
+
+		BufferedReader br = new BufferedReader(new FileReader(arquivo));
+		while (br.ready()) {
+			buffer.append(br.readLine());
+		}
+		br.close();
+
+		return buffer.toString();
 	}
-	
-	private static List<Configuracao> obterConfiguracoes(File[] arquivos) throws IOException, Exception{
+
+	private static List<Configuracao> obterConfiguracoes(File[] arquivos) throws IOException, Exception {
 		ArrayList<Configuracao> configuracoes = new ArrayList<Configuracao>();
-				
-		Configuracao configXml = new Configuracao(ComandosProcessamento.ProcessarXML);
-		Configuracao configJson = new Configuracao(ComandosProcessamento.ProcessarJSON);
-		
+
+		Configuracao configXml = new Configuracao(
+				ComandosProcessamento.ProcessarXML);
+		Configuracao configJson = new Configuracao(
+				ComandosProcessamento.ProcessarJSON);
+
 		for (File arquivo : arquivos) {
-			ComandosProcessamento comando = ComandosProcessamento.getComandoPorExtensao(getExtensao(arquivo));
-			
+			ComandosProcessamento comando = ComandosProcessamento
+					.getComandoPorExtensao(getExtensao(arquivo));
+
 			switch (comando) {
 			case ProcessarJSON:
 				configJson.incNumTarefas();
@@ -121,13 +132,12 @@ public class ProcessadorGrafos {
 				break;
 			}
 		}
-		
+
 		configuracoes.add(configJson);
 		configuracoes.add(configXml);
-		
+
 		return configuracoes;
 	}
-	
 	/* EXEMPLOS DE MATRIZES PARA SERIALIZAR
 		MatrizesProcessar m = new MatrizesProcessar();
 		m.matriz1 = new double[][] {
