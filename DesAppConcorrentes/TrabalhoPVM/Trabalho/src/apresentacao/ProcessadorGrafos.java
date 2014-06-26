@@ -9,6 +9,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import jpvm.jpvmEnvironment;
 import jpvm.jpvmException;
 import comunicacao.ComandosProcessamento;
@@ -17,14 +18,14 @@ import comunicacao.Resposta;
 import comunicacao.pacotes.Cabecalho;
 import comunicacao.pacotes.matrizes.MatrizesProcessar;
 import comunicacao.pacotes.Pacote;
+import comunicacao.utils.ObjectSerializationToXML;
 
 public class ProcessadorGrafos {
 
 	private static String caminhoDiretorioEntrada = "C:\\pvm\\entrada";
 	private static String caminhoDiretorioSaida = "C:\\pvm\\saida";
 
-	public static void main(String[] args) throws Exception, jpvmException,
-			IOException {
+	public static void main(String[] args) throws Exception, jpvmException, IOException {	
 		File diretorioEntrada = new File(caminhoDiretorioEntrada);
 		final File[] arquivosParaProcessar = diretorioEntrada.listFiles();
 

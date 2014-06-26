@@ -1,5 +1,6 @@
 package apresentacao;
 
+import matematica.CalculadoraMatrizes;
 import Jama.Matrix;
 import comunicacao.ComandosProcessamento;
 import comunicacao.ComandosResposta;
@@ -22,7 +23,7 @@ public class ProcessadorXML {
 		
 		ObjectSerializationToXML serializador = new ObjectSerializationToXML();
 		MatrizesProcessar processar = (MatrizesProcessar)serializador.fromXML(pacote.conteudo);
-		
+				
 		Matrix matrizResultante = multiplicarMatrizes(processar);
 					
 		MatrizesReposta resposta = new MatrizesReposta();
@@ -33,9 +34,8 @@ public class ProcessadorXML {
 	}
 
 	private static Matrix multiplicarMatrizes(MatrizesProcessar processar) {
-		Matrix matriz1 = new Matrix(processar.matriz1);
-		Matrix matriz2 = new Matrix(processar.matriz2);
-		return matriz1.times(matriz2);
+		CalculadoraMatrizes calculadora = new CalculadoraMatrizes();
+		return calculadora.multiplicarMatrizes(processar.matriz1, processar.matriz2);
 	}
 
 	private static Pacote serializarResposta(Object objeto) throws Exception {		

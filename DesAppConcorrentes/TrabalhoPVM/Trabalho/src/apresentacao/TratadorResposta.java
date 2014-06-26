@@ -20,10 +20,10 @@ public class TratadorResposta {
 		// para que seja retornado e criado de acordo
 		switch (resposta.getTipoResposta()) {
 		case RespostaJSON:
-			GravarConteudo("nome.json", resposta.getConteudo());
+			GravarConteudo("nome.json", resposta.getPacote().conteudo);
 			break;
 		case RespostaXML:
-			GravarConteudo("nome.xml", resposta.getConteudo());
+			GravarConteudo("nome.xml", resposta.getPacote().conteudo);
 			break;
 		default:
 			throw new Exception("tipo de resposta não reconhecida: " + resposta.getTipoResposta());
