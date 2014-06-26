@@ -1,5 +1,5 @@
 package comunicacao.pacotes.matrizes;
 
-public class MatrizesReposta{
+public class MatrizResposta{
 	public double[][] matriz;
 }

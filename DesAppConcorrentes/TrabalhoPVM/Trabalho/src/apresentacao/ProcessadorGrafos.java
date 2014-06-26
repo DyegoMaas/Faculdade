@@ -49,10 +49,8 @@ public class ProcessadorGrafos {
 						pacote.cabecalho.nomeArquivo = file.getName();
 						pacote.conteudo = getConteudo(file);
 
-						byte[] bytesPacote = prepararPacoteParaEnvio(pacote);
 						// empacotar conteudo arquivo
-
-						mestre.Enviar(comando, bytesPacote);
+						mestre.Enviar(comando, pacote);
 
 					} catch (Exception | jpvmException e) {
 						e.printStackTrace();
@@ -112,17 +110,13 @@ public class ProcessadorGrafos {
 	}
 
 	private static List<Configuracao> obterConfiguracoes(File[] arquivos) throws IOException, Exception {
-			throws IOException, Exception {
 		ArrayList<Configuracao> configuracoes = new ArrayList<Configuracao>();
 
-		Configuracao configXml = new Configuracao(
-				ComandosProcessamento.ProcessarXML);
-		Configuracao configJson = new Configuracao(
-				ComandosProcessamento.ProcessarJSON);
+		Configuracao configXml = new Configuracao(ComandosProcessamento.ProcessarXML);
+		Configuracao configJson = new Configuracao(ComandosProcessamento.ProcessarJSON);
 
 		for (File arquivo : arquivos) {
-			ComandosProcessamento comando = ComandosProcessamento
-					.getComandoPorExtensao(getExtensao(arquivo));
+			ComandosProcessamento comando = ComandosProcessamento.getComandoPorExtensao(getExtensao(arquivo));
 
 			switch (comando) {
 			case ProcessarJSON:

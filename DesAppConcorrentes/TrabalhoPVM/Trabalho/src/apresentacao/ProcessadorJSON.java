@@ -1,22 +1,40 @@
 package apresentacao;
 
+import matematica.CalculadoraMatrizes;
+import comunicacao.pacotes.matrizes.MatrizResposta;
+
+import com.google.gson.Gson;
+
 import jpvm.jpvmEnvironment;
 import jpvm.jpvmException;
 import comunicacao.ComandosProcessamento;
 import comunicacao.ComandosResposta;
 import comunicacao.Escravo;
 import comunicacao.pacotes.Pacote;
+import comunicacao.pacotes.matrizes.MatrizesProcessar;
 
 public class ProcessadorJSON {
 	public static void main(String[] args) throws jpvmException, Exception {
 		Escravo escravo = new Escravo(ComandosProcessamento.ProcessarJSON, new jpvmEnvironment());
 
-		Pacote pacote = escravo.Receber();
-		if(pacote == null)
+		Pacote pacoteRecebido = escravo.Receber();
+		if(pacoteRecebido == null)
 			return;
 
-		//TODO processar a entrada
+		Gson gson = new Gson();
+		MatrizesProcessar matrizesProcessar = gson.fromJson(pacoteRecebido.conteudo, MatrizesProcessar.class);
+
+		CalculadoraMatrizes calculadora = new CalculadoraMatrizes();
+		MatrizResposta matrizResposta = calculadora.multiplicarMatrizes(matrizesProcessar.matriz1, matrizesProcessar.matriz2);
 		
-		escravo.Enviar(ComandosResposta.RespostaJSON, new Pacote());
+		String matrizRespostaString = gson.toJson(matrizResposta);
+		
+		//TODO processar a entrada
+
+		Pacote pacoteResposta = new Pacote();
+		pacoteResposta.cabecalho = pacoteRecebido.cabecalho;
+		pacoteResposta.conteudo = matrizRespostaString;
+
+		escravo.Enviar(ComandosResposta.RespostaJSON, pacoteResposta);
 	}
 }
