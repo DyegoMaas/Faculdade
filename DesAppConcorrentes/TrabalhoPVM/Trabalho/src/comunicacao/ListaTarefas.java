@@ -15,8 +15,9 @@ public class ListaTarefas {
 	}
 
 	public jpvmTaskId getProximo(){
-		int proximo = ((contador + 1) % idsTarefas.length);
+		int proximo = (contador + 1) % idsTarefas.length;
 		contador++;
+		
 		return idsTarefas[proximo];
 	}
 	

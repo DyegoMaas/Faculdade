@@ -26,7 +26,7 @@ public class Escravo {
 		this.jpvmEnvironment = jpvmEnvironment;
 	}
 
-	public void Enviar(ComandosResposta comandoRecepcao, Pacote pacote) throws jpvmException, Exception {
+	public void enviar(ComandosResposta comandoRecepcao, Pacote pacote) throws jpvmException, Exception {
 		System.out.printf("[ESCRAVO] Enviando comandoRecepcao %d\n", comandoRecepcao.getValor());
 		
 		jpvmBuffer buffer = new jpvmBuffer();
@@ -88,4 +88,8 @@ public class Escravo {
 
         return object;
     }
+
+	public void finalizar() throws jpvmException {
+		this.jpvmEnvironment.pvm_exit();
+	}
 }

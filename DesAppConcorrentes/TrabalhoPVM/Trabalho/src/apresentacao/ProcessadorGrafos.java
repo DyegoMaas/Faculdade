@@ -33,7 +33,6 @@ public class ProcessadorGrafos {
 		}
 
 		final Mestre mestre = construirMestre(arquivosParaProcessar);
-
 		Thread processadorEntrada = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -47,7 +46,7 @@ public class ProcessadorGrafos {
 						pacote.cabecalho.nomeArquivo = file.getName();
 						pacote.conteudo = getConteudo(file);
 
-						mestre.Enviar(comando, pacote);
+						mestre.enviar(comando, pacote);
 
 					} catch (Exception | jpvmException e) {
 						e.printStackTrace();
@@ -63,7 +62,7 @@ public class ProcessadorGrafos {
 			public void run() {
 				for (int i = 0; i < arquivosParaProcessar.length; i++) {
 					try {
-						Resposta resposta = mestre.Receber();
+						Resposta resposta = mestre.receber();
 						tratadorResposta.Tratar(resposta);
 					} catch (jpvmException | Exception e) {
 						e.printStackTrace();
@@ -74,6 +73,11 @@ public class ProcessadorGrafos {
 
 		processadorEntrada.start();
 		processadorSaida.start();
+		
+		processadorEntrada.join();
+		processadorSaida.join();
+		
+		mestre.finalizar();
 	}
 
 	private static Mestre construirMestre(final File[] arquivosParaProcessar)
@@ -82,7 +86,7 @@ public class ProcessadorGrafos {
 
 		List<Configuracao> configuracoes = obterConfiguracoes(arquivosParaProcessar);
 		for (Configuracao configuracao : configuracoes) {
-			mestre.Adicionar(configuracao.getComando(), configuracao.getNumTarefas());
+			mestre.adicionar(configuracao.getComando(), configuracao.getNumTarefas());
 		}
 
 		return mestre;

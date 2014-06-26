@@ -20,13 +20,6 @@ public class ProcessadorJSON {
 		Pacote pacoteRecebido = escravo.Receber();		
 		if(pacoteRecebido == null)
 			return;		
-
-//		try{			
-//			Gson gson = new Gson();
-//			escravo.Enviar(ComandosResposta.RespostaJSON, dummy("x"));//TODO remover
-//		}catch(Exception e){
-//			escravo.Enviar(ComandosResposta.RespostaJSON, dummy(e.getMessage()));//TODO remover
-//		}
 		
 		Gson gson = new Gson();		
 		MatrizesProcessar matrizesProcessar = gson.fromJson(pacoteRecebido.conteudo, MatrizesProcessar.class);		
@@ -40,7 +33,8 @@ public class ProcessadorJSON {
 		pacoteResposta.cabecalho = pacoteRecebido.cabecalho;
 		pacoteResposta.conteudo = matrizRespostaString;
 
-		escravo.Enviar(ComandosResposta.RespostaJSON, pacoteResposta);
+		escravo.enviar(ComandosResposta.RespostaJSON, pacoteResposta);
+		escravo.finalizar();
 	}
 
 //	private static Pacote dummy(String msg) {

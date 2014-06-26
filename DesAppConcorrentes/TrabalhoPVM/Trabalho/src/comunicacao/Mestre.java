@@ -28,7 +28,7 @@ public class Mestre {
 		this.jpvmEnvironment = jpvmEnvironment;
 	}
 
-	public void Adicionar(ComandosProcessamento comando, int numeroTarefas) throws jpvmException {
+	public void adicionar(ComandosProcessamento comando, int numeroTarefas) throws jpvmException {
 		int numeroEscravos = numeroEscravos(numeroTarefas);
 		
 		jpvmTaskId[] idsTarefas = new jpvmTaskId[numeroEscravos];
@@ -37,7 +37,7 @@ public class Mestre {
 		tarefas.put(comando, new ListaTarefas(comando, idsTarefas));
 	}
 
-	public void Enviar(ComandosProcessamento comando, Pacote pacote) throws jpvmException, Exception {
+	public void enviar(ComandosProcessamento comando, Pacote pacote) throws jpvmException, Exception {
 		ListaTarefas listaTarefas = tarefas.get(comando);
 		jpvmTaskId taskId = listaTarefas.getProximo();
 
@@ -50,7 +50,7 @@ public class Mestre {
 		jpvmEnvironment.pvm_send(buffer, taskId, comando.getValor());
 	}
 
-	public Resposta Receber() throws jpvmException, Exception {
+	public Resposta receber() throws jpvmException, Exception {
 		jpvmMessage mensagem = jpvmEnvironment.pvm_recv();
 
 		System.out.printf("[MESTRE] Recebido comando [%d] do tipo [%d] do escravo [%s]\n", ++numeroRecebimentos, mensagem.messageTag, mensagem.sourceTid);		
@@ -96,10 +96,15 @@ public class Mestre {
     }
 	
 	private int numeroEscravos(int numeroTarefas) {
-		int numeroEscravos = numeroTarefas / 2;
-		if(numeroEscravos == 0)
-			numeroEscravos = 1;
-		
-		return numeroEscravos;
+		return numeroTarefas;
+//		int numeroEscravos = numeroTarefas / 2;
+//		if(numeroEscravos == 0)
+//			numeroEscravos = 1;
+//		
+//		return numeroEscravos;
+	}
+
+	public void finalizar() throws jpvmException {
+		this.jpvmEnvironment.pvm_exit();
 	}
 }

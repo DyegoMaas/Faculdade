@@ -32,12 +32,7 @@ public class ProcessadorXML {
 		pacoteResposta.cabecalho = pacoteRecebido.cabecalho;
 		pacoteResposta.conteudo = serializador.toXML(matrizResultante);		
 		
-		escravo.Enviar(ComandosResposta.RespostaXML, pacoteResposta);	
+		escravo.enviar(ComandosResposta.RespostaXML, pacoteResposta);
+		escravo.finalizar();
 	}
-	
-//	private static Pacote dummy(String msg) {
-//		Pacote p = new Pacote();
-//		p.conteudo = msg;
-//		return p;
-//	}
 }
