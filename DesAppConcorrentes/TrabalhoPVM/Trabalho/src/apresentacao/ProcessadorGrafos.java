@@ -16,9 +16,7 @@ import comunicacao.ComandosProcessamento;
 import comunicacao.Mestre;
 import comunicacao.Resposta;
 import comunicacao.pacotes.Cabecalho;
-import comunicacao.pacotes.matrizes.MatrizesProcessar;
 import comunicacao.pacotes.Pacote;
-import comunicacao.utils.ObjectSerializationToXML;
 
 public class ProcessadorGrafos {
 
@@ -49,7 +47,6 @@ public class ProcessadorGrafos {
 						pacote.cabecalho.nomeArquivo = file.getName();
 						pacote.conteudo = getConteudo(file);
 
-						// empacotar conteudo arquivo
 						mestre.Enviar(comando, pacote);
 
 					} catch (Exception | jpvmException e) {
@@ -85,8 +82,7 @@ public class ProcessadorGrafos {
 
 		List<Configuracao> configuracoes = obterConfiguracoes(arquivosParaProcessar);
 		for (Configuracao configuracao : configuracoes) {
-			mestre.Adicionar(configuracao.getComando(),
-					configuracao.getNumTarefas());
+			mestre.Adicionar(configuracao.getComando(), configuracao.getNumTarefas());
 		}
 
 		return mestre;

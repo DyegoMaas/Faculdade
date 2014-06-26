@@ -28,8 +28,6 @@ public class ProcessadorJSON {
 		MatrizResposta matrizResposta = calculadora.multiplicarMatrizes(matrizesProcessar.matriz1, matrizesProcessar.matriz2);
 		
 		String matrizRespostaString = gson.toJson(matrizResposta);
-		
-		//TODO processar a entrada
 
 		Pacote pacoteResposta = new Pacote();
 		pacoteResposta.cabecalho = pacoteRecebido.cabecalho;
