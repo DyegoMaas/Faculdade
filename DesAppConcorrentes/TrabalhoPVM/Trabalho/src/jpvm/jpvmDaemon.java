@@ -674,14 +674,16 @@ public class jpvmDaemon {
 		
 
 		// Create a thread to execute the new task
-		String args[] = new String[7];
+		// Alterado número de args
+		String args[] = new String[8];
 		args[0] = java_exec;
 		args[1] = "-Djpvm.daemon="+jpvm.pvm_mytid().getPort();
 		args[2] = "-Djpvm.parhost="+parent.getHost();
 		args[3] = "-Djpvm.parport="+parent.getPort();
 		args[4] = "-Djpvm.taskname="+name;
 		args[5] = "-Djpvm.regnum="+nextCreateOrder;
-		args[6] = name; 
+		args[6] = "-Djava.library.path=C:/libs";
+		args[7] = name; 
 		if(debug_on)
 			log("exec( "+args[0]+" "+args[1]+" "+args[2]+" "+
 				args[3]+" "+args[4]+" "+args[5]+" )");
