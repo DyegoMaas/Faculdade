@@ -128,5 +128,18 @@ public class ProcessadorGrafos {
 		return configuracoes;
 	}
 	
-	
+	/* EXEMPLOS DE MATRIZES PARA SERIALIZAR
+		MatrizesProcessar m = new MatrizesProcessar();
+		m.matriz1 = new double[][] {
+				{1, 2.5d, 5},
+				{1.2d, 2.5d, 5},
+				{10d, 2.5d, 5}
+			};
+		
+		m.matriz2 = new double[][] {
+				{1, 2.5d, 3.5d},
+				{12.2d, 1, 5},
+				{10d, 2.5d, 1}
+			};
+		String s = x.toXML(m);*/
 }
