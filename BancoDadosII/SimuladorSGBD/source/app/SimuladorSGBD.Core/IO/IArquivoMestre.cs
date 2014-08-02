@@ -4,8 +4,8 @@ namespace SimuladorSGBD.Core.IO
 {
     public interface IArquivoMestre : IDisposable
     {
+        bool ExisteNoDisco { get; }
         void CriarArquivoSeNaoExiste(int blocos, int bytes);
-        bool ArquivoExiste();
         IPagina CarregarPagina(int indicePagina);
     }
 }

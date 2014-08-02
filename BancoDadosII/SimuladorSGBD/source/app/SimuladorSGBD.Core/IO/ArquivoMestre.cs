@@ -11,10 +11,15 @@ namespace SimuladorSGBD.Core.IO
         {
             arquivo = new FileInfo(caminhoArquivo);
         }
+        
+        public bool ExisteNoDisco
+        {
+            get { return arquivo.Exists; }
+        }
 
         public void CriarArquivoSeNaoExiste(int blocos, int bytes)
         {
-            if (ArquivoExiste())
+            if (ExisteNoDisco)
                 return;
 
             using (var stream = arquivo.Create())
@@ -24,11 +29,6 @@ namespace SimuladorSGBD.Core.IO
                     CriarBlocoVazio(stream, bytes);
                 }
             }
-        }
-
-        public bool ArquivoExiste()
-        {
-            return arquivo.Exists;
         }
 
         public IPagina CarregarPagina(int indicePagina)

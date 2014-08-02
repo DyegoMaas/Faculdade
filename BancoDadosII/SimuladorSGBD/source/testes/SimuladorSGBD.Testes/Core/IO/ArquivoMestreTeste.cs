@@ -13,7 +13,7 @@ namespace SimuladorSGBD.Testes.Core.IO
 
         public ArquivoMestreTeste()
         {
-            TentarExcluirArquivo(3);
+            TentarExcluirArquivo(5);
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace SimuladorSGBD.Testes.Core.IO
         public void verificando_se_arquivo_existe_quando_nao_existe()
         {
             var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
-            manipuladorArquivos.ArquivoExiste().Should().BeFalse("o arquivo não existe");
+            manipuladorArquivos.ExisteNoDisco.Should().BeFalse("o arquivo não existe");
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace SimuladorSGBD.Testes.Core.IO
             arquivo.Create();
 
             var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
-            manipuladorArquivos.ArquivoExiste().Should().BeTrue("o arquivo existe");
+            manipuladorArquivos.ExisteNoDisco.Should().BeTrue("o arquivo existe");
         }
 
         [Fact]
