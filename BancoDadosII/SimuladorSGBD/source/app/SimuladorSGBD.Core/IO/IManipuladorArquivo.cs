@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimuladorSGBD.Core
+namespace SimuladorSGBD.Core.IO
 {
     public interface IManipuladorArquivo : IDisposable
     {

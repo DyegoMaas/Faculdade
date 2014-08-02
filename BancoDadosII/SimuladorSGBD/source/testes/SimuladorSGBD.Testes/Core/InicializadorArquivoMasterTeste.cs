@@ -2,6 +2,7 @@
 using SimuladorSGBD.Core;
 using System;
 using System.IO;
+using SimuladorSGBD.Core.IO;
 using Xunit;
 
 namespace SimuladorSGBD.Testes.Core

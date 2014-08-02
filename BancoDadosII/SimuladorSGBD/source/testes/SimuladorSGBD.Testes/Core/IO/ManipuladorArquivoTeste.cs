@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
-using SimuladorSGBD.Core;
-using System;
+﻿using System;
 using System.IO;
+using FluentAssertions;
+using SimuladorSGBD.Core.IO;
 using Xunit;
 
-namespace SimuladorSGBD.Testes.Core
+namespace SimuladorSGBD.Testes.Core.IO
 {
     public class ManipuladorArquivoTeste
     {

@@ -1,4 +1,4 @@
-﻿namespace SimuladorSGBD.Core
+﻿namespace SimuladorSGBD.Core.IO
 {
     public interface IManipuladorArquivos
     {

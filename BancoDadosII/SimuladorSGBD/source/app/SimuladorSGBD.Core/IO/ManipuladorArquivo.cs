@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SimuladorSGBD.Core
+namespace SimuladorSGBD.Core.IO
 {
     public class ManipuladorArquivo : IManipuladorArquivo
     {

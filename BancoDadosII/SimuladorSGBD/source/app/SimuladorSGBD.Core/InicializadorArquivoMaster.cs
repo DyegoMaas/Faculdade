@@ -1,4 +1,6 @@
-﻿namespace SimuladorSGBD.Core
+﻿using SimuladorSGBD.Core.IO;
+
+namespace SimuladorSGBD.Core
 {
     public class InicializadorArquivoMaster
     {

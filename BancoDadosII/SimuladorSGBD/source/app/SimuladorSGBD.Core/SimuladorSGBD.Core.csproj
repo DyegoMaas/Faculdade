@@ -39,11 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IManipuladorArquivo.cs" />
-    <Compile Include="IManipuladorArquivos.cs" />
+    <Compile Include="IO\IManipuladorArquivo.cs" />
+    <Compile Include="IO\IManipuladorArquivos.cs" />
     <Compile Include="InicializadorArquivoMaster.cs" />
-    <Compile Include="ManipuladorArquivo.cs" />
-    <Compile Include="ManipuladorArquivos.cs" />
+    <Compile Include="IO\ManipuladorArquivo.cs" />
+    <Compile Include="IO\ManipuladorArquivos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
