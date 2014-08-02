@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace SimuladorSGBD.Core.IO
 {
     public class ArquivoMestre : IArquivoMestre
     {
+        private const int TamanhoPaginas = 128;
         private readonly FileInfo arquivo;
 
         public ArquivoMestre(string caminhoArquivo)
@@ -33,7 +35,21 @@ namespace SimuladorSGBD.Core.IO
 
         public IPagina CarregarPagina(int indicePagina)
         {
-            throw new NotImplementedException();
+            var buffer = new byte[TamanhoPaginas];
+            using (var stream = arquivo.OpenRead())
+            {
+                var offset = indicePagina * buffer.Length;
+                stream.Seek(offset, SeekOrigin.Begin);
+                stream.Read(buffer, 0, buffer.Length);
+            }
+
+            return new Pagina
+            {
+                Dados = Encoding.ASCII.GetChars(buffer, 0, buffer.Length),
+                PinCount = 0,
+                Sujo = false,
+                UltimoAcesso = 0
+            };
         }
 
         public void Dispose()

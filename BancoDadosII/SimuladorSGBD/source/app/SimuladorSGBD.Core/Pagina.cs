@@ -2,9 +2,9 @@
 {
     internal class Pagina : IPagina
     {
-        public char[] Dados { get; private set; }
-        public bool Sujo { get; private set; }
-        public int PinCount { get; private set; }
-        public int UltimoAcesso { get; private set; }
+        public char[] Dados { get; set; }
+        public bool Sujo { get; set; }
+        public int PinCount { get; set; }
+        public int UltimoAcesso { get; set; }
     }
 }
