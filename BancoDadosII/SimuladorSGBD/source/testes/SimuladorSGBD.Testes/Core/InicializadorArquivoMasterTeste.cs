@@ -21,36 +21,27 @@ namespace SimuladorSGBD.Testes.Core
         public void criacao_do_arquivo_principal_do_banco_quando_nao_existe()
         {
             var mockManipuladorArquivos = new Mock<IManipuladorArquivos>();
-            mockManipuladorArquivos.Setup(m => m.ArquivoExiste(arquivoMaster)).Returns(false);
+            var mockManipuladorArquivo = new Mock<IManipuladorArquivo>();
+            mockManipuladorArquivos.Setup(m => m.Manipular(arquivoMaster)).Returns(mockManipuladorArquivo.Object);
 
             var inicializadorArquivoMaster = new InicializadorArquivoMaster(mockManipuladorArquivos.Object);
             inicializadorArquivoMaster.Inicializar(arquivoMaster);
 
-            mockManipuladorArquivos.Verify(m => m.CriarArquivo(arquivoMaster), Times.Once, "deveria ter criado o arquivo principal");
-        }
-
-        [Fact]
-        public void mantendo_arquivo_principal_do_banco_inalterado_durante_a_inicializado_se_ja_existe()
-        {
-            var mockManipuladorArquivos = new Mock<IManipuladorArquivos>();
-            mockManipuladorArquivos.Setup(m => m.ArquivoExiste(arquivoMaster)).Returns(true);
-
-            var inicializadorArquivoMaster = new InicializadorArquivoMaster(mockManipuladorArquivos.Object);
-            inicializadorArquivoMaster.Inicializar(arquivoMaster);
-
-            mockManipuladorArquivos.Verify(m => m.CriarArquivo(arquivoMaster), Times.Never, "não deve alterar o arquivo se já existe");
+            mockManipuladorArquivo.Verify(m => m.CriarArquivoSeNaoExiste(It.IsAny<int>(), It.IsAny<int>()), Times.Once, "deveria ter criado o arquivo principal");
         }
 
         [Fact]
         public void o_arquivo_principal_criado_deve_ter_20_blocos_de_128_bytes()
         {
             var mockManipuladorArquivos = new Mock<IManipuladorArquivos>();
-            mockManipuladorArquivos.Setup(m => m.ArquivoExiste(arquivoMaster)).Returns(false);
+            var mockManipuladorArquivo = new Mock<IManipuladorArquivo>();
+            mockManipuladorArquivos.Setup(m => m.Manipular(arquivoMaster)).Returns(mockManipuladorArquivo.Object);
+            mockManipuladorArquivo.Setup(m => m.ArquivoExiste()).Returns(false);
 
             var inicializadorArquivoMaster = new InicializadorArquivoMaster(mockManipuladorArquivos.Object);
             inicializadorArquivoMaster.Inicializar(arquivoMaster);
 
-            mockManipuladorArquivos.Verify(m => m.CriarBlocoVazio(128), Times.Exactly(20), "deveria ter criado 20 blocos de 128 bytes");
+            mockManipuladorArquivo.Verify(m => m.CriarArquivoSeNaoExiste(20, 128), Times.Once, "deveria ter criado 20 blocos de 128 bytes");
         }
     }
 }

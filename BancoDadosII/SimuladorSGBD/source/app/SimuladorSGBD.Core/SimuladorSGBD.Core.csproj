@@ -39,9 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="IManipuladorArquivo.cs" />
     <Compile Include="IManipuladorArquivos.cs" />
     <Compile Include="InicializadorArquivoMaster.cs" />
+    <Compile Include="ManipuladorArquivo.cs" />
     <Compile Include="ManipuladorArquivos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

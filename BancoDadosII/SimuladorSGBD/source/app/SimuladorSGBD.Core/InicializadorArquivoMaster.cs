@@ -11,18 +11,9 @@
 
         public void Inicializar(string caminhoArquivo)
         {
-            if (manipuladorArquivos.ArquivoExiste(caminhoArquivo))
-                return;
-
-            manipuladorArquivos.CriarArquivo(caminhoArquivo);
-            CriarBlocos(blocos:20, bytes:128);
-        }
-
-        private void CriarBlocos(int blocos, int bytes)
-        {
-            for (int i = 0; i < blocos; i++)
+            using (var arquivo = manipuladorArquivos.Manipular(caminhoArquivo))
             {
-                manipuladorArquivos.CriarBlocoVazio(bytes);
+                arquivo.CriarArquivoSeNaoExiste(blocos: 20, bytes: 128);
             }
         }
     }

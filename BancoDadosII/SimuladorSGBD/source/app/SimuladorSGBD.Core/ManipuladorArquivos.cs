@@ -1,27 +1,33 @@
-﻿using System.IO;
-
-namespace SimuladorSGBD.Core
+﻿namespace SimuladorSGBD.Core
 {
+    //public class ManipuladorArquivos : IManipuladorArquivos
+    //{
+    //    public void CriarArquivoSeNaoExiste(string caminhoArquivo)
+    //    {
+    //        if (ArquivoExiste(caminhoArquivo))
+    //            return;
+
+    //        var arquivo = new FileInfo(caminhoArquivo);
+    //        arquivo.Create();
+    //    }
+
+    //    public bool ArquivoExiste(string caminhoArquivo)
+    //    {
+    //        var arquivo = new FileInfo(caminhoArquivo);
+    //        return arquivo.Exists;
+    //    }
+
+    //    public void CriarBlocoVazio(int bytes)
+    //    {
+    //        throw new System.NotImplementedException();
+    //    }
+    //}
+
     public class ManipuladorArquivos : IManipuladorArquivos
     {
-        public void CriarArquivo(string caminhoArquivo)
+        public IManipuladorArquivo Manipular(string caminhoArquivo)
         {
-            if (ArquivoExiste(caminhoArquivo))
-                return;
-
-            var arquivo = new FileInfo(caminhoArquivo);
-            arquivo.Create();
-        }
-
-        public bool ArquivoExiste(string caminhoArquivo)
-        {
-            var arquivo = new FileInfo(caminhoArquivo);
-            return arquivo.Exists;
-        }
-
-        public void CriarBlocoVazio(int bytes)
-        {
-            throw new System.NotImplementedException();
+            return new ManipuladorArquivo(caminhoArquivo);
         }
     }
 }

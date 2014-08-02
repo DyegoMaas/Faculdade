@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\InicializadorArquivoMasterTeste.cs" />
-    <Compile Include="Core\ManipuladorArquivosTeste.cs" />
+    <Compile Include="Core\ManipuladorArquivoTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
