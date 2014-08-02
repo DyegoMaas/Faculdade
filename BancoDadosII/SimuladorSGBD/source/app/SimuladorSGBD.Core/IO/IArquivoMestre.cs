@@ -2,7 +2,7 @@
 
 namespace SimuladorSGBD.Core.IO
 {
-    public interface IManipuladorArquivoMestre : IDisposable
+    public interface IArquivoMestre : IDisposable
     {
         void CriarArquivoSeNaoExiste(int blocos, int bytes);
         bool ArquivoExiste();

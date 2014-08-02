@@ -7,11 +7,11 @@ using Xunit;
 
 namespace SimuladorSGBD.Testes.Core.IO
 {
-    public class ManipuladorArquivoMestreTeste
+    public class ArquivoMestreTeste
     {
         private readonly string arquivoTeste = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "arquivoTeste.txt");
 
-        public ManipuladorArquivoMestreTeste()
+        public ArquivoMestreTeste()
         {
             TentarExcluirArquivo(3);
         }
@@ -19,7 +19,7 @@ namespace SimuladorSGBD.Testes.Core.IO
         [Fact]
         public void criacao_de_um_arquivo_que_nao_existe()
         {
-            var manipuladorArquivos = new ManipuladorArquivoMestreMestre(arquivoTeste);
+            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
             manipuladorArquivos.CriarArquivoSeNaoExiste(1, 1);
 
             File.Exists(arquivoTeste).Should().BeTrue("deveria ter criado o arquivo master");
@@ -28,7 +28,7 @@ namespace SimuladorSGBD.Testes.Core.IO
         [Fact]
         public void verificando_se_arquivo_existe_quando_nao_existe()
         {
-            var manipuladorArquivos = new ManipuladorArquivoMestreMestre(arquivoTeste);
+            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
             manipuladorArquivos.ArquivoExiste().Should().BeFalse("o arquivo não existe");
         }
 
@@ -38,14 +38,14 @@ namespace SimuladorSGBD.Testes.Core.IO
             var arquivo = new FileInfo(arquivoTeste);
             arquivo.Create();
 
-            var manipuladorArquivos = new ManipuladorArquivoMestreMestre(arquivoTeste);
+            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
             manipuladorArquivos.ArquivoExiste().Should().BeTrue("o arquivo existe");
         }
 
         [Fact]
         public void criacao_de_blocos_na_inicilizacao()
         {
-            var manipuladorArquivos = new ManipuladorArquivoMestreMestre(arquivoTeste);
+            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
             manipuladorArquivos.CriarArquivoSeNaoExiste(2, 128);
 
             var bytesArquivo = File.ReadAllBytes(arquivoTeste);

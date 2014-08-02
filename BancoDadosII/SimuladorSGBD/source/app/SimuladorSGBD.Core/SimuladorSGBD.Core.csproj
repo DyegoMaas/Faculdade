@@ -40,11 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IO\IConfiguracaoIO.cs" />
-    <Compile Include="IO\IManipuladorArquivoMestre.cs" />
+    <Compile Include="IO\IArquivoMestre.cs" />
     <Compile Include="IO\IManipuladorArquivoMestreFactory.cs" />
     <Compile Include="InicializadorArquivoMaster.cs" />
-    <Compile Include="IO\ManipuladorArquivoMestreMestre.cs" />
-    <Compile Include="IO\ManipuladorArquivoMestreFactoryMestreFactory.cs" />
+    <Compile Include="IO\ArquivoMestre.cs" />
+    <Compile Include="IO\ManipuladorArquivoMestreFactory.cs" />
     <Compile Include="IPagina.cs" />
     <Compile Include="Pagina.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

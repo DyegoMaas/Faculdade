@@ -2,6 +2,6 @@
 {
     public interface IManipuladorArquivoMestreFactory
     {
-        IManipuladorArquivoMestre Criar();
+        IArquivoMestre Criar();
     }
 }

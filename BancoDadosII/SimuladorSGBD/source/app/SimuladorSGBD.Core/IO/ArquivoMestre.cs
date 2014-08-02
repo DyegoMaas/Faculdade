@@ -3,11 +3,11 @@ using System.IO;
 
 namespace SimuladorSGBD.Core.IO
 {
-    public class ManipuladorArquivoMestreMestre : IManipuladorArquivoMestre
+    public class ArquivoMestre : IArquivoMestre
     {
         private readonly FileInfo arquivo;
 
-        public ManipuladorArquivoMestreMestre(string caminhoArquivo)
+        public ArquivoMestre(string caminhoArquivo)
         {
             arquivo = new FileInfo(caminhoArquivo);
         }

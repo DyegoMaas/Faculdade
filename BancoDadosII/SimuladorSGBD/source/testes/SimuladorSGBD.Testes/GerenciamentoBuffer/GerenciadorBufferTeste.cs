@@ -16,7 +16,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         public void carregando_uma_pagina_para_o_buffer(int indicePagina)
         {
             var mockManipuladorArquivoMestreFactory = new Mock<IManipuladorArquivoMestreFactory>();
-            var mockManipuladorArquivoMestre = new Mock<IManipuladorArquivoMestre>();
+            var mockManipuladorArquivoMestre = new Mock<IArquivoMestre>();
 
             var paginaNoDisco = new PaginaFake
             {
