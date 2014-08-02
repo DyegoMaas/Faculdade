@@ -59,7 +59,10 @@
   <ItemGroup>
     <Compile Include="Core\InicializadorArquivoMasterTeste.cs" />
     <Compile Include="Core\IO\ManipuladorArquivosTeste.cs" />
-    <Compile Include="Core\IO\ManipuladorArquivoTeste.cs" />
+    <Compile Include="Core\IO\ManipuladorArquivoMestreTeste.cs" />
+    <Compile Include="Fixtures\ConfiguracaoIOFake.cs" />
+    <Compile Include="Fixtures\PaginaFake.cs" />
+    <Compile Include="GerenciamentoBuffer\GerenciadorBufferTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

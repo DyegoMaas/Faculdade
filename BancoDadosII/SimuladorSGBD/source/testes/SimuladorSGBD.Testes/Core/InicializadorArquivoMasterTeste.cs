@@ -21,9 +21,9 @@ namespace SimuladorSGBD.Testes.Core
         [Fact]
         public void criacao_do_arquivo_principal_do_banco_quando_nao_existe()
         {
-            var mockManipuladorArquivos = new Mock<IManipuladorArquivos>();
-            var mockManipuladorArquivo = new Mock<IManipuladorArquivo>();
-            mockManipuladorArquivos.Setup(m => m.Manipular(arquivoMaster)).Returns(mockManipuladorArquivo.Object);
+            var mockManipuladorArquivos = new Mock<IManipuladorArquivoMestreFactory>();
+            var mockManipuladorArquivo = new Mock<IManipuladorArquivoMestre>();
+            mockManipuladorArquivos.Setup(m => m.Criar()).Returns(mockManipuladorArquivo.Object);
 
             var inicializadorArquivoMaster = new InicializadorArquivoMaster(mockManipuladorArquivos.Object);
             inicializadorArquivoMaster.Inicializar(arquivoMaster);
@@ -34,9 +34,9 @@ namespace SimuladorSGBD.Testes.Core
         [Fact]
         public void o_arquivo_principal_criado_deve_ter_20_blocos_de_128_bytes()
         {
-            var mockManipuladorArquivos = new Mock<IManipuladorArquivos>();
-            var mockManipuladorArquivo = new Mock<IManipuladorArquivo>();
-            mockManipuladorArquivos.Setup(m => m.Manipular(arquivoMaster)).Returns(mockManipuladorArquivo.Object);
+            var mockManipuladorArquivos = new Mock<IManipuladorArquivoMestreFactory>();
+            var mockManipuladorArquivo = new Mock<IManipuladorArquivoMestre>();
+            mockManipuladorArquivos.Setup(m => m.Criar()).Returns(mockManipuladorArquivo.Object);
             mockManipuladorArquivo.Setup(m => m.ArquivoExiste()).Returns(false);
 
             var inicializadorArquivoMaster = new InicializadorArquivoMaster(mockManipuladorArquivos.Object);

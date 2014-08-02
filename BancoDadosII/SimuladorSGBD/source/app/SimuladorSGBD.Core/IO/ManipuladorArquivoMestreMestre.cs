@@ -3,11 +3,11 @@ using System.IO;
 
 namespace SimuladorSGBD.Core.IO
 {
-    public class ManipuladorArquivo : IManipuladorArquivo
+    public class ManipuladorArquivoMestreMestre : IManipuladorArquivoMestre
     {
         private readonly FileInfo arquivo;
 
-        public ManipuladorArquivo(string caminhoArquivo)
+        public ManipuladorArquivoMestreMestre(string caminhoArquivo)
         {
             arquivo = new FileInfo(caminhoArquivo);
         }
@@ -31,9 +31,13 @@ namespace SimuladorSGBD.Core.IO
             return arquivo.Exists;
         }
 
-        public void Dispose()
+        public IPagina CarregarPagina(int indicePagina)
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
         }
 
         private void CriarBlocoVazio(Stream stream, int bytes)
