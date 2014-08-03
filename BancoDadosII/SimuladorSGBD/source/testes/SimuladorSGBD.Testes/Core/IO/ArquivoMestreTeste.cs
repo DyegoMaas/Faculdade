@@ -84,14 +84,14 @@ namespace SimuladorSGBD.Testes.Core.IO
             var arquivo = new FileInfo(arquivoTeste);
             using (var streamWriter = arquivo.CreateText())
             {
-                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidoCom: conteudoPrimeiro));
-                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidoCom: conteudoSegundo));
+                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidaCom: conteudoPrimeiro));
+                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidaCom: conteudoSegundo));
             }
         }
 
-        private IPaginaComConteudo NovaPagina(int tamanho, char preenchidoCom)
+        private IPaginaComConteudo NovaPagina(int tamanho, char preenchidaCom)
         {
-            return new PaginaFake {Conteudo = new string(preenchidoCom, tamanho).ToCharArray()};
+            return new PaginaTesteBuilder().PreenchidoCom(tamanho, preenchidaCom).Construir();
         }
 
         private void EscreverUmaPagina(StreamWriter streamWriter, IPaginaComConteudo pagina)

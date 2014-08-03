@@ -22,7 +22,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             var mockArquivoMestre = new Mock<IArquivoMestre>();
             var mockBuffer = new Mock<IBufferEmMemoria>();
 
-            var paginaNoDisco = new PaginaFake { Conteudo = new char[128] };
+            var paginaNoDisco = new PaginaTesteBuilder().PreenchidoCom(128, 'a').Construir();
             mockArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
