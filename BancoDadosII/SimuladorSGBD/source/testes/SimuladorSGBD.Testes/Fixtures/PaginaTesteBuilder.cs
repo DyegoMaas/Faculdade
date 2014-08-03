@@ -11,10 +11,15 @@ namespace SimuladorSGBD.Testes.Fixtures
         private bool sujo;
         private int ultimoAcesso = 0;
 
-        private PaginaTesteBuilder ComConteudo(char[] conteudo)
+        public PaginaTesteBuilder ComConteudo(char[] conteudo)
         {
             this.conteudo = conteudo;
             return this;
+        }
+
+        public PaginaTesteBuilder PreenchidoCom(int numeroCaracteres, char caractere)
+        {
+            return ComConteudo(Enumerable.Repeat(caractere, numeroCaracteres).ToArray());
         }
 
         public PaginaTesteBuilder NoIndice(int indice)

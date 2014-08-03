@@ -44,7 +44,7 @@ namespace SimuladorSGBD.Core.IO
                 stream.Read(buffer, 0, buffer.Length);
             }
 
-            return new PaginaEmMemoria
+            return new PaginaEmMemoria(indicePagina)
             {
                 Conteudo = Encoding.ASCII.GetChars(buffer, 0, buffer.Length)
             };

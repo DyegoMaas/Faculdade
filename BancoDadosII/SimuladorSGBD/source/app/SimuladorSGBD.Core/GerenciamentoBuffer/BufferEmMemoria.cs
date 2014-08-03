@@ -2,7 +2,7 @@
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public class BufferEmMemoria : IBuffer
+    public class BufferEmMemoria : IBufferEmMemoria
     {
         private readonly IDictionary<int, IPaginaEmMemoria> buffer = new Dictionary<int, IPaginaEmMemoria>();
 

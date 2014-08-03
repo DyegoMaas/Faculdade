@@ -13,7 +13,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             var paginaArmazenada = new PaginaTesteBuilder().Construir();
 
-            IBuffer buffer = new BufferEmMemoria();
+            IBufferEmMemoria buffer = new BufferEmMemoria();
             buffer.Armazenar(paginaArmazenada);
 
             var paginaRecuperada = buffer.Obter(paginaArmazenada.IndicePaginaNoDisco);

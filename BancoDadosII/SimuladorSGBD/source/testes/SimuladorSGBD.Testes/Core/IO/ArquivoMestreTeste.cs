@@ -78,13 +78,7 @@ namespace SimuladorSGBD.Testes.Core.IO
             APaginaDeveConterApenas(arquivoMestre, indicePagina:0, caractere:'c');
             APaginaDeveConterApenas(arquivoMestre, indicePagina:1, caractere:'b');
         }
-
-        private static void APaginaDeveConterApenas(ArquivoMestre arquivoMestre, int indicePagina, char caractere)
-        {
-            IPaginaComConteudo paginaUm = arquivoMestre.CarregarPagina(indicePagina);
-            APaginaDeveConterApenas(paginaUm, caractereEsperado: caractere);
-        }
-
+        
         private void DadoQueExisteUmArquivoComDuasPaginas(int tamanhoPaginas, char conteudoPrimeiro, char conteudoSegundo)
         {
             var arquivo = new FileInfo(arquivoTeste);
@@ -105,11 +99,12 @@ namespace SimuladorSGBD.Testes.Core.IO
             streamWriter.Write(pagina.Conteudo);
         }
 
-        private static void APaginaDeveConterApenas(IPaginaComConteudo paginaUm, char caractereEsperado)
+        private static void APaginaDeveConterApenas(ArquivoMestre arquivoMestre, int indicePagina, char caractere)
         {
-            foreach (var caractere in paginaUm.Conteudo)
+            IPaginaComConteudo paginaUm = arquivoMestre.CarregarPagina(indicePagina);
+            foreach (var c in paginaUm.Conteudo)
             {
-                caractere.Should().Be(caractereEsperado);
+                c.Should().Be(caractere);
             }
         }
 

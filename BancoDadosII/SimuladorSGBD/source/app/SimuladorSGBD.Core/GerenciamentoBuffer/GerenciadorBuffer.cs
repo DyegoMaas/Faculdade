@@ -6,10 +6,10 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
     public class GerenciadorBuffer
     {
         private readonly IArquivoMestre arquivoMestre;
-        private readonly IBuffer buffer;
+        private readonly IBufferEmMemoria buffer;
         private readonly IConfiguaracaoBuffer configuaracaoBuffer;
 
-        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IBuffer buffer, IConfiguaracaoBuffer configuaracaoBuffer)
+        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IBufferEmMemoria buffer, IConfiguaracaoBuffer configuaracaoBuffer)
         {
             this.arquivoMestre = arquivoMestre;
             this.buffer = buffer;
@@ -21,13 +21,11 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             if(BufferEstaCheio())
                 throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
 
-            var paginaEmMemoria = new PaginaEmMemoria
+            var paginaEmMemoria = new PaginaEmMemoria(indice)
             {
                 Conteudo = arquivoMestre.CarregarPagina(indice).Conteudo,
                 PinCount = 0,
-                Sujo = false,
-                UltimoAcesso = 0,
-                IndicePaginaNoDisco = indice
+                UltimoAcesso = 0
             };
             
             ArmazenarNoBuffer(paginaEmMemoria);
@@ -42,7 +40,9 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
 
         public void AtualizarPagina(int indicePagina, char[] conteudo)
         {
-            throw new NotImplementedException();
+            var pagina = buffer.Obter(indicePagina);
+            pagina.Sujo = true;
+            pagina.Conteudo = conteudo;
         }
 
         private bool BufferEstaCheio()

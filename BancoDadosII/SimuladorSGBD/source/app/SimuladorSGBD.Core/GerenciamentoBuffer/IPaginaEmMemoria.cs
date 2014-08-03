@@ -1,10 +1,11 @@
-﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
+﻿
+namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public interface IPaginaEmMemoria : Core.IPaginaComConteudo
+    public interface IPaginaEmMemoria : IPaginaComConteudo
     {
-        bool Sujo { get; }
-        int PinCount { get; }
-        int UltimoAcesso { get; }
-        int IndicePaginaNoDisco { get; set; }
+        bool Sujo { get; set; }
+        int PinCount { get; set; }
+        int UltimoAcesso { get; set; }
+        int IndicePaginaNoDisco { get; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public interface IBuffer
+    public interface IBufferEmMemoria
     {
         int NumeroPaginasNoBuffer { get; }
         void Armazenar(IPaginaEmMemoria pagina);
