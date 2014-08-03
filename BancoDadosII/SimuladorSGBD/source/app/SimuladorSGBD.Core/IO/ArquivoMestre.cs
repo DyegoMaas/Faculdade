@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using SimuladorSGBD.Core.GerenciamentoBuffer;
 
 namespace SimuladorSGBD.Core.IO
 {

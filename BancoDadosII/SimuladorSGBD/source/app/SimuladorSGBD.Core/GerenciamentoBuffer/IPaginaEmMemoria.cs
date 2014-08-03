@@ -1,4 +1,4 @@
-﻿namespace SimuladorSGBD.Core
+﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
     public interface IPaginaEmMemoria : IPaginaComDados
     {

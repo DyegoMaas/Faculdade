@@ -1,4 +1,5 @@
 ﻿using SimuladorSGBD.Core;
+using SimuladorSGBD.Core.GerenciamentoBuffer;
 
 namespace SimuladorSGBD.Testes.Fixtures
 {
