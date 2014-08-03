@@ -4,19 +4,16 @@ namespace SimuladorSGBD.Core
 {
     public class InicializadorArquivoMaster
     {
-        private readonly IManipuladorArquivoMestreFactory manipuladorArquivoMestreFactory;
+        private readonly IArquivoMestre arquivoMestre;
 
-        public InicializadorArquivoMaster(IManipuladorArquivoMestreFactory manipuladorArquivoMestreFactory)
+        public InicializadorArquivoMaster(IArquivoMestre arquivoMestre)
         {
-            this.manipuladorArquivoMestreFactory = manipuladorArquivoMestreFactory;
+            this.arquivoMestre = arquivoMestre;
         }
 
         public void Inicializar(string caminhoArquivo)
         {
-            using (var arquivo = manipuladorArquivoMestreFactory.Criar())
-            {
-                arquivo.CriarArquivoSeNaoExiste(blocos: 20, bytes: 128);
-            }
+            arquivoMestre.CriarArquivoSeNaoExiste(blocos: 20, bytes: 128);
         }
     }
 }

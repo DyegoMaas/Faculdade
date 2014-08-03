@@ -1,8 +1,7 @@
-﻿using System;
-
+﻿
 namespace SimuladorSGBD.Core.IO
 {
-    public interface IArquivoMestre : IDisposable
+    public interface IArquivoMestre
     {
         bool ExisteNoDisco { get; }
         void CriarArquivoSeNaoExiste(int blocos, int bytes);

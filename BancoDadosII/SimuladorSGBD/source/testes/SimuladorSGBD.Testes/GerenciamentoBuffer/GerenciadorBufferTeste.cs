@@ -15,8 +15,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         InlineData(10)]
         public void carregando_uma_pagina_para_o_buffer(int indicePagina)
         {
-            var mockManipuladorArquivoMestreFactory = new Mock<IManipuladorArquivoMestreFactory>();
-            var mockManipuladorArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IArquivoMestre>();
 
             var paginaNoDisco = new PaginaFake
             {
@@ -25,36 +24,32 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
                 PinCount = 1,
                 UltimoAcesso = 12
             };
-            mockManipuladorArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
+            mockArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
 
-            mockManipuladorArquivoMestreFactory.Setup(m => m.Criar()).Returns(mockManipuladorArquivoMestre.Object);
-
-            var gerenciadorBuffer = new GerenciadorBuffer(mockManipuladorArquivoMestreFactory.Object);
+            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object);
             IPagina pagina = gerenciadorBuffer.CarregarPagina(indicePagina);
             pagina.Dados.Should().HaveSameCount(paginaNoDisco.Dados);
             pagina.Sujo.Should().Be(paginaNoDisco.Sujo);
             pagina.PinCount.Should().Be(paginaNoDisco.PinCount);
             pagina.UltimoAcesso.Should().Be(paginaNoDisco.UltimoAcesso);
 
-            mockManipuladorArquivoMestre.Verify(m => m.CarregarPagina(indicePagina));
+            mockArquivoMestre.Verify(m => m.CarregarPagina(indicePagina));
         }
     }
 
+    //TODO: mover para o projeto Core
     public class GerenciadorBuffer
     {
-        private readonly IManipuladorArquivoMestreFactory manipuladorArquivoMestreFactory;
+        private readonly IArquivoMestre arquivoMestre;
 
-        public GerenciadorBuffer(IManipuladorArquivoMestreFactory manipuladorArquivoMestreFactory)
+        public GerenciadorBuffer(IArquivoMestre arquivoMestre)
         {
-            this.manipuladorArquivoMestreFactory = manipuladorArquivoMestreFactory;
+            this.arquivoMestre = arquivoMestre;
         }
 
         public IPagina CarregarPagina(int indice)
         {
-            using (var arquivo = manipuladorArquivoMestreFactory.Criar())
-            {
-                return arquivo.CarregarPagina(indice);
-            }
+            return arquivoMestre.CarregarPagina(indice);
         }
         
         public void SalvarPagina(int indice, IPagina pagina)

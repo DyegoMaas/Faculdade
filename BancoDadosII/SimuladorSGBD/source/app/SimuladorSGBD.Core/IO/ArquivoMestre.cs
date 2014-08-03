@@ -52,10 +52,6 @@ namespace SimuladorSGBD.Core.IO
             };
         }
 
-        public void Dispose()
-        {
-        }
-
         private void CriarBlocoVazio(Stream stream, int bytes)
         {
             var buffer = new byte[bytes];

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading;
-using FluentAssertions;
+﻿using FluentAssertions;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.IO;
+using System;
+using System.IO;
+using System.Threading;
 using Xunit;
-using Xunit.Extensions;
 
 namespace SimuladorSGBD.Testes.Core.IO
 {
