@@ -1,6 +1,8 @@
-﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
+﻿using SimuladorSGBD.Core.GerenciamentoBuffer;
+
+namespace SimuladorSGBD.Testes.Fixtures
 {
-    internal class PaginaEmMemoria : IPaginaEmMemoria
+    public class PaginaFake : IPaginaEmMemoria
     {
         public char[] Dados { get; set; }
         public bool Sujo { get; set; }

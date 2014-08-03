@@ -1,31 +1,44 @@
-﻿using SimuladorSGBD.Core.IO;
+﻿using System;
+using System.Collections.Generic;
+using SimuladorSGBD.Core.IO;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
     public class GerenciadorBuffer
     {
         private readonly IArquivoMestre arquivoMestre;
+        private readonly IConfiguaracaoBuffer configuaracaoBuffer;
+        private readonly IDictionary<int, IPaginaEmMemoria> buffer = new Dictionary<int, IPaginaEmMemoria>();
 
-        public GerenciadorBuffer(IArquivoMestre arquivoMestre)
+        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IConfiguaracaoBuffer configuaracaoBuffer)
         {
             this.arquivoMestre = arquivoMestre;
+            this.configuaracaoBuffer = configuaracaoBuffer;
         }
 
         public IPaginaEmMemoria CarregarPagina(int indice)
         {
-            return new PaginaEmMemoria
+            var paginaEmMemoria = new PaginaEmMemoria
             {
                 Dados = arquivoMestre.CarregarPagina(indice).Dados,
                 PinCount = 0,
                 Sujo = false,
                 UltimoAcesso = 0,
-                IndicePagina = indice
+                IndicePaginaNoDisco = indice
             };
+
+            ArmazenarNoBuffer(paginaEmMemoria);
+            return paginaEmMemoria;
         }
-        
-        public void SalvarPagina(int indice, IPaginaEmMemoria pagina)
+
+        private void ArmazenarNoBuffer(PaginaEmMemoria paginaEmMemoria)
         {
-            throw new System.NotImplementedException();
+            buffer.Add(paginaEmMemoria.IndicePaginaNoDisco, paginaEmMemoria);
+        }
+
+        public void SalvarPagina(int indice)
+        {
+            arquivoMestre.SalvarPagina(indice, buffer[indice]);
         }
     }
 }

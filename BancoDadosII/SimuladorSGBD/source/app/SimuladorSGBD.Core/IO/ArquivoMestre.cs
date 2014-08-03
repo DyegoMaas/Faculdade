@@ -50,6 +50,11 @@ namespace SimuladorSGBD.Core.IO
             };
         }
 
+        public void SalvarPagina(int indice, IPaginaComDados paginaComDados)
+        {
+            throw new NotImplementedException();
+        }
+
         private void CriarBlocoVazio(Stream stream, int bytes)
         {
             var buffer = new byte[bytes];

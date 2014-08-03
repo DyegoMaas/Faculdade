@@ -60,7 +60,7 @@
     <Compile Include="Core\InicializadorArquivoMasterTeste.cs" />
     <Compile Include="Core\IO\ArquivoMestreTeste.cs" />
     <Compile Include="Fixtures\ConfiguracaoIOFake.cs" />
-    <Compile Include="Fixtures\PaginaComDadosFake.cs" />
+    <Compile Include="Fixtures\PaginaFake.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBufferTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
