@@ -9,6 +9,7 @@ using Xunit.Extensions;
 
 namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 {
+    //TODO extrair o Buffer para fora do gerenciador. Ex.: IBuffer
     public class GerenciadorBufferTeste
     {
         [Theory,
@@ -44,7 +45,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             var paginaNoDisco = new PaginaFake { Dados = new char[128] };
             mockArquivoMestre.Setup(m => m.CarregarPagina(indiceZero)).Returns(paginaNoDisco);
             gerenciadorBuffer.CarregarPagina(indiceZero);
-
+            
             gerenciadorBuffer.SalvarPagina(indiceZero);
             mockArquivoMestre.Verify(a => a.SalvarPagina(indiceZero, It.IsAny<IPaginaComDados>()), Times.Once, "deveria salvar a página no disco");
         }

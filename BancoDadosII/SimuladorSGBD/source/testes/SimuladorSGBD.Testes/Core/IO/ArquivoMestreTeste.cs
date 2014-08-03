@@ -4,12 +4,14 @@ using SimuladorSGBD.Core.IO;
 using System;
 using System.IO;
 using System.Threading;
+using SimuladorSGBD.Testes.Fixtures;
 using Xunit;
 
 namespace SimuladorSGBD.Testes.Core.IO
 {
     public class ArquivoMestreTeste
     {
+        private const int TamanhoPaginas = 128;
         private readonly string arquivoTeste = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "arquivoTeste.txt");
 
         public ArquivoMestreTeste()
@@ -46,44 +48,61 @@ namespace SimuladorSGBD.Testes.Core.IO
         [Fact]
         public void criacao_de_blocos_na_inicilizacao()
         {
+            const int numeroBlocos = 2;
+
             var arquivoMestre = new ArquivoMestre(arquivoTeste);
-            arquivoMestre.CriarArquivoSeNaoExiste(2, 128);
+            arquivoMestre.CriarArquivoSeNaoExiste(numeroBlocos, TamanhoPaginas);
 
             var bytesArquivo = File.ReadAllBytes(arquivoTeste);
-            bytesArquivo.Length.Should().Be(256);
+            bytesArquivo.Length.Should().Be(numeroBlocos * TamanhoPaginas);
         }
 
         [Fact]
         public void carregando_uma_pagina_do_disco()
         {
-            DadoQueExisteUmArquivoComDuasPaginas(tamanhoPaginas:128, conteudoPrimeiro:'a', conteudoSegundo:'b');
+            DadoQueExisteUmArquivoComDuasPaginas(tamanhoPaginas: TamanhoPaginas, conteudoPrimeiro: 'a', conteudoSegundo: 'b');
             var arquivoMestre = new ArquivoMestre(arquivoTeste);
 
-            IPaginaComDados paginaUm = arquivoMestre.CarregarPagina(0);
-            APaginaDeveConterApenas(paginaUm, caractereEsperado:'a');
-
-            IPaginaComDados paginaDois = arquivoMestre.CarregarPagina(1);
-            APaginaDeveConterApenas(paginaDois, caractereEsperado: 'b');
+            APaginaDeveConterApenas(arquivoMestre, indicePagina: 0, caractere: 'a');
+            APaginaDeveConterApenas(arquivoMestre, indicePagina: 1, caractere: 'b');
         }
-        
+
+        [Fact]
+        public void salvando_uma_pagina_no_disco()
+        {
+            DadoQueExisteUmArquivoComDuasPaginas(tamanhoPaginas: TamanhoPaginas, conteudoPrimeiro: 'a', conteudoSegundo: 'b');
+            var arquivoMestre = new ArquivoMestre(arquivoTeste);
+
+            arquivoMestre.SalvarPagina(0, NovaPagina(TamanhoPaginas, 'c'));
+
+            APaginaDeveConterApenas(arquivoMestre, indicePagina:0, caractere:'c');
+            APaginaDeveConterApenas(arquivoMestre, indicePagina:1, caractere:'b');
+        }
+
+        private static void APaginaDeveConterApenas(ArquivoMestre arquivoMestre, int indicePagina, char caractere)
+        {
+            IPaginaComDados paginaUm = arquivoMestre.CarregarPagina(indicePagina);
+            APaginaDeveConterApenas(paginaUm, caractereEsperado: caractere);
+        }
+
         private void DadoQueExisteUmArquivoComDuasPaginas(int tamanhoPaginas, char conteudoPrimeiro, char conteudoSegundo)
         {
             var arquivo = new FileInfo(arquivoTeste);
             using (var streamWriter = arquivo.CreateText())
             {
-                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: 128, preenchidoCom: conteudoPrimeiro));
-                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: 128, preenchidoCom: conteudoSegundo));
+                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidoCom: conteudoPrimeiro));
+                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidoCom: conteudoSegundo));
             }
         }
 
-        private string NovaPagina(int tamanho, char preenchidoCom)
+        private IPaginaComDados NovaPagina(int tamanho, char preenchidoCom)
         {
-            return new string(preenchidoCom, tamanho);
+            return new PaginaFake {Dados = new string(preenchidoCom, tamanho).ToCharArray()};
         }
 
-        private void EscreverUmaPagina(StreamWriter streamWriter, string conteudo)
+        private void EscreverUmaPagina(StreamWriter streamWriter, IPaginaComDados pagina)
         {
-            streamWriter.Write(conteudo);
+            streamWriter.Write(pagina.Dados);
         }
 
         private static void APaginaDeveConterApenas(IPaginaComDados paginaUm, char caractereEsperado)

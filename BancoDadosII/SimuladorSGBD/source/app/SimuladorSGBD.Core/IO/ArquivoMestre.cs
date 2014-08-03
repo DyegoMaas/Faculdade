@@ -39,7 +39,7 @@ namespace SimuladorSGBD.Core.IO
             var buffer = new byte[TamanhoPaginas];
             using (var stream = arquivo.OpenRead())
             {
-                var offset = indicePagina * buffer.Length;
+                var offset = indicePagina * TamanhoPaginas;
                 stream.Seek(offset, SeekOrigin.Begin);
                 stream.Read(buffer, 0, buffer.Length);
             }
@@ -50,9 +50,15 @@ namespace SimuladorSGBD.Core.IO
             };
         }
 
-        public void SalvarPagina(int indice, IPaginaComDados paginaComDados)
+        public void SalvarPagina(int indicePagina, IPaginaComDados paginaComDados)
         {
-            throw new NotImplementedException();
+            var buffer = Encoding.ASCII.GetBytes(paginaComDados.Dados, 0, paginaComDados.Dados.Length);
+            using (var stream = arquivo.OpenWrite())
+            {
+                var offset = indicePagina * TamanhoPaginas;
+                stream.Seek(offset, SeekOrigin.Begin);
+                stream.Write(buffer, 0, buffer.Length);
+            }
         }
 
         private void CriarBlocoVazio(Stream stream, int bytes)
