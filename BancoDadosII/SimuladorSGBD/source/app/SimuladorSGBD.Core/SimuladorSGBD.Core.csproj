@@ -39,8 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GerenciamentoBuffer\BufferEmMemoria.cs" />
     <Compile Include="GerenciamentoBuffer\ConfiguracaoBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBuffer.cs" />
+    <Compile Include="GerenciamentoBuffer\IBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\IConfiguaracaoBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\IPaginaEmMemoria.cs" />
     <Compile Include="GerenciamentoBuffer\PaginaEmMemoria.cs" />

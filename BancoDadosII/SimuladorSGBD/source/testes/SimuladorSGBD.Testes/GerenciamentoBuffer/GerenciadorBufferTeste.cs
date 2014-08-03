@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Moq;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
@@ -9,7 +10,6 @@ using Xunit.Extensions;
 
 namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 {
-    //TODO extrair o Buffer para fora do gerenciador. Ex.: IBuffer
     public class GerenciadorBufferTeste
     {
         [Theory,
@@ -19,11 +19,12 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         public void carregando_uma_pagina_para_o_buffer(int indicePagina)
         {
             var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockBuffer = new Mock<IBuffer>();
 
             var paginaNoDisco = new PaginaFake { Dados = new char[128] };
             mockArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, UmaConfiguracaoDeBuffer(1));
+            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
             IPaginaEmMemoria pagina = gerenciadorBuffer.CarregarPagina(indicePagina);
             pagina.Dados.Should().HaveSameCount(paginaNoDisco.Dados);
             pagina.Sujo.Should().Be(false);
@@ -32,22 +33,59 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             pagina.IndicePaginaNoDisco.Should().Be(indicePagina);
 
             mockArquivoMestre.Verify(m => m.CarregarPagina(indicePagina));
+            mockBuffer.Verify(buffer => buffer.Armazenar(It.Is<IPaginaEmMemoria>(p => p.IndicePaginaNoDisco == indicePagina)));
         }
 
         [Fact]
         public void salvando_uma_pagina_no_disco()
         {
-            const int indiceZero = 0;
+            const int indiceUm = 1;
 
             var mockArquivoMestre = new Mock<IArquivoMestre>();
-            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, UmaConfiguracaoDeBuffer(1));
+            var mockBuffer = new Mock<IBuffer>();
 
-            var paginaNoDisco = new PaginaFake { Dados = new char[128] };
-            mockArquivoMestre.Setup(m => m.CarregarPagina(indiceZero)).Returns(paginaNoDisco);
+            var paginaNoBuffer = new PaginaTesteBuilder().NoIndice(indiceUm).Construir();
+            mockBuffer.Setup(buffer => buffer.Obter(indiceUm)).Returns(paginaNoBuffer);
+
+            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
+            gerenciadorBuffer.SalvarPagina(indiceUm);
+
+            mockBuffer.Verify(b => b.Obter(indiceUm));
+            mockArquivoMestre.Verify(a => a.SalvarPagina(indiceUm, It.Is<IPaginaComDados>(p => p == paginaNoBuffer)), Times.Once, "deveria salvar a página no disco");
+        }
+
+        //integração
+        [Fact]
+        public void restringindo_o_buffer_ao_numero_limite_de_paginas_configuradas()
+        {
+            const int indiceZero = 0;
+            const int indiceUm = 1;
+            const int indiceDois = 2;
+            const int duasPaginas = 2;
+
+            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, indiceZero);
+            DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, indiceUm);
+            DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, indiceDois);
+
+            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, new BufferEmMemoria(),
+                UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria:duasPaginas));
             gerenciadorBuffer.CarregarPagina(indiceZero);
+            gerenciadorBuffer.CarregarPagina(indiceUm);
+
+            gerenciadorBuffer.Invoking(g => g.CarregarPagina(indiceDois)).ShouldThrow<InvalidOperationException>();
+        }
+
+        [Fact]
+        public void alterando_uma_pagina_em_memoria()
+        {
             
-            gerenciadorBuffer.SalvarPagina(indiceZero);
-            mockArquivoMestre.Verify(a => a.SalvarPagina(indiceZero, It.IsAny<IPaginaComDados>()), Times.Once, "deveria salvar a página no disco");
+        }
+
+        private static void DadoQueExisteUmaPaginaEmDiscoNoIndice(Mock<IArquivoMestre> mockArquivoMestre, int indicePagina)
+        {
+            mockArquivoMestre.Setup(buffer => buffer.CarregarPagina(indicePagina))
+                .Returns(new PaginaTesteBuilder().NoIndice(indicePagina).Construir);
         }
 
         private IConfiguaracaoBuffer UmaConfiguracaoDeBuffer(int limiteDePaginasEmMemoria)

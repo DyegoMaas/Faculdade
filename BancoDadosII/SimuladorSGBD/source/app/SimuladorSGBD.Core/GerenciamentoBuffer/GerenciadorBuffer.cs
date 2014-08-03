@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SimuladorSGBD.Core.IO;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
@@ -7,17 +6,21 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
     public class GerenciadorBuffer
     {
         private readonly IArquivoMestre arquivoMestre;
+        private readonly IBuffer buffer;
         private readonly IConfiguaracaoBuffer configuaracaoBuffer;
-        private readonly IDictionary<int, IPaginaEmMemoria> buffer = new Dictionary<int, IPaginaEmMemoria>();
 
-        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IConfiguaracaoBuffer configuaracaoBuffer)
+        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IBuffer buffer, IConfiguaracaoBuffer configuaracaoBuffer)
         {
             this.arquivoMestre = arquivoMestre;
+            this.buffer = buffer;
             this.configuaracaoBuffer = configuaracaoBuffer;
         }
 
         public IPaginaEmMemoria CarregarPagina(int indice)
         {
+            if(BufferEstaCheio())
+                throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
+
             var paginaEmMemoria = new PaginaEmMemoria
             {
                 Dados = arquivoMestre.CarregarPagina(indice).Dados,
@@ -26,19 +29,25 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
                 UltimoAcesso = 0,
                 IndicePaginaNoDisco = indice
             };
-
+            
             ArmazenarNoBuffer(paginaEmMemoria);
             return paginaEmMemoria;
         }
 
+        private bool BufferEstaCheio()
+        {
+            return buffer.NumeroPaginasNoBuffer == configuaracaoBuffer.LimiteDePaginasEmMemoria;
+        }
+
         private void ArmazenarNoBuffer(PaginaEmMemoria paginaEmMemoria)
         {
-            buffer.Add(paginaEmMemoria.IndicePaginaNoDisco, paginaEmMemoria);
+            buffer.Armazenar(paginaEmMemoria);
         }
 
         public void SalvarPagina(int indice)
         {
-            arquivoMestre.SalvarPagina(indice, buffer[indice]);
+            var pagina = buffer.Obter(indice);
+            arquivoMestre.SalvarPagina(indice, pagina);
         }
     }
 }
