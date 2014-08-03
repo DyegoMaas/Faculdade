@@ -6,7 +6,7 @@ using Xunit.Extensions;
 
 namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 {
-    public class BufferTeste
+    public class BufferEmMemoriaTeste
     {
         [Fact]
         public void armazenando_uma_pagina_no_buffer_e_recuperando_a_pagina()
