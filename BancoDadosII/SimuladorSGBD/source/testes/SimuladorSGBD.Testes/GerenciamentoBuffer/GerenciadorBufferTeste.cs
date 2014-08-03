@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using SimuladorSGBD.Core;
+using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.Core.IO;
 using SimuladorSGBD.Testes.Fixtures;
 using Xunit.Extensions;
@@ -17,44 +18,17 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             var mockArquivoMestre = new Mock<IArquivoMestre>();
 
-            var paginaNoDisco = new PaginaFake
-            {
-                Dados = new char[128],
-                Sujo = true,
-                PinCount = 1,
-                UltimoAcesso = 12
-            };
+            var paginaNoDisco = new PaginaFake { Dados = new char[128] };
             mockArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object);
-            IPagina pagina = gerenciadorBuffer.CarregarPagina(indicePagina);
+            IPaginaEmMemoria pagina = gerenciadorBuffer.CarregarPagina(indicePagina);
             pagina.Dados.Should().HaveSameCount(paginaNoDisco.Dados);
-            pagina.Sujo.Should().Be(paginaNoDisco.Sujo);
-            pagina.PinCount.Should().Be(paginaNoDisco.PinCount);
-            pagina.UltimoAcesso.Should().Be(paginaNoDisco.UltimoAcesso);
+            pagina.Sujo.Should().Be(false);
+            pagina.PinCount.Should().Be(0);
+            pagina.UltimoAcesso.Should().Be(0);
 
             mockArquivoMestre.Verify(m => m.CarregarPagina(indicePagina));
-        }
-    }
-
-    //TODO: mover para o projeto Core
-    public class GerenciadorBuffer
-    {
-        private readonly IArquivoMestre arquivoMestre;
-
-        public GerenciadorBuffer(IArquivoMestre arquivoMestre)
-        {
-            this.arquivoMestre = arquivoMestre;
-        }
-
-        public IPagina CarregarPagina(int indice)
-        {
-            return arquivoMestre.CarregarPagina(indice);
-        }
-        
-        public void SalvarPagina(int indice, IPagina pagina)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace SimuladorSGBD.Core.IO
             }
         }
 
-        public IPagina CarregarPagina(int indicePagina)
+        public IPaginaComDados CarregarPagina(int indicePagina)
         {
             var buffer = new byte[TamanhoPaginas];
             using (var stream = arquivo.OpenRead())
@@ -43,12 +43,9 @@ namespace SimuladorSGBD.Core.IO
                 stream.Read(buffer, 0, buffer.Length);
             }
 
-            return new Pagina
+            return new PaginaEmMemoria
             {
-                Dados = Encoding.ASCII.GetChars(buffer, 0, buffer.Length),
-                PinCount = 0,
-                Sujo = false,
-                UltimoAcesso = 0
+                Dados = Encoding.ASCII.GetChars(buffer, 0, buffer.Length)
             };
         }
 

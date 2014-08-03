@@ -1,6 +1,6 @@
 ﻿namespace SimuladorSGBD.Core
 {
-    internal class Pagina : IPagina
+    internal class PaginaEmMemoria : IPaginaEmMemoria
     {
         public char[] Dados { get; set; }
         public bool Sujo { get; set; }

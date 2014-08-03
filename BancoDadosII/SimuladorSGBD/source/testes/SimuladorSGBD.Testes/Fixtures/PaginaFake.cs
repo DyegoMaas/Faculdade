@@ -2,7 +2,7 @@
 
 namespace SimuladorSGBD.Testes.Fixtures
 {
-    public class PaginaFake : IPagina
+    public class PaginaFake : IPaginaEmMemoria
     {
         public char[] Dados { get; set; }
         public bool Sujo { get; set; }

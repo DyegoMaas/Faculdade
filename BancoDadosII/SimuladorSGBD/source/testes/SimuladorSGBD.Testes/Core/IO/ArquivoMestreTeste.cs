@@ -20,8 +20,8 @@ namespace SimuladorSGBD.Testes.Core.IO
         [Fact]
         public void criacao_de_um_arquivo_que_nao_existe()
         {
-            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
-            manipuladorArquivos.CriarArquivoSeNaoExiste(1, 1);
+            var arquivoMestre = new ArquivoMestre(arquivoTeste);
+            arquivoMestre.CriarArquivoSeNaoExiste(1, 1);
 
             File.Exists(arquivoTeste).Should().BeTrue("deveria ter criado o arquivo master");
         }
@@ -29,8 +29,8 @@ namespace SimuladorSGBD.Testes.Core.IO
         [Fact]
         public void verificando_se_arquivo_existe_quando_nao_existe()
         {
-            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
-            manipuladorArquivos.ExisteNoDisco.Should().BeFalse("o arquivo não existe");
+            var arquivoMestre = new ArquivoMestre(arquivoTeste);
+            arquivoMestre.ExisteNoDisco.Should().BeFalse("o arquivo não existe");
         }
 
         [Fact]
@@ -39,15 +39,15 @@ namespace SimuladorSGBD.Testes.Core.IO
             var arquivo = new FileInfo(arquivoTeste);
             using (arquivo.Create()){}
 
-            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
-            manipuladorArquivos.ExisteNoDisco.Should().BeTrue("o arquivo existe");
+            var arquivoMestre = new ArquivoMestre(arquivoTeste);
+            arquivoMestre.ExisteNoDisco.Should().BeTrue("o arquivo existe");
         }
 
         [Fact]
         public void criacao_de_blocos_na_inicilizacao()
         {
-            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
-            manipuladorArquivos.CriarArquivoSeNaoExiste(2, 128);
+            var arquivoMestre = new ArquivoMestre(arquivoTeste);
+            arquivoMestre.CriarArquivoSeNaoExiste(2, 128);
 
             var bytesArquivo = File.ReadAllBytes(arquivoTeste);
             bytesArquivo.Length.Should().Be(256);
@@ -57,23 +57,15 @@ namespace SimuladorSGBD.Testes.Core.IO
         public void carregando_uma_pagina_do_disco()
         {
             DadoQueExisteUmArquivoComDuasPaginas(tamanhoPaginas:128, conteudoPrimeiro:'a', conteudoSegundo:'b');
-            var manipuladorArquivos = new ArquivoMestre(arquivoTeste);
+            var arquivoMestre = new ArquivoMestre(arquivoTeste);
 
-            var paginaUm = manipuladorArquivos.CarregarPagina(0);
-            APaginaContemApenas(paginaUm, caractereEsperado:'a');
+            IPaginaComDados paginaUm = arquivoMestre.CarregarPagina(0);
+            APaginaDeveConterApenas(paginaUm, caractereEsperado:'a');
 
-            var paginaDois = manipuladorArquivos.CarregarPagina(1);
-            APaginaContemApenas(paginaDois, caractereEsperado: 'b');
+            IPaginaComDados paginaDois = arquivoMestre.CarregarPagina(1);
+            APaginaDeveConterApenas(paginaDois, caractereEsperado: 'b');
         }
-
-        private static void APaginaContemApenas(IPagina paginaUm, char caractereEsperado)
-        {
-            foreach (var caractere in paginaUm.Dados)
-            {
-                caractere.Should().Be(caractereEsperado);
-            }
-        }
-
+        
         private void DadoQueExisteUmArquivoComDuasPaginas(int tamanhoPaginas, char conteudoPrimeiro, char conteudoSegundo)
         {
             var arquivo = new FileInfo(arquivoTeste);
@@ -92,6 +84,14 @@ namespace SimuladorSGBD.Testes.Core.IO
         private void EscreverUmaPagina(StreamWriter streamWriter, string conteudo)
         {
             streamWriter.Write(conteudo);
+        }
+
+        private static void APaginaDeveConterApenas(IPaginaComDados paginaUm, char caractereEsperado)
+        {
+            foreach (var caractere in paginaUm.Dados)
+            {
+                caractere.Should().Be(caractereEsperado);
+            }
         }
 
         private void TentarExcluirArquivo(int numeroTentativas)

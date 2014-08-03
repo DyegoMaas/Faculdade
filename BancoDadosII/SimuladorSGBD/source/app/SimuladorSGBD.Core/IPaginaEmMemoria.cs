@@ -1,8 +1,7 @@
 ﻿namespace SimuladorSGBD.Core
 {
-    public interface IPagina
+    public interface IPaginaEmMemoria : IPaginaComDados
     {
-        char[] Dados { get; }
         bool Sujo { get; }
         int PinCount { get; }
         int UltimoAcesso { get; }
