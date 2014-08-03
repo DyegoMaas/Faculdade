@@ -81,7 +81,7 @@ namespace SimuladorSGBD.Testes.Core.IO
 
         private static void APaginaDeveConterApenas(ArquivoMestre arquivoMestre, int indicePagina, char caractere)
         {
-            IPaginaComDados paginaUm = arquivoMestre.CarregarPagina(indicePagina);
+            IPaginaComConteudo paginaUm = arquivoMestre.CarregarPagina(indicePagina);
             APaginaDeveConterApenas(paginaUm, caractereEsperado: caractere);
         }
 
@@ -95,19 +95,19 @@ namespace SimuladorSGBD.Testes.Core.IO
             }
         }
 
-        private IPaginaComDados NovaPagina(int tamanho, char preenchidoCom)
+        private IPaginaComConteudo NovaPagina(int tamanho, char preenchidoCom)
         {
-            return new PaginaFake {Dados = new string(preenchidoCom, tamanho).ToCharArray()};
+            return new PaginaFake {Conteudo = new string(preenchidoCom, tamanho).ToCharArray()};
         }
 
-        private void EscreverUmaPagina(StreamWriter streamWriter, IPaginaComDados pagina)
+        private void EscreverUmaPagina(StreamWriter streamWriter, IPaginaComConteudo pagina)
         {
-            streamWriter.Write(pagina.Dados);
+            streamWriter.Write(pagina.Conteudo);
         }
 
-        private static void APaginaDeveConterApenas(IPaginaComDados paginaUm, char caractereEsperado)
+        private static void APaginaDeveConterApenas(IPaginaComConteudo paginaUm, char caractereEsperado)
         {
-            foreach (var caractere in paginaUm.Dados)
+            foreach (var caractere in paginaUm.Conteudo)
             {
                 caractere.Should().Be(caractereEsperado);
             }

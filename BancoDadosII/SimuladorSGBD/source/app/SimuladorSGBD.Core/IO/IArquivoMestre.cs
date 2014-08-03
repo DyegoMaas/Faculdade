@@ -5,7 +5,7 @@ namespace SimuladorSGBD.Core.IO
     {
         bool ExisteNoDisco { get; }
         void CriarArquivoSeNaoExiste(int blocos, int bytes);
-        IPaginaComDados CarregarPagina(int indicePagina);
-        void SalvarPagina(int indicePagina, IPaginaComDados paginaComDados);
+        IPaginaComConteudo CarregarPagina(int indicePagina);
+        void SalvarPagina(int indicePagina, IPaginaComConteudo paginaComConteudo);
     }
 }

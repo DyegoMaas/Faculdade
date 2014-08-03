@@ -1,6 +1,6 @@
 ﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public interface IPaginaEmMemoria : Core.IPaginaComDados
+    public interface IPaginaEmMemoria : Core.IPaginaComConteudo
     {
         bool Sujo { get; }
         int PinCount { get; }

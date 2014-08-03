@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using SimuladorSGBD.Core;
@@ -21,12 +22,12 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             var mockArquivoMestre = new Mock<IArquivoMestre>();
             var mockBuffer = new Mock<IBuffer>();
 
-            var paginaNoDisco = new PaginaFake { Dados = new char[128] };
+            var paginaNoDisco = new PaginaFake { Conteudo = new char[128] };
             mockArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
             IPaginaEmMemoria pagina = gerenciadorBuffer.CarregarPagina(indicePagina);
-            pagina.Dados.Should().HaveSameCount(paginaNoDisco.Dados);
+            pagina.Conteudo.Should().HaveSameCount(paginaNoDisco.Conteudo);
             pagina.Sujo.Should().Be(false);
             pagina.PinCount.Should().Be(0);
             pagina.UltimoAcesso.Should().Be(0);
@@ -51,7 +52,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             gerenciadorBuffer.SalvarPagina(indiceUm);
 
             mockBuffer.Verify(b => b.Obter(indiceUm));
-            mockArquivoMestre.Verify(a => a.SalvarPagina(indiceUm, It.Is<IPaginaComDados>(p => p == paginaNoBuffer)), Times.Once, "deveria salvar a página no disco");
+            mockArquivoMestre.Verify(a => a.SalvarPagina(indiceUm, It.Is<IPaginaComConteudo>(p => p == paginaNoBuffer)), Times.Once, "deveria salvar a página no disco");
         }
 
         //integração
@@ -61,7 +62,6 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             const int indiceZero = 0;
             const int indiceUm = 1;
             const int indiceDois = 2;
-            const int duasPaginas = 2;
 
             var mockArquivoMestre = new Mock<IArquivoMestre>();
             DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, indiceZero);
@@ -69,17 +69,23 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, indiceDois);
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, new BufferEmMemoria(),
-                UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria:duasPaginas));
+                UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria:2));
             gerenciadorBuffer.CarregarPagina(indiceZero);
             gerenciadorBuffer.CarregarPagina(indiceUm);
 
             gerenciadorBuffer.Invoking(g => g.CarregarPagina(indiceDois)).ShouldThrow<InvalidOperationException>();
         }
 
-        [Fact]
+        [Fact(Skip="teste")]
         public void alterando_uma_pagina_em_memoria()
         {
-            
+            const int indiceZero = 0;
+
+            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, new BufferEmMemoria(), UmaConfiguracaoDeBuffer(1));
+
+            var pagina = new PaginaTesteBuilder().Construir();
+            gerenciadorBuffer.AtualizarPagina(indiceZero, pagina.Conteudo);
         }
 
         private static void DadoQueExisteUmaPaginaEmDiscoNoIndice(Mock<IArquivoMestre> mockArquivoMestre, int indicePagina)

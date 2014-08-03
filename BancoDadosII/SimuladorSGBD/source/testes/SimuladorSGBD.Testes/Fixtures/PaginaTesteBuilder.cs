@@ -45,7 +45,7 @@ namespace SimuladorSGBD.Testes.Fixtures
         {
             return new PaginaFake
             {
-                Dados = conteudo,
+                Conteudo = conteudo,
                 IndicePaginaNoDisco = indicePaginaNoDisco,
                 PinCount = pinCount,
                 Sujo = sujo,

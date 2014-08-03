@@ -23,7 +23,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
 
             var paginaEmMemoria = new PaginaEmMemoria
             {
-                Dados = arquivoMestre.CarregarPagina(indice).Dados,
+                Conteudo = arquivoMestre.CarregarPagina(indice).Conteudo,
                 PinCount = 0,
                 Sujo = false,
                 UltimoAcesso = 0,
@@ -34,6 +34,17 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return paginaEmMemoria;
         }
 
+        public void SalvarPagina(int indice)
+        {
+            var pagina = buffer.Obter(indice);
+            arquivoMestre.SalvarPagina(indice, pagina);
+        }
+
+        public void AtualizarPagina(int indicePagina, char[] conteudo)
+        {
+            throw new NotImplementedException();
+        }
+
         private bool BufferEstaCheio()
         {
             return buffer.NumeroPaginasNoBuffer == configuaracaoBuffer.LimiteDePaginasEmMemoria;
@@ -42,12 +53,6 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         private void ArmazenarNoBuffer(PaginaEmMemoria paginaEmMemoria)
         {
             buffer.Armazenar(paginaEmMemoria);
-        }
-
-        public void SalvarPagina(int indice)
-        {
-            var pagina = buffer.Obter(indice);
-            arquivoMestre.SalvarPagina(indice, pagina);
         }
     }
 }

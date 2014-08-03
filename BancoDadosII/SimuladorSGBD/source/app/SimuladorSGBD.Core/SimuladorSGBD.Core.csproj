@@ -50,8 +50,8 @@
     <Compile Include="IO\IArquivoMestre.cs" />
     <Compile Include="InicializadorArquivoMaster.cs" />
     <Compile Include="IO\ArquivoMestre.cs" />
-    <Compile Include="IPaginaComDados.cs" />
-    <Compile Include="PaginaComDados.cs" />
+    <Compile Include="IPaginaComConteudo.cs" />
+    <Compile Include="PaginaComConteudo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
