@@ -76,6 +76,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             gerenciadorBuffer.Invoking(g => g.CarregarPagina(indiceDois)).ShouldThrow<InvalidOperationException>();
         }
 
+        //integração
         [Fact]
         public void alterando_uma_pagina_em_memoria()
         {
@@ -95,6 +96,26 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             var paginaRecuperada = buffer.Obter(indiceUm);
             paginaRecuperada.Sujo.Should().BeTrue("deve marcar uma página como suja ao atualizar seu conteúdo");
             APaginaDeveConterApenas(paginaRecuperada, 'x');
+        }
+
+        [Fact]
+        public void carregando_pagina_do_buffer_se_ela_ja_estiver_nele()
+        {
+            const int indiceUm = 1;
+
+            var pagina = new PaginaTesteBuilder().NoIndice(indiceUm).Construir();
+
+            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockBuffer = new Mock<IBufferEmMemoria>();
+            mockBuffer.Setup(buffer => buffer.Obter(indiceUm)).Returns(pagina);
+
+            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
+            var paginaRecuperada = gerenciadorBuffer.CarregarPagina(indiceUm);
+
+            mockBuffer.Verify(b => b.Obter(indiceUm), Times.Once);
+            mockArquivoMestre.Verify(b => b.CarregarPagina(indiceUm), Times.Never);
+
+            paginaRecuperada.IndicePaginaNoDisco.Should().Be(indiceUm);
         }
 
         private static void DadoQueExisteUmaPaginaEmDiscoNoIndice(Mock<IArquivoMestre> mockArquivoMestre, int indicePagina)
@@ -122,8 +143,6 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
     public static class ConteudoPaginaTesteHelper
     {
-
-
         public static char[] NovoConteudo(int numeroCaracteres, char caractere)
         {
             return Enumerable.Repeat(caractere, numeroCaracteres).ToArray();

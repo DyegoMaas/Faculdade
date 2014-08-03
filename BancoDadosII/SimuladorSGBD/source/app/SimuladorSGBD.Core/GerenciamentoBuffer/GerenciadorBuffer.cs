@@ -21,14 +21,24 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             if(BufferEstaCheio())
                 throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
 
+            var paginaBuffer = buffer.Obter(indice);
+            if (paginaBuffer != null)
+                return paginaBuffer;
+
+            var pagina = CarregarPaginaDoDisco(indice);
+            ArmazenarNoBuffer(pagina);
+
+            return pagina;
+        }
+
+        private PaginaEmMemoria CarregarPaginaDoDisco(int indice)
+        {
             var paginaEmMemoria = new PaginaEmMemoria(indice)
             {
                 Conteudo = arquivoMestre.CarregarPagina(indice).Conteudo,
                 PinCount = 0,
                 UltimoAcesso = 0
             };
-            
-            ArmazenarNoBuffer(paginaEmMemoria);
             return paginaEmMemoria;
         }
 
