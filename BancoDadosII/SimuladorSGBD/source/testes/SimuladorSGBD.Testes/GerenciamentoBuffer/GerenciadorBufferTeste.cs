@@ -18,7 +18,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             var mockArquivoMestre = new Mock<IArquivoMestre>();
 
-            var paginaNoDisco = new PaginaFake { Dados = new char[128] };
+            var paginaNoDisco = new PaginaComDadosFake { Dados = new char[128] };
             mockArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object);
@@ -27,6 +27,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             pagina.Sujo.Should().Be(false);
             pagina.PinCount.Should().Be(0);
             pagina.UltimoAcesso.Should().Be(0);
+            pagina.IndicePagina.Should().Be(indicePagina);
 
             mockArquivoMestre.Verify(m => m.CarregarPagina(indicePagina));
         }

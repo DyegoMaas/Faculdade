@@ -6,5 +6,6 @@
         public bool Sujo { get; set; }
         public int PinCount { get; set; }
         public int UltimoAcesso { get; set; }
+        public int IndicePagina { get; set; }
     }
 }

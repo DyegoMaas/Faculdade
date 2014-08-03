@@ -18,7 +18,8 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
                 Dados = arquivoMestre.CarregarPagina(indice).Dados,
                 PinCount = 0,
                 Sujo = false,
-                UltimoAcesso = 0
+                UltimoAcesso = 0,
+                IndicePagina = indice
             };
         }
         

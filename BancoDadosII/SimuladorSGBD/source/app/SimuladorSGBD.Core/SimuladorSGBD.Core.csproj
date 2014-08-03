@@ -40,14 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GerenciamentoBuffer\GerenciadorBuffer.cs" />
+    <Compile Include="GerenciamentoBuffer\IPaginaEmMemoria.cs" />
+    <Compile Include="GerenciamentoBuffer\PaginaEmMemoria.cs" />
     <Compile Include="IO\IConfiguracaoIO.cs" />
     <Compile Include="IO\IArquivoMestre.cs" />
     <Compile Include="InicializadorArquivoMaster.cs" />
     <Compile Include="IO\ArquivoMestre.cs" />
-    <Compile Include="IPaginaEmMemoria.cs" />
     <Compile Include="IPaginaComDados.cs" />
     <Compile Include="PaginaComDados.cs" />
-    <Compile Include="PaginaEmMemoria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

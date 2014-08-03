@@ -5,5 +5,6 @@
         bool Sujo { get; }
         int PinCount { get; }
         int UltimoAcesso { get; }
+        int IndicePagina { get; set; }
     }
 }
