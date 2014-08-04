@@ -26,7 +26,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         public void carregando_uma_pagina_para_o_buffer(int indicePagina)
         {
             var mockArquivoMestre = new Mock<IArquivoMestre>();
-            var mockBuffer = new Mock<IBufferEmMemoria>();
+            var mockBuffer = new Mock<IPoolDeBuffers>();
 
             var paginaNoDisco = new PaginaTesteBuilder().PreenchidoCom(128, 'a').Construir();
             mockArquivoMestre.Setup(m => m.CarregarPagina(indicePagina)).Returns(paginaNoDisco);
@@ -47,7 +47,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         public void atualizando_no_buffer_uma_pagina_que_ja_foi_carregada()
         {
             var mockArquivoMestre = new Mock<IArquivoMestre>();
-            var mockBuffer = new Mock<IBufferEmMemoria>();
+            var mockBuffer = new Mock<IPoolDeBuffers>();
 
             var paginaNoDiscoAntes = new PaginaTesteBuilder().NoIndice(IndiceZero).PreenchidoCom(128, 'a').Construir();
             mockArquivoMestre.Setup(m => m.CarregarPagina(IndiceZero)).Returns(paginaNoDiscoAntes);
@@ -68,7 +68,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         public void salvando_uma_pagina_no_disco()
         {
             var mockArquivoMestre = new Mock<IArquivoMestre>();
-            var mockBuffer = new Mock<IBufferEmMemoria>();
+            var mockBuffer = new Mock<IPoolDeBuffers>();
 
             var paginaNoBuffer = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
             mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(paginaNoBuffer);
@@ -89,7 +89,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, IndiceUm);
             DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, IndiceDois);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, new BufferEmMemoria(),
+            var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, new PoolDeBuffers(),
                 UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria:2));
             gerenciadorBuffer.CarregarPagina(IndiceZero);
             gerenciadorBuffer.CarregarPagina(IndiceUm);
@@ -104,7 +104,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             const int tamanhoConteudo = 128;
 
             var mockArquivoMestre = new Mock<IArquivoMestre>();
-            var buffer = new BufferEmMemoria();
+            var buffer = new PoolDeBuffers();
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, buffer, UmaConfiguracaoDeBuffer(1));
 
             var pagina = new PaginaTesteBuilder().PreenchidoCom(numeroCaracteres: tamanhoConteudo, caractere: 'a').Construir();
@@ -124,7 +124,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             var paginaNoBuffer = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
 
             var mockArquivoMestre = new Mock<IArquivoMestre>();
-            var mockBuffer = new Mock<IBufferEmMemoria>();
+            var mockBuffer = new Mock<IPoolDeBuffers>();
             mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(paginaNoBuffer);
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
@@ -143,7 +143,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             var mockArquivoMestre = new Mock<IArquivoMestre>();
             mockArquivoMestre.Setup(a => a.CarregarPagina(IndiceUm)).Returns(paginaNoDisco);
 
-            var mockBuffer = new Mock<IBufferEmMemoria>();
+            var mockBuffer = new Mock<IPoolDeBuffers>();
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
             var paginaRecuperada = gerenciadorBuffer.LerPagina(IndiceUm);
 
@@ -156,7 +156,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         [Fact]
         public void listando_as_paginas_no_buffer()
         {
-            var mockBuffer = new Mock<IBufferEmMemoria>();
+            var mockBuffer = new Mock<IPoolDeBuffers>();
             mockBuffer.Setup(b => b.ListarPaginas()).Returns(new IResumoPagina[2]);
 
             var gerenciadorBuffer = new GerenciadorBuffer(new Mock<IArquivoMestre>().Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(3));
@@ -177,7 +177,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
                 mockArquivoMestre.Setup(a => a.CarregarPagina(i)).Returns(new PaginaTesteBuilder().Construir());
             }
 
-            var mockBuffer = new Mock<IBufferEmMemoria>();
+            var mockBuffer = new Mock<IPoolDeBuffers>();
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(numeroPaginasNoCarregadas));
             gerenciadorBuffer.InicializarBuffer();
 

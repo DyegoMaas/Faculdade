@@ -18,7 +18,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
         {
             var paginaArmazenada = new PaginaTesteBuilder().Construir();
 
-            IBufferEmMemoria buffer = new BufferEmMemoria();
+            IPoolDeBuffers buffer = new PoolDeBuffers();
             buffer.Armazenar(paginaArmazenada);
 
             var paginaRecuperada = buffer.Obter(paginaArmazenada.IndicePaginaNoDisco);
@@ -31,7 +31,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
             var paginaOriginal = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
             var novaPagina = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
 
-            var buffer = new BufferEmMemoria();
+            var buffer = new PoolDeBuffers();
             buffer.Armazenar(paginaOriginal);
             buffer.Armazenar(novaPagina);
 
@@ -74,7 +74,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
                 new PaginaTesteBuilder().NoIndice(IndiceDois).Sujo().ComPinCount(2).Construir()
             }.ToList();
 
-            var buffer = new BufferEmMemoria();
+            var buffer = new PoolDeBuffers();
             paginasNoBuffer.ForEach(buffer.Armazenar);
 
             var resumosPaginas = buffer.ListarPaginas().ToArray();
@@ -92,9 +92,9 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
             }
         }
         
-        private static BufferEmMemoria DadoUmBufferVazio()
+        private static PoolDeBuffers DadoUmBufferVazio()
         {
-            return new BufferEmMemoria();
+            return new PoolDeBuffers();
         }
     }
 }

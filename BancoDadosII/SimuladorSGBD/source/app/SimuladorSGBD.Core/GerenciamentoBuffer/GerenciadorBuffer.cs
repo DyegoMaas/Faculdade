@@ -9,10 +9,10 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
     public class GerenciadorBuffer : IGerenciadorBuffer
     {
         private readonly IArquivoMestre arquivoMestre;
-        private readonly IBufferEmMemoria buffer;
+        private readonly IPoolDeBuffers buffer;
         private readonly IConfiguracaoBuffer configuracaoBuffer;
 
-        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IBufferEmMemoria buffer, IConfiguracaoBuffer configuracaoBuffer)
+        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
         {
             this.arquivoMestre = arquivoMestre;
             this.buffer = buffer;

@@ -42,7 +42,7 @@ namespace SimuladorSGBD.IoC
 
         private static void RegistrarGerenciamentoBuffer(ContainerBuilder builder)
         {
-            builder.RegisterType<BufferEmMemoria>().As<IBufferEmMemoria>();
+            builder.RegisterType<PoolDeBuffers>().As<IPoolDeBuffers>();
             builder.RegisterInstance(new ConfiguracaoBuffer
             {
                 LimiteDePaginasEmMemoria = 10
