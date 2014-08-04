@@ -1,16 +1,17 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
 using SimuladorSGBD.Testes.Fixtures;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Xunit;
 using Xunit.Extensions;
 
-namespace SimuladorSGBD.Testes.GerenciamentoBuffer
+namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
 {
     public class GerenciadorBufferTeste
     {

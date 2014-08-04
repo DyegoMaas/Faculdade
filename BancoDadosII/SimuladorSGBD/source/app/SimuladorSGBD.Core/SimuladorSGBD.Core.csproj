@@ -39,16 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GerenciamentoBuffer\BufferEmMemoria.cs" />
-    <Compile Include="GerenciamentoBuffer\ConfiguracaoBuffer.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\BufferEmMemoria.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\ConfiguracaoBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBuffer.cs" />
-    <Compile Include="GerenciamentoBuffer\IBufferEmMemoria.cs" />
-    <Compile Include="GerenciamentoBuffer\IConfiguracaoBuffer.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\IBufferEmMemoria.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\IConfiguracaoBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\IGerenciadorBuffer.cs" />
-    <Compile Include="GerenciamentoBuffer\IPaginaEmMemoria.cs" />
-    <Compile Include="GerenciamentoBuffer\IResumoPagina.cs" />
-    <Compile Include="GerenciamentoBuffer\PaginaEmMemoria.cs" />
-    <Compile Include="GerenciamentoBuffer\ResumoPagina.cs" />
+    <Compile Include="GerenciamentoBuffer\Paginas\IPaginaEmMemoria.cs" />
+    <Compile Include="GerenciamentoBuffer\Paginas\IResumoPagina.cs" />
+    <Compile Include="GerenciamentoBuffer\Paginas\PaginaEmMemoria.cs" />
+    <Compile Include="GerenciamentoBuffer\Paginas\ResumoPagina.cs" />
     <Compile Include="IInicializadorArquivoMestre.cs" />
     <Compile Include="IO\ConfiguracaoIO.cs" />
     <Compile Include="IO\IConfiguracaoIO.cs" />

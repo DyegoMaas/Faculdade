@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer

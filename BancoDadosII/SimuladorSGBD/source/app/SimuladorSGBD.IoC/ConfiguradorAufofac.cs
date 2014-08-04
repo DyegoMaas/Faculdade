@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
 using SimuladorSGBD.Core.IO;
 using System;
 using System.IO;

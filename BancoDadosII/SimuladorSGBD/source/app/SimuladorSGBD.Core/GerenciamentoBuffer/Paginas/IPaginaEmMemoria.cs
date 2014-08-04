@@ -1,5 +1,5 @@
 ﻿
-namespace SimuladorSGBD.Core.GerenciamentoBuffer
+namespace SimuladorSGBD.Core.GerenciamentoBuffer.Paginas
 {
     public interface IPaginaEmMemoria : IPaginaComConteudo
     {

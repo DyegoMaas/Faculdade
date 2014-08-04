@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
 using SimuladorSGBD.Core.IO;
 using SimuladorSGBD.Testes.Fixtures;
 using Xunit;

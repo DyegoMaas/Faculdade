@@ -1,4 +1,4 @@
-﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
+﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer.Paginas
 {
     internal class ResumoPagina : IResumoPagina
     {

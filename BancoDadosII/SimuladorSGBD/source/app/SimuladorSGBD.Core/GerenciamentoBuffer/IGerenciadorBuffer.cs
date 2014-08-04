@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {

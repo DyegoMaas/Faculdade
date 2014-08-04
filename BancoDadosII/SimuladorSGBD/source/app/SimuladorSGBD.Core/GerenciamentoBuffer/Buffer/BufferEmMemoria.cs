@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 
-namespace SimuladorSGBD.Core.GerenciamentoBuffer
+namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
 {
     public class BufferEmMemoria : IBufferEmMemoria
     {
