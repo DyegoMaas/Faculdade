@@ -62,8 +62,8 @@
     <Compile Include="Fixtures\ConfiguracaoIOFake.cs" />
     <Compile Include="Fixtures\ConteudoPaginaTesteHelper.cs" />
     <Compile Include="Fixtures\PaginaTesteBuilder.cs" />
-    <Compile Include="GerenciamentoBuffer\BufferEmMemoriaTeste.cs" />
-    <Compile Include="GerenciamentoBuffer\Buffer\GerenciadorBufferTeste.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\BufferEmMemoriaTeste.cs" />
+    <Compile Include="GerenciamentoBuffer\GerenciadorBufferTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

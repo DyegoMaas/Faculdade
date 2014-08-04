@@ -11,7 +11,7 @@ using SimuladorSGBD.Testes.Fixtures;
 using Xunit;
 using Xunit.Extensions;
 
-namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
+namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 {
     public class GerenciadorBufferTeste
     {
