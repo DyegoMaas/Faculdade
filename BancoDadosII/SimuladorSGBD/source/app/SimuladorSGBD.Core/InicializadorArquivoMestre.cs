@@ -4,16 +4,16 @@ namespace SimuladorSGBD.Core
 {
     public class InicializadorArquivoMestre : IInicializadorArquivoMestre
     {
-        private readonly IArquivoMestre arquivoMestre;
+        private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
 
-        public InicializadorArquivoMestre(IArquivoMestre arquivoMestre)
+        public InicializadorArquivoMestre(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco)
         {
-            this.arquivoMestre = arquivoMestre;
+            this.gerenciadorEspacoEmDisco = gerenciadorEspacoEmDisco;
         }
 
         public void Inicializar()
         {
-            arquivoMestre.CriarArquivoSeNaoExiste(blocos: 20, bytes: 128);
+            gerenciadorEspacoEmDisco.CriarArquivoSeNaoExiste(blocos: 20, bytes: 128);
         }
     }
 }

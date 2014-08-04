@@ -37,7 +37,7 @@ namespace SimuladorSGBD.IoC
                 CaminhoArquivoMestre = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "arquivoMestre.txt")
             }).As<IConfiguracaoIO>();
 
-            builder.RegisterType<ArquivoMestre>().As<IArquivoMestre>();
+            builder.RegisterType<GerenciadorEspacoEmDisco>().As<IGerenciadorEspacoEmDisco>();
         }
 
         private static void RegistrarGerenciamentoBuffer(ContainerBuilder builder)

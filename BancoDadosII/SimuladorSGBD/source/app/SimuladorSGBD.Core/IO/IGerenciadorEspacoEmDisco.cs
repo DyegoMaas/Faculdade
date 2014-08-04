@@ -1,7 +1,7 @@
 ﻿
 namespace SimuladorSGBD.Core.IO
 {
-    public interface IArquivoMestre
+    public interface IGerenciadorEspacoEmDisco
     {
         bool ExisteNoDisco { get; }
         void CriarArquivoSeNaoExiste(int blocos, int bytes);

@@ -10,7 +10,7 @@ namespace SimuladorSGBD.Testes.Core
         [Fact]
         public void criacao_do_arquivo_principal_do_banco_quando_nao_existe()
         {
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
 
             var inicializadorArquivoMaster = new InicializadorArquivoMestre(mockArquivoMestre.Object);
             inicializadorArquivoMaster.Inicializar();
@@ -21,7 +21,7 @@ namespace SimuladorSGBD.Testes.Core
         [Fact]
         public void o_arquivo_principal_criado_deve_ter_20_blocos_de_128_bytes()
         {
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             mockArquivoMestre.SetupGet(m => m.ExisteNoDisco).Returns(false);
 
             var inicializadorArquivoMaster = new InicializadorArquivoMestre(mockArquivoMestre.Object);

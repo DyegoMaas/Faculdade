@@ -5,12 +5,12 @@ using System.Text;
 
 namespace SimuladorSGBD.Core.IO
 {
-    public class ArquivoMestre : IArquivoMestre
+    public class GerenciadorEspacoEmDisco : IGerenciadorEspacoEmDisco
     {
         private const int TamanhoPaginas = 128;
         private readonly FileInfo arquivo;
 
-        public ArquivoMestre(IConfiguracaoIO configuracaoIO)
+        public GerenciadorEspacoEmDisco(IConfiguracaoIO configuracaoIO)
         {
             arquivo = new FileInfo(configuracaoIO.CaminhoArquivoMestre);
         }

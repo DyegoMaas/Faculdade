@@ -52,9 +52,9 @@
     <Compile Include="IInicializadorArquivoMestre.cs" />
     <Compile Include="IO\ConfiguracaoIO.cs" />
     <Compile Include="IO\IConfiguracaoIO.cs" />
-    <Compile Include="IO\IArquivoMestre.cs" />
+    <Compile Include="IO\IGerenciadorEspacoEmDisco.cs" />
     <Compile Include="InicializadorArquivoMestre.cs" />
-    <Compile Include="IO\ArquivoMestre.cs" />
+    <Compile Include="IO\GerenciadorEspacoEmDisco.cs" />
     <Compile Include="IPagina.cs" />
     <Compile Include="Pagina.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

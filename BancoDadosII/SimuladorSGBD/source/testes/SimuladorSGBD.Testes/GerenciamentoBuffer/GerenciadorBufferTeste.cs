@@ -25,7 +25,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         InlineData(10)]
         public void carregando_uma_pagina_para_o_buffer(int indicePagina)
         {
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             var mockBuffer = new Mock<IPoolDeBuffers>();
 
             var quadroDisco = new QuadroTesteBuilder().PreenchidoCom(128, 'a').Construir();
@@ -46,7 +46,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         [Fact]
         public void atualizando_no_buffer_uma_pagina_que_ja_foi_carregada()
         {
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             var mockBuffer = new Mock<IPoolDeBuffers>();
 
             var paginaNoDiscoAntes = new QuadroTesteBuilder().NoIndice(IndiceZero).PreenchidoCom(128, 'a').Construir();
@@ -67,7 +67,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         [Fact]
         public void salvando_uma_pagina_no_disco()
         {
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             var mockBuffer = new Mock<IPoolDeBuffers>();
 
             var quadroNoBuffer = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
@@ -84,7 +84,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         [Fact]
         public void restringindo_o_buffer_ao_numero_limite_de_paginas_configuradas()
         {
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, IndiceZero);
             DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, IndiceUm);
             DadoQueExisteUmaPaginaEmDiscoNoIndice(mockArquivoMestre, IndiceDois);
@@ -103,7 +103,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             const int tamanhoConteudo = 128;
 
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             var buffer = new PoolDeBuffers();
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, buffer, UmaConfiguracaoDeBuffer(1));
 
@@ -123,7 +123,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             var paginaNoBuffer = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
 
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             var mockBuffer = new Mock<IPoolDeBuffers>();
             mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(paginaNoBuffer);
 
@@ -140,7 +140,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             var quadroNoDisco = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
 
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             mockArquivoMestre.Setup(a => a.CarregarPagina(IndiceUm)).Returns(quadroNoDisco.Pagina);
 
             var mockBuffer = new Mock<IPoolDeBuffers>();
@@ -159,7 +159,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             var mockBuffer = new Mock<IPoolDeBuffers>();
             mockBuffer.Setup(b => b.ListarPaginas()).Returns(new IResumoPagina[2]);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(new Mock<IArquivoMestre>().Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(3));
+            var gerenciadorBuffer = new GerenciadorBuffer(new Mock<IGerenciadorEspacoEmDisco>().Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(3));
             IEnumerable<IResumoPagina> resumoBuffer = gerenciadorBuffer.ListarPaginas();
 
             mockBuffer.Verify(b => b.ListarPaginas());
@@ -171,7 +171,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             const int numeroPaginasNoCarregadas = 10;
 
-            var mockArquivoMestre = new Mock<IArquivoMestre>();
+            var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             for (int i = 0; i < numeroPaginasNoCarregadas; i++)
             {
                 mockArquivoMestre.Setup(a => a.CarregarPagina(i)).Returns(new QuadroTesteBuilder().Construir().Pagina);
@@ -184,7 +184,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             mockBuffer.Verify(buffer => buffer.Armazenar(It.IsAny<IQuadro>()), Times.Exactly(numeroPaginasNoCarregadas));
         }
 
-        private static void DadoQueExisteUmaPaginaEmDiscoNoIndice(Mock<IArquivoMestre> mockArquivoMestre, int indicePagina)
+        private static void DadoQueExisteUmaPaginaEmDiscoNoIndice(Mock<IGerenciadorEspacoEmDisco> mockArquivoMestre, int indicePagina)
         {
             mockArquivoMestre.Setup(buffer => buffer.CarregarPagina(indicePagina))
                 .Returns(new QuadroTesteBuilder().NoIndice(indicePagina).Construir().Pagina);

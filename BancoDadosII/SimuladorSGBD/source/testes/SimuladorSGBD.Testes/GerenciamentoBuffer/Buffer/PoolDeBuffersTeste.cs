@@ -7,7 +7,7 @@ using Xunit.Extensions;
 
 namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
 {
-    public class BufferEmMemoriaTeste
+    public class PoolDeBuffersTeste
     {
         private const int IndiceZero = 0;
         private const int IndiceUm = 1;

@@ -58,11 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\InicializadorArquivoMestreTeste.cs" />
-    <Compile Include="Core\IO\ArquivoMestreTeste.cs" />
+    <Compile Include="Core\IO\GerenciadorEspacoEmDiscoTeste.cs" />
     <Compile Include="Fixtures\ConfiguracaoIOFake.cs" />
     <Compile Include="Fixtures\ConteudoPaginaTesteHelper.cs" />
     <Compile Include="Fixtures\QuadroTesteBuilder.cs" />
-    <Compile Include="GerenciamentoBuffer\Buffer\BufferEmMemoriaTeste.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\PoolDeBuffersTeste.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBufferTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

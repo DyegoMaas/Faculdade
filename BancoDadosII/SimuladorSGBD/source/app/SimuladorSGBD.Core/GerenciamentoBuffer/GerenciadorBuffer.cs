@@ -8,13 +8,13 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
     public class GerenciadorBuffer : IGerenciadorBuffer
     {
-        private readonly IArquivoMestre arquivoMestre;
+        private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
         private readonly IPoolDeBuffers buffer;
         private readonly IConfiguracaoBuffer configuracaoBuffer;
 
-        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
+        public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
         {
-            this.arquivoMestre = arquivoMestre;
+            this.gerenciadorEspacoEmDisco = gerenciadorEspacoEmDisco;
             this.buffer = buffer;
             this.configuracaoBuffer = configuracaoBuffer;
         }
@@ -52,7 +52,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         public void SalvarPagina(int indice)
         {
             var quadro = buffer.Obter(indice);
-            arquivoMestre.SalvarPagina(indice, quadro.Pagina);
+            gerenciadorEspacoEmDisco.SalvarPagina(indice, quadro.Pagina);
         }
 
         public void AtualizarPagina(int indicePagina, char[] conteudo)
@@ -71,7 +71,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         {
             var quadro = new Quadro(indice)
             {
-                Pagina = arquivoMestre.CarregarPagina(indice),
+                Pagina = gerenciadorEspacoEmDisco.CarregarPagina(indice),
                 PinCount = 0,
                 UltimoAcesso = 0
             };
