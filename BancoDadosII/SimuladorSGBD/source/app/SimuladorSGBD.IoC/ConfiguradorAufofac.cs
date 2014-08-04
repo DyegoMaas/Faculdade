@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Autofac.Extras.CommonServiceLocator;
+using Microsoft.Practices.ServiceLocation;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
@@ -13,12 +15,14 @@ namespace SimuladorSGBD.IoC
         public static IContainer Configurar()
         {
             var builder = new ContainerBuilder();
-
             RegistrarCore(builder);
             RegistrarIO(builder);
             RegistrarGerenciamentoBuffer(builder);
 
-            return builder.Build();
+            var container = builder.Build();
+
+            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(container));
+            return container;
         }
 
         private static void RegistrarCore(ContainerBuilder builder)

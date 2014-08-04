@@ -1,4 +1,4 @@
-﻿using Autofac;
+﻿using Microsoft.Practices.ServiceLocation;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.IoC;
 using System;
@@ -10,8 +10,9 @@ namespace SimuladorSGBD
     {
         static void Main(string[] args)
         {
-            var container = ConfiguradorAufofac.Configurar();
-            var gerenciadorBuffer = container.Resolve<IGerenciadorBuffer>();
+            ConfiguradorAufofac.Configurar();
+            var gerenciadorBuffer = ServiceLocator.Current.GetInstance<IGerenciadorBuffer>();
+            gerenciadorBuffer.InicializarBuffer();
 
             var pagina = gerenciadorBuffer.CarregarPagina(0);
             gerenciadorBuffer.AtualizarPagina(0, new String('f', 128).ToCharArray());

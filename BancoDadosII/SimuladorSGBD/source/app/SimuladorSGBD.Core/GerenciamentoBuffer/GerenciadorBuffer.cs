@@ -19,19 +19,34 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             this.configuracaoBuffer = configuracaoBuffer;
         }
 
+        public void InicializarBuffer()
+        {
+            for (int indicePagina = 0; indicePagina < configuracaoBuffer.LimiteDePaginasEmMemoria; indicePagina++)
+            {
+                var paginaCarregadaDoDisco = CarregarPaginaDoDisco(indicePagina);
+                buffer.Armazenar(paginaCarregadaDoDisco);
+            }
+        }
+        
         public IPaginaEmMemoria CarregarPagina(int indice)
         {
-            if(BufferEstaCheio())
-                throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
-
             var paginaBuffer = buffer.Obter(indice);
-            if (paginaBuffer != null)
-                return paginaBuffer;
+            if (paginaBuffer == null && BufferEstaCheio())
+                throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
 
             var pagina = CarregarPaginaDoDisco(indice);
             ArmazenarNoBuffer(pagina);
 
             return pagina;
+        }
+
+        public IPaginaEmMemoria LerPagina(int indice)
+        {
+            var paginaBuffer = buffer.Obter(indice);
+            if (paginaBuffer != null)
+                return paginaBuffer;
+
+            return CarregarPagina(indice);
         }
 
         public void SalvarPagina(int indice)
