@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using SimuladorSGBD.Core.IO;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public class GerenciadorBuffer
+    public class GerenciadorBuffer : IGerenciadorBuffer
     {
         private readonly IArquivoMestre arquivoMestre;
         private readonly IBufferEmMemoria buffer;
-        private readonly IConfiguaracaoBuffer configuaracaoBuffer;
+        private readonly IConfiguracaoBuffer configuracaoBuffer;
 
-        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IBufferEmMemoria buffer, IConfiguaracaoBuffer configuaracaoBuffer)
+        public GerenciadorBuffer(IArquivoMestre arquivoMestre, IBufferEmMemoria buffer, IConfiguracaoBuffer configuracaoBuffer)
         {
             this.arquivoMestre = arquivoMestre;
             this.buffer = buffer;
-            this.configuaracaoBuffer = configuaracaoBuffer;
+            this.configuracaoBuffer = configuracaoBuffer;
         }
 
         public IPaginaEmMemoria CarregarPagina(int indice)
@@ -31,17 +32,6 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return pagina;
         }
 
-        private PaginaEmMemoria CarregarPaginaDoDisco(int indice)
-        {
-            var paginaEmMemoria = new PaginaEmMemoria(indice)
-            {
-                Conteudo = arquivoMestre.CarregarPagina(indice).Conteudo,
-                PinCount = 0,
-                UltimoAcesso = 0
-            };
-            return paginaEmMemoria;
-        }
-
         public void SalvarPagina(int indice)
         {
             var pagina = buffer.Obter(indice);
@@ -54,10 +44,26 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             pagina.Sujo = true;
             pagina.Conteudo = conteudo;
         }
+        
+        public IEnumerable<IResumoPagina> ListarPaginas()
+        {
+            return buffer.ListarPaginas();
+        }
+
+        private PaginaEmMemoria CarregarPaginaDoDisco(int indice)
+        {
+            var paginaEmMemoria = new PaginaEmMemoria(indice)
+            {
+                Conteudo = arquivoMestre.CarregarPagina(indice).Conteudo,
+                PinCount = 0,
+                UltimoAcesso = 0
+            };
+            return paginaEmMemoria;
+        }
 
         private bool BufferEstaCheio()
         {
-            return buffer.NumeroPaginasNoBuffer == configuaracaoBuffer.LimiteDePaginasEmMemoria;
+            return buffer.NumeroPaginasNoBuffer == configuracaoBuffer.LimiteDePaginasEmMemoria;
         }
 
         private void ArmazenarNoBuffer(PaginaEmMemoria paginaEmMemoria)

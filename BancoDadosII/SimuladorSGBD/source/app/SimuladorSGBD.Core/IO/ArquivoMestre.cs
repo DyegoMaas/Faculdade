@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
 
@@ -10,9 +11,9 @@ namespace SimuladorSGBD.Core.IO
         private const int TamanhoPaginas = 128;
         private readonly FileInfo arquivo;
 
-        public ArquivoMestre(string caminhoArquivo)
+        public ArquivoMestre(IConfiguracaoIO configuracaoIO)
         {
-            arquivo = new FileInfo(caminhoArquivo);
+            arquivo = new FileInfo(configuracaoIO.CaminhoArquivoMestre);
         }
         
         public bool ExisteNoDisco
@@ -63,8 +64,7 @@ namespace SimuladorSGBD.Core.IO
 
         private void CriarBlocoVazio(Stream stream, int bytes)
         {
-            var buffer = new byte[bytes];
-            Array.Clear(buffer, 0, buffer.Length);
+            var buffer = Encoding.ASCII.GetBytes(Enumerable.Repeat('0', bytes).ToArray());
             stream.Write(buffer, 0, buffer.Length);
         }
     }

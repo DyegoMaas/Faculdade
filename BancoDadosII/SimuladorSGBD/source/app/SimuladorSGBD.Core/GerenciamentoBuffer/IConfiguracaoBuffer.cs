@@ -1,6 +1,6 @@
 ﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public interface IConfiguaracaoBuffer
+    public interface IConfiguracaoBuffer
     {
         int LimiteDePaginasEmMemoria { get; }
     }

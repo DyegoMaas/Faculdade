@@ -1,5 +1,9 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using Moq;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
+using SimuladorSGBD.Core.IO;
 using SimuladorSGBD.Testes.Fixtures;
 using Xunit;
 using Xunit.Extensions;
@@ -8,6 +12,10 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 {
     public class BufferEmMemoriaTeste
     {
+        private const int IndiceZero = 0;
+        private const int IndiceUm = 1;
+        private const int IndiceDois = 2;
+
         [Fact]
         public void armazenando_uma_pagina_no_buffer_e_recuperando_a_pagina()
         {
@@ -23,16 +31,14 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         [Fact]
         public void sobrescrevendo_paginas_de_mesmo_indice_no_buffer()
         {
-            const int indiceUm = 1;
-
-            var paginaOriginal = new PaginaTesteBuilder().NoIndice(indiceUm).Construir();
-            var novaPagina = new PaginaTesteBuilder().NoIndice(indiceUm).Construir();
+            var paginaOriginal = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
+            var novaPagina = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
 
             var buffer = new BufferEmMemoria();
             buffer.Armazenar(paginaOriginal);
             buffer.Armazenar(novaPagina);
 
-            var paginaRecuperada = buffer.Obter(indiceUm);
+            var paginaRecuperada = buffer.Obter(IndiceUm);
             paginaRecuperada.Should().Be(novaPagina);
         }
 
@@ -59,6 +65,33 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             }
 
             buffer.NumeroPaginasNoBuffer.Should().Be(numeroPaginasNoBuffer);
+        }
+
+        [Fact]
+        public void listando_as_paginas_no_buffer()
+        {
+            var paginasNoBuffer = new[]
+            {
+                new PaginaTesteBuilder().NoIndice(IndiceZero).Construir(),
+                new PaginaTesteBuilder().NoIndice(IndiceUm).Sujo().Construir(),
+                new PaginaTesteBuilder().NoIndice(IndiceDois).Sujo().ComPinCount(2).Construir()
+            }.ToList();
+
+            var buffer = new BufferEmMemoria();
+            paginasNoBuffer.ForEach(buffer.Armazenar);
+
+            var resumosPaginas = buffer.ListarPaginas().ToArray();
+            resumosPaginas.Should().HaveSameCount(paginasNoBuffer);
+
+            for (var i = 0; i < resumosPaginas.Length; i++)
+            {
+                var resumo = resumosPaginas[i];
+                var paginaNoBuffer = paginasNoBuffer[i];
+
+                resumo.IndiceNoDisco.Should().Be(paginaNoBuffer.IndicePaginaNoDisco);
+                resumo.PinCount.Should().Be(paginaNoBuffer.PinCount);
+                resumo.Sujo.Should().Be(paginaNoBuffer.Sujo);
+            }
         }
         
         private static BufferEmMemoria DadoUmBufferVazio()

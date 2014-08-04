@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
@@ -21,6 +22,16 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             if(buffer.ContainsKey(indicePagina))
                 return buffer[indicePagina];
             return null;
+        }
+
+        public IEnumerable<IResumoPagina> ListarPaginas()
+        {
+            return buffer.Values.Select(b => new ResumoPagina
+            {
+                IndiceNoDisco = b.IndicePaginaNoDisco,
+                PinCount = b.PinCount,
+                Sujo = b.Sujo
+            });
         }
     }
 }

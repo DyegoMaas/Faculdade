@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimuladorSGBD.Core", "sourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimuladorSGBD.Testes", "source\testes\SimuladorSGBD.Testes\SimuladorSGBD.Testes.csproj", "{A8BEF474-59DE-4C85-B1A5-A7EE813353D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimuladorSGBD.IoC", "source\app\SimuladorSGBD.IoC\SimuladorSGBD.IoC.csproj", "{489E9276-DFC8-40AD-8170-8F33334EA20F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A8BEF474-59DE-4C85-B1A5-A7EE813353D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8BEF474-59DE-4C85-B1A5-A7EE813353D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8BEF474-59DE-4C85-B1A5-A7EE813353D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{489E9276-DFC8-40AD-8170-8F33334EA20F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{489E9276-DFC8-40AD-8170-8F33334EA20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{489E9276-DFC8-40AD-8170-8F33334EA20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{489E9276-DFC8-40AD-8170-8F33334EA20F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

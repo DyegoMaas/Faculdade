@@ -2,16 +2,16 @@
 
 namespace SimuladorSGBD.Core
 {
-    public class InicializadorArquivoMaster
+    public class InicializadorArquivoMestre : IInicializadorArquivoMestre
     {
         private readonly IArquivoMestre arquivoMestre;
 
-        public InicializadorArquivoMaster(IArquivoMestre arquivoMestre)
+        public InicializadorArquivoMestre(IArquivoMestre arquivoMestre)
         {
             this.arquivoMestre = arquivoMestre;
         }
 
-        public void Inicializar(string caminhoArquivo)
+        public void Inicializar()
         {
             arquivoMestre.CriarArquivoSeNaoExiste(blocos: 20, bytes: 128);
         }
