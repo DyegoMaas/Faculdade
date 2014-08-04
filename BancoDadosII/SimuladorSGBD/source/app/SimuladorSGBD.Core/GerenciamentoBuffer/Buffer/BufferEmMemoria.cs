@@ -29,6 +29,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
         {
             return buffer.Values.Select(b => new ResumoPagina
             {
+                Conteudo = b.Conteudo,
                 IndiceNoDisco = b.IndicePaginaNoDisco,
                 PinCount = b.PinCount,
                 Sujo = b.Sujo

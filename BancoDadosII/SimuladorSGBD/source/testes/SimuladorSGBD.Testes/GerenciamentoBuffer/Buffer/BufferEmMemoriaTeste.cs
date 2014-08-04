@@ -85,6 +85,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
                 var resumo = resumosPaginas[i];
                 var paginaNoBuffer = paginasNoBuffer[i];
 
+                resumo.Conteudo.Should().BeSameAs(paginaNoBuffer.Conteudo);
                 resumo.IndiceNoDisco.Should().Be(paginaNoBuffer.IndicePaginaNoDisco);
                 resumo.PinCount.Should().Be(paginaNoBuffer.PinCount);
                 resumo.Sujo.Should().Be(paginaNoBuffer.Sujo);
