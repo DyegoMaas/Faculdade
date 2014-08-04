@@ -1,9 +1,7 @@
-﻿using System;
+﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SimuladorSGBD.Core.GerenciamentoBuffer;
-using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 
 namespace SimuladorSGBD.Core.IO
 {

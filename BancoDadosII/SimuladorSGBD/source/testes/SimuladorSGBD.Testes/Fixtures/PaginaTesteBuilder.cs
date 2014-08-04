@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 
 namespace SimuladorSGBD.Testes.Fixtures
