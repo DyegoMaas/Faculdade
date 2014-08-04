@@ -45,9 +45,9 @@
     <Compile Include="GerenciamentoBuffer\Buffer\IPoolDeBuffers.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\IConfiguracaoBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\IGerenciadorBuffer.cs" />
-    <Compile Include="GerenciamentoBuffer\Paginas\IPaginaEmMemoria.cs" />
+    <Compile Include="GerenciamentoBuffer\Paginas\IQuadro.cs" />
     <Compile Include="GerenciamentoBuffer\Paginas\IResumoPagina.cs" />
-    <Compile Include="GerenciamentoBuffer\Paginas\PaginaEmMemoria.cs" />
+    <Compile Include="GerenciamentoBuffer\Paginas\Quadro.cs" />
     <Compile Include="GerenciamentoBuffer\Paginas\ResumoPagina.cs" />
     <Compile Include="IInicializadorArquivoMestre.cs" />
     <Compile Include="IO\ConfiguracaoIO.cs" />
@@ -55,8 +55,8 @@
     <Compile Include="IO\IArquivoMestre.cs" />
     <Compile Include="InicializadorArquivoMestre.cs" />
     <Compile Include="IO\ArquivoMestre.cs" />
-    <Compile Include="IPaginaComConteudo.cs" />
-    <Compile Include="PaginaComConteudo.cs" />
+    <Compile Include="IPagina.cs" />
+    <Compile Include="Pagina.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

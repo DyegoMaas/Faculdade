@@ -1,6 +1,6 @@
 ﻿namespace SimuladorSGBD.Core
 {
-    internal class PaginaComConteudo : IPaginaComConteudo
+    internal class Pagina : IPagina
     {
         public char[] Conteudo { get; set; }
     }

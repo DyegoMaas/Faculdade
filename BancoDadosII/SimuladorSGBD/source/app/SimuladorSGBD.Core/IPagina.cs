@@ -1,6 +1,6 @@
 ﻿namespace SimuladorSGBD.Core
 {
-    public interface IPaginaComConteudo
+    public interface IPagina
     {
         char[] Conteudo { get; set;  }
     }

@@ -6,19 +6,19 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
 {
     public class PoolDeBuffers : IPoolDeBuffers
     {
-        private readonly IDictionary<int, IPaginaEmMemoria> buffer = new Dictionary<int, IPaginaEmMemoria>();
+        private readonly IDictionary<int, IQuadro> buffer = new Dictionary<int, IQuadro>();
 
         public int NumeroPaginasNoBuffer
         {
             get { return buffer.Count; }
         }
 
-        public void Armazenar(IPaginaEmMemoria pagina)
+        public void Armazenar(IQuadro pagina)
         {
             buffer[pagina.IndicePaginaNoDisco] = pagina;
         }
 
-        public IPaginaEmMemoria Obter(int indicePagina)
+        public IQuadro Obter(int indicePagina)
         {
             if(buffer.ContainsKey(indicePagina))
                 return buffer[indicePagina];
@@ -29,7 +29,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
         {
             return buffer.Values.Select(b => new ResumoPagina
             {
-                Conteudo = b.Conteudo,
+                Conteudo = b.Pagina.Conteudo,
                 IndiceNoDisco = b.IndicePaginaNoDisco,
                 PinCount = b.PinCount,
                 Sujo = b.Sujo

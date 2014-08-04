@@ -34,7 +34,7 @@ namespace SimuladorSGBD.Core.IO
             }
         }
 
-        public IPaginaComConteudo CarregarPagina(int indicePagina)
+        public IPagina CarregarPagina(int indicePagina)
         {
             var buffer = new byte[TamanhoPaginas];
             using (var stream = arquivo.OpenRead())
@@ -44,15 +44,15 @@ namespace SimuladorSGBD.Core.IO
                 stream.Read(buffer, 0, buffer.Length);
             }
 
-            return new PaginaEmMemoria(indicePagina)
+            return new Pagina
             {
                 Conteudo = Encoding.ASCII.GetChars(buffer, 0, buffer.Length)
             };
         }
 
-        public void SalvarPagina(int indicePagina, IPaginaComConteudo paginaComConteudo)
+        public void SalvarPagina(int indicePagina, IPagina pagina)
         {
-            var buffer = Encoding.ASCII.GetBytes(paginaComConteudo.Conteudo, 0, paginaComConteudo.Conteudo.Length);
+            var buffer = Encoding.ASCII.GetBytes(pagina.Conteudo, 0, pagina.Conteudo.Length);
             using (var stream = arquivo.OpenWrite())
             {
                 var offset = indicePagina * TamanhoPaginas;

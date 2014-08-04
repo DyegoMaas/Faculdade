@@ -16,7 +16,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
         [Fact]
         public void armazenando_uma_pagina_no_buffer_e_recuperando_a_pagina()
         {
-            var paginaArmazenada = new PaginaTesteBuilder().Construir();
+            var paginaArmazenada = new QuadroTesteBuilder().Construir();
 
             IPoolDeBuffers buffer = new PoolDeBuffers();
             buffer.Armazenar(paginaArmazenada);
@@ -28,8 +28,8 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
         [Fact]
         public void sobrescrevendo_paginas_de_mesmo_indice_no_buffer()
         {
-            var paginaOriginal = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
-            var novaPagina = new PaginaTesteBuilder().NoIndice(IndiceUm).Construir();
+            var paginaOriginal = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
+            var novaPagina = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
 
             var buffer = new PoolDeBuffers();
             buffer.Armazenar(paginaOriginal);
@@ -58,7 +58,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
 
             for (int indice = 0; indice < numeroPaginasNoBuffer; indice++)
             {
-                buffer.Armazenar(new PaginaTesteBuilder().NoIndice(indice).Construir());
+                buffer.Armazenar(new QuadroTesteBuilder().NoIndice(indice).Construir());
             }
 
             buffer.NumeroPaginasNoBuffer.Should().Be(numeroPaginasNoBuffer);
@@ -69,9 +69,9 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
         {
             var paginasNoBuffer = new[]
             {
-                new PaginaTesteBuilder().NoIndice(IndiceZero).Construir(),
-                new PaginaTesteBuilder().NoIndice(IndiceUm).Sujo().Construir(),
-                new PaginaTesteBuilder().NoIndice(IndiceDois).Sujo().ComPinCount(2).Construir()
+                new QuadroTesteBuilder().NoIndice(IndiceZero).Construir(),
+                new QuadroTesteBuilder().NoIndice(IndiceUm).Sujo().Construir(),
+                new QuadroTesteBuilder().NoIndice(IndiceDois).Sujo().ComPinCount(2).Construir()
             }.ToList();
 
             var buffer = new PoolDeBuffers();
@@ -85,7 +85,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
                 var resumo = resumosPaginas[i];
                 var paginaNoBuffer = paginasNoBuffer[i];
 
-                resumo.Conteudo.Should().BeSameAs(paginaNoBuffer.Conteudo);
+                resumo.Conteudo.Should().BeSameAs(paginaNoBuffer.Pagina.Conteudo);
                 resumo.IndiceNoDisco.Should().Be(paginaNoBuffer.IndicePaginaNoDisco);
                 resumo.PinCount.Should().Be(paginaNoBuffer.PinCount);
                 resumo.Sujo.Should().Be(paginaNoBuffer.Sujo);

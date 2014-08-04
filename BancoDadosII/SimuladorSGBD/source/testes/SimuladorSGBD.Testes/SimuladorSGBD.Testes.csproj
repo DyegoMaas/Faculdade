@@ -61,7 +61,7 @@
     <Compile Include="Core\IO\ArquivoMestreTeste.cs" />
     <Compile Include="Fixtures\ConfiguracaoIOFake.cs" />
     <Compile Include="Fixtures\ConteudoPaginaTesteHelper.cs" />
-    <Compile Include="Fixtures\PaginaTesteBuilder.cs" />
+    <Compile Include="Fixtures\QuadroTesteBuilder.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\BufferEmMemoriaTeste.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBufferTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

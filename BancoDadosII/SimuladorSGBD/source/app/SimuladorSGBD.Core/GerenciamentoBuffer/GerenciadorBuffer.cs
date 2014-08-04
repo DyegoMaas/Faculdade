@@ -28,7 +28,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             }
         }
         
-        public IPaginaEmMemoria CarregarPagina(int indice)
+        public IQuadro CarregarPagina(int indice)
         {
             var paginaBuffer = buffer.Obter(indice);
             if (paginaBuffer == null && BufferEstaCheio())
@@ -40,7 +40,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return pagina;
         }
 
-        public IPaginaEmMemoria LerPagina(int indice)
+        public IQuadro LerPagina(int indice)
         {
             var paginaBuffer = buffer.Obter(indice);
             if (paginaBuffer != null)
@@ -51,15 +51,15 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
 
         public void SalvarPagina(int indice)
         {
-            var pagina = buffer.Obter(indice);
-            arquivoMestre.SalvarPagina(indice, pagina);
+            var quadro = buffer.Obter(indice);
+            arquivoMestre.SalvarPagina(indice, quadro.Pagina);
         }
 
         public void AtualizarPagina(int indicePagina, char[] conteudo)
         {
-            var pagina = buffer.Obter(indicePagina);
-            pagina.Sujo = true;
-            pagina.Conteudo = conteudo;
+            var quadro = buffer.Obter(indicePagina);
+            quadro.Sujo = true;
+            quadro.Pagina.Conteudo = conteudo;
         }
         
         public IEnumerable<IResumoPagina> ListarPaginas()
@@ -67,15 +67,15 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return buffer.ListarPaginas();
         }
 
-        private PaginaEmMemoria CarregarPaginaDoDisco(int indice)
+        private Quadro CarregarPaginaDoDisco(int indice)
         {
-            var paginaEmMemoria = new PaginaEmMemoria(indice)
+            var quadro = new Quadro(indice)
             {
-                Conteudo = arquivoMestre.CarregarPagina(indice).Conteudo,
+                Pagina = arquivoMestre.CarregarPagina(indice),
                 PinCount = 0,
                 UltimoAcesso = 0
             };
-            return paginaEmMemoria;
+            return quadro;
         }
 
         private bool BufferEstaCheio()
@@ -83,9 +83,9 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return buffer.NumeroPaginasNoBuffer == configuracaoBuffer.LimiteDePaginasEmMemoria;
         }
 
-        private void ArmazenarNoBuffer(PaginaEmMemoria paginaEmMemoria)
+        private void ArmazenarNoBuffer(Quadro quadro)
         {
-            buffer.Armazenar(paginaEmMemoria);
+            buffer.Armazenar(quadro);
         }
     }
 }

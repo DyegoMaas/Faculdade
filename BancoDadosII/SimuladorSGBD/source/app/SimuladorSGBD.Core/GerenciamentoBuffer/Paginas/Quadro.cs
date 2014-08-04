@@ -1,15 +1,15 @@
 ﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer.Paginas
 {
-    internal class PaginaEmMemoria : IPaginaEmMemoria
+    internal class Quadro : IQuadro
     {
         private readonly int indiceNoDisco;
 
-        public PaginaEmMemoria(int indiceNoDisco)
+        public Quadro(int indiceNoDisco)
         {
             this.indiceNoDisco = indiceNoDisco;
         }
 
-        public char[] Conteudo { get; set; }
+        public IPagina Pagina { get; set; }
         public bool Sujo { get; set; }
         public int PinCount { get; set; }
         public int UltimoAcesso { get; set; }

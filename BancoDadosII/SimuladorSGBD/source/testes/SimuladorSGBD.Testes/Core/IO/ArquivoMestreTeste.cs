@@ -93,19 +93,19 @@ namespace SimuladorSGBD.Testes.Core.IO
             }
         }
 
-        private IPaginaComConteudo NovaPagina(int tamanho, char preenchidaCom)
+        private IPagina NovaPagina(int tamanho, char preenchidaCom)
         {
-            return new PaginaTesteBuilder().PreenchidoCom(tamanho, preenchidaCom).Construir();
+            return new QuadroTesteBuilder().PreenchidoCom(tamanho, preenchidaCom).Construir().Pagina;
         }
 
-        private void EscreverUmaPagina(StreamWriter streamWriter, IPaginaComConteudo pagina)
+        private void EscreverUmaPagina(StreamWriter streamWriter, IPagina pagina)
         {
             streamWriter.Write(pagina.Conteudo);
         }
 
         private static void APaginaDeveConterApenas(ArquivoMestre arquivoMestre, int indicePagina, char caractere)
         {
-            IPaginaComConteudo paginaUm = arquivoMestre.CarregarPagina(indicePagina);
+            IPagina paginaUm = arquivoMestre.CarregarPagina(indicePagina);
             foreach (var c in paginaUm.Conteudo)
             {
                 c.Should().Be(caractere);
