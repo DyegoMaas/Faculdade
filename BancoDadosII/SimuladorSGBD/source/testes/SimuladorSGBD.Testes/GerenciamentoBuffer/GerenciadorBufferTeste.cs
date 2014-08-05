@@ -121,18 +121,27 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         [Fact]
         public void lendo_uma_pagina_que_ja_esta_no_buffer()
         {
-            var paginaNoBuffer = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
+            var quadro = new QuadroTesteBuilder()
+                .NoIndice(IndiceUm).ComPinCount(0)
+                .Construir();
 
             var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
             var mockBuffer = new Mock<IPoolDeBuffers>();
-            mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(paginaNoBuffer);
+            mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(quadro);
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockArquivoMestre.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
-            var paginaRecuperada = gerenciadorBuffer.LerPagina(IndiceUm);
+            var quadroRecuperado = gerenciadorBuffer.LerPagina(IndiceUm);
 
-            paginaRecuperada.IndicePaginaNoDisco.Should().Be(paginaNoBuffer.IndicePaginaNoDisco);
+            quadroRecuperado.IndicePaginaNoDisco.Should().Be(quadro.IndicePaginaNoDisco);
             mockBuffer.Verify(b => b.Obter(IndiceUm), Times.Once);
             mockArquivoMestre.Verify(b => b.CarregarPagina(IndiceUm), Times.Never);
+
+            DeveIncrementarOPinCount(quadro:quadroRecuperado, pinCountAnterior:0);
+        }
+
+        private void DeveIncrementarOPinCount(IQuadro quadro, int pinCountAnterior)
+        {
+            quadro.PinCount.Should().Be(pinCountAnterior + 1, "o pincount deve ser incrementado ao ler uma pagina que ja esta no buffer");
         }
 
         [Fact]

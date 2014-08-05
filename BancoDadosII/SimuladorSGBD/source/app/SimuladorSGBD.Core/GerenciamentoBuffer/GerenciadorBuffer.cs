@@ -23,28 +23,33 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         {
             for (int indicePagina = 0; indicePagina < configuracaoBuffer.LimiteDePaginasEmMemoria; indicePagina++)
             {
-                var paginaCarregadaDoDisco = CarregarPaginaDoDisco(indicePagina);
-                buffer.Armazenar(paginaCarregadaDoDisco);
+                var pagina = CarregarPaginaDoDisco(indicePagina);
+                var quadro = MontarNovoQuadro(pagina, indicePagina);
+                buffer.Armazenar(quadro);
             }
         }
         
         public IQuadro CarregarPagina(int indice)
         {
-            var paginaBuffer = buffer.Obter(indice);
-            if (paginaBuffer == null && BufferEstaCheio())
+            var quadroBuffer = buffer.Obter(indice);
+            if (quadroBuffer == null && BufferEstaCheio())
                 throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
 
             var pagina = CarregarPaginaDoDisco(indice);
-            ArmazenarNoBuffer(pagina);
+            var quadro = MontarNovoQuadro(pagina, indice);
+            ArmazenarNoBuffer(quadro);
 
-            return pagina;
+            return quadro;
         }
 
         public IQuadro LerPagina(int indice)
         {
-            var paginaBuffer = buffer.Obter(indice);
-            if (paginaBuffer != null)
-                return paginaBuffer;
+            var quadroBuffer = buffer.Obter(indice);
+            if (quadroBuffer != null)
+            {
+                quadroBuffer.PinCount++;
+                return quadroBuffer;
+            }
 
             return CarregarPagina(indice);
         }
@@ -67,11 +72,16 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return buffer.ListarPaginas();
         }
 
-        private Quadro CarregarPaginaDoDisco(int indice)
+        private IPagina CarregarPaginaDoDisco(int indice)
         {
-            var quadro = new Quadro(indice)
+            return gerenciadorEspacoEmDisco.CarregarPagina(indice);
+        }
+
+        private Quadro MontarNovoQuadro(IPagina pagina, int indicePagina)
+        {
+            var quadro = new Quadro(indicePagina)
             {
-                Pagina = gerenciadorEspacoEmDisco.CarregarPagina(indice),
+                Pagina = pagina,
                 PinCount = 0,
                 UltimoAcesso = 0
             };
