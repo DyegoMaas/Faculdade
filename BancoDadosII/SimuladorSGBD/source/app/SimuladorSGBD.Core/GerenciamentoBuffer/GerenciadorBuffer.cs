@@ -28,19 +28,6 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
                 buffer.Armazenar(quadro);
             }
         }
-        
-        public IQuadro CarregarPagina(int indice)
-        {
-            var quadroBuffer = buffer.Obter(indice);
-            if (quadroBuffer == null && BufferEstaCheio())
-                throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
-
-            var pagina = CarregarPaginaDoDisco(indice);
-            var quadro = MontarNovoQuadro(pagina, indice);
-            ArmazenarNoBuffer(quadro);
-
-            return quadro;
-        }
 
         public IQuadro LerPagina(int indice)
         {
@@ -54,15 +41,28 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return CarregarPagina(indice);
         }
 
+        private IQuadro CarregarPagina(int indice)
+        {
+            var quadroBuffer = buffer.Obter(indice);
+            if (quadroBuffer == null && BufferEstaCheio())
+                throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
+
+            var pagina = CarregarPaginaDoDisco(indice);
+            var quadro = MontarNovoQuadro(pagina, indice);
+            ArmazenarNoBuffer(quadro);
+
+            return quadro;
+        }
+
         public void SalvarPagina(int indice)
         {
             var quadro = buffer.Obter(indice);
             gerenciadorEspacoEmDisco.SalvarPagina(indice, quadro.Pagina);
         }
 
-        public void AtualizarPagina(int indicePagina, char[] conteudo)
+        public void AtualizarPagina(int indice, char[] conteudo)
         {
-            var quadro = buffer.Obter(indicePagina);
+            var quadro = buffer.Obter(indice);
             quadro.Sujo = true;
             quadro.Pagina.Conteudo = conteudo;
         }

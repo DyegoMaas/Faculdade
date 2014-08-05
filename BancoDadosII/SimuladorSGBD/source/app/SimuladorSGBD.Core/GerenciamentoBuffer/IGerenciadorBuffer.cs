@@ -6,10 +6,9 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
     public interface IGerenciadorBuffer
     {
         void InicializarBuffer();
-        IQuadro CarregarPagina(int indice);
-        IQuadro LerPagina(int indicePagina);
+        IQuadro LerPagina(int indice);
         void SalvarPagina(int indice);
-        void AtualizarPagina(int indicePagina, char[] conteudo);
+        void AtualizarPagina(int indice, char[] conteudo);
         IEnumerable<IResumoPagina> ListarPaginas();
     }
 }
