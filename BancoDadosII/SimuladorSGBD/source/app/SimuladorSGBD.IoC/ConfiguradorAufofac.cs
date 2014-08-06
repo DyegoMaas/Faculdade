@@ -48,8 +48,18 @@ namespace SimuladorSGBD.IoC
                 LimiteDePaginasEmMemoria = 10
             }).As<IConfiguracaoBuffer>();
 
+            builder.RegisterType<LogicaSubstituicaoDummy>().As<ILogicaSubstituicao>();
+
             builder.RegisterType<GerenciadorBuffer>().As<IGerenciadorBuffer>().SingleInstance()
                 .OnActivating(e => e.Context.Resolve<IInicializadorArquivoMestre>().Inicializar());
+        }
+    }
+
+    internal class LogicaSubstituicaoDummy : ILogicaSubstituicao
+    {
+        public int Selecionar()
+        {
+            return 0;
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
+using System.Collections.Generic;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
@@ -21,17 +20,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             this.buffer = buffer;
             this.configuracaoBuffer = configuracaoBuffer;
         }
-
-        public void InicializarBuffer()
-        {
-            for (int indicePagina = 0; indicePagina < configuracaoBuffer.LimiteDePaginasEmMemoria; indicePagina++)
-            {
-                var pagina = CarregarPaginaDoDisco(indicePagina);
-                var quadro = MontarNovoQuadro(pagina, indicePagina);
-                buffer.Armazenar(quadro);
-            }
-        }
-
+        
         public IQuadro ObterPagina(int indice)
         {
             var quadroBuffer = buffer.Obter(indice);
@@ -41,14 +30,18 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
                 return quadroBuffer;
             }
 
-            var indiceParaSubstituir = logicaSubstituicao.Selecionar();
-            var quadroParaSubstituir = buffer.Obter(indiceParaSubstituir);
-            quadroParaSubstituir.PinCount++;
-            if(quadroParaSubstituir.Sujo)
+            if (BufferEstaCheio())
             {
-                gerenciadorEspacoEmDisco.SalvarPagina(quadroParaSubstituir.IndicePaginaNoDisco, quadroParaSubstituir.Pagina);
+                var indiceParaSubstituir = logicaSubstituicao.Selecionar();
+                var quadroParaSubstituir = buffer.Obter(indiceParaSubstituir);
+                quadroParaSubstituir.PinCount++;
+                if (quadroParaSubstituir.Sujo)
+                {
+                    gerenciadorEspacoEmDisco.SalvarPagina(quadroParaSubstituir.IndicePaginaNoDisco,
+                        quadroParaSubstituir.Pagina);
+                }
+                buffer.Remover(indiceParaSubstituir);
             }
-            buffer.Remover(indiceParaSubstituir);
 
             var pagina = CarregarPaginaDoDisco(indice);
             var quadro = MontarNovoQuadro(pagina, indice);
