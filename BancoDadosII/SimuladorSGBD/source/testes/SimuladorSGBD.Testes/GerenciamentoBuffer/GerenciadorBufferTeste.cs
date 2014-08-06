@@ -144,9 +144,8 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             if (quadroSubstituidoEstaSujo)
             {
                 mockGerenciadorDisco.Verify(b => b.SalvarPagina(IndiceZero, It.IsAny<IPagina>()), Times.Once);
-                mockBuffer.Verify(b => b.Remover(IndiceZero), Times.Once);
             }
-            
+            mockBuffer.Verify(b => b.Remover(IndiceZero), Times.Once);
             mockBuffer.Verify(b => b.Armazenar(It.Is<IQuadro>(p => p.IndicePaginaNoDisco == IndiceUm)), Times.Once);
         }
 
