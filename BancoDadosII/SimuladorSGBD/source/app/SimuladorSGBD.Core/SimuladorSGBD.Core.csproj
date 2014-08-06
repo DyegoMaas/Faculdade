@@ -45,6 +45,7 @@
     <Compile Include="GerenciamentoBuffer\Buffer\IPoolDeBuffers.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\IConfiguracaoBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\IGerenciadorBuffer.cs" />
+    <Compile Include="GerenciamentoBuffer\ILogicaSubstituicao.cs" />
     <Compile Include="GerenciamentoBuffer\Paginas\IQuadro.cs" />
     <Compile Include="GerenciamentoBuffer\Paginas\IResumoPagina.cs" />
     <Compile Include="GerenciamentoBuffer\Paginas\Quadro.cs" />

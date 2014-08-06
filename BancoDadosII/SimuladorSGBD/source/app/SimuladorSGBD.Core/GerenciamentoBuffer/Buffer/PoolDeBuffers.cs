@@ -13,9 +13,9 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
             get { return buffer.Count; }
         }
 
-        public void Armazenar(IQuadro pagina)
+        public void Armazenar(IQuadro quadro)
         {
-            buffer[pagina.IndicePaginaNoDisco] = pagina;
+            buffer[quadro.IndicePaginaNoDisco] = quadro;
         }
 
         public IQuadro Obter(int indicePagina)
@@ -25,7 +25,13 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
             return null;
         }
 
-        public IEnumerable<IResumoPagina> ListarPaginas()
+        public void Remover(int indicePagina)
+        {
+            if (buffer.ContainsKey(indicePagina))
+                buffer.Remove(indicePagina);
+        }
+
+        public IEnumerable<IResumoPagina> ListarQuadros()
         {
             return buffer.Values.Select(b => new ResumoPagina
             {

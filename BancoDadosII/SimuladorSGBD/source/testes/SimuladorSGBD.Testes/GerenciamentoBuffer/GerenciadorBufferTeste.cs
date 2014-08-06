@@ -19,20 +19,29 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         private const int IndiceUm = 1;
         private const int IndiceDois = 2;
 
+        readonly Mock<IGerenciadorEspacoEmDisco> mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
+        readonly Mock<IPoolDeBuffers> mockBuffer = new Mock<IPoolDeBuffers>();
+        readonly Mock<ILogicaSubstituicao> mockLogicaSubstituicao = new Mock<ILogicaSubstituicao>();
+        
         [Theory,
-        InlineData(0),
+        InlineData(1),
         InlineData(2),
         InlineData(10)]
         public void carregando_uma_pagina_para_o_buffer(int indicePagina)
         {
-            var mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
-            var mockBuffer = new Mock<IPoolDeBuffers>();
-
-            var quadroDisco = new QuadroTesteBuilder().PreenchidoCom(128, 'a').Construir();
+            var quadroDisco = new QuadroTesteBuilder().NoIndice(indicePagina).PreenchidoCom(128, 'a').Construir();
+            var quadroNoBuffer = new QuadroTesteBuilder().NoIndice(IndiceZero).PreenchidoCom(128, 'x').Construir();
             mockGerenciadorDisco.Setup(m => m.CarregarPagina(indicePagina)).Returns(quadroDisco.Pagina);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
-            IQuadro quadro = gerenciadorBuffer.LerPagina(indicePagina);
+            IQuadro quadro = null;
+            mockBuffer.Setup(b => b.Armazenar(It.IsAny<IQuadro>())).Callback<IQuadro>(q => quadro = q);
+            mockBuffer.Setup(b => b.Obter(IndiceZero)).Returns(quadroNoBuffer);
+
+            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, 
+                mockBuffer.Object, UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria: 1));
+            gerenciadorBuffer.ObterPagina(indicePagina);
+
+            APaginaDeveConterApenas(quadro, 'a');
             quadro.Pagina.Conteudo.Should().HaveSameCount(quadroDisco.Pagina.Conteudo);
             quadro.Sujo.Should().Be(false);
             quadro.PinCount.Should().Be(0);
@@ -40,19 +49,15 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             quadro.IndicePaginaNoDisco.Should().Be(indicePagina);
 
             mockGerenciadorDisco.Verify(m => m.CarregarPagina(indicePagina));
-            mockBuffer.Verify(buffer => buffer.Armazenar(It.Is<IQuadro>(p => p.IndicePaginaNoDisco == indicePagina)));
         }
 
         [Fact]
         public void salvando_uma_pagina_no_disco()
         {
-            var mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
-            var mockBuffer = new Mock<IPoolDeBuffers>();
-
             var quadroNoBuffer = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
             mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(quadroNoBuffer);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
+            var gerenciadorBuffer = DadoUmGerenciadorBufferCom(paginasNoBuffer: 1);
             gerenciadorBuffer.SalvarPagina(IndiceUm);
 
             mockBuffer.Verify(b => b.Obter(IndiceUm));
@@ -65,11 +70,10 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             const int tamanhoConteudo = 128;
 
-            var mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
             var buffer = new PoolDeBuffers();
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, buffer, UmaConfiguracaoDeBuffer(1));
+            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, buffer, UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria: 1));
 
-            var quadro = new QuadroTesteBuilder().PreenchidoCom(numeroCaracteres: tamanhoConteudo, caractere: 'a').Construir();
+            var quadro = new QuadroTesteBuilder().NoIndice(IndiceZero).PreenchidoCom(numeroCaracteres: tamanhoConteudo, caractere: 'a').Construir();
             mockGerenciadorDisco.Setup(a => a.CarregarPagina(IndiceZero)).Returns(quadro.Pagina);
             gerenciadorBuffer.InicializarBuffer();
 
@@ -87,12 +91,10 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
                 .NoIndice(IndiceUm).ComPinCount(0)
                 .Construir();
 
-            var mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
-            var mockBuffer = new Mock<IPoolDeBuffers>();
             mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(quadro);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
-            var quadroRecuperado = gerenciadorBuffer.LerPagina(IndiceUm);
+            var gerenciadorBuffer = DadoUmGerenciadorBufferCom(paginasNoBuffer: 1);
+            var quadroRecuperado = gerenciadorBuffer.ObterPagina(IndiceUm);
 
             quadroRecuperado.IndicePaginaNoDisco.Should().Be(quadro.IndicePaginaNoDisco);
             mockBuffer.Verify(b => b.Obter(IndiceUm), Times.Once);
@@ -101,39 +103,45 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             DeveIncrementarOPinCount(quadro:quadroRecuperado, pinCountAnterior:0);
         }
 
-        private void DeveIncrementarOPinCount(IQuadro quadro, int pinCountAnterior)
+        [Theory,
+        InlineData(true),
+        InlineData(false)]
+        public void lendo_uma_pagina_que_ainda_nao_esta_no_buffer(bool quadroSubstituidoEstaSujo)
         {
-            quadro.PinCount.Should().Be(pinCountAnterior + 1, "o pincount deve ser incrementado ao ler uma pagina que ja esta no buffer");
-        }
+            var quadroZeroSubstituir = new QuadroTesteBuilder().NoIndice(IndiceZero).Sujo(quadroSubstituidoEstaSujo).ComPinCount(1).Construir();
+            var quadroUm = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
 
-        [Fact]
-        public void lendo_uma_pagina_que_ainda_nao_esta_no_buffer()
-        {
-            var quadroNoDisco = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
+            mockGerenciadorDisco.Setup(a => a.CarregarPagina(IndiceUm)).Returns(quadroUm.Pagina);
+            mockBuffer.Setup(b => b.Obter(IndiceZero)).Returns(quadroZeroSubstituir);
+            mockLogicaSubstituicao.Setup(l => l.Selecionar()).Returns(IndiceZero);
 
-            var mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
-            mockGerenciadorDisco.Setup(a => a.CarregarPagina(IndiceUm)).Returns(quadroNoDisco.Pagina);
+            var gerenciadorBuffer = DadoUmGerenciadorBufferCom(paginasNoBuffer: 1);
+            var paginaRecuperada = gerenciadorBuffer.ObterPagina(IndiceUm);
 
-            var mockBuffer = new Mock<IPoolDeBuffers>();
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(1));
-            var paginaRecuperada = gerenciadorBuffer.LerPagina(IndiceUm);
 
-            var sequencia = new MockSequence();
-            mockBuffer.InSequence(sequencia).Setup(b => b.Obter(IndiceUm));
-            mockGerenciadorDisco.InSequence(sequencia).Setup(b => b.CarregarPagina(IndiceUm));
-            mockBuffer.InSequence(sequencia).Setup(b => b.Armazenar(It.Is<IQuadro>(p => p.IndicePaginaNoDisco == IndiceUm)));
+            mockBuffer.Verify(b => b.Obter(IndiceUm), Times.Once);
+            mockGerenciadorDisco.Verify(b => b.CarregarPagina(IndiceUm), Times.Once);
+            mockLogicaSubstituicao.Verify(l => l.Selecionar(), Times.Once);
+            DeveIncrementarOPinCount(quadro: quadroZeroSubstituir, pinCountAnterior: 1);
+
+            if (quadroSubstituidoEstaSujo)
+            {
+                mockGerenciadorDisco.Verify(b => b.SalvarPagina(IndiceZero, It.IsAny<IPagina>()), Times.Once);
+                mockBuffer.Verify(b => b.Remover(IndiceZero), Times.Once);
+            }
+            
+            mockBuffer.Verify(b => b.Armazenar(It.Is<IQuadro>(p => p.IndicePaginaNoDisco == IndiceUm)), Times.Once);
         }
 
         [Fact]
         public void listando_as_paginas_no_buffer()
         {
-            var mockBuffer = new Mock<IPoolDeBuffers>();
-            mockBuffer.Setup(b => b.ListarPaginas()).Returns(new IResumoPagina[2]);
+            mockBuffer.Setup(b => b.ListarQuadros()).Returns(new IResumoPagina[2]);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(new Mock<IGerenciadorEspacoEmDisco>().Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(3));
+            var gerenciadorBuffer = DadoUmGerenciadorBufferCom(paginasNoBuffer:3);
             IEnumerable<IResumoPagina> resumoBuffer = gerenciadorBuffer.ListarPaginas();
 
-            mockBuffer.Verify(b => b.ListarPaginas());
+            mockBuffer.Verify(b => b.ListarQuadros());
             resumoBuffer.Should().HaveCount(2, "deveria listar os três itens do buffer");
         }
 
@@ -142,23 +150,20 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         {
             const int numeroPaginasNoCarregadas = 10;
 
-            var mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
             for (int i = 0; i < numeroPaginasNoCarregadas; i++)
             {
                 mockGerenciadorDisco.Setup(a => a.CarregarPagina(i)).Returns(new QuadroTesteBuilder().Construir().Pagina);
             }
 
-            var mockBuffer = new Mock<IPoolDeBuffers>();
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(numeroPaginasNoCarregadas));
+            var gerenciadorBuffer = DadoUmGerenciadorBufferCom(numeroPaginasNoCarregadas);
             gerenciadorBuffer.InicializarBuffer();
 
             mockBuffer.Verify(buffer => buffer.Armazenar(It.IsAny<IQuadro>()), Times.Exactly(numeroPaginasNoCarregadas));
         }
 
-        private static void DadoQueExisteUmaPaginaEmDiscoNoIndice(Mock<IGerenciadorEspacoEmDisco> mockGerenciadorDisco, int indicePagina)
+        private GerenciadorBuffer DadoUmGerenciadorBufferCom(int paginasNoBuffer)
         {
-            mockGerenciadorDisco.Setup(buffer => buffer.CarregarPagina(indicePagina))
-                .Returns(new QuadroTesteBuilder().NoIndice(indicePagina).Construir().Pagina);
+            return new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(paginasNoBuffer));
         }
 
         private IConfiguracaoBuffer UmaConfiguracaoDeBuffer(int limiteDePaginasEmMemoria)
@@ -175,6 +180,11 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             {
                 c.Should().Be(caractere);
             }
+        }
+
+        private void DeveIncrementarOPinCount(IQuadro quadro, int pinCountAnterior)
+        {
+            quadro.PinCount.Should().Be(pinCountAnterior + 1, "o pincount deve ser incrementado ao ler uma pagina que ja esta no buffer");
         }
     }
 }

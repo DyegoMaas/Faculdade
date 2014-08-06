@@ -8,12 +8,15 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
     public class GerenciadorBuffer : IGerenciadorBuffer
     {
+        private readonly ILogicaSubstituicao logicaSubstituicao;
         private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
         private readonly IPoolDeBuffers buffer;
         private readonly IConfiguracaoBuffer configuracaoBuffer;
-
-        public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
+        
+        public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, ILogicaSubstituicao logicaSubstituicao, 
+            IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
         {
+            this.logicaSubstituicao = logicaSubstituicao;
             this.gerenciadorEspacoEmDisco = gerenciadorEspacoEmDisco;
             this.buffer = buffer;
             this.configuracaoBuffer = configuracaoBuffer;
@@ -29,7 +32,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             }
         }
 
-        public IQuadro LerPagina(int indice)
+        public IQuadro ObterPagina(int indice)
         {
             var quadroBuffer = buffer.Obter(indice);
             if (quadroBuffer != null)
@@ -38,14 +41,14 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
                 return quadroBuffer;
             }
 
-            return CarregarPagina(indice);
-        }
-
-        private IQuadro CarregarPagina(int indice)
-        {
-            var quadroBuffer = buffer.Obter(indice);
-            if (quadroBuffer == null && BufferEstaCheio())
-                throw new InvalidOperationException("Não é possível carregar novas páginas ao buffer. O buffer está cheio.");
+            var indiceParaSubstituir = logicaSubstituicao.Selecionar();
+            var quadroParaSubstituir = buffer.Obter(indiceParaSubstituir);
+            quadroParaSubstituir.PinCount++;
+            if(quadroParaSubstituir.Sujo)
+            {
+                gerenciadorEspacoEmDisco.SalvarPagina(quadroParaSubstituir.IndicePaginaNoDisco, quadroParaSubstituir.Pagina);
+            }
+            buffer.Remover(indiceParaSubstituir);
 
             var pagina = CarregarPaginaDoDisco(indice);
             var quadro = MontarNovoQuadro(pagina, indice);
@@ -66,12 +69,12 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             quadro.Sujo = true;
             quadro.Pagina.Conteudo = conteudo;
         }
-        
+
         public IEnumerable<IResumoPagina> ListarPaginas()
         {
-            return buffer.ListarPaginas();
+            return buffer.ListarQuadros();
         }
-
+        
         private IPagina CarregarPaginaDoDisco(int indice)
         {
             return gerenciadorEspacoEmDisco.CarregarPagina(indice);

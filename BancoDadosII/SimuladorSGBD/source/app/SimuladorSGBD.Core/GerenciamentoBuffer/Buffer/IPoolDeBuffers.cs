@@ -6,8 +6,9 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
     public interface IPoolDeBuffers
     {
         int NumeroPaginasNoBuffer { get; }
-        void Armazenar(IQuadro pagina);
+        void Armazenar(IQuadro quadro);
         IQuadro Obter(int indicePagina);
-        IEnumerable<IResumoPagina> ListarPaginas();
+        IEnumerable<IResumoPagina> ListarQuadros();
+        void Remover(int indicePagina);
     }
 }

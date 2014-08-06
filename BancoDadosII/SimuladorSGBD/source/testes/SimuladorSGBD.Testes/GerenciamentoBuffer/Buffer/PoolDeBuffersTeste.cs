@@ -16,36 +16,36 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
         [Fact]
         public void armazenando_uma_pagina_no_buffer_e_recuperando_a_pagina()
         {
-            var paginaArmazenada = new QuadroTesteBuilder().Construir();
+            var quadroArmazenado = new QuadroTesteBuilder().Construir();
 
             IPoolDeBuffers buffer = new PoolDeBuffers();
-            buffer.Armazenar(paginaArmazenada);
+            buffer.Armazenar(quadroArmazenado);
 
-            var paginaRecuperada = buffer.Obter(paginaArmazenada.IndicePaginaNoDisco);
-            paginaRecuperada.Should().Be(paginaArmazenada);
+            var quadroRecuperado = buffer.Obter(quadroArmazenado.IndicePaginaNoDisco);
+            quadroRecuperado.Should().Be(quadroArmazenado);
         }
 
         [Fact]
         public void sobrescrevendo_paginas_de_mesmo_indice_no_buffer()
         {
-            var paginaOriginal = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
-            var novaPagina = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
+            var quadroOriginal = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
+            var novoQuadro = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
 
             var buffer = new PoolDeBuffers();
-            buffer.Armazenar(paginaOriginal);
-            buffer.Armazenar(novaPagina);
+            buffer.Armazenar(quadroOriginal);
+            buffer.Armazenar(novoQuadro);
 
             var paginaRecuperada = buffer.Obter(IndiceUm);
-            paginaRecuperada.Should().Be(novaPagina);
+            paginaRecuperada.Should().Be(novoQuadro);
         }
 
         [Fact]
         public void retorna_nulo_ao_obter_uma_pagina_inexistente()
         {
             var buffer = DadoUmBufferVazio();
-            var paginaRecuperada = buffer.Obter(0);
+            var quadroRecuperado = buffer.Obter(0);
 
-            paginaRecuperada.Should().BeNull();
+            quadroRecuperado.Should().BeNull();
         }
 
         [Theory]
@@ -67,7 +67,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
         [Fact]
         public void listando_as_paginas_no_buffer()
         {
-            var paginasNoBuffer = new[]
+            var quadrosNoBuffer = new[]
             {
                 new QuadroTesteBuilder().NoIndice(IndiceZero).Construir(),
                 new QuadroTesteBuilder().NoIndice(IndiceUm).Sujo().Construir(),
@@ -75,21 +75,32 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
             }.ToList();
 
             var buffer = new PoolDeBuffers();
-            paginasNoBuffer.ForEach(buffer.Armazenar);
+            quadrosNoBuffer.ForEach(buffer.Armazenar);
 
-            var resumosPaginas = buffer.ListarPaginas().ToArray();
-            resumosPaginas.Should().HaveSameCount(paginasNoBuffer);
+            var resumosQuadros = buffer.ListarQuadros().ToArray();
+            resumosQuadros.Should().HaveSameCount(quadrosNoBuffer);
 
-            for (var i = 0; i < resumosPaginas.Length; i++)
+            for (var i = 0; i < resumosQuadros.Length; i++)
             {
-                var resumo = resumosPaginas[i];
-                var paginaNoBuffer = paginasNoBuffer[i];
+                var resumo = resumosQuadros[i];
+                var quadroNoBuffer = quadrosNoBuffer[i];
 
-                resumo.Conteudo.Should().BeSameAs(paginaNoBuffer.Pagina.Conteudo);
-                resumo.IndiceNoDisco.Should().Be(paginaNoBuffer.IndicePaginaNoDisco);
-                resumo.PinCount.Should().Be(paginaNoBuffer.PinCount);
-                resumo.Sujo.Should().Be(paginaNoBuffer.Sujo);
+                resumo.Conteudo.Should().BeSameAs(quadroNoBuffer.Pagina.Conteudo);
+                resumo.IndiceNoDisco.Should().Be(quadroNoBuffer.IndicePaginaNoDisco);
+                resumo.PinCount.Should().Be(quadroNoBuffer.PinCount);
+                resumo.Sujo.Should().Be(quadroNoBuffer.Sujo);
             }
+        }
+
+        [Fact]
+        public void excluindo_um_quadro_do_buffer()
+        {
+            var buffer = new PoolDeBuffers();
+
+            var quadro = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
+            buffer.Armazenar(quadro);
+            buffer.Remover(IndiceUm);
+            buffer.Obter(IndiceUm).Should().BeNull("deveria ter excluido o quadro");
         }
         
         private static PoolDeBuffers DadoUmBufferVazio()

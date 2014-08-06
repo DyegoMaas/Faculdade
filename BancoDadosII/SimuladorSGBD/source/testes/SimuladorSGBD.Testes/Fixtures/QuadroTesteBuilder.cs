@@ -35,9 +35,9 @@ namespace SimuladorSGBD.Testes.Fixtures
             return this;
         }
 
-        public QuadroTesteBuilder Sujo()
+        public QuadroTesteBuilder Sujo(bool sujo = true)
         {
-            this.sujo = true;
+            this.sujo = sujo;
             return this;
         }
 
