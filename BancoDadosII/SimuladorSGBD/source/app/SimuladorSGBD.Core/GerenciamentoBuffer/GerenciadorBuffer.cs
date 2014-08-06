@@ -57,6 +57,15 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             return quadro;
         }
 
+        public void LiberarPagina(int indice, bool paginaFoiAlterada)
+        {
+            var quadro = buffer.Obter(indice);
+            quadro.PinCount--;
+
+            if (paginaFoiAlterada)
+                quadro.Sujo = true;
+        }
+
         public void SalvarPagina(int indice)
         {
             var quadro = buffer.Obter(indice);
@@ -74,7 +83,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         {
             return buffer.ListarQuadros();
         }
-        
+
         private IPagina CarregarPaginaDoDisco(int indice)
         {
             return gerenciadorEspacoEmDisco.CarregarPagina(indice);

@@ -85,7 +85,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         }
         
         [Fact]
-        public void lendo_uma_pagina_que_ja_esta_no_buffer()
+        public void obtendo_uma_pagina_que_ja_esta_no_buffer()
         {
             var quadro = new QuadroTesteBuilder()
                 .NoIndice(IndiceUm).ComPinCount(0)
@@ -106,7 +106,24 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         [Theory,
         InlineData(true),
         InlineData(false)]
-        public void lendo_uma_pagina_que_ainda_nao_esta_no_buffer(bool quadroSubstituidoEstaSujo)
+        public void liberando_uma_pagina(bool paginaFoiAlterada)
+        {
+            var quadro = new QuadroTesteBuilder()
+                .NoIndice(IndiceUm).ComPinCount(1)
+                .Construir();
+
+            mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(quadro);
+            var gerenciadorBuffer = DadoUmGerenciadorBufferCom(paginasNoBuffer: 1);
+            gerenciadorBuffer.LiberarPagina(IndiceUm, paginaFoiAlterada);
+
+            DeveDecrementarOPinCount(quadro: quadro, pinCountAnterior: 1);
+            quadro.Sujo.Should().Be(paginaFoiAlterada);
+        }
+
+        [Theory,
+        InlineData(true),
+        InlineData(false)]
+        public void obtendo_uma_pagina_que_ainda_nao_esta_no_buffer(bool quadroSubstituidoEstaSujo)
         {
             var quadroZeroSubstituir = new QuadroTesteBuilder().NoIndice(IndiceZero).Sujo(quadroSubstituidoEstaSujo).ComPinCount(1).Construir();
             var quadroUm = new QuadroTesteBuilder().NoIndice(IndiceUm).Construir();
@@ -184,7 +201,12 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
         private void DeveIncrementarOPinCount(IQuadro quadro, int pinCountAnterior)
         {
-            quadro.PinCount.Should().Be(pinCountAnterior + 1, "o pincount deve ser incrementado ao ler uma pagina que ja esta no buffer");
+            quadro.PinCount.Should().Be(pinCountAnterior + 1, "o pincount deve ser incrementado");
+        }
+
+        private void DeveDecrementarOPinCount(IQuadro quadro, int pinCountAnterior)
+        {
+            quadro.PinCount.Should().Be(pinCountAnterior - 1, "o pincount deve ser decrementado ao liberar uma pagina");
         }
     }
 }
