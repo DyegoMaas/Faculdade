@@ -62,6 +62,7 @@
     <Compile Include="Fixtures\ConfiguracaoIOFake.cs" />
     <Compile Include="Fixtures\ConteudoPaginaTesteHelper.cs" />
     <Compile Include="Fixtures\QuadroTesteBuilder.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LeastRecentlyUsedTeste.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\PoolDeBuffersTeste.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBufferTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
