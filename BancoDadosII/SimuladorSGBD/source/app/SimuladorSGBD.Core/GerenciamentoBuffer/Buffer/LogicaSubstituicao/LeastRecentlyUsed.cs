@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao
 {

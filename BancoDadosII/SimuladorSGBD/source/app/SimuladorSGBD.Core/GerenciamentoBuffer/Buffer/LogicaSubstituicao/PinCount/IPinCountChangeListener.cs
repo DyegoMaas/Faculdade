@@ -1,5 +1,5 @@
 ﻿
-namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
+namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount
 {
     public interface IPinCountChangeListener
     {
