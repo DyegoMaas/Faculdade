@@ -13,7 +13,7 @@ namespace SimuladorSGBD.Testes.Core
             var mockArquivoMestre = new Mock<IGerenciadorEspacoEmDisco>();
 
             var inicializadorArquivoMaster = new InicializadorArquivoMestre(mockArquivoMestre.Object);
-            inicializadorArquivoMaster.Inicializar();
+            inicializadorArquivoMaster.Inicializar(blocos:20, bytes:128);
 
             mockArquivoMestre.Verify(m => m.CriarArquivoSeNaoExiste(It.IsAny<int>(), It.IsAny<int>()), Times.Once, "deveria ter criado o arquivo principal");
         }
@@ -25,7 +25,7 @@ namespace SimuladorSGBD.Testes.Core
             mockArquivoMestre.SetupGet(m => m.ExisteNoDisco).Returns(false);
 
             var inicializadorArquivoMaster = new InicializadorArquivoMestre(mockArquivoMestre.Object);
-            inicializadorArquivoMaster.Inicializar();
+            inicializadorArquivoMaster.Inicializar(blocos: 20, bytes: 128);
 
             mockArquivoMestre.Verify(m => m.CriarArquivoSeNaoExiste(20, 128), Times.Once, "deveria ter criado 20 blocos de 128 bytes");
         }

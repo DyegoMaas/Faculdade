@@ -49,10 +49,10 @@ namespace SimuladorSGBD.IoC
                 LimiteDePaginasEmMemoria = 10
             }).As<IConfiguracaoBuffer>();
 
-            builder.RegisterType<LeastRecentlyUsed>().As<ILogicaSubstituicao>();
+            builder.RegisterType<LogicaSubstituicaoFactory>().As<ILogicaSubstituicaoFactory>();
 
             builder.RegisterType<GerenciadorBuffer>().As<IGerenciadorBuffer>().SingleInstance()
-                .OnActivating(e => e.Context.Resolve<IInicializadorArquivoMestre>().Inicializar());
+                .OnActivating(e => e.Context.Resolve<IInicializadorArquivoMestre>().Inicializar(blocos:20, bytes:128));
         }
     }
 }

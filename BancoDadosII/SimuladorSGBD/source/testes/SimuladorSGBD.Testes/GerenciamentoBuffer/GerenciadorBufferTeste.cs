@@ -5,6 +5,7 @@ using Moq;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
@@ -18,13 +19,18 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
     {
         private const int IndiceZero = 0;
         private const int IndiceUm = 1;
-        private const int IndiceDois = 2;
 
         readonly Mock<IGerenciadorEspacoEmDisco> mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
         readonly Mock<IPoolDeBuffers> mockBuffer = new Mock<IPoolDeBuffers>();
         readonly Mock<ILogicaSubstituicao> mockLogicaSubstituicao = new Mock<ILogicaSubstituicao>();
+        readonly Mock<ILogicaSubstituicaoFactory> mockLogicaSubstituicaoFactory = new Mock<ILogicaSubstituicaoFactory>();
         readonly Mock<IPinCountChangeListener> mockPinCountChangeListener = new Mock<IPinCountChangeListener>();
-        
+
+        public GerenciadorBufferTeste()
+        {
+            mockLogicaSubstituicaoFactory.Setup(f => f.LRU()).Returns(mockLogicaSubstituicao.Object);
+        }
+
         [Theory,
         InlineData(1),
         InlineData(2),
@@ -39,7 +45,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             mockBuffer.Setup(b => b.Armazenar(It.IsAny<IQuadro>())).Callback<IQuadro>(q => quadro = q);
             mockBuffer.Setup(b => b.Obter(IndiceZero)).Returns(quadroNoBuffer);
 
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, 
+            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicaoFactory.Object, 
                 mockBuffer.Object, UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria: 1));
             gerenciadorBuffer.ObterPagina(indicePagina);
 
@@ -73,7 +79,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             const int tamanhoConteudo = 128;
 
             var buffer = new PoolDeBuffers();
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, buffer, UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria: 1));
+            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicaoFactory.Object, buffer, UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria: 1));
 
             var quadro = new QuadroTesteBuilder().NoIndice(IndiceZero).PreenchidoCom(numeroCaracteres: tamanhoConteudo, caractere: 'a').Construir();
             mockGerenciadorDisco.Setup(a => a.CarregarPagina(IndiceZero)).Returns(quadro.Pagina);
@@ -182,7 +188,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
         private GerenciadorBuffer DadoUmGerenciadorBufferCom(int limitePaginasNoBuffer)
         {
-            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(limitePaginasNoBuffer));
+            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicaoFactory.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(limitePaginasNoBuffer));
             gerenciadorBuffer.Registrar(mockPinCountChangeListener.Object);
 
             return gerenciadorBuffer;

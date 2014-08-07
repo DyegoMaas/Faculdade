@@ -2,6 +2,6 @@
 {
     public interface IInicializadorArquivoMestre
     {
-        void Inicializar();
+        void Inicializar(int blocos, int bytes);
     }
 }

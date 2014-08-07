@@ -11,9 +11,9 @@ namespace SimuladorSGBD.Core
             this.gerenciadorEspacoEmDisco = gerenciadorEspacoEmDisco;
         }
 
-        public void Inicializar()
+        public void Inicializar(int blocos, int bytes)
         {
-            gerenciadorEspacoEmDisco.CriarArquivoSeNaoExiste(blocos: 20, bytes: 128);
+            gerenciadorEspacoEmDisco.CriarArquivoSeNaoExiste(blocos, bytes);
         }
     }
 }

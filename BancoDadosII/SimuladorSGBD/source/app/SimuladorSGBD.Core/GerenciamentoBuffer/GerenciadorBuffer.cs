@@ -1,4 +1,5 @@
 ﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
@@ -8,13 +9,13 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
     public class GerenciadorBuffer : IGerenciadorBuffer, IPinCountSubject
     {
-        private readonly ILogicaSubstituicao logicaSubstituicao;
+        private readonly ILogicaSubstituicaoFactory logicaSubstituicao;
         private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
         private readonly IPoolDeBuffers buffer;
         private readonly IConfiguracaoBuffer configuracaoBuffer;
         private readonly List<IPinCountChangeListener> pinCountChangeListeners = new List<IPinCountChangeListener>();
         
-        public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, ILogicaSubstituicao logicaSubstituicao, 
+        public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, ILogicaSubstituicaoFactory logicaSubstituicao, 
             IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
         {
             this.logicaSubstituicao = logicaSubstituicao;
@@ -34,7 +35,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
 
             if (BufferEstaCheio())
             {
-                var indiceParaSubstituir = logicaSubstituicao.Selecionar();
+                var indiceParaSubstituir = logicaSubstituicao.LRU().Selecionar();
                 var quadroParaSubstituir = buffer.Obter(indiceParaSubstituir);
                 IncrementarPinCount(quadroParaSubstituir);
                 if (quadroParaSubstituir.Sujo)
