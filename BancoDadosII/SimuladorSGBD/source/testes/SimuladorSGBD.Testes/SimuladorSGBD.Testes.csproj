@@ -63,6 +63,7 @@
     <Compile Include="Fixtures\ConteudoPaginaTesteHelper.cs" />
     <Compile Include="Fixtures\QuadroTesteBuilder.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LeastRecentlyUsedTeste.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LogicaSubstituicaoFactoryTeste.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\MostRecentlyUsedTeste.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\PoolDeBuffersTeste.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBufferTeste.cs" />
