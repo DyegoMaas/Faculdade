@@ -1,10 +1,28 @@
-﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao
+﻿using System.Collections.Generic;
+using System.Linq;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
+
+namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao
 {
-    public class MostRecentlyUsed : ILogicaSubstituicao
+    public class MostRecentlyUsed : ILogicaSubstituicao, IPinCountChangeListener
     {
+        private readonly Stack<int> quadrosDisponiveisSubstituicao = new Stack<int>();
+
         public int Selecionar()
         {
-            throw new System.NotImplementedException();
+            if (quadrosDisponiveisSubstituicao.Any())
+                return quadrosDisponiveisSubstituicao.Pop();
+            return -1;
+        }
+
+        public void NotificarIncrementoPinCount(int indice, int novoPinCount)
+        {
+        }
+
+        public void NotificarDecrementoPinCount(int indice, int novoPinCount)
+        {
+            if (novoPinCount == 0)
+                quadrosDisponiveisSubstituicao.Push(indice);
         }
     }
 }
