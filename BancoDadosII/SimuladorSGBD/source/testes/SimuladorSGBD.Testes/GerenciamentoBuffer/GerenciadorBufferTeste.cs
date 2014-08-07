@@ -5,6 +5,7 @@ using Moq;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
 using SimuladorSGBD.Testes.Fixtures;
@@ -22,6 +23,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         readonly Mock<IGerenciadorEspacoEmDisco> mockGerenciadorDisco = new Mock<IGerenciadorEspacoEmDisco>();
         readonly Mock<IPoolDeBuffers> mockBuffer = new Mock<IPoolDeBuffers>();
         readonly Mock<ILogicaSubstituicao> mockLogicaSubstituicao = new Mock<ILogicaSubstituicao>();
+        readonly Mock<IPinCountChangeListener> mockPinCountChangeListener = new Mock<IPinCountChangeListener>();
         
         [Theory,
         InlineData(1),
@@ -180,7 +182,10 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
         private GerenciadorBuffer DadoUmGerenciadorBufferCom(int limitePaginasNoBuffer)
         {
-            return new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(limitePaginasNoBuffer));
+            var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicao.Object, mockBuffer.Object, UmaConfiguracaoDeBuffer(limitePaginasNoBuffer));
+            gerenciadorBuffer.Registrar(mockPinCountChangeListener.Object);
+
+            return gerenciadorBuffer;
         }
 
         private IConfiguracaoBuffer UmaConfiguracaoDeBuffer(int limiteDePaginasEmMemoria)
@@ -201,12 +206,16 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
         private void DeveIncrementarOPinCount(IQuadro quadro, int pinCountAnterior)
         {
-            quadro.PinCount.Should().Be(pinCountAnterior + 1, "o pincount deve ser incrementado");
+            var novoPinCount = pinCountAnterior + 1;
+            quadro.PinCount.Should().Be(novoPinCount, "o pincount deve ser incrementado");
+            mockPinCountChangeListener.Verify(l => l.NotificarIncrementoPinCount(quadro.IndicePaginaNoDisco, novoPinCount), Times.Once());
         }
 
         private void DeveDecrementarOPinCount(IQuadro quadro, int pinCountAnterior)
         {
-            quadro.PinCount.Should().Be(pinCountAnterior - 1, "o pincount deve ser decrementado ao liberar uma pagina");
+            var novoPinCount = pinCountAnterior - 1;
+            quadro.PinCount.Should().Be(novoPinCount, "o pincount deve ser decrementado ao liberar uma pagina");
+            mockPinCountChangeListener.Verify(l => l.NotificarDecrementoPinCount(quadro.IndicePaginaNoDisco, novoPinCount), Times.Once());
         }
 
         private void NaoDeveAlterarOPinCount(IQuadro quadro, int pinCountAnterior)

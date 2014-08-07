@@ -1,16 +1,18 @@
 ﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
 using System.Collections.Generic;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public class GerenciadorBuffer : IGerenciadorBuffer
+    public class GerenciadorBuffer : IGerenciadorBuffer, IPinCountSubject
     {
         private readonly ILogicaSubstituicao logicaSubstituicao;
         private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
         private readonly IPoolDeBuffers buffer;
         private readonly IConfiguracaoBuffer configuracaoBuffer;
+        private readonly List<IPinCountChangeListener> pinCountChangeListeners = new List<IPinCountChangeListener>();
         
         public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, ILogicaSubstituicao logicaSubstituicao, 
             IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
@@ -26,7 +28,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             var quadroBuffer = buffer.Obter(indice);
             if (quadroBuffer != null)
             {
-                quadroBuffer.PinCount++;
+                IncrementarPinCount(quadroBuffer);
                 return quadroBuffer;
             }
 
@@ -34,7 +36,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             {
                 var indiceParaSubstituir = logicaSubstituicao.Selecionar();
                 var quadroParaSubstituir = buffer.Obter(indiceParaSubstituir);
-                quadroParaSubstituir.PinCount++;
+                IncrementarPinCount(quadroParaSubstituir);
                 if (quadroParaSubstituir.Sujo)
                 {
                     gerenciadorEspacoEmDisco.SalvarPagina(quadroParaSubstituir.IndicePaginaNoDisco,
@@ -53,7 +55,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         public void LiberarPagina(int indice, bool paginaFoiAlterada)
         {
             var quadro = buffer.Obter(indice);
-            quadro.PinCount--;
+            DecrementarPinCount(quadro);
 
             if (paginaFoiAlterada)
                 quadro.Sujo = true;
@@ -101,6 +103,23 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         private void ArmazenarNoBuffer(Quadro quadro)
         {
             buffer.Armazenar(quadro);
+        }
+
+        public void Registrar(IPinCountChangeListener pinCountChangeListener)
+        {
+            pinCountChangeListeners.Add(pinCountChangeListener);
+        }
+
+        private void IncrementarPinCount(IQuadro quadro)
+        {
+            quadro.PinCount++;
+            pinCountChangeListeners.ForEach(l => l.NotificarIncrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
+        }
+
+        private void DecrementarPinCount(IQuadro quadro)
+        {
+            quadro.PinCount--;
+            pinCountChangeListeners.ForEach(l => l.NotificarDecrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
         }
     }
 }
