@@ -4,6 +4,7 @@ using Microsoft.Practices.ServiceLocation;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao;
 using SimuladorSGBD.Core.IO;
 using System;
 using System.IO;
@@ -48,18 +49,10 @@ namespace SimuladorSGBD.IoC
                 LimiteDePaginasEmMemoria = 10
             }).As<IConfiguracaoBuffer>();
 
-            builder.RegisterType<LogicaSubstituicaoDummy>().As<ILogicaSubstituicao>();
+            builder.RegisterType<LeastRecentlyUsed>().As<ILogicaSubstituicao>();
 
             builder.RegisterType<GerenciadorBuffer>().As<IGerenciadorBuffer>().SingleInstance()
                 .OnActivating(e => e.Context.Resolve<IInicializadorArquivoMestre>().Inicializar());
-        }
-    }
-
-    internal class LogicaSubstituicaoDummy : ILogicaSubstituicao
-    {
-        public int Selecionar()
-        {
-            return 0;
         }
     }
 }
