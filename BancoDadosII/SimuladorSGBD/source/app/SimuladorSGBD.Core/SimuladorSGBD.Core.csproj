@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GerenciamentoBuffer\Buffer\IBufferContainer.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\ILogicaSubstituicaoFactory.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LogicaSubstituicaoFactory.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\PinCount\IPinCountChangeListener.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LeastRecentlyUsed.cs" />

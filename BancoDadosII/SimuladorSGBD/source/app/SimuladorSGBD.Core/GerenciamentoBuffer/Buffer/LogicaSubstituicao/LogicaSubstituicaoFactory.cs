@@ -2,7 +2,8 @@
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao
 {
-    public class LogicaSubstituicaoFactory {
+    public class LogicaSubstituicaoFactory : ILogicaSubstituicaoFactory
+    {
         private readonly Lazy<ILogicaSubstituicao> lru = new Lazy<ILogicaSubstituicao>(() => new LeastRecentlyUsed());
         private readonly Lazy<ILogicaSubstituicao> mru = new Lazy<ILogicaSubstituicao>(() => new MostRecentlyUsed());
 
