@@ -4,7 +4,7 @@ using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao
 {
-    public class MostRecentlyUsed : ILogicaSubstituicao, IPinCountChangeListener
+    public class MostRecentlyUsed : ILogicaSubstituicao, IPinCountChangeObserver
     {
         private readonly Stack<int> quadrosDisponiveisSubstituicao = new Stack<int>();
 

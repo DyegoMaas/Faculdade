@@ -24,7 +24,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
         readonly Mock<IPoolDeBuffers> mockBuffer = new Mock<IPoolDeBuffers>();
         readonly Mock<ILogicaSubstituicao> mockLogicaSubstituicao = new Mock<ILogicaSubstituicao>();
         readonly Mock<ILogicaSubstituicaoFactory> mockLogicaSubstituicaoFactory = new Mock<ILogicaSubstituicaoFactory>();
-        readonly Mock<IPinCountChangeListener> mockPinCountChangeListener = new Mock<IPinCountChangeListener>();
+        readonly Mock<IPinCountChangeObserver> mockPinCountChangeListener = new Mock<IPinCountChangeObserver>();
 
         public GerenciadorBufferTeste()
         {
@@ -184,6 +184,21 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
             mockBuffer.Verify(b => b.ListarQuadros());
             resumoBuffer.Should().HaveCount(2, "deveria listar os três itens do buffer");
+        }
+
+        [Fact]
+        public void notificando_os_observers_de_alteracoes_no_buffer()
+        {
+            mockBuffer.Setup(b => b.Obter(It.IsAny<int>()))
+                .Returns(new QuadroTesteBuilder().NoIndice(IndiceUm).ComPinCount(0).Construir());
+
+            var mockBufferChangeObserver = new Mock<IBufferChangeObserver>();
+            var gerenciadorBuffer = DadoUmGerenciadorBufferCom(limitePaginasNoBuffer: 1);
+            gerenciadorBuffer.Registrar(mockBufferChangeObserver.Object);
+
+            gerenciadorBuffer.AtualizarPagina(0, new String('x', 128).ToCharArray());
+
+            mockBufferChangeObserver.Verify(o => o.NotificarAlteracaoBuffer(), Times.Once());
         }
 
         private GerenciadorBuffer DadoUmGerenciadorBufferCom(int limitePaginasNoBuffer)

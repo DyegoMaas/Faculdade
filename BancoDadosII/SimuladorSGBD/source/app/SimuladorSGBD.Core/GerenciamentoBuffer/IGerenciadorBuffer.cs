@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
+using System.Collections.Generic;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
@@ -9,5 +10,6 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         void SalvarPagina(int indice);
         void AtualizarPagina(int indice, char[] conteudo);
         IEnumerable<IResumoPagina> ListarPaginas();
+        void Registrar(IBufferChangeObserver observer);
     }
 }

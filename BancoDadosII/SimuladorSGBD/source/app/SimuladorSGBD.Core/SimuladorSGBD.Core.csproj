@@ -39,10 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GerenciamentoBuffer\Buffer\IBufferChangeSubject.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\IBufferContainer.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\ILogicaSubstituicaoFactory.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LogicaSubstituicaoFactory.cs" />
-    <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\PinCount\IPinCountChangeListener.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\PinCount\IPinCountChangeObserver.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LeastRecentlyUsed.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\MostRecentlyUsed.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\PinCount\IPinCountSubject.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="GerenciamentoBuffer\GerenciadorBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\IPoolDeBuffers.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\IConfiguracaoBuffer.cs" />
+    <Compile Include="GerenciamentoBuffer\Buffer\IBufferChangeObserver.cs" />
     <Compile Include="GerenciamentoBuffer\IGerenciadorBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\ILogicaSubstituicao.cs" />
     <Compile Include="GerenciamentoBuffer\Paginas\IQuadro.cs" />

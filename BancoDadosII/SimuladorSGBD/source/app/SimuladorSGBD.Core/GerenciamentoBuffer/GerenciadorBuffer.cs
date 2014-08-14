@@ -7,14 +7,15 @@ using System.Collections.Generic;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public class GerenciadorBuffer : IGerenciadorBuffer, IPinCountSubject
+    public class GerenciadorBuffer : IGerenciadorBuffer, IPinCountSubject, IBufferChangeSubject
     {
         private readonly ILogicaSubstituicaoFactory logicaSubstituicao;
         private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
         private readonly IPoolDeBuffers buffer;
         private readonly IConfiguracaoBuffer configuracaoBuffer;
-        private readonly List<IPinCountChangeListener> pinCountChangeListeners = new List<IPinCountChangeListener>();
-        
+        private readonly List<IPinCountChangeObserver> pinCountChangeObservers = new List<IPinCountChangeObserver>();
+        private readonly List<IBufferChangeObserver> bufferChangeObservers = new List<IBufferChangeObserver>();
+
         public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, ILogicaSubstituicaoFactory logicaSubstituicao, 
             IPoolDeBuffers buffer, IConfiguracaoBuffer configuracaoBuffer)
         {
@@ -73,6 +74,11 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             var quadro = buffer.Obter(indice);
             quadro.Sujo = true;
             quadro.Pagina.Conteudo = conteudo;
+
+            foreach (var observer in bufferChangeObservers)
+            {
+                observer.NotificarAlteracaoBuffer();
+            }
         }
 
         public IEnumerable<IResumoPagina> ListarPaginas()
@@ -106,21 +112,26 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             buffer.Armazenar(quadro);
         }
 
-        public void Registrar(IPinCountChangeListener pinCountChangeListener)
+        public void Registrar(IPinCountChangeObserver observer)
         {
-            pinCountChangeListeners.Add(pinCountChangeListener);
+            pinCountChangeObservers.Add(observer);
+        }
+
+        public void Registrar(IBufferChangeObserver observer)
+        {
+            bufferChangeObservers.Add(observer);
         }
 
         private void IncrementarPinCount(IQuadro quadro)
         {
             quadro.PinCount++;
-            pinCountChangeListeners.ForEach(l => l.NotificarIncrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
+            pinCountChangeObservers.ForEach(l => l.NotificarIncrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
         }
 
         private void DecrementarPinCount(IQuadro quadro)
         {
             quadro.PinCount--;
-            pinCountChangeListeners.ForEach(l => l.NotificarDecrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
+            pinCountChangeObservers.ForEach(l => l.NotificarDecrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
         }
     }
 }

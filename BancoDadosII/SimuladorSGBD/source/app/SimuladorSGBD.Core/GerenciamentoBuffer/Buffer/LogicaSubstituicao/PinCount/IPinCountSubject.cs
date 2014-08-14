@@ -2,6 +2,6 @@
 {
     public interface IPinCountSubject
     {
-        void Registrar(IPinCountChangeListener pinCountChangeListener);
+        void Registrar(IPinCountChangeObserver observer);
     }
 }

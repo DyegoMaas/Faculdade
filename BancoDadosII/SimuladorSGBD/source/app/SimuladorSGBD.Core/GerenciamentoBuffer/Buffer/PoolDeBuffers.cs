@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
+using System.Collections.Generic;
 using System.Linq;
-using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
-using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
 {
@@ -13,7 +12,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
         {
             get { return buffer.Count; }
         }
-
+        
         public void Armazenar(IQuadro quadro)
         {
             buffer[quadro.IndicePaginaNoDisco] = quadro;
