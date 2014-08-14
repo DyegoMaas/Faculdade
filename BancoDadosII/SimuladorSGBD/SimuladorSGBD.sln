@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimuladorSGBD.Testes", "sou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimuladorSGBD.IoC", "source\app\SimuladorSGBD.IoC\SimuladorSGBD.IoC.csproj", "{489E9276-DFC8-40AD-8170-8F33334EA20F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ferramentas", "Ferramentas", "{623F7FBE-18AA-4BC5-B3C0-1D35C3245DCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BufferMonitor", "tools\BufferMonitor\BufferMonitor.csproj", "{E6848D9F-1176-41D2-BA79-3DC1EDDC1E52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,11 +37,16 @@ Global
 		{489E9276-DFC8-40AD-8170-8F33334EA20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{489E9276-DFC8-40AD-8170-8F33334EA20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{489E9276-DFC8-40AD-8170-8F33334EA20F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6848D9F-1176-41D2-BA79-3DC1EDDC1E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6848D9F-1176-41D2-BA79-3DC1EDDC1E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6848D9F-1176-41D2-BA79-3DC1EDDC1E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6848D9F-1176-41D2-BA79-3DC1EDDC1E52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A8BEF474-59DE-4C85-B1A5-A7EE813353D8} = {2F821D5E-DAF0-4873-9B42-DF17A659ACD3}
+		{E6848D9F-1176-41D2-BA79-3DC1EDDC1E52} = {623F7FBE-18AA-4BC5-B3C0-1D35C3245DCB}
 	EndGlobalSection
 EndGlobal
