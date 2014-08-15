@@ -46,7 +46,6 @@
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\PinCount\IPinCountChangeObserver.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\LeastRecentlyUsed.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\MostRecentlyUsed.cs" />
-    <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\PinCount\IPinCountSubject.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\PoolDeBuffers.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\ConfiguracaoBuffer.cs" />
     <Compile Include="GerenciamentoBuffer\GerenciadorBuffer.cs" />

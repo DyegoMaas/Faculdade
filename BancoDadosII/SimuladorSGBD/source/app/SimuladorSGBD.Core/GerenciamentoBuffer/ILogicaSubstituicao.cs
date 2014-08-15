@@ -1,6 +1,8 @@
-﻿namespace SimuladorSGBD.Core.GerenciamentoBuffer
+﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
+
+namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public interface ILogicaSubstituicao
+    public interface ILogicaSubstituicao : IPinCountChangeObserver
     {
         int Selecionar();
     }

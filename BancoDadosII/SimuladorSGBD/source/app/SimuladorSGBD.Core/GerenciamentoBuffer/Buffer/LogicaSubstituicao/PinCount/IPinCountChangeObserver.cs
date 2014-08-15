@@ -5,5 +5,6 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCo
     {
         void NotificarIncrementoPinCount(int indice, int novoPinCount);
         void NotificarDecrementoPinCount(int indice, int novoPinCount);
+        void NotificarNovoQuadroComPinCountZero(int indice);
     }
 }

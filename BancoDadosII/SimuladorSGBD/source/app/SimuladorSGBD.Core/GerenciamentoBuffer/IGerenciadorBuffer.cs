@@ -11,5 +11,6 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         void AtualizarPagina(int indice, char[] conteudo);
         IEnumerable<IResumoPagina> ListarPaginas();
         void Registrar(IBufferChangeObserver observer);
+        void LiberarPagina(int indice, bool paginaFoiAlterada);
     }
 }

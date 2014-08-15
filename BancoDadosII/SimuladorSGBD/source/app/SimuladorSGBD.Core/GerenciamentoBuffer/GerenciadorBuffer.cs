@@ -7,13 +7,13 @@ using System.Collections.Generic;
 
 namespace SimuladorSGBD.Core.GerenciamentoBuffer
 {
-    public class GerenciadorBuffer : IGerenciadorBuffer, IPinCountSubject, IBufferChangeSubject
+    public class GerenciadorBuffer : IGerenciadorBuffer, IBufferChangeSubject
     {
         private readonly ILogicaSubstituicaoFactory logicaSubstituicao;
         private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
         private readonly IPoolDeBuffers buffer;
         private readonly IConfiguracaoBuffer configuracaoBuffer;
-        private readonly List<IPinCountChangeObserver> pinCountChangeObservers = new List<IPinCountChangeObserver>();
+        private readonly List<IPinCountChangeObserver> pinCountObservers = new List<IPinCountChangeObserver>();
         private readonly List<IBufferChangeObserver> bufferChangeObservers = new List<IBufferChangeObserver>();
 
         public GerenciadorBuffer(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, ILogicaSubstituicaoFactory logicaSubstituicao, 
@@ -23,6 +23,9 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             this.gerenciadorEspacoEmDisco = gerenciadorEspacoEmDisco;
             this.buffer = buffer;
             this.configuracaoBuffer = configuracaoBuffer;
+
+            pinCountObservers.Add(logicaSubstituicao.LRU());
+            pinCountObservers.Add(logicaSubstituicao.MRU());
         }
         
         public IQuadro ObterPagina(int indice)
@@ -37,20 +40,23 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             if (BufferEstaCheio())
             {
                 var indiceParaSubstituir = logicaSubstituicao.LRU().Selecionar();
-                var quadroParaSubstituir = buffer.Obter(indiceParaSubstituir);
-                IncrementarPinCount(quadroParaSubstituir);
-                if (quadroParaSubstituir.Sujo)
+                if(indiceParaSubstituir > -1)
                 {
-                    gerenciadorEspacoEmDisco.SalvarPagina(quadroParaSubstituir.IndicePaginaNoDisco,
-                        quadroParaSubstituir.Pagina);
+                    var quadroParaSubstituir = buffer.Obter(indiceParaSubstituir);
+                    IncrementarPinCount(quadroParaSubstituir);
+                    if (quadroParaSubstituir.Sujo)
+                    {
+                        gerenciadorEspacoEmDisco.SalvarPagina(quadroParaSubstituir.IndicePaginaNoDisco,
+                            quadroParaSubstituir.Pagina);
+                    }
+                    buffer.Remover(indiceParaSubstituir);
                 }
-                buffer.Remover(indiceParaSubstituir);
             }
 
             var pagina = CarregarPaginaDoDisco(indice);
             var quadro = MontarNovoQuadro(pagina, indice);
             ArmazenarNoBuffer(quadro);
-
+            
             return quadro;
         }
 
@@ -85,6 +91,11 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         {
             return buffer.ListarQuadros();
         }
+        
+        public void Registrar(IBufferChangeObserver observer)
+        {
+            bufferChangeObservers.Add(observer);
+        }
 
         private IPagina CarregarPaginaDoDisco(int indice)
         {
@@ -110,28 +121,19 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
         private void ArmazenarNoBuffer(Quadro quadro)
         {
             buffer.Armazenar(quadro);
-        }
-
-        public void Registrar(IPinCountChangeObserver observer)
-        {
-            pinCountChangeObservers.Add(observer);
-        }
-
-        public void Registrar(IBufferChangeObserver observer)
-        {
-            bufferChangeObservers.Add(observer);
+            pinCountObservers.ForEach(l => l.NotificarNovoQuadroComPinCountZero(quadro.IndicePaginaNoDisco));
         }
 
         private void IncrementarPinCount(IQuadro quadro)
         {
             quadro.PinCount++;
-            pinCountChangeObservers.ForEach(l => l.NotificarIncrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
+            pinCountObservers.ForEach(l => l.NotificarIncrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
         }
 
         private void DecrementarPinCount(IQuadro quadro)
         {
             quadro.PinCount--;
-            pinCountChangeObservers.ForEach(l => l.NotificarDecrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
+            pinCountObservers.ForEach(l => l.NotificarDecrementoPinCount(quadro.IndicePaginaNoDisco, quadro.PinCount));
         }
     }
 }

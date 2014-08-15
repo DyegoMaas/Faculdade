@@ -1,21 +1,19 @@
-﻿using System.Linq;
-using Microsoft.Practices.ServiceLocation;
+﻿using Microsoft.Practices.ServiceLocation;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
-using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.IoC;
 using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 
 namespace SimuladorSGBD
 {
     class Program
     {
-        private const string NomeArquivoSaida = "relatorioBuffer.txt";
+        //private const string NomeArquivoSaida = "relatorioBuffer.txt";
         private const string ComandoSair = "SAIR";
         private const string ComandoObter = "OBTER";
         private const string ComandoAtualizar = "ATUALIZAR";
         private const string ComandoImprimir = "IMPRIMIR";
+        private const string ComandoLiberar = "LIBERAR";
 
         static void Main(string[] args)
         {
@@ -49,6 +47,11 @@ namespace SimuladorSGBD
 
                         gerenciadorBuffer.AtualizarPagina(indicePaginaAtualizar, conteudoCompleto);
                         break;
+                    case ComandoLiberar:
+                        var indicePaginaLiberar = comando.ObterInt(0);
+                        var alterouRegistro = comando.ObterBool(1);
+                        gerenciadorBuffer.LiberarPagina(indicePaginaLiberar, alterouRegistro);
+                        break;
                     case ComandoImprimir:
                         gerenciadorBuffer.ListarPaginas()
                             .ToList()
@@ -64,9 +67,10 @@ namespace SimuladorSGBD
         {
             Console.WriteLine("Comandos disponiveis:");
             Console.WriteLine(string.Format("{0} (encerra o programa)", ComandoSair));
-            Console.WriteLine(string.Format("{0} -INDICE_DA_PAGINA (carrega a pagina indicada)", ComandoObter));
-            Console.WriteLine(string.Format("{0} -INDICE_DA_PAGINA -CONTEUDO_128_CARACTERES (atualiza a pagina indicada com o conteudo informado)", ComandoAtualizar));
+            Console.WriteLine(string.Format("{0} INDICE_DA_PAGINA (carrega a pagina indicada)", ComandoObter));
+            Console.WriteLine(string.Format("{0} INDICE_DA_PAGINA CONTEUDO_128_CARACTERES (atualiza a pagina indicada com o conteudo informado)", ComandoAtualizar));
             Console.WriteLine(string.Format("{0} (imprime um resumo do estado dos quadros no buffer)", ComandoImprimir));
+            Console.WriteLine(string.Format("{0} INDICE_DA_PAGINA BOOL_PAGINA_ALTERADA (libera a pagina)", ComandoLiberar));
             Console.WriteLine();
         }
 
@@ -76,22 +80,22 @@ namespace SimuladorSGBD
             if(entrada == null)
                 return new Comando {Nome = string.Empty};
 
-            var comandoString = entrada.Replace("-", string.Empty).Split(' ');
+            var comandoString = entrada.Split(' ');
             return new Comando
             {
-                Nome = comandoString.Length > 0 ? comandoString[0].ToUpper() : string.Empty,
+                Nome = comandoString.Length > 0 ? comandoString[0].Trim().ToUpper() : string.Empty,
                 Parametros = comandoString.Skip(1).ToArray(),
             };
         }
 
-        private static void CriarArquivoRepresentandoBuffer(List<IResumoPagina> listaPaginasBuffer)
-        {
-            var caminhoArquivoSaida = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, NomeArquivoSaida);
-            using (var saida = File.CreateText(caminhoArquivoSaida))
-            {
-                listaPaginasBuffer.ForEach(p => saida.WriteLine(p.ToString()));
-            }
-        }
+        //private static void CriarArquivoRepresentandoBuffer(List<IResumoPagina> listaPaginasBuffer)
+        //{
+        //    var caminhoArquivoSaida = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, NomeArquivoSaida);
+        //    using (var saida = File.CreateText(caminhoArquivoSaida))
+        //    {
+        //        listaPaginasBuffer.ForEach(p => saida.WriteLine(p.ToString()));
+        //    }
+        //}
     }
 
     internal class Comando
@@ -101,12 +105,19 @@ namespace SimuladorSGBD
 
         public string ObterString(int indice)
         {
-            return Parametros[indice];
+            return Parametros[indice].Trim();
         }
 
         public int ObterInt(int indice)
         {
             return int.Parse(ObterString(indice));
+        }
+
+        public bool ObterBool(int indice)
+        {
+            bool valor = false;
+            bool.TryParse(ObterString(indice), out valor);
+            return valor;
         }
     }
 }

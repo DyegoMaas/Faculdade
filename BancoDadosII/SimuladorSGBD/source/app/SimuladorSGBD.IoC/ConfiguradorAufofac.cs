@@ -61,7 +61,7 @@ namespace SimuladorSGBD.IoC
             builder.RegisterType<GerenciadorBuffer>()
                    .As<IGerenciadorBuffer>()
                    .SingleInstance()
-                   .OnActivating(e => e.Context.Resolve<IInicializadorArquivoMestre>().Inicializar(blocos:20, bytes:128));
+                   .OnActivating(e => e.Context.Resolve<IInicializadorArquivoMestre>().Inicializar(blocos: 20, bytes: 128));
         }
     }
 }

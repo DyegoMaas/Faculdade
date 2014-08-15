@@ -24,5 +24,9 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao
             if (novoPinCount == 0)
                 quadrosDisponiveisSubstituicao.Push(indice);
         }
+
+        public void NotificarNovoQuadroComPinCountZero(int indice)
+        {
+        }
     }
 }
