@@ -33,8 +33,7 @@ namespace BufferMonitor
 
         public void NotificarAlteracaoBuffer()
         {
-            //TODO atualizar informacoes na tela
-            throw new NotImplementedException();
+            sgbd.GerenciadorBuffer.ListarPaginas();
         }
     }
 }
