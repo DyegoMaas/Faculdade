@@ -1,4 +1,5 @@
-﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
+﻿using System;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,12 +34,18 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
 
         public IEnumerable<IResumoPagina> ListarQuadros()
         {
-            return buffer.Values.Select(b => new ResumoPagina
+            return buffer.Values.Select(b =>
             {
-                Conteudo = b.Pagina.Conteudo,
-                IndiceNoDisco = b.IndicePaginaNoDisco,
-                PinCount = b.PinCount,
-                Sujo = b.Sujo
+                var copiaConteudoQuadro = new char[b.Pagina.Conteudo.Length];
+                Array.Copy(b.Pagina.Conteudo, copiaConteudoQuadro, copiaConteudoQuadro.Length);
+
+                return new ResumoPagina
+                {
+                    Conteudo = copiaConteudoQuadro,
+                    IndiceNoDisco = b.IndicePaginaNoDisco,
+                    PinCount = b.PinCount,
+                    Sujo = b.Sujo
+                };
             });
         }
     }
