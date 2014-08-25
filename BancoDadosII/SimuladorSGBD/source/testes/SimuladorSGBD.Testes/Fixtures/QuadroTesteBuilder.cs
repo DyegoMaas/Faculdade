@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using SimuladorSGBD.Core;
+﻿using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
+using System.Linq;
 
 namespace SimuladorSGBD.Testes.Fixtures
 {

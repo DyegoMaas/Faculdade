@@ -5,7 +5,7 @@ using SimuladorSGBD.Testes.Fixtures;
 using Xunit;
 using Xunit.Extensions;
 
-namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer
+namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer.Buffer
 {
     public class PoolDeBuffersTeste
     {

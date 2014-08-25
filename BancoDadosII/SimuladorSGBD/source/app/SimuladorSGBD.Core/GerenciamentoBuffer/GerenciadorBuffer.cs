@@ -28,7 +28,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
             pinCountObservers.Add(logicaSubstituicao.MRU());
         }
         
-        public IQuadro ObterPagina(int indice)
+        public IQuadro ObterQuadro(int indice)
         {
             var quadroBuffer = buffer.Obter(indice);
             if (quadroBuffer != null)

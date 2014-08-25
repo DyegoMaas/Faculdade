@@ -3,7 +3,7 @@ using SimuladorSGBD.Core.GerenciamentoBuffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao;
 using Xunit;
 
-namespace SimuladorSGBD.Testes.GerenciamentoBuffer.Buffer.LogicaSubstituicao
+namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao
 {
     public class LogicaSubstituicaoFactoryTeste
     {

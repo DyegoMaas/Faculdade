@@ -36,7 +36,7 @@ namespace SimuladorSGBD
                         break;
                     case ComandoObter:
                         var indicePaginaObter = comando.ObterInt(0);
-                        gerenciadorBuffer.ObterPagina(indicePaginaObter);
+                        gerenciadorBuffer.ObterQuadro(indicePaginaObter);
                         break;
                     case ComandoAtualizar:
                         var indicePaginaAtualizar = comando.ObterInt(0);

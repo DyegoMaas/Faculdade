@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
@@ -7,12 +9,10 @@ using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
 using SimuladorSGBD.Testes.Fixtures;
-using System;
-using System.Collections.Generic;
 using Xunit;
 using Xunit.Extensions;
 
-namespace SimuladorSGBD.Testes.GerenciamentoBuffer
+namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer
 {
     public class GerenciadorBufferTeste
     {
@@ -49,7 +49,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
             var gerenciadorBuffer = new GerenciadorBuffer(mockGerenciadorDisco.Object, mockLogicaSubstituicaoFactory.Object, 
                 mockBuffer.Object, UmaConfiguracaoDeBuffer(limiteDePaginasEmMemoria: 1));
-            gerenciadorBuffer.ObterPagina(indicePagina);
+            gerenciadorBuffer.ObterQuadro(indicePagina);
 
             APaginaDeveConterApenas(quadro, 'a');
             quadro.Pagina.Conteudo.Should().HaveSameCount(quadroDisco.Pagina.Conteudo);
@@ -85,7 +85,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
 
             var quadro = new QuadroTesteBuilder().NoIndice(IndiceZero).PreenchidoCom(numeroCaracteres: tamanhoConteudo, caractere: 'a').Construir();
             mockGerenciadorDisco.Setup(a => a.CarregarPagina(IndiceZero)).Returns(quadro.Pagina);
-            gerenciadorBuffer.ObterPagina(IndiceZero);
+            gerenciadorBuffer.ObterQuadro(IndiceZero);
             gerenciadorBuffer.AtualizarPagina(IndiceZero, ConteudoPaginaTesteHelper.NovoConteudo(tamanhoConteudo, 'x'));
 
             var paginaRecuperada = buffer.Obter(IndiceZero);
@@ -103,7 +103,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             mockBuffer.Setup(buffer => buffer.Obter(IndiceUm)).Returns(quadro);
 
             var gerenciadorBuffer = DadoUmGerenciadorBufferCom(limitePaginasNoBuffer: 1);
-            var quadroRecuperado = gerenciadorBuffer.ObterPagina(IndiceUm);
+            var quadroRecuperado = gerenciadorBuffer.ObterQuadro(IndiceUm);
 
             quadroRecuperado.IndicePaginaNoDisco.Should().Be(quadro.IndicePaginaNoDisco);
             mockBuffer.Verify(b => b.Obter(IndiceUm), Times.Once);
@@ -143,7 +143,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             mockLogicaSubstituicaoLRU.Setup(l => l.Selecionar()).Returns(IndiceZero);
 
             var gerenciadorBuffer = DadoUmGerenciadorBufferCom(limitePaginasNoBuffer: 1);
-            var paginaRecuperada = gerenciadorBuffer.ObterPagina(IndiceUm);
+            var paginaRecuperada = gerenciadorBuffer.ObterQuadro(IndiceUm);
 
             mockBuffer.Verify(b => b.Obter(IndiceUm), Times.Once);
             mockGerenciadorDisco.Verify(b => b.CarregarPagina(IndiceUm), Times.Once);
@@ -166,7 +166,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             mockGerenciadorDisco.Setup(a => a.CarregarPagina(IndiceUm)).Returns(quadro.Pagina);
 
             var gerenciadorBuffer = DadoUmGerenciadorBufferCom(limitePaginasNoBuffer: 1);
-            var paginaRecuperada = gerenciadorBuffer.ObterPagina(IndiceUm);
+            var paginaRecuperada = gerenciadorBuffer.ObterQuadro(IndiceUm);
 
             mockBuffer.Verify(b => b.Obter(IndiceUm), Times.Once);
             mockGerenciadorDisco.Verify(b => b.CarregarPagina(IndiceUm), Times.Once);
@@ -212,7 +212,7 @@ namespace SimuladorSGBD.Testes.GerenciamentoBuffer
             mockBuffer.SetupGet(b => b.NumeroPaginasNoBuffer).Returns(0);
 
             var gerenciadorBuffer = DadoUmGerenciadorBufferCom(limitePaginasNoBuffer: 1);
-            var paginaRecuperada = gerenciadorBuffer.ObterPagina(IndiceZero);
+            var paginaRecuperada = gerenciadorBuffer.ObterQuadro(IndiceZero);
 
             mockBuffer.Verify(b => b.Obter(IndiceZero), Times.Once());
             mockGerenciadorDisco.Verify(b => b.CarregarPagina(IndiceZero), Times.Once());
