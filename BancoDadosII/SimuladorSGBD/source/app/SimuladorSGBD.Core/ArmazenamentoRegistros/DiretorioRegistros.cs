@@ -4,19 +4,7 @@ namespace SimuladorSGBD.Core.ArmazenamentoRegistros
 {
     public class DiretorioRegistros
     {
-        private int enderecoInicioAreaLivre;
-
-        public int EnderecoInicioAreaLivre
-        {
-            get
-            {
-                if (NumeroEntradas == 0)
-                    return 0;
-                return enderecoInicioAreaLivre - 1;
-            }
-            private set { enderecoInicioAreaLivre = value; }
-        }
-
+        public int EnderecoInicioAreaLivre { get; set; }
         public int NumeroEntradas { get { return DiretorioSlots.Count; } }
         public IList<PonteiroRegistro> DiretorioSlots { get; private set; }
 
@@ -27,13 +15,13 @@ namespace SimuladorSGBD.Core.ArmazenamentoRegistros
         
         public void InserirSlot(int tamanho)
         {
-            enderecoInicioAreaLivre += tamanho;
-
             DiretorioSlots.Add(new PonteiroRegistro
             {
-                Indice = DiretorioSlots.Count + 1, 
+                Endereco = EnderecoInicioAreaLivre,
                 Tamanho = tamanho
             });
+
+            EnderecoInicioAreaLivre += tamanho;
         }
     }
 }

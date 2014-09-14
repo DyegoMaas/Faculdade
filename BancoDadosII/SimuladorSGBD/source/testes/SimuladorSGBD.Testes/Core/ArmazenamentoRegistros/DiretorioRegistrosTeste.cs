@@ -25,14 +25,14 @@ namespace SimuladorSGBD.Testes.Core.ArmazenamentoRegistros
             diretorioRegistros.InserirSlot(tamanhoPrimeiroRegistro);
             diretorioRegistros.InserirSlot(tamanhoSegundoRegistro);
 
-            diretorioRegistros.EnderecoInicioAreaLivre.Should().Be(tamanhoPrimeiroRegistro + tamanhoSegundoRegistro - 1);
+            diretorioRegistros.EnderecoInicioAreaLivre.Should().Be(tamanhoPrimeiroRegistro + tamanhoSegundoRegistro);
             diretorioRegistros.NumeroEntradas.Should().Be(2);
             diretorioRegistros.DiretorioSlots.Should().HaveCount(2);
 
-            diretorioRegistros.DiretorioSlots[0].Indice.Should().Be(1);
+            diretorioRegistros.DiretorioSlots[0].Endereco.Should().Be(0);
             diretorioRegistros.DiretorioSlots[0].Tamanho.Should().Be(tamanhoPrimeiroRegistro);
 
-            diretorioRegistros.DiretorioSlots[1].Indice.Should().Be(2);
+            diretorioRegistros.DiretorioSlots[1].Endereco.Should().Be(tamanhoPrimeiroRegistro);
             diretorioRegistros.DiretorioSlots[1].Tamanho.Should().Be(tamanhoSegundoRegistro);
         }
     }
