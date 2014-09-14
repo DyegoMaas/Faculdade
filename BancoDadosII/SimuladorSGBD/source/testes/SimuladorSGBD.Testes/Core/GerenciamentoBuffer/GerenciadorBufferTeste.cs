@@ -8,6 +8,7 @@ using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
 using SimuladorSGBD.Core.IO;
+using SimuladorSGBD.Testes.Core.ArmazenamentoRegistros;
 using SimuladorSGBD.Testes.Fixtures;
 using Xunit;
 using Xunit.Extensions;
@@ -25,12 +26,15 @@ namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer
         readonly Mock<ILogicaSubstituicao> mockLogicaSubstituicaoMRU = new Mock<ILogicaSubstituicao>();
         readonly Mock<ILogicaSubstituicaoFactory> mockLogicaSubstituicaoFactory = new Mock<ILogicaSubstituicaoFactory>();
         readonly Mock<ILogicaSubstituicao> mockPinCountObserver;
+        private readonly ConteudoPaginaTesteHelper conteudoPaginaTesteHelper;
 
         public GerenciadorBufferTeste()
         {
             mockLogicaSubstituicaoFactory.Setup(f => f.LRU()).Returns(mockLogicaSubstituicaoLRU.Object);
             mockLogicaSubstituicaoFactory.Setup(f => f.MRU()).Returns(mockLogicaSubstituicaoMRU.Object);
             mockPinCountObserver = mockLogicaSubstituicaoLRU;
+
+            conteudoPaginaTesteHelper = new ConteudoPaginaTesteHelper();
         }
 
         [Theory,
@@ -86,7 +90,7 @@ namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer
             var quadro = new QuadroTesteBuilder().NoIndice(IndiceZero).PreenchidoCom(numeroCaracteres: tamanhoConteudo, caractere: 'a').Construir();
             mockGerenciadorDisco.Setup(a => a.CarregarPagina(IndiceZero)).Returns(quadro.Pagina);
             gerenciadorBuffer.ObterQuadro(IndiceZero);
-            gerenciadorBuffer.AtualizarPagina(IndiceZero, ConteudoPaginaTesteHelper.NovoConteudo(tamanhoConteudo, 'x'));
+            gerenciadorBuffer.AtualizarPagina(IndiceZero, conteudoPaginaTesteHelper.NovoConteudo(tamanhoConteudo, 'x'));
 
             var paginaRecuperada = buffer.Obter(IndiceZero);
             paginaRecuperada.Sujo.Should().BeTrue("deve marcar uma página como suja ao atualizar seu conteúdo");
@@ -198,7 +202,7 @@ namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer
             var gerenciadorBuffer = DadoUmGerenciadorBufferCom(limitePaginasNoBuffer: 1);
             gerenciadorBuffer.Registrar(mockBufferChangeObserver.Object);
 
-            gerenciadorBuffer.AtualizarPagina(0, new String('x', 128).ToCharArray());
+            gerenciadorBuffer.AtualizarPagina(0, conteudoPaginaTesteHelper.NovoConteudo(128, 'x'));
 
             mockBufferChangeObserver.Verify(o => o.NotificarAlteracaoBuffer(), Times.Once());
         }
@@ -238,9 +242,10 @@ namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer
 
         public void APaginaDeveConterApenas(IQuadro pagina, char caractere)
         {
+            var @byte = conteudoPaginaTesteHelper.ToByte(caractere);
             foreach (var c in pagina.Pagina.Conteudo)
             {
-                c.Should().Be(caractere);
+                c.Should().Be(@byte);
             }
         }
 

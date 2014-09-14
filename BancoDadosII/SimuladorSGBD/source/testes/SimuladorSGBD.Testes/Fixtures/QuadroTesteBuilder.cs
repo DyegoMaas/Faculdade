@@ -1,26 +1,34 @@
 ﻿using SimuladorSGBD.Core;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
-using System.Linq;
+using SimuladorSGBD.Testes.Core.ArmazenamentoRegistros;
 
 namespace SimuladorSGBD.Testes.Fixtures
 {
     public class QuadroTesteBuilder
     {
-        private char[] conteudo = Enumerable.Repeat('a', 128).ToArray();
+        private readonly ConteudoPaginaTesteHelper conteudoPaginaTesteHelper;
+        private byte[] conteudo;
         private int indicePaginaNoDisco = 0;
         private int pinCount = 0;
         private bool sujo;
         private int ultimoAcesso = 0;
 
-        public QuadroTesteBuilder ComConteudo(char[] conteudo)
+        public QuadroTesteBuilder()
+        {
+            conteudoPaginaTesteHelper = new ConteudoPaginaTesteHelper();
+            conteudo = conteudoPaginaTesteHelper.NovoConteudo(128, 'a');
+        }
+
+        public QuadroTesteBuilder ComConteudo(byte[] conteudo)
         {
             this.conteudo = conteudo;
             return this;
         }
-
+        
         public QuadroTesteBuilder PreenchidoCom(int numeroCaracteres, char caractere)
         {
-            return ComConteudo(Enumerable.Repeat(caractere, numeroCaracteres).ToArray());
+            var conteudoGerado = conteudoPaginaTesteHelper.NovoConteudo(numeroCaracteres, caractere);
+            return ComConteudo(conteudoGerado);
         }
 
         public QuadroTesteBuilder NoIndice(int indice)
@@ -41,7 +49,7 @@ namespace SimuladorSGBD.Testes.Fixtures
             return this;
         }
 
-        public QuadroTesteBuilder ConUltimoAcesso(int ultimoAcesso)
+        public QuadroTesteBuilder ComUltimoAcesso(int ultimoAcesso)
         {
             this.ultimoAcesso = ultimoAcesso;
             return this;
@@ -70,7 +78,7 @@ namespace SimuladorSGBD.Testes.Fixtures
 
         private class PaginaFake : IPagina
         {
-            public char[] Conteudo { get; set; }
+            public byte[] Conteudo { get; set; }
         }
     }
 }

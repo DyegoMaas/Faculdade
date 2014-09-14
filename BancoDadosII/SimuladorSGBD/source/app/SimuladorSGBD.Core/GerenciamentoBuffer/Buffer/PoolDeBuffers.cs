@@ -36,7 +36,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer.Buffer
         {
             return buffer.Values.Select(b =>
             {
-                var copiaConteudoQuadro = new char[b.Pagina.Conteudo.Length];
+                var copiaConteudoQuadro = new byte[b.Pagina.Conteudo.Length];
                 Array.Copy(b.Pagina.Conteudo, copiaConteudoQuadro, copiaConteudoQuadro.Length);
 
                 return new ResumoPagina

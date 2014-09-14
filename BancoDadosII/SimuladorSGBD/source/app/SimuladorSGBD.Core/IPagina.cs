@@ -2,6 +2,6 @@
 {
     public interface IPagina
     {
-        char[] Conteudo { get; set;  }
+        byte[] Conteudo { get; set; }
     }
 }

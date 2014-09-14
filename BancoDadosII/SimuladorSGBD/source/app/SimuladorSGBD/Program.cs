@@ -42,7 +42,7 @@ namespace SimuladorSGBD
                         var indicePaginaAtualizar = comando.ObterInt(0);
                         var conteudo = comando.ObterString(1).ToCharArray();
 
-                        var conteudoCompleto = Enumerable.Repeat('0', 128).ToArray();
+                        var conteudoCompleto = Enumerable.Repeat((byte)0, 128).ToArray();
                         Array.Copy(conteudo, conteudoCompleto, conteudo.Length);
 
                         gerenciadorBuffer.AtualizarPagina(indicePaginaAtualizar, conteudoCompleto);

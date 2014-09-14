@@ -2,7 +2,7 @@
 {
     public interface IResumoPagina
     {
-        char[] Conteudo { get; }
+        byte[] Conteudo { get; }
         int IndiceNoDisco { get; }
         int PinCount { get; }
         bool Sujo { get; }

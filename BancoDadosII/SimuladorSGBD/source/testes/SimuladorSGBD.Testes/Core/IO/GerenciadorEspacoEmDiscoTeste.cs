@@ -4,6 +4,7 @@ using SimuladorSGBD.Core.IO;
 using System;
 using System.IO;
 using System.Threading;
+using SimuladorSGBD.Testes.Core.ArmazenamentoRegistros;
 using SimuladorSGBD.Testes.Fixtures;
 using Xunit;
 
@@ -12,6 +13,7 @@ namespace SimuladorSGBD.Testes.Core.IO
     public class GerenciadorEspacoEmDiscoTeste
     {
         private const int TamanhoPaginas = 128;
+        private ConteudoPaginaTesteHelper conteudoPaginaTesteHelper;
 
         private readonly IConfiguracaoIO configuracaoDefault = new ConfiguracaoIO
         {
@@ -21,6 +23,7 @@ namespace SimuladorSGBD.Testes.Core.IO
         public GerenciadorEspacoEmDiscoTeste()
         {
             TentarExcluirArquivo(3);
+            conteudoPaginaTesteHelper = new ConteudoPaginaTesteHelper();
         }
 
         [Fact]
@@ -86,10 +89,10 @@ namespace SimuladorSGBD.Testes.Core.IO
         private void DadoQueExisteUmArquivoComDuasPaginas(int tamanhoPaginas, char conteudoPrimeiro, char conteudoSegundo)
         {
             var arquivo = new FileInfo(configuracaoDefault.CaminhoArquivoMestre);
-            using (var streamWriter = arquivo.CreateText())
+            using (var fileStream = arquivo.Create())
             {
-                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidaCom: conteudoPrimeiro));
-                EscreverUmaPagina(streamWriter, NovaPagina(tamanho: TamanhoPaginas, preenchidaCom: conteudoSegundo));
+                EscreverUmaPagina(fileStream, NovaPagina(tamanho: TamanhoPaginas, preenchidaCom: conteudoPrimeiro));
+                EscreverUmaPagina(fileStream, NovaPagina(tamanho: TamanhoPaginas, preenchidaCom: conteudoSegundo));
             }
         }
 
@@ -98,17 +101,19 @@ namespace SimuladorSGBD.Testes.Core.IO
             return new QuadroTesteBuilder().PreenchidoCom(tamanho, preenchidaCom).Construir().Pagina;
         }
 
-        private void EscreverUmaPagina(StreamWriter streamWriter, IPagina pagina)
+        private void EscreverUmaPagina(FileStream streamWriter, IPagina pagina)
         {
-            streamWriter.Write(pagina.Conteudo);
+            streamWriter.Write(pagina.Conteudo, 0, pagina.Conteudo.Length);
         }
 
-        private static void APaginaDeveConterApenas(GerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, int indicePagina, char caractere)
+        private void APaginaDeveConterApenas(GerenciadorEspacoEmDisco gerenciadorEspacoEmDisco, int indicePagina, char caractere)
         {
+            var @byte = conteudoPaginaTesteHelper.ToByte(caractere);
+
             IPagina paginaUm = gerenciadorEspacoEmDisco.CarregarPagina(indicePagina);
             foreach (var c in paginaUm.Conteudo)
             {
-                c.Should().Be(caractere);
+                c.Should().Be(@byte);
             }
         }
 

@@ -1,7 +1,5 @@
-﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace SimuladorSGBD.Core.IO
 {
@@ -44,15 +42,12 @@ namespace SimuladorSGBD.Core.IO
                 stream.Read(buffer, 0, buffer.Length);
             }
 
-            return new Pagina
-            {
-                Conteudo = Encoding.ASCII.GetChars(buffer, 0, buffer.Length)
-            };
+            return new Pagina { Conteudo = buffer };
         }
 
         public void SalvarPagina(int indicePagina, IPagina pagina)
         {
-            var buffer = Encoding.ASCII.GetBytes(pagina.Conteudo, 0, pagina.Conteudo.Length);
+            var buffer = pagina.Conteudo;
             using (var stream = arquivo.OpenWrite())
             {
                 var offset = indicePagina * TamanhoPaginas;
@@ -63,7 +58,7 @@ namespace SimuladorSGBD.Core.IO
 
         private void CriarBlocoVazio(Stream stream, int bytes)
         {
-            var buffer = Encoding.ASCII.GetBytes(Enumerable.Repeat('0', bytes).ToArray());
+            var buffer = Enumerable.Repeat((byte) 0, bytes).ToArray();
             stream.Write(buffer, 0, buffer.Length);
         }
     }

@@ -8,7 +8,7 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
     {
         IQuadro ObterQuadro(int indice);
         void SalvarPagina(int indice);
-        void AtualizarPagina(int indice, char[] conteudo);
+        void AtualizarPagina(int indice, byte[] conteudo);
         IEnumerable<IResumoPagina> ListarPaginas();
         void Registrar(IBufferChangeObserver observer);
         void LiberarPagina(int indice, bool paginaFoiAlterada);

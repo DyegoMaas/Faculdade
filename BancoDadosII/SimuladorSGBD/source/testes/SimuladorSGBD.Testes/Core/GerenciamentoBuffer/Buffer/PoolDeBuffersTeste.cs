@@ -9,9 +9,15 @@ namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer.Buffer
 {
     public class PoolDeBuffersTeste
     {
+        private readonly ConteudoPaginaTesteHelper conteudoPaginaTesteHelper;
         private const int IndiceZero = 0;
         private const int IndiceUm = 1;
         private const int IndiceDois = 2;
+
+        public PoolDeBuffersTeste()
+        {
+            conteudoPaginaTesteHelper = new ConteudoPaginaTesteHelper();
+        }
 
         [Fact]
         public void armazenando_uma_pagina_no_buffer_e_recuperando_a_pagina()
@@ -84,7 +90,7 @@ namespace SimuladorSGBD.Testes.Core.GerenciamentoBuffer.Buffer
             {
                 var resumo = resumosQuadros[i];
                 var quadroNoBuffer = quadrosNoBuffer[i];
-
+                
                 resumo.Conteudo.Should().BeEquivalentTo(quadroNoBuffer.Pagina.Conteudo);
                 resumo.IndiceNoDisco.Should().Be(quadroNoBuffer.IndicePaginaNoDisco);
                 resumo.PinCount.Should().Be(quadroNoBuffer.PinCount);

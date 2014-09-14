@@ -2,6 +2,6 @@
 {
     internal class Pagina : IPagina
     {
-        public char[] Conteudo { get; set; }
+        public byte[] Conteudo { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
+﻿using System;
+using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Buffer.LogicaSubstituicao.PinCount;
 using SimuladorSGBD.Core.GerenciamentoBuffer.Paginas;
@@ -69,13 +70,14 @@ namespace SimuladorSGBD.Core.GerenciamentoBuffer
                 quadro.Sujo = true;
         }
 
+        [Obsolete]
         public void SalvarPagina(int indice)
         {
             var quadro = buffer.Obter(indice);
             gerenciadorEspacoEmDisco.SalvarPagina(indice, quadro.Pagina);
         }
 
-        public void AtualizarPagina(int indice, char[] conteudo)
+        public void AtualizarPagina(int indice, byte[] conteudo)
         {
             var quadro = buffer.Obter(indice);
             quadro.Sujo = true;
