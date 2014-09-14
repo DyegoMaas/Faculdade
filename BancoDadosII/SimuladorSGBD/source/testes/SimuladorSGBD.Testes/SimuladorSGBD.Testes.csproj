@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ArmazenamentoRegistros\ArmazenadorRegistrosTeste.cs" />
+    <Compile Include="Core\ArmazenamentoRegistros\DiretorioRegistrosTeste.cs" />
     <Compile Include="Core\InicializadorArquivoMestreTeste.cs" />
     <Compile Include="Core\IO\GerenciadorEspacoEmDiscoTeste.cs" />
     <Compile Include="Fixtures\ConfiguracaoIOFake.cs" />

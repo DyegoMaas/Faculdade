@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArmazenamentoRegistros\DiretorioRegistros.cs" />
+    <Compile Include="ArmazenamentoRegistros\PonteiroRegistro.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\IBufferChangeSubject.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\IBufferContainer.cs" />
     <Compile Include="GerenciamentoBuffer\Buffer\LogicaSubstituicao\ILogicaSubstituicaoFactory.cs" />
@@ -68,9 +70,7 @@
     <Compile Include="Pagina.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ArmazenamentoRegistros\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using FluentAssertions;
-using Moq;
+﻿using SimuladorSGBD.Core.ArmazenamentoRegistros;
 using SimuladorSGBD.Core.GerenciamentoBuffer;
-using SimuladorSGBD.Testes.Fixtures;
 using System;
 using System.Text;
 using Xunit;
@@ -12,66 +9,15 @@ namespace SimuladorSGBD.Testes.Core.ArmazenamentoRegistros
     public class ArmazenadorRegistrosTeste
     {
         [Fact]
-        public void cadastrando_um_valor_vazio()
+        public void teste()
         {
-            var quadroOriginal = new QuadroTesteBuilder().Construir();
-            char[] conteudoEsperado = Enumerable.Repeat(CaratereConteudo, TamanhoConteudo).ToArray();
-
-            var mockGerenciadorBuffer = new Mock<IGerenciadorBuffer>();
-            mockGerenciadorBuffer.Setup(gb => gb.ObterQuadro(It.IsAny<int>()))
-                .Returns(quadroOriginal);
-
-            char[] arrayEditado = null;
-            mockGerenciadorBuffer.Setup(gb => gb.AtualizarPagina(It.IsAny<int>(), It.IsAny<byte[]>()))
-                .Callback<int, char[]>((i, array) => arrayEditado = array);
-
-            var armazenadorRegistros = new ArmazenadorRegistros(mockGerenciadorBuffer.Object);
-            armazenadorRegistros.Inserir(new Registro { Conteudo = conteudoEsperado });
-
-            mockGerenciadorBuffer.Verify(gb => gb.ObterQuadro(0), Times.Once());
-            mockGerenciadorBuffer.Verify(gb => gb.AtualizarPagina(0, It.IsAny<byte[]>()), Times.Once());
-            mockGerenciadorBuffer.Verify(gb => gb.LiberarPagina(0, true), Times.Once());
-
-            arrayEditado[0].Should().Be(CaractereCoringa);
-            arrayEditado.Skip(1).Take(TamanhoConteudo).Should().ContainInOrder(conteudoEsperado);
-
-            //TODO validar ponteiro
+            
         }
-
-        private bool ValidarInicio(char[] array, char[] conteudoEsperado)
-        {
-            return array[0] == CaractereCoringa
-                && array[1] == CaratereConteudo;
-        }
-
-        public const char CaractereCoringa = 'A'; //TODO escolher o wildcard
-        private const char CaratereConteudo = 'a';
-        private const int TamanhoConteudo = 10;
-
-        private bool ValidarFinal(char[] array)
-        {
-            var conteudoQuadro = new string(array);
-
-            var ponteiro = new PonteiroRegistro()
-            {
-                Indice = int.Parse(conteudoQuadro.Substring(conteudoQuadro.Length - 1 - 4)),
-                Tamanho = int.Parse(conteudoQuadro.Substring(conteudoQuadro.Length - 1 - 8))
-            };
-
-            return ponteiro.Indice == 0 && ponteiro.Tamanho == 0;
-        }
-    }
-
-    [Serializable]
-    public class PonteiroRegistro
-    {
-        public int Indice { get; set; }
-        public int Tamanho { get; set; }
     }
 
     public class Registro
     {
-        public char[] Conteudo { get; set; }
+        public byte[] Conteudo { get; set; }
     }
 
     public class ArmazenadorRegistros
