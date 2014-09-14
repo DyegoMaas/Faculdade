@@ -28,7 +28,7 @@ namespace SimuladorSGBD.IoC
 
         private static void RegistrarCore(ContainerBuilder builder)
         {
-            builder.RegisterType<InicializadorArquivoMestre>()
+            builder.RegisterType<InicializadorArquivoHeap>()
                    .As<IInicializadorArquivoMestre>()
                    .SingleInstance();
         }

@@ -64,7 +64,7 @@
     <Compile Include="IO\ConfiguracaoIO.cs" />
     <Compile Include="IO\IConfiguracaoIO.cs" />
     <Compile Include="IO\IGerenciadorEspacoEmDisco.cs" />
-    <Compile Include="InicializadorArquivoMestre.cs" />
+    <Compile Include="InicializadorArquivoHeap.cs" />
     <Compile Include="IO\GerenciadorEspacoEmDisco.cs" />
     <Compile Include="IPagina.cs" />
     <Compile Include="Pagina.cs" />

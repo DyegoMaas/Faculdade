@@ -2,11 +2,11 @@
 
 namespace SimuladorSGBD.Core
 {
-    public class InicializadorArquivoMestre : IInicializadorArquivoMestre
+    public class InicializadorArquivoHeap : IInicializadorArquivoMestre
     {
         private readonly IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco;
 
-        public InicializadorArquivoMestre(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco)
+        public InicializadorArquivoHeap(IGerenciadorEspacoEmDisco gerenciadorEspacoEmDisco)
         {
             this.gerenciadorEspacoEmDisco = gerenciadorEspacoEmDisco;
         }

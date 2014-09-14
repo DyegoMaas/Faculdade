@@ -9,7 +9,7 @@
 //    public class ArmazenadorRegistrosTeste
 //    {
 //        [Fact]
-//        public void teste()
+//        public void criando_um_registro_sem_campos()
 //        {
             
 //        }
