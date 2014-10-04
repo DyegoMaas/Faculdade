@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JogoCartas21.Core.IO;
 using JogoCartas21.Core.Models;
+using JogoCartas21.Core.Utils;
 
 namespace JogoCartas21.Core
 {
@@ -18,7 +18,7 @@ namespace JogoCartas21.Core
 
         public IEnumerable<Player> GetPlayers(Usuario usuario)
         {
-            var mensagem = string.Format("GET PLAYERS {0}:{1}", usuario.UserId, usuario.Senha);
+            var mensagem = "GET PLAYERS {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
             var resposta = clienteTcp.EfetuarChamada(mensagem);
 
             var listaJogadores = ConverterJogadores(resposta);
@@ -27,20 +27,20 @@ namespace JogoCartas21.Core
 
         public Carta GetCard(Usuario usuario)
         {
-            var mensagem = string.Format("GET CARD {0}:{1}", usuario.UserId, usuario.Senha);
+            var mensagem = "GET CARD {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
             var resposta = clienteTcp.EfetuarChamada(mensagem);
 
             var partesResposta = resposta.Split(';');
             return new Carta
             {
                Num = partesResposta[0],
-               Suit = (Naipe)Enum.Parse(typeof(Naipe), partesResposta[1])
+               Suit = partesResposta[1].ToEnum<Naipe>()
             };
         }
 
         public void EnviarComandoJogo(Usuario usuario, ComandosJogo comando)
         {
-            var mensagem = string.Format("SEND GAME {0}:{1}:{2}", usuario.UserId, usuario.Senha, ConverterParaString(comando));
+            var mensagem = "SEND GAME {0}:{1}:{2}".FormatWith(usuario.UserId, usuario.Senha, ConverterParaString(comando));
             clienteUdp.EnviarMensagem(mensagem);
         }
 
@@ -53,7 +53,7 @@ namespace JogoCartas21.Core
                 yield return new Player
                 {
                     UserId = partesResposta[i],
-                    Status = (PlayerStatus)Enum.Parse(typeof(PlayerStatus), partesResposta[i + 1])
+                    Status = partesResposta[i + 1].ToEnum<PlayerStatus>()
                 };
             }
         }
