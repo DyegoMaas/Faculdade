@@ -3,6 +3,6 @@
     public class Carta  
     {
         public string Num { get; set; }
-        public string Suit { get; set; }
+        public Naipe Suit { get; set; }
     }
 }

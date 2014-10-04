@@ -3,6 +3,6 @@
     public class Player
     {
         public string UserId { get; set; }
-        public string Status { get; set; }
+        public PlayerStatus Status { get; set; }
     }
 }

@@ -45,7 +45,9 @@
     <Compile Include="IO\ClienteTCP.cs" />
     <Compile Include="IConectorJogoCartas21.cs" />
     <Compile Include="Models\ComandosJogo.cs" />
+    <Compile Include="Models\Naipe.cs" />
     <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\PlayerStatus.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

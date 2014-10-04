@@ -34,7 +34,7 @@ namespace JogoCartas21.Core
             return new Carta
             {
                Num = partesResposta[0],
-               Suit = partesResposta[1],
+               Suit = (Naipe)Enum.Parse(typeof(Naipe), partesResposta[1])
             };
         }
 
@@ -53,7 +53,7 @@ namespace JogoCartas21.Core
                 yield return new Player
                 {
                     UserId = partesResposta[i],
-                    Status = partesResposta[i + 1]
+                    Status = (PlayerStatus)Enum.Parse(typeof(PlayerStatus), partesResposta[i + 1])
                 };
             }
         }

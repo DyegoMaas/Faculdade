@@ -26,7 +26,8 @@ namespace JogoCartas21.Console
             jogo.EntrarNoJogo();
             Thread.Sleep(TimeSpan.FromSeconds(2));
             var players = jogo.ObterJogadoresAtivos();
-            jogo.PegarCarta();
+            //jogo.PegarCarta();
+            
             System.Console.Read();
         }
 
@@ -66,8 +67,11 @@ namespace JogoCartas21.Console
                 var jogadoresAtivos = ObterJogadoresAtivos();
                 var jogador = jogadoresAtivos.First(j => j.UserId == usuario.UserId);
 
-                if(jogador.Status == "GETTING") //todo USAR ENUM
-                throw new NotImplementedException();
+                if (jogador.Status == PlayerStatus.GETTING)
+                    return conector.GetCard(usuario);
+
+                //em outro status não é permitido pegar uma carta
+                throw new InvalidOperationException();
             }
         }
     }

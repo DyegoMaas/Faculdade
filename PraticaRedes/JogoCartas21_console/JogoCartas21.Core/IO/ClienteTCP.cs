@@ -28,8 +28,7 @@ namespace JogoCartas21.Core.IO
 
                 Console.WriteLine("Conectado");
                 var stream = tcpClient.GetStream();
-                var asciiEncoding = new ASCIIEncoding();
-                var byteArray = asciiEncoding.GetBytes(mensagem);
+                var byteArray = Encoding.ASCII.GetBytes(mensagem);
                 Console.WriteLine("Transmitindo {0}...", mensagem);
 
                 stream.Write(byteArray, 0, byteArray.Length);
@@ -49,7 +48,7 @@ namespace JogoCartas21.Core.IO
                     if (bytesRecebidos.Any())
                         return Encoding.UTF8.GetString(bytesRecebidos);
 
-                    throw new Exception("Nenhuma mensagem recebida.");
+                    return string.Empty;
                 }
             }
         }
