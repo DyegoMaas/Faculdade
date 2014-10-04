@@ -47,15 +47,21 @@ namespace JogoCartas21.Core
         private IEnumerable<Player> ConverterJogadores(string resposta)
         {
             resposta = resposta.TrimEnd('\n').TrimEnd(':');
+
+            if(string.IsNullOrWhiteSpace(resposta))
+                return new Player[0];
+
+            var players = new List<Player>();
             var partesResposta = resposta.Split(':');
             for (int i = 0; i < partesResposta.Length; i += 3)
             {
-                yield return new Player
+                players.Add(new Player
                 {
                     UserId = partesResposta[i],
                     Status = partesResposta[i + 1].ToEnum<PlayerStatus>()
-                };
+                });
             }
+            return players;
         }
 
         private string ConverterParaString(ComandosJogo comando)

@@ -23,10 +23,21 @@ namespace JogoCartas21.Console
             var conector = new ConectorJogoCartas21(clienteTcp, clienteUdp);
             var jogo = new JogoCartas21(conector, new Usuario(userId, senha));
 
-            jogo.EntrarNoJogo();
+
+            System.Console.WriteLine(clienteTcp.EnviarMensagem(string.Format("GET USERS {0}:{1}", userId, senha)));
+
+            //jogo.EntrarNoJogo();
             Thread.Sleep(TimeSpan.FromSeconds(2));
-            var players = jogo.ObterJogadoresAtivos();
-            //jogo.PegarCarta();
+
+            for (int i = 0; i < 5; i++)
+            {
+                var players = jogo.ObterJogadoresAtivos();
+                foreach (var player in players)
+                {
+                    System.Console.WriteLine("{0} - {1}", player.UserId, player.Status);
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
+                }                
+            }
             
             System.Console.Read();
         }
