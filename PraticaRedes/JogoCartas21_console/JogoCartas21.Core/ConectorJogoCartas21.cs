@@ -19,7 +19,7 @@ namespace JogoCartas21.Core
         public IEnumerable<Player> GetPlayers(Usuario usuario)
         {
             var mensagem = "GET PLAYERS {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
-            var resposta = clienteTcp.EfetuarChamada(mensagem);
+            var resposta = clienteTcp.EnviarMensagem(mensagem);
 
             var listaJogadores = ConverterJogadores(resposta);
             return listaJogadores;
@@ -28,7 +28,7 @@ namespace JogoCartas21.Core
         public Carta GetCard(Usuario usuario)
         {
             var mensagem = "GET CARD {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
-            var resposta = clienteTcp.EfetuarChamada(mensagem);
+            var resposta = clienteTcp.EnviarMensagem(mensagem);
 
             var partesResposta = resposta.Split(';');
             return new Carta

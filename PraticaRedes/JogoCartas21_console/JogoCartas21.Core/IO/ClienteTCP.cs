@@ -18,7 +18,7 @@ namespace JogoCartas21.Core.IO
             this.porta = porta;
         }
 
-        public string EfetuarChamada(string mensagem)
+        public string EnviarMensagem(string mensagem)
         {
             using (var tcpClient = new TcpClient())
             {
