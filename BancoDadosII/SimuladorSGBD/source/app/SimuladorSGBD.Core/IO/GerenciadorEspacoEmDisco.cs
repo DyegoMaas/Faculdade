@@ -58,7 +58,8 @@ namespace SimuladorSGBD.Core.IO
 
         private void CriarBlocoVazio(Stream stream, int bytes)
         {
-            var buffer = Enumerable.Repeat((byte) 0, bytes).ToArray();
+            var s = Enumerable.Repeat(0b, bytes);
+            //var buffer = Encoding.ASCII.GetBytes(Enumerable.Repeat('0', bytes).ToArray());
             stream.Write(buffer, 0, buffer.Length);
         }
     }
