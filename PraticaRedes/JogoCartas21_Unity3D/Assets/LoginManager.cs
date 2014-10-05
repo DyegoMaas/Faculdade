@@ -19,10 +19,11 @@ public class LoginManager : MonoBehaviour
 	
 	}
 
-    public void Login(string userId, string senha)
+    public void Login(string login)
     {
-        UserId = userId;
-        Senha = senha;
+        var partes = login.Trim().Split(':');
+        UserId = partes[0];
+        Senha = partes[1];
 
         Application.LoadLevel(level);
     }
