@@ -5,12 +5,17 @@ using System.Threading;
 using JogoCartas21.Core;
 using JogoCartas21.Core.IO;
 using System.Linq;
+using JogoCartas21.Core.Jogo;
 using JogoCartas21.Core.Models;
 
 namespace JogoCartas21.Console
 {
     class Program
     {
+        private const string EnderecoServidor = "larc.inf.furb.br";
+        private const int PortaUDP = 1011;
+        private const int PortaTCP = 1012;
+
         private static void Main(string[] args)
         {
             //const string userId = "6673";
@@ -18,8 +23,8 @@ namespace JogoCartas21.Console
             const string userId = "8065";
             const string senha = "egptq";
 
-            var clienteTcp = new ClienteTCP("larc.inf.furb.br", 1012);
-            var clienteUdp = new ClienteUDP("larc.inf.furb.br", 1011);
+            var clienteTcp = new ClienteTCP(EnderecoServidor, PortaTCP);
+            var clienteUdp = new ClienteUDP(EnderecoServidor, PortaUDP);
             var conector = new ConectorJogoCartas21(clienteTcp, clienteUdp);
             var jogo = new JogoCartas21(conector, new Usuario(userId, senha));
 

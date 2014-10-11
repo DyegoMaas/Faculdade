@@ -3,7 +3,7 @@ using JogoCartas21.Core.IO;
 using JogoCartas21.Core.Models;
 using JogoCartas21.Core.Utils;
 
-namespace JogoCartas21.Core
+namespace JogoCartas21.Core.Jogo
 {
     public class ConectorJogoCartas21 : IConectorJogoCartas21
     {

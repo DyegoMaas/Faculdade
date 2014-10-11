@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JogoCartas21.Core.Models;
 
-namespace JogoCartas21.Core
+namespace JogoCartas21.Core.Jogo
 {
     public interface IConectorJogoCartas21
     {

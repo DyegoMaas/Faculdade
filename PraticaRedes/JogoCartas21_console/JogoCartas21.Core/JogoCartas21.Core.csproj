@@ -41,9 +41,9 @@
   <ItemGroup>
     <Compile Include="IO\ClienteUDP.cs" />
     <Compile Include="Models\Carta.cs" />
-    <Compile Include="ConectorJogoCartas21.cs" />
+    <Compile Include="Jogo\ConectorJogoCartas21.cs" />
     <Compile Include="IO\ClienteTCP.cs" />
-    <Compile Include="IConectorJogoCartas21.cs" />
+    <Compile Include="Jogo\IConectorJogoCartas21.cs" />
     <Compile Include="Models\ComandosJogo.cs" />
     <Compile Include="Models\Naipe.cs" />
     <Compile Include="Models\Player.cs" />
@@ -51,6 +51,9 @@
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Chat\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
