@@ -1,8 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\LoginManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="c:\dev\Faculdade\PraticaRedes\JogoCartas21_Unity3D\Assets\Scripts\ClienteUDP.cs">
     <Files>
-      <File FileName="Assets\LoginManager.cs" Line="28" Column="25" />
+      <File FileName="Assets\Scripts\Jogo.cs" Line="22" Column="48" />
+      <File FileName="c:\dev\Faculdade\PraticaRedes\JogoCartas21_Unity3D\Assets\Scripts\ClienteUDP.cs" Line="43" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -7,28 +7,23 @@ using UnityEngine;
 
 public class ClienteTCP : MonoBehaviour {
     
-    private const char CaractereFimMensagem = '\r';
-    private readonly string hostname;
-    private readonly int porta;
+    public string hostname;
+    public int porta;
 
-    public ClienteTCP(string hostname, int porta)
-    {
-        this.hostname = hostname;
-        this.porta = porta;
-    }
+    private const char CaractereFimMensagem = '\r';
 
     public string EnviarMensagem(string mensagem)
     {
         using (var tcpClient = new TcpClient())
         {
-            Console.WriteLine("Conectando...");
+            Debug.Log("Conectando via TCP...");
 
             tcpClient.Connect(hostname, porta);
 
-            Console.WriteLine("Conectado");
+            Debug.Log("Conectado");
             var stream = tcpClient.GetStream();
             var byteArray = Encoding.ASCII.GetBytes(mensagem);
-            Console.WriteLine("Transmitindo {0}...", mensagem);
+            Debug.Log(string.Format("Transmitindo {0}...", mensagem));
 
             stream.Write(byteArray, 0, byteArray.Length);
 

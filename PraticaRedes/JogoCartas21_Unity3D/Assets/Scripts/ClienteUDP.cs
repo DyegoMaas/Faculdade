@@ -1,17 +1,12 @@
-﻿using System.Net.Sockets;
+﻿using System.Collections;
+using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
 public class ClienteUDP : MonoBehaviour {
     
-    private readonly string hostname;
-    private readonly int porta;
-
-    public ClienteUDP(string hostname, int porta)
-    {
-        this.hostname = hostname;
-        this.porta = porta;
-    }
+    public string hostname;
+    public int porta;
 
     public void EnviarMensagem(string mensagem)
     {

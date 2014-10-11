@@ -26,7 +26,6 @@ namespace JogoCartas21.Console
             var conector = new ConectorJogoCartas21(clienteTcp, clienteUdp);
             var jogo = new JogoCartas21(conector, new Usuario(userId, senha));
 
-
             System.Console.WriteLine(clienteTcp.EnviarMensagem(string.Format("GET USERS {0}:{1}", userId, senha)));
 
             jogo.EntrarNoJogo();
