@@ -1,4 +1,4 @@
-#################
+﻿#################
 ## Eclipse
 #################
 
@@ -169,15 +169,14 @@ App_Data/*.ldf
 #############
 ## Unity 3D
 #############
-
-# Library folder
 Library/
 
 # Diretório do Resharper
 _ReSharper*/
-
-# Arquivos temporários do Unity
 Temp/
+Obj/
+UnityGenerated/
+Assets/AssetStoreTools*
 
 
 #############
