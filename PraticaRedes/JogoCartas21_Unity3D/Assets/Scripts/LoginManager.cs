@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class LoginManager : MonoBehaviour
 {
-    public string level = "jogo";
-
-    public string UserId { get; private set; }
-    public string Senha { get; private set; }
+    public string userId = "";
+    public string senha = "";
 
 	// Use this for initialization
     private void Start()
@@ -22,9 +19,9 @@ public class LoginManager : MonoBehaviour
     public void Login(string login)
     {
         var partes = login.Trim().Split(':');
-        UserId = partes[0];
-        Senha = partes[1];
+        userId = partes[0];
+        senha = partes[1];
 
-        Application.LoadLevel(level);
+        Application.LoadLevel(1);
     }
 }
