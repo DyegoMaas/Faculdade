@@ -31,18 +31,23 @@ namespace JogoCartas21.Console
 
             System.Console.WriteLine(clienteTcp.EnviarMensagem(string.Format("GET USERS {0}:{1}", userId, senha)));
 
-            //jogo.EntrarNoJogo();
-            Thread.Sleep(TimeSpan.FromSeconds(2));
-
-            for (int i = 0; i < 5; i++)
+            jogo.EntrarNoJogo();
+            for (int i = 0; i < 15; i++)
             {
+                Thread.Sleep(TimeSpan.FromSeconds(1));
                 var players = jogo.ObterJogadoresAtivos();
                 foreach (var player in players)
                 {
                     System.Console.WriteLine("{0} - {1}", player.UserId, player.Status);
-                    Thread.Sleep(TimeSpan.FromSeconds(1));
+
+                    if (player.UserId == userId && player.Status == PlayerStatus.GETTING)
+                    {
+                        var carta = jogo.PegarCarta();
+                        System.Console.WriteLine("Carta obtida: {0} de {1}", carta.Num, carta.Suit);
+                    }
                 }                
             }
+            jogo.SairDoJogo();
             
             System.Console.Read();
         }

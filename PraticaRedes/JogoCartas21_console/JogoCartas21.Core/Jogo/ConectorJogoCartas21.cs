@@ -30,7 +30,7 @@ namespace JogoCartas21.Core.Jogo
             var mensagem = "GET CARD {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
             var resposta = clienteTcp.EnviarMensagem(mensagem);
 
-            var partesResposta = resposta.Split(';');
+            var partesResposta = resposta.Split(':');
             return new Carta
             {
                Num = partesResposta[0],
