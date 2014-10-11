@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JogoCartas21.Core.IO;
 using JogoCartas21.Core.Models;
 using JogoCartas21.Core.Utils;
@@ -30,12 +31,11 @@ namespace JogoCartas21.Core.Jogo
             var mensagem = "GET CARD {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
             var resposta = clienteTcp.EnviarMensagem(mensagem);
 
+            if (resposta == ":")
+                throw new InvalidOperationException("resposta inválida (timeout?)");
+
             var partesResposta = resposta.Split(':');
-            return new Carta
-            {
-               Num = partesResposta[0],
-               Suit = partesResposta[1].ToEnum<Naipe>()
-            };
+            return new Carta(partesResposta[0], partesResposta[1].ToEnum<Naipe>());
         }
 
         public void EnviarComandoJogo(Usuario usuario, ComandosJogo comando)

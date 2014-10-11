@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Threading;
-using JogoCartas21.Core;
-using JogoCartas21.Core.IO;
-using System.Linq;
+﻿using JogoCartas21.Core.IO;
 using JogoCartas21.Core.Jogo;
 using JogoCartas21.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace JogoCartas21.Console
 {
@@ -32,21 +30,27 @@ namespace JogoCartas21.Console
             System.Console.WriteLine(clienteTcp.EnviarMensagem(string.Format("GET USERS {0}:{1}", userId, senha)));
 
             jogo.EntrarNoJogo();
-            for (int i = 0; i < 15; i++)
+            while(jogo.Pontuacao < 15)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(1));
                 var players = jogo.ObterJogadoresAtivos();
+                
                 foreach (var player in players)
                 {
                     System.Console.WriteLine("{0} - {1}", player.UserId, player.Status);
+                }
 
-                    if (player.UserId == userId && player.Status == PlayerStatus.GETTING)
+                var eu = players.FirstOrDefault(p => p.UserId == userId);
+                if (eu != null)
+                {
+                    if (jogo.PossoPegarCarta())
                     {
                         var carta = jogo.PegarCarta();
-                        System.Console.WriteLine("Carta obtida: {0} de {1}", carta.Num, carta.Suit);
+                        System.Console.WriteLine("Carta obtida: {0} de {1}; Pontuação: {2}", carta.Num, carta.Suit, jogo.Pontuacao);
                     }
-                }                
+                }
             }
+            jogo.PararDeJogar();
             jogo.SairDoJogo();
             
             System.Console.Read();
@@ -56,6 +60,8 @@ namespace JogoCartas21.Console
         {
             private readonly ConectorJogoCartas21 conector;
             private readonly Usuario usuario;
+            private Player jogador;
+            public int Pontuacao { get; private set; }
 
             public JogoCartas21(ConectorJogoCartas21 conector, Usuario usuario)
             {
@@ -66,33 +72,46 @@ namespace JogoCartas21.Console
             public void EntrarNoJogo()
             {
                 conector.EnviarComandoJogo(usuario, ComandosJogo.Enter);
+                Pontuacao = 0;
             }
 
             public void PararDeJogar()
             {
                 conector.EnviarComandoJogo(usuario, ComandosJogo.Stop);
+                Pontuacao = 0;
             }
 
             public void SairDoJogo()
             {
                 conector.EnviarComandoJogo(usuario, ComandosJogo.Quit);
+                Pontuacao = 0;
             }
 
             public IList<Player> ObterJogadoresAtivos()
             {
-                return conector.GetPlayers(usuario).ToArray();
+                var jogadoresAtivos = conector.GetPlayers(usuario).ToArray();
+                jogador = jogadoresAtivos.FirstOrDefault(p => p.UserId == usuario.UserId);
+
+                return jogadoresAtivos;
+            }
+
+            public bool PossoPegarCarta()
+            {
+                if (jogador == null)
+                    return false;
+
+                return jogador.Status == PlayerStatus.GETTING;
             }
 
             public Carta PegarCarta()
             {
-                var jogadoresAtivos = ObterJogadoresAtivos();
-                var jogador = jogadoresAtivos.First(j => j.UserId == usuario.UserId);
+                if(!PossoPegarCarta())
+                    throw new InvalidOperationException();
 
-                if (jogador.Status == PlayerStatus.GETTING)
-                    return conector.GetCard(usuario);
+                var carta = conector.GetCard(usuario);
+                Pontuacao += carta.ValorCarta;
 
-                //em outro status não é permitido pegar uma carta
-                throw new InvalidOperationException();
+                return carta;
             }
         }
     }
