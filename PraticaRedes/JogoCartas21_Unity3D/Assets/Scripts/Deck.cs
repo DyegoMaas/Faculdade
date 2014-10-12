@@ -8,12 +8,12 @@ public class Deck : MonoBehaviour {
     public Transform destinoCarta;
     private Color startcolor;
     private Jogo jogo;
+
+    private int cartasAdquiridas = 0;
     
     void Start()
     {
         jogo = FindObjectOfType<Jogo>();
-
-        InstanciarCarta(new Carta("A", Naipe.CLUB));
     }
 
     void OnMouseEnter()
@@ -32,11 +32,11 @@ public class Deck : MonoBehaviour {
         var cartaAdquirida = jogo.PegarCarta();
         if (cartaAdquirida != null)
         {
-            InstanciarCarta(cartaAdquirida);
+            InstanciarCartaEMover(cartaAdquirida, destinoCarta.position);
         }
     }
 
-    private void InstanciarCarta(Carta cartaAdquirida)
+    private void InstanciarCartaEMover(Carta cartaAdquirida, Vector3 posicaoFinal)
     {
         var caminhoResource = MontarCaminhoResource(cartaAdquirida);
         try
@@ -49,16 +49,17 @@ public class Deck : MonoBehaviour {
             carta.transform.rotation = targetTrasform.rotation;
             carta.transform.localScale = new Vector3(targetTrasform.localScale.x, targetTrasform.localScale.y, carta.transform.localScale.z);
 
-            var posicaoFinal = destinoCarta.position;
+            posicaoFinal -= new Vector3(0f, 0f, cartasAdquiridas * .1f);
             iTween.MoveTo(carta, iTween.Hash("position", posicaoFinal, "easeType", "easeInOutExpo", "time", 1f));
 
-            var rotacaoFinal = destinoCarta.rotation.eulerAngles + new Vector3(0f, 180f);
+            var rotacaoFinal = new Vector3(0f, 180f);
             iTween.RotateTo(carta, iTween.Hash("rotation", rotacaoFinal, "easeType", "easeInOutBack", "delay", .1));
         }
-        catch (Exception execao)
+        catch (Exception)
         {
             Debug.LogError("Erro ao carregar o recurso:" + caminhoResource);
         }
+        cartasAdquiridas++;
     }
 
     private string MontarCaminhoResource(Carta cartaAdquirida)
