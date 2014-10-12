@@ -16,11 +16,9 @@ public class ClienteTCP : MonoBehaviour {
     {
         using (var tcpClient = new TcpClient())
         {
-            Debug.Log("Conectando via TCP...");
-
             tcpClient.Connect(hostname, porta);
 
-            Debug.Log("Conectado");
+            Debug.Log("Conectado via TCP...");
             var stream = tcpClient.GetStream();
             var byteArray = Encoding.ASCII.GetBytes(mensagem);
             Debug.Log(string.Format("Transmitindo {0}...", mensagem));

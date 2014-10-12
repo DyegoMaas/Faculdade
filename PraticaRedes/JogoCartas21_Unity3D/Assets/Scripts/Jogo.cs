@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +9,7 @@ public class Jogo : MonoBehaviour
 {
     public Text listaJogadoresAtivos;
     public Text pontos;
+    public float intervaloAtualizacaoListaJogadores = 1f;
     private JogoCartas21 jogo;
     private Usuario usuario;
 
@@ -27,7 +27,7 @@ public class Jogo : MonoBehaviour
 	    jogo = new JogoCartas21(conector, usuario);
 
         EntrarJogo();
-        InvokeRepeating("AtualizarJogadoresAtivos", .5f, 1f);
+        InvokeRepeating("AtualizarJogadoresAtivos", .5f, intervaloAtualizacaoListaJogadores);
 	}
 
     // Update is called once per frame
@@ -35,14 +35,35 @@ public class Jogo : MonoBehaviour
 	
 	}
 
+    void OnApplicationQuit()
+    {
+        SairJogo();
+    }
+
     void EntrarJogo()
     {
+        pontos.text = "0";
         jogo.EntrarNoJogo();
     }
 
     void PararJogo()
     {
+        Debug.Log("Parando jogo");
         jogo.PararDeJogar();
+        Debug.Log("Parado");
+    }
+
+    void PegarCarta()
+    {
+        if (jogo.PossoPegarCarta())
+        {
+            var cartaAdquirida = jogo.PegarCarta();
+            pontos.text = jogo.Pontuacao.ToString();
+        }
+        else
+        {
+            Debug.Log("não podia pegar cartas");
+        }
     }
 
     private void SairJogo()
@@ -52,7 +73,8 @@ public class Jogo : MonoBehaviour
 
     void AtualizarJogadoresAtivos()
     {
-        clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha)); //TODO remover isso da versão final
+        //TODO remover isso da versão final
+        clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha));
 
         if (jogo.Ativo)
         {
@@ -60,7 +82,7 @@ public class Jogo : MonoBehaviour
             var jogadoresAtivos = jogo.ObterJogadoresAtivos();
             foreach (var jogador in jogadoresAtivos)
             {
-                stringBuilder.AppendFormat("{0}:{1}", jogador.UserId, jogador.Status).AppendLine();
+                stringBuilder.AppendFormat("{0} - {1}", jogador.UserId, jogador.Status).AppendLine();
             }
             listaJogadoresAtivos.text = stringBuilder.ToString();
 
@@ -95,7 +117,6 @@ public class JogoCartas21
     public void PararDeJogar()
     {
         conector.EnviarComandoJogo(usuario, ComandosJogo.Stop);
-        Pontuacao = 0;
         Ativo = false;
     }
 
@@ -128,6 +149,7 @@ public class JogoCartas21
             throw new InvalidOperationException();
 
         var carta = conector.GetCard(usuario);
+        Debug.Log("Num: " + carta.Num);
         Pontuacao += carta.ValorCarta;
 
         return carta;
@@ -157,7 +179,7 @@ public class ConectorJogoCartas21
     public Carta GetCard(Usuario usuario)
     {
         var mensagem = "GET CARD {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
-        var resposta = clienteTcp.EnviarMensagem(mensagem);
+        var resposta = clienteTcp.EnviarMensagem(mensagem).Trim();
 
         if (resposta == ":")
             throw new InvalidOperationException("resposta inválida (timeout?)");
@@ -211,6 +233,7 @@ public class Carta
 {
     private static readonly Dictionary<string, int> ValoresCarta = new Dictionary<string, int>
         {
+            {"1", 1},
             {"A", 1},
             {"2", 2},
             {"3", 3},
@@ -222,7 +245,10 @@ public class Carta
             {"9", 9},
             {"J", 10},
             {"Q", 10},
-            {"K", 10}
+            {"K", 10},
+            {"10", 10},
+            {"11", 10},
+            {"12", 10}
         };
 
     public string Num { get; private set; }
@@ -236,7 +262,7 @@ public class Carta
 
     public int ValorCarta
     {
-        get { return ValoresCarta[Num]; }
+        get { return ValoresCarta[Num.ToUpper()]; }
     }
 }
 

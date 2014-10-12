@@ -48,8 +48,22 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ClienteTCP.cs" />
      <Compile Include="Assets\Scripts\ClienteUDP.cs" />
+     <Compile Include="Assets\Scripts\Deck.cs" />
      <Compile Include="Assets\Scripts\Jogo.cs" />
      <Compile Include="Assets\Scripts\LoginManager.cs" />
+     <Compile Include="Assets\uPromise\Content\Deferred.cs" />
+     <Compile Include="Assets\uPromise\Content\Promise.Static.cs" />
+     <Compile Include="Assets\uPromise\Content\Promise.cs" />
+     <Compile Include="Assets\uPromise\Content\PromiseFactory.cs" />
+     <Compile Include="Assets\uPromise\Content\Utility\GlobalMonoBehaviour.cs" />
+     <Compile Include="Assets\uPromise\Content\Utility\Singleton.cs" />
+     <Compile Include="Assets\uPromise\Examples\BulbBehaviour.cs" />
+     <Compile Include="Assets\uPromise\Examples\BulbsController.cs" />
+     <Compile Include="Assets\uPromise\Examples\PromiseHttpController.cs" />
+     <Compile Include="Assets\uPromise\Examples\PromiseMoveController.cs" />
+     <Compile Include="Assets\uPromise\Examples\PromiseTestRunner.cs" />
+     <None Include="Assets\uPromise\readme.txt" />
+     <None Include="Assets\PlayingCards\ReadMe\ReadMe.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>
