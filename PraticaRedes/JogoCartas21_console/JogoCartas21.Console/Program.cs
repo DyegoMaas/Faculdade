@@ -29,7 +29,7 @@ namespace JogoCartas21.Console
             System.Console.WriteLine(clienteTcp.EnviarMensagem(string.Format("GET USERS {0}:{1}", userId, senha)));
 
             jogo.EntrarNoJogo();
-            while(jogo.Pontuacao < 15)
+            while(jogo.Pontuacao < 21)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(1));
                 var players = jogo.ObterJogadoresAtivos();

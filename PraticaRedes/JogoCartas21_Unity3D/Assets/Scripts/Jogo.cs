@@ -48,22 +48,20 @@ public class Jogo : MonoBehaviour
 
     void PararJogo()
     {
-        Debug.Log("Parando jogo");
+        Debug.Log("Parando de jogar");
         jogo.PararDeJogar();
-        Debug.Log("Parado");
     }
 
-    void PegarCarta()
+    public Carta PegarCarta()
     {
         if (jogo.PossoPegarCarta())
         {
             var cartaAdquirida = jogo.PegarCarta();
             pontos.text = jogo.Pontuacao.ToString();
+            return cartaAdquirida;
         }
-        else
-        {
-            Debug.Log("não podia pegar cartas");
-        }
+        Debug.Log("não podia pegar cartas");
+        return null;
     }
 
     private void SairJogo()
@@ -76,18 +74,15 @@ public class Jogo : MonoBehaviour
         //TODO remover isso da versão final
         clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha));
 
-        if (jogo.Ativo)
+        var stringBuilder = new StringBuilder();
+        var jogadoresAtivos = jogo.ObterJogadoresAtivos();
+        foreach (var jogador in jogadoresAtivos)
         {
-            var stringBuilder = new StringBuilder();
-            var jogadoresAtivos = jogo.ObterJogadoresAtivos();
-            foreach (var jogador in jogadoresAtivos)
-            {
-                stringBuilder.AppendFormat("{0} - {1}", jogador.UserId, jogador.Status).AppendLine();
-            }
-            listaJogadoresAtivos.text = stringBuilder.ToString();
-
-            Debug.Log("Numero de jogadores: " + jogadoresAtivos.Count);
+            stringBuilder.AppendFormat("{0} - {1}", jogador.UserId, jogador.Status).AppendLine();
         }
+        listaJogadoresAtivos.text = stringBuilder.ToString();
+
+        Debug.Log("Numero de jogadores: " + jogadoresAtivos.Count);
     }
 }
 
@@ -149,7 +144,6 @@ public class JogoCartas21
             throw new InvalidOperationException();
 
         var carta = conector.GetCard(usuario);
-        Debug.Log("Num: " + carta.Num);
         Pontuacao += carta.ValorCarta;
 
         return carta;
@@ -182,7 +176,7 @@ public class ConectorJogoCartas21
         var resposta = clienteTcp.EnviarMensagem(mensagem).Trim();
 
         if (resposta == ":")
-            throw new InvalidOperationException("resposta inválida (timeout?)");
+            throw new InvalidOperationException("Não pode pegar");
 
         var partesResposta = resposta.Split(':');
         return new Carta(partesResposta[0], partesResposta[1].ToEnum<Naipe>());
@@ -233,7 +227,6 @@ public class Carta
 {
     private static readonly Dictionary<string, int> ValoresCarta = new Dictionary<string, int>
         {
-            {"1", 1},
             {"A", 1},
             {"2", 2},
             {"3", 3},
@@ -243,12 +236,10 @@ public class Carta
             {"7", 7},
             {"8", 8},
             {"9", 9},
+            {"10", 10},
             {"J", 10},
             {"Q", 10},
-            {"K", 10},
-            {"10", 10},
-            {"11", 10},
-            {"12", 10}
+            {"K", 10}
         };
 
     public string Num { get; private set; }

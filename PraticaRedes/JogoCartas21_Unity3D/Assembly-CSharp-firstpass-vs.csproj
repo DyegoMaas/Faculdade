@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{D8B20ED4-19AC-87FC-5BFC-257FFAF46AFB}</ProjectGuid>
+	<ProjectGuid>{34AE19AA-2450-8B29-A24B-251FC21A94FF}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
@@ -46,33 +46,16 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\ClienteTCP.cs" />
-     <Compile Include="Assets\Scripts\ClienteUDP.cs" />
-     <Compile Include="Assets\Scripts\Deck.cs" />
-     <Compile Include="Assets\Scripts\Jogo.cs" />
-     <Compile Include="Assets\Scripts\LoginManager.cs" />
-     <Compile Include="Assets\Scripts\RetiradaCarta.cs" />
-     <Compile Include="Assets\uPromise\Content\Deferred.cs" />
-     <Compile Include="Assets\uPromise\Content\Promise.Static.cs" />
-     <Compile Include="Assets\uPromise\Content\Promise.cs" />
-     <Compile Include="Assets\uPromise\Content\PromiseFactory.cs" />
-     <Compile Include="Assets\uPromise\Content\Utility\GlobalMonoBehaviour.cs" />
-     <Compile Include="Assets\uPromise\Content\Utility\Singleton.cs" />
-     <Compile Include="Assets\uPromise\Examples\BulbBehaviour.cs" />
-     <Compile Include="Assets\uPromise\Examples\BulbsController.cs" />
-     <Compile Include="Assets\uPromise\Examples\PromiseHttpController.cs" />
-     <Compile Include="Assets\uPromise\Examples\PromiseMoveController.cs" />
-     <Compile Include="Assets\uPromise\Examples\PromiseTestRunner.cs" />
+     <Compile Include="Assets\Plugins\Pixelplacement\iTween\Sample\MoveSample.cs" />
+     <Compile Include="Assets\Plugins\Pixelplacement\iTween\Sample\RotateSample.cs" />
+     <Compile Include="Assets\Plugins\Pixelplacement\iTween\Sample\SampleInfo.cs" />
+     <Compile Include="Assets\Plugins\Pixelplacement\iTween\iTween.cs" />
      <None Include="Assets\uPromise\readme.txt" />
      <None Include="Assets\Plugins\Pixelplacement\iTween\ReadMe!\ReadMe!.txt" />
      <None Include="Assets\PlayingCards\ReadMe\ReadMe.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{34AE19AA-2450-8B29-A24B-251FC21A94FF}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
