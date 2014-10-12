@@ -9,13 +9,16 @@ using UnityEngine.UI;
 public class Jogo : MonoBehaviour
 {
     public Text listaJogadoresAtivos;
+    public Text pontos;
     private JogoCartas21 jogo;
     private Usuario usuario;
+
+    private ClienteTCP clienteTCP;
 
 	// Use this for initialization
 	void Start ()
 	{
-	    var clienteTCP = GetComponent<ClienteTCP>();
+	    clienteTCP = GetComponent<ClienteTCP>();
 	    var clienteUDP = GetComponent<ClienteUDP>();
 	    var loginManager = FindObjectOfType<LoginManager>();
 
@@ -23,7 +26,6 @@ public class Jogo : MonoBehaviour
 		usuario = new Usuario(loginManager.userId, loginManager.senha);
 	    jogo = new JogoCartas21(conector, usuario);
 
-	    clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha)); //TODO remover isso da versão final
         EntrarJogo();
         InvokeRepeating("AtualizarJogadoresAtivos", .5f, 1f);
 	}
@@ -50,6 +52,8 @@ public class Jogo : MonoBehaviour
 
     void AtualizarJogadoresAtivos()
     {
+        clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha)); //TODO remover isso da versão final
+
         if (jogo.Ativo)
         {
             var stringBuilder = new StringBuilder();
