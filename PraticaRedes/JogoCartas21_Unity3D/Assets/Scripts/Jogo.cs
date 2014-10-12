@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +29,7 @@ public class Jogo : MonoBehaviour
 	    jogo = new JogoCartas21(conector, usuario);
 
         EntrarJogo();
-        InvokeRepeating("AtualizarJogadoresAtivos", .5f, intervaloAtualizacaoListaJogadores);
+	    StartCoroutine(AtualizarJogadoresAtivos());
 	}
 
     // Update is called once per frame
@@ -69,20 +71,40 @@ public class Jogo : MonoBehaviour
         jogo.SairDoJogo();
     }
 
-    void AtualizarJogadoresAtivos()
+    private IEnumerator AtualizarJogadoresAtivos()
     {
-        //TODO remover isso da versão final
-        clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha));
+        var atualizado = false;
+        var jogadores = string.Empty;
 
-        var stringBuilder = new StringBuilder();
-        var jogadoresAtivos = jogo.ObterJogadoresAtivos();
-        foreach (var jogador in jogadoresAtivos)
+        while (true)
         {
-            stringBuilder.AppendFormat("{0} - {1}", jogador.UserId, jogador.Status).AppendLine();
-        }
-        listaJogadoresAtivos.text = stringBuilder.ToString();
+            if (!atualizado)
+            {
+                var thread = new Thread(() =>
+                {
+                    //TODO remover isso da versão final
+                    clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha));
 
-        Debug.Log("Numero de jogadores: " + jogadoresAtivos.Count);
+                    var stringBuilder = new StringBuilder();
+                    var jogadoresAtivos = jogo.ObterJogadoresAtivos();
+                    foreach (var jogador in jogadoresAtivos)
+                    {
+                        stringBuilder.AppendFormat("{0} - {1}", jogador.UserId, jogador.Status).AppendLine();
+                    }
+                    jogadores = stringBuilder.ToString();
+
+                    atualizado = true;
+                });
+                thread.Start();
+                yield return true;
+            }
+            else
+            {
+                listaJogadoresAtivos.text = jogadores;
+                atualizado = false;
+                yield return new WaitForSeconds(1f);   
+            }
+        }
     }
 }
 

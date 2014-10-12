@@ -6,6 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Cenas/login.unity
+    path: Assets/Cenas/login_windows.unity
   - enabled: 1
     path: Assets/Cenas/jogo.unity
+  - enabled: 0
+    path: Assets/Cenas/login_web.unity
