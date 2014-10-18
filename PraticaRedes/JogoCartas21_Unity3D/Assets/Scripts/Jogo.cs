@@ -4,39 +4,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.UI;
-using uPromise.Example.Http;
 
 public class Jogo : MonoBehaviour
 {
     public Text listaJogadoresAtivos;
     public Text pontos;
     public Text mensagens;
+    public InputField inputMensagens;
     public float intervaloAtualizacaoListaJogadores = 1f;
     private JogoCartas21 jogo;
     private Usuario usuario;
+    
+    private ConectorJogoCartas21 conectorJogo;
+    private ConectorChat conectorChat;
 
-    private ClienteTCP clienteTCP;
-
-	// Use this for initialization
+    // Use this for initialization
 	void Start ()
 	{
-	    clienteTCP = GetComponent<ClienteTCP>();
+	    var clienteTCP = GetComponent<ClienteTCP>();
 	    var clienteUDP = GetComponent<ClienteUDP>();
 	    var loginManager = FindObjectOfType<LoginManager>();
 
-	    var conectorJogo = new ConectorJogoCartas21(clienteTCP, clienteUDP);
-	    var conectorChat = new ConectorChat(clienteTCP, clienteUDP);
+	    conectorJogo = new ConectorJogoCartas21(clienteTCP, clienteUDP);
+	    conectorChat = new ConectorChat(clienteTCP, clienteUDP);
 		usuario = new Usuario(loginManager.userId, loginManager.senha);
 	    jogo = new JogoCartas21(conectorJogo, conectorChat, usuario);
 
         EntrarJogo();
 	    StartCoroutine(AtualizarJogadoresAtivos());
+        StartCoroutine(AtualizarMensagens());
 	}
 
     // Update is called once per frame
-	void Update () {
+    void Update () {
 	
 	}
 
@@ -47,14 +50,19 @@ public class Jogo : MonoBehaviour
 
     void EntrarJogo()
     {
-        pontos.text = "0";
         jogo.EntrarNoJogo();
+        AtualizarPontuacaoNaTela();
     }
 
     void PararJogo()
     {
-        Debug.Log("Parando de jogar");
         jogo.PararDeJogar();
+        AtualizarPontuacaoNaTela();
+    }
+
+    void SairJogo()
+    {
+        jogo.SairDoJogo();
     }
 
     public Carta PegarCarta()
@@ -69,14 +77,10 @@ public class Jogo : MonoBehaviour
         return null;
     }
 
-    private void SairJogo()
-    {
-        jogo.SairDoJogo();
-    }
-
     private IEnumerator AtualizarJogadoresAtivos()
     {
         var atualizado = false;
+        bool iniciado = false;
         var jogadores = string.Empty;
 
         while (true)
@@ -85,29 +89,90 @@ public class Jogo : MonoBehaviour
             {
                 var thread = new Thread(() =>
                 {
-                    //TODO remover isso da versão final
-                    clienteTCP.EnviarMensagem(string.Format("GET USERS {0}:{1}", usuario.UserId, usuario.Senha));
-
                     var stringBuilder = new StringBuilder();
+
+                    var usuariosAtivos = jogo.ObterUsuariosChat();
                     var jogadoresAtivos = jogo.ObterJogadoresAtivos();
-                    foreach (var jogador in jogadoresAtivos)
+
+                    foreach (var usuarioChat in usuariosAtivos)
                     {
-                        stringBuilder.AppendFormat("{0} - {1}", jogador.UserId, jogador.Status).AppendLine();
+                        var jogador = jogadoresAtivos.FirstOrDefault(j => j.UserId == usuarioChat.UserId);
+                        stringBuilder.AppendFormat("{0} ({1})", usuarioChat.UserId, usuarioChat.Wins);
+                        if (jogador != null)
+                        {
+                            stringBuilder.AppendFormat(" - {0}", jogador.Status);
+                        }
+                        stringBuilder.AppendLine();
                     }
                     jogadores = stringBuilder.ToString();
 
                     atualizado = true;
                 });
-                thread.Start();
+                if (!iniciado)
+                {
+                    thread.Start();
+                    iniciado = true;
+                }
                 yield return true;
             }
             else
             {
                 listaJogadoresAtivos.text = jogadores;
                 atualizado = false;
+                iniciado = false;
                 yield return new WaitForSeconds(1f);   
             }
         }
+    }
+
+    private IEnumerator AtualizarMensagens()
+    {
+        var atualizado = false;
+        var iniciado = false;
+        var pilhaMensagens = new Stack<string>();
+
+        var ultimaMensagem = string.Empty;
+
+        while (true)
+        {
+            if (!atualizado)
+            {
+                var thread = new Thread(() =>
+                {
+                    var mensagem = jogo.ObterUltimaMensagem();
+                    if (mensagem != string.Empty && mensagem != ultimaMensagem)
+                    {
+                        pilhaMensagens.Push(mensagem);
+                    }
+
+                    atualizado = true;
+                });
+                if (!iniciado)
+                {
+                    thread.Start();
+                    iniciado = true;
+                }
+                yield return true;
+            }
+            else
+            {
+                var stringBuilder = new StringBuilder();
+                foreach (var msg in pilhaMensagens.Take(10))
+                {
+                    stringBuilder.AppendLine(msg);
+                }
+                mensagens.text = stringBuilder.ToString();
+
+                atualizado = false;
+                iniciado = false;
+                yield return new WaitForSeconds(1f);
+            }
+        }
+    }
+
+    private void AtualizarPontuacaoNaTela()
+    {
+        pontos.text = jogo.Pontuacao.ToString();
     }
 }
 
@@ -139,11 +204,13 @@ public class JogoCartas21
     public void PararDeJogar()
     {
         conectorJogo.EnviarComandoJogo(usuario, ComandosJogo.Stop);
+        Pontuacao = 0;
         Ativo = false;
     }
 
     public void SairDoJogo()
     {
+        Console.WriteLine("Sair jogo");
         conectorJogo.EnviarComandoJogo(usuario, ComandosJogo.Quit);
         Pontuacao = 0;
         Ativo = false;
@@ -190,6 +257,15 @@ public class JogoCartas21
     public void EnviarMensagem(string mensagem, Usuario destinatario)
     {
         conectorChat.EnviarMensagem(usuario, destinatario, mensagem);
+    }
+
+    public string ObterUltimaMensagem()
+    {
+        var mensagemChat = conectorChat.GetMessage(usuario);
+        if (mensagemChat != null)
+            return mensagemChat.Mensagem;
+        
+        return string.Empty;
     }
 }
 
