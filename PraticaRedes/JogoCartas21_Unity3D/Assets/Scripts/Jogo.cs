@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using uPromise.Example.Http;
 
 public class Jogo : MonoBehaviour
 {
     public Text listaJogadoresAtivos;
     public Text pontos;
+    public Text mensagens;
     public float intervaloAtualizacaoListaJogadores = 1f;
     private JogoCartas21 jogo;
     private Usuario usuario;
@@ -24,9 +26,10 @@ public class Jogo : MonoBehaviour
 	    var clienteUDP = GetComponent<ClienteUDP>();
 	    var loginManager = FindObjectOfType<LoginManager>();
 
-	    var conector = new ConectorJogoCartas21(clienteTCP, clienteUDP);
+	    var conectorJogo = new ConectorJogoCartas21(clienteTCP, clienteUDP);
+	    var conectorChat = new ConectorChat(clienteTCP, clienteUDP);
 		usuario = new Usuario(loginManager.userId, loginManager.senha);
-	    jogo = new JogoCartas21(conector, usuario);
+	    jogo = new JogoCartas21(conectorJogo, conectorChat, usuario);
 
         EntrarJogo();
 	    StartCoroutine(AtualizarJogadoresAtivos());
@@ -112,41 +115,43 @@ public class Jogo : MonoBehaviour
 
 public class JogoCartas21
 {
-    private readonly ConectorJogoCartas21 conector;
+    private readonly ConectorJogoCartas21 conectorJogo;
+    private readonly ConectorChat conectorChat;
     private readonly Usuario usuario;
     private Player jogador;
     public int Pontuacao { get; private set; }
     public bool Ativo { get; private set; }
 
-    public JogoCartas21(ConectorJogoCartas21 conector, Usuario usuario)
+    public JogoCartas21(ConectorJogoCartas21 conectorJogo, ConectorChat conectorChat, Usuario usuario)
     {
-        this.conector = conector;
+        this.conectorJogo = conectorJogo;
+        this.conectorChat = conectorChat;
         this.usuario = usuario;
     }
 
     public void EntrarNoJogo()
     {
-        conector.EnviarComandoJogo(usuario, ComandosJogo.Enter);
+        conectorJogo.EnviarComandoJogo(usuario, ComandosJogo.Enter);
         Pontuacao = 0;
         Ativo = true;
     }
 
     public void PararDeJogar()
     {
-        conector.EnviarComandoJogo(usuario, ComandosJogo.Stop);
+        conectorJogo.EnviarComandoJogo(usuario, ComandosJogo.Stop);
         Ativo = false;
     }
 
     public void SairDoJogo()
     {
-        conector.EnviarComandoJogo(usuario, ComandosJogo.Quit);
+        conectorJogo.EnviarComandoJogo(usuario, ComandosJogo.Quit);
         Pontuacao = 0;
         Ativo = false;
     }
 
     public IList<Player> ObterJogadoresAtivos()
     {
-        var jogadoresAtivos = conector.GetPlayers(usuario).ToArray();
+        var jogadoresAtivos = conectorJogo.GetPlayers(usuario).ToArray();
         jogador = jogadoresAtivos.FirstOrDefault(p => p.UserId == usuario.UserId);
 
         return jogadoresAtivos;
@@ -165,10 +170,98 @@ public class JogoCartas21
         if (!PossoPegarCarta())
             throw new InvalidOperationException();
 
-        var carta = conector.GetCard(usuario);
+        var carta = conectorJogo.GetCard(usuario);
         Pontuacao += carta.ValorCarta;
 
         return carta;
+    }
+
+    public IEnumerable<UsuarioChat> ObterUsuariosChat()
+    {
+        return conectorChat.GetUsers(usuario);
+    }
+
+    public void EnviarMensagemParaTodos(string mensagem)
+    {
+        var todos = new Usuario("0", string.Empty);
+        EnviarMensagem(mensagem, destinatario:todos);
+    }
+
+    public void EnviarMensagem(string mensagem, Usuario destinatario)
+    {
+        conectorChat.EnviarMensagem(usuario, destinatario, mensagem);
+    }
+}
+
+public class ConectorChat
+{
+    private readonly ClienteTCP clienteTcp;
+    private readonly ClienteUDP clienteUdp;
+
+    public ConectorChat(ClienteTCP clienteTcp, ClienteUDP clienteUdp)
+    {
+        this.clienteTcp = clienteTcp;
+        this.clienteUdp = clienteUdp;
+    }
+
+    public IEnumerable<UsuarioChat> GetUsers(Usuario usuario)
+    {
+        var mensagem = "GET USERS {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
+        var resposta = clienteTcp.EnviarMensagem(mensagem);
+
+        var listaJogadores = ConverterUsuariosChat(resposta);
+        return listaJogadores;
+    }
+
+    public MensagemChat GetMessage(Usuario usuario)
+    {
+        var mensagem = "GET MESSAGE {0}:{1}".FormatWith(usuario.UserId, usuario.Senha);
+        var resposta = clienteTcp.EnviarMensagem(mensagem);
+
+        return ConverterMensagem(resposta);
+    }
+
+    public void EnviarMensagem(Usuario remetente, Usuario destinatario, string mensagemChat)
+    {
+        var mensagem = "SEND MESSAGE {0}:{1}:{2}:{3}".FormatWith(remetente.UserId, remetente.Senha, destinatario.UserId, mensagemChat);
+        clienteUdp.EnviarMensagem(mensagem);
+    }
+
+    private IEnumerable<UsuarioChat> ConverterUsuariosChat(string resposta)
+    {
+        resposta = resposta.TrimEnd('\n').TrimEnd(':');
+
+        if (string.IsNullOrEmpty(resposta))
+            return new UsuarioChat[0];
+
+        var usuarios = new List<UsuarioChat>();
+        var usuariosResposta = resposta.Split(':');
+        for (int i = 0; i < usuariosResposta.Length; i += 3)
+        {
+            usuarios.Add(new UsuarioChat
+            {
+                UserId = usuariosResposta[i],
+                UserName = usuariosResposta[i + 1],
+                Wins = int.Parse(usuariosResposta[i + 2])
+            });
+        }
+        return usuarios;
+    }
+
+    private MensagemChat ConverterMensagem(string resposta)
+    {
+        resposta = resposta.TrimEnd('\n').TrimEnd(':');
+
+        if (string.IsNullOrEmpty(resposta))
+            return null;
+
+        var mensagemResposta = resposta.Split(':');
+        var userId = mensagemResposta[0];
+        return new MensagemChat
+        {
+            UserId = userId == "0" ? "Servidor" : userId,
+            Mensagem = mensagemResposta[1],
+        };
     }
 }
 
@@ -318,6 +411,19 @@ public class Usuario
         UserId = userId;
         Senha = senha;
     }
+}
+
+public class UsuarioChat
+{
+    public string UserId { get; set; }
+    public string UserName { get; set; }
+    public int Wins { get; set; }
+}
+
+public class MensagemChat
+{
+    public string UserId { get; set; }
+    public string Mensagem { get; set; }
 }
 
 #endregion
