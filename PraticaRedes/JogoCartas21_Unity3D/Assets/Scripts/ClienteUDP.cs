@@ -12,6 +12,7 @@ public class ClienteUDP : MonoBehaviour {
     {
         var udpClient = new UdpClient();
 
+        Debug.Log(string.Format("Transmitindo via UDP: {0}...", mensagem));
         var bytes = Encoding.ASCII.GetBytes(mensagem);
         udpClient.Send(bytes, bytes.Length, hostname, porta);
     }

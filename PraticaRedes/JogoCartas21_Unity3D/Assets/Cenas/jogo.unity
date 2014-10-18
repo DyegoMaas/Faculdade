@@ -567,7 +567,7 @@ MonoBehaviour:
   listaJogadoresAtivos: {fileID: 1020221026}
   pontos: {fileID: 46688177}
   mensagens: {fileID: 1962381869}
-  inputMensagens: {fileID: 0}
+  inputMensagens: {fileID: 1186943490}
   intervaloAtualizacaoListaJogadores: 1
 --- !u!4 &434284620
 Transform:
@@ -1442,7 +1442,7 @@ MonoBehaviour:
   keyboardType: 0
   validation: 0
   characterLimit: 0
-  multiLine: 1
+  multiLine: 0
   activeTextColor: {r: 1, g: 1, b: 1, a: 1}
   onSubmit:
     m_PersistentCalls:

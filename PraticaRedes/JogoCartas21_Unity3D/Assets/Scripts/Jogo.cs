@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
-using System.Xml;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,11 +37,28 @@ public class Jogo : MonoBehaviour
         EntrarJogo();
 	    StartCoroutine(AtualizarJogadoresAtivos());
         StartCoroutine(AtualizarMensagens());
+
+        inputMensagens.onSubmit.AddListener(mensagem =>
+        {
+            var destinatario = Usuario.Servidor();
+
+            var matchUserId = Regex.Match(mensagem, "(\\d+):");
+            if (matchUserId.Success)
+            {
+                Debug.Log("mensagem antes_" + mensagem);
+                destinatario = new Usuario(matchUserId.Value.TrimEnd(':'), string.Empty);
+                mensagem = mensagem.Substring(matchUserId.Value.Length + 1).Trim();
+                Debug.Log("match: " + matchUserId.Value);
+                Debug.Log("mensagem depois_" + mensagem);
+            }
+
+            Debug.Log("mensagem enviada_" + mensagem);
+            jogo.EnviarMensagem(mensagem, destinatario);
+        });
 	}
 
     // Update is called once per frame
     void Update () {
-	
 	}
 
     void OnApplicationQuit()
@@ -140,9 +158,9 @@ public class Jogo : MonoBehaviour
                 var thread = new Thread(() =>
                 {
                     var mensagem = jogo.ObterUltimaMensagem();
-                    if (mensagem != string.Empty && mensagem != ultimaMensagem)
+                    if (mensagem != null && mensagem.Mensagem != ultimaMensagem)
                     {
-                        pilhaMensagens.Push(mensagem);
+                        pilhaMensagens.Push("{0}: {1}".FormatWith(mensagem.UserId, mensagem.Mensagem));
                     }
 
                     atualizado = true;
@@ -250,8 +268,7 @@ public class JogoCartas21
 
     public void EnviarMensagemParaTodos(string mensagem)
     {
-        var todos = new Usuario("0", string.Empty);
-        EnviarMensagem(mensagem, destinatario:todos);
+        EnviarMensagem(mensagem, destinatario:Usuario.Todos());
     }
 
     public void EnviarMensagem(string mensagem, Usuario destinatario)
@@ -259,13 +276,9 @@ public class JogoCartas21
         conectorChat.EnviarMensagem(usuario, destinatario, mensagem);
     }
 
-    public string ObterUltimaMensagem()
+    public MensagemChat ObterUltimaMensagem()
     {
-        var mensagemChat = conectorChat.GetMessage(usuario);
-        if (mensagemChat != null)
-            return mensagemChat.Mensagem;
-        
-        return string.Empty;
+        return conectorChat.GetMessage(usuario);
     }
 }
 
@@ -299,7 +312,11 @@ public class ConectorChat
 
     public void EnviarMensagem(Usuario remetente, Usuario destinatario, string mensagemChat)
     {
-        var mensagem = "SEND MESSAGE {0}:{1}:{2}:{3}".FormatWith(remetente.UserId, remetente.Senha, destinatario.UserId, mensagemChat);
+        Debug.Log("no chat -> " + mensagemChat);
+        Debug.Log("no chat (dest) -> " + destinatario.UserId);
+        //var mensagem = "SEND MESSAGE {0}:{1}:{2}:{3}".FormatWith(remetente.UserId, remetente.Senha, destinatario.UserId, mensagemChat);
+        var mensagem = string.Format("SEND MESSAGE {0}:{1}:{2}:{3}", remetente.UserId, remetente.Senha, destinatario.UserId, mensagemChat);
+        Debug.Log("msg montada no chat -> " + mensagem);
         clienteUdp.EnviarMensagem(mensagem);
     }
 
@@ -486,6 +503,16 @@ public class Usuario
     {
         UserId = userId;
         Senha = senha;
+    }
+
+    public static Usuario Servidor()
+    {
+        return new Usuario("0", string.Empty);
+    }
+
+    public static Usuario Todos()
+    {
+        return new Usuario("0", string.Empty);
     }
 }
 
