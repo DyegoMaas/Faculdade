@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -16,9 +15,10 @@ public class Jogo : MonoBehaviour
     public Text mensagens;
     public InputField inputMensagens;
     public float intervaloAtualizacaoListaJogadores = 1f;
+    private int numeroMensagensChat = 20;
+    
     private JogoCartas21 jogo;
     private Usuario usuario;
-    
     private ConectorJogoCartas21 conectorJogo;
     private ConectorChat conectorChat;
 
@@ -45,14 +45,10 @@ public class Jogo : MonoBehaviour
             var matchUserId = Regex.Match(mensagem, "(\\d+):");
             if (matchUserId.Success)
             {
-                Debug.Log("mensagem antes_" + mensagem);
                 destinatario = new Usuario(matchUserId.Value.TrimEnd(':'), string.Empty);
                 mensagem = mensagem.Substring(matchUserId.Value.Length + 1).Trim();
-                Debug.Log("match: " + matchUserId.Value);
-                Debug.Log("mensagem depois_" + mensagem);
             }
 
-            Debug.Log("mensagem enviada_" + mensagem);
             jogo.EnviarMensagem(mensagem, destinatario);
         });
 	}
@@ -81,6 +77,7 @@ public class Jogo : MonoBehaviour
     void SairJogo()
     {
         jogo.SairDoJogo();
+        Application.Quit();
     }
 
     public Carta PegarCarta()
@@ -93,6 +90,13 @@ public class Jogo : MonoBehaviour
         }
         Debug.Log("não podia pegar cartas");
         return null;
+    }
+
+    private class UsuarioTela
+    {
+        public string UserId { get; set; }
+        public string Vitorias { get; set; }
+        public string Status { get; set; }
     }
 
     private IEnumerator AtualizarJogadoresAtivos()
@@ -112,17 +116,52 @@ public class Jogo : MonoBehaviour
                     var usuariosAtivos = jogo.ObterUsuariosChat();
                     var jogadoresAtivos = jogo.ObterJogadoresAtivos();
 
-                    foreach (var usuarioChat in usuariosAtivos)
+                    var dicionarioUsuarios = usuariosAtivos.Select(u => new UsuarioTela
                     {
-                        var jogador = jogadoresAtivos.FirstOrDefault(j => j.UserId == usuarioChat.UserId);
-                        stringBuilder.AppendFormat("{0} ({1})", usuarioChat.UserId, usuarioChat.Wins);
-                        if (jogador != null)
+                        UserId = u.UserId,
+                        Vitorias = u.Wins.ToString()
+                    }).ToDictionary(u => u.UserId, user => user);
+                    
+                    foreach (var jogador in jogadoresAtivos)
+                    {
+                        var userId = jogador.UserId;
+                        if (dicionarioUsuarios.ContainsKey(userId))
                         {
-                            stringBuilder.AppendFormat(" - {0}", jogador.Status);
+                            dicionarioUsuarios[userId].Status = jogador.Status.ToString();
                         }
+                        else
+                        {
+                            dicionarioUsuarios.Add(userId, new UsuarioTela
+                            {
+                                UserId = userId,
+                                Vitorias = "0",
+                                Status = string.Empty
+                            });
+                        }
+                    }
+
+                    foreach (var item in dicionarioUsuarios)
+                    {
+                        var usuarioChat = item.Value;
+
+                        stringBuilder.AppendFormat("{0} ({1})", usuarioChat.UserId, usuarioChat.Vitorias);
+                        if(!string.IsNullOrEmpty(usuarioChat.Status))
+                            stringBuilder.AppendFormat(" - {0}", usuarioChat.Status);
                         stringBuilder.AppendLine();
                     }
                     jogadores = stringBuilder.ToString();
+
+                    //foreach (var usuarioChat in usuariosAtivos)
+                    //{
+                    //    var jogador = jogadoresAtivos.FirstOrDefault(j => j.UserId == usuarioChat.UserId);
+                    //    stringBuilder.AppendFormat("{0} ({1})", usuarioChat.UserId, usuarioChat.Wins);
+                    //    if (jogador != null)
+                    //    {
+                    //        stringBuilder.AppendFormat(" - {0}", jogador.Status);
+                    //    }
+                    //    stringBuilder.AppendLine();
+                    //}
+                    //jogadores = stringBuilder.ToString();
 
                     atualizado = true;
                 });
@@ -175,7 +214,7 @@ public class Jogo : MonoBehaviour
             else
             {
                 var stringBuilder = new StringBuilder();
-                foreach (var msg in pilhaMensagens.Take(10))
+                foreach (var msg in pilhaMensagens.Take(numeroMensagensChat))
                 {
                     stringBuilder.AppendLine(msg);
                 }
@@ -312,11 +351,7 @@ public class ConectorChat
 
     public void EnviarMensagem(Usuario remetente, Usuario destinatario, string mensagemChat)
     {
-        Debug.Log("no chat -> " + mensagemChat);
-        Debug.Log("no chat (dest) -> " + destinatario.UserId);
-        //var mensagem = "SEND MESSAGE {0}:{1}:{2}:{3}".FormatWith(remetente.UserId, remetente.Senha, destinatario.UserId, mensagemChat);
         var mensagem = string.Format("SEND MESSAGE {0}:{1}:{2}:{3}", remetente.UserId, remetente.Senha, destinatario.UserId, mensagemChat);
-        Debug.Log("msg montada no chat -> " + mensagem);
         clienteUdp.EnviarMensagem(mensagem);
     }
 

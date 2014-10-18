@@ -19,7 +19,7 @@ RenderSettings:
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientLight: {r: .200000003, g: .200000003, b: .200000003, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 16522f49031ff414abdf1f83f1b6a36c, type: 2}
   m_HaloStrength: .5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -502,7 +502,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 8035840fc3e7d1c4eab8781cc9621416, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8035840fc3e7d1c4eab8781cc9621416, type: 2}
@@ -821,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &919055647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1061,8 +1061,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -.505999327, y: -14.4139833}
-  m_SizeDelta: {x: -27.9880009, y: -56.6279678}
+  m_AnchoredPosition: {x: -.505999327, y: -16.8139839}
+  m_SizeDelta: {x: -27.9880009, y: -51.8279686}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1020221026
 MonoBehaviour:
@@ -1720,8 +1720,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 147.679993, y: -137.210007}
-  m_SizeDelta: {x: 200, y: 213}
+  m_AnchoredPosition: {x: 147.679993, y: -157.759995}
+  m_SizeDelta: {x: 200, y: 268.200012}
   m_Pivot: {x: .5, y: .5}
 --- !u!1 &1247623731
 GameObject:
@@ -2012,7 +2012,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1712484759}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 12.2609997}
+  m_LocalPosition: {x: 0, y: 0, z: 29.9820004}
   m_LocalScale: {x: 1.17563295, y: 1.30938625, z: .99999994}
   m_Children:
   - {fileID: 1962381868}
@@ -2021,8 +2021,8 @@ RectTransform:
   m_RootOrder: 3
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 147.679993, y: 164.360001}
-  m_SizeDelta: {x: 220, y: 213}
+  m_AnchoredPosition: {x: 149.929993, y: 222.289993}
+  m_SizeDelta: {x: 229.47998, y: 316.600006}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1712484761
 MonoBehaviour:
@@ -2100,7 +2100,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 8
+    m_FontSize: 11
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
