@@ -23,7 +23,7 @@ public class Jogo : MonoBehaviour
     private ConectorChat conectorChat;
 
     // Use this for initialization
-	void Start ()
+	IEnumerator Start ()
 	{
 	    var clienteTCP = GetComponent<ClienteTCP>();
 	    var clienteUDP = GetComponent<ClienteUDP>();
@@ -34,9 +34,11 @@ public class Jogo : MonoBehaviour
 		usuario = new Usuario(loginManager.userId, loginManager.senha);
 	    jogo = new JogoCartas21(conectorJogo, conectorChat, usuario);
 
-        EntrarJogo();
 	    StartCoroutine(AtualizarJogadoresAtivos());
         StartCoroutine(AtualizarMensagens());
+
+	    yield return new WaitForSeconds(1f);
+        EntrarJogo();
 
         inputMensagens.onSubmit.AddListener(mensagem =>
         {
@@ -77,7 +79,7 @@ public class Jogo : MonoBehaviour
     void SairJogo()
     {
         jogo.SairDoJogo();
-        Application.Quit();
+        //Application.Quit();
     }
 
     public Carta PegarCarta()
@@ -170,14 +172,14 @@ public class Jogo : MonoBehaviour
                     thread.Start();
                     iniciado = true;
                 }
-                yield return true;
+                yield return null;
             }
             else
             {
                 listaJogadoresAtivos.text = jogadores;
                 atualizado = false;
                 iniciado = false;
-                yield return new WaitForSeconds(1f);   
+                yield return new WaitForSeconds(6f);   
             }
         }
     }
@@ -188,8 +190,6 @@ public class Jogo : MonoBehaviour
         var iniciado = false;
         var pilhaMensagens = new Stack<string>();
 
-        var ultimaMensagem = string.Empty;
-
         while (true)
         {
             if (!atualizado)
@@ -197,7 +197,7 @@ public class Jogo : MonoBehaviour
                 var thread = new Thread(() =>
                 {
                     var mensagem = jogo.ObterUltimaMensagem();
-                    if (mensagem != null && mensagem.Mensagem != ultimaMensagem)
+                    if (mensagem != null)
                     {
                         pilhaMensagens.Push("{0}: {1}".FormatWith(mensagem.UserId, mensagem.Mensagem));
                     }
@@ -209,7 +209,7 @@ public class Jogo : MonoBehaviour
                     thread.Start();
                     iniciado = true;
                 }
-                yield return true;
+                yield return null;
             }
             else
             {
@@ -222,7 +222,7 @@ public class Jogo : MonoBehaviour
 
                 atualizado = false;
                 iniciado = false;
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(.5f);
             }
         }
     }
