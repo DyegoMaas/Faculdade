@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using BrightstarDB.EntityFramework;
 
-namespace ConsoleApp2
+namespace ConsoleApp2.Mapeamentos
 {
     [Entity("Film")]
     public interface IFilm

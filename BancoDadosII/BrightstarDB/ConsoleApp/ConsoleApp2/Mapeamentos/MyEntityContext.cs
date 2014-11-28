@@ -14,19 +14,18 @@ using System.Linq;
 using BrightstarDB.Client;
 using BrightstarDB.EntityFramework;
 
-using System.Text;
 
-namespace ConsoleApp2 
+namespace ConsoleApp2.Mapeamentos 
 {
     public partial class MyEntityContext : BrightstarEntityContext {
     	
     	static MyEntityContext() 
     	{
     		var provider = new ReflectionMappingProvider();
-    		provider.AddMappingsForType(EntityMappingStore.Instance, typeof(ConsoleApp2.IActor));
-    		EntityMappingStore.Instance.SetImplMapping<ConsoleApp2.IActor, ConsoleApp2.Actor>();
-    		provider.AddMappingsForType(EntityMappingStore.Instance, typeof(ConsoleApp2.IFilm));
-    		EntityMappingStore.Instance.SetImplMapping<ConsoleApp2.IFilm, ConsoleApp2.Film>();
+    		provider.AddMappingsForType(EntityMappingStore.Instance, typeof(ConsoleApp2.Mapeamentos.IActor));
+    		EntityMappingStore.Instance.SetImplMapping<ConsoleApp2.Mapeamentos.IActor, ConsoleApp2.Mapeamentos.Actor>();
+    		provider.AddMappingsForType(EntityMappingStore.Instance, typeof(ConsoleApp2.Mapeamentos.IFilm));
+    		EntityMappingStore.Instance.SetImplMapping<ConsoleApp2.Mapeamentos.IFilm, ConsoleApp2.Mapeamentos.Film>();
     	}
     	
     	/// <summary>
@@ -92,26 +91,26 @@ namespace ConsoleApp2
     	
     	private void InitializeContext() 
     	{
-    		Actors = 	new BrightstarEntitySet<ConsoleApp2.IActor>(this);
-    		Films = 	new BrightstarEntitySet<ConsoleApp2.IFilm>(this);
+    		Actors = 	new BrightstarEntitySet<ConsoleApp2.Mapeamentos.IActor>(this);
+    		Films = 	new BrightstarEntitySet<ConsoleApp2.Mapeamentos.IFilm>(this);
     	}
     	
-    	public IEntitySet<ConsoleApp2.IActor> Actors
+    	public IEntitySet<ConsoleApp2.Mapeamentos.IActor> Actors
     	{
     		get; private set;
     	}
     	
-    	public IEntitySet<ConsoleApp2.IFilm> Films
+    	public IEntitySet<ConsoleApp2.Mapeamentos.IFilm> Films
     	{
     		get; private set;
     	}
     	
         public IEntitySet<T> EntitySet<T>() where T : class {
             var itemType = typeof(T);
-            if (typeof(T).Equals(typeof(ConsoleApp2.IActor))) {
+            if (typeof(T).Equals(typeof(ConsoleApp2.Mapeamentos.IActor))) {
                 return (IEntitySet<T>)this.Actors;
             }
-            if (typeof(T).Equals(typeof(ConsoleApp2.IFilm))) {
+            if (typeof(T).Equals(typeof(ConsoleApp2.Mapeamentos.IFilm))) {
                 return (IEntitySet<T>)this.Films;
             }
             throw new InvalidOperationException(typeof(T).FullName + " is not a recognized entity interface type.");
@@ -120,7 +119,7 @@ namespace ConsoleApp2
         } // end class MyEntityContext
         
 }
-namespace ConsoleApp2 
+namespace ConsoleApp2.Mapeamentos 
 {
     
     public partial class Actor : BrightstarEntityObject, IActor 
@@ -128,7 +127,7 @@ namespace ConsoleApp2
     	public Actor(BrightstarEntityContext context, BrightstarDB.Client.IDataObject dataObject) : base(context, dataObject) { }
     	public Actor() : base() { }
     	public System.String Id { get {return GetKey(); } set { SetKey(value); } }
-    	#region Implementation of ConsoleApp2.IActor
+    	#region Implementation of ConsoleApp2.Mapeamentos.IActor
     
     	public System.String Name
     	{
@@ -141,15 +140,15 @@ namespace ConsoleApp2
             		get { return GetRelatedProperty<System.DateTime>("DateOfBirth"); }
             		set { SetRelatedProperty("DateOfBirth", value); }
     	}
-    	public System.Collections.Generic.ICollection<ConsoleApp2.IFilm> Films
+    	public System.Collections.Generic.ICollection<ConsoleApp2.Mapeamentos.IFilm> Films
     	{
-    		get { return GetRelatedObjects<ConsoleApp2.IFilm>("Films"); }
+    		get { return GetRelatedObjects<ConsoleApp2.Mapeamentos.IFilm>("Films"); }
     		set { if (value == null) throw new ArgumentNullException("value"); SetRelatedObjects("Films", value); }
     								}
     	#endregion
     }
 }
-namespace ConsoleApp2 
+namespace ConsoleApp2.Mapeamentos 
 {
     
     public partial class Film : BrightstarEntityObject, IFilm 
@@ -157,16 +156,16 @@ namespace ConsoleApp2
     	public Film(BrightstarEntityContext context, BrightstarDB.Client.IDataObject dataObject) : base(context, dataObject) { }
     	public Film() : base() { }
     	public System.String Id { get {return GetKey(); } set { SetKey(value); } }
-    	#region Implementation of ConsoleApp2.IFilm
+    	#region Implementation of ConsoleApp2.Mapeamentos.IFilm
     
     	public System.String Name
     	{
             		get { return GetRelatedProperty<System.String>("Name"); }
             		set { SetRelatedProperty("Name", value); }
     	}
-    	public System.Collections.Generic.ICollection<ConsoleApp2.IActor> Actors
+    	public System.Collections.Generic.ICollection<ConsoleApp2.Mapeamentos.IActor> Actors
     	{
-    		get { return GetRelatedObjects<ConsoleApp2.IActor>("Actors"); }
+    		get { return GetRelatedObjects<ConsoleApp2.Mapeamentos.IActor>("Actors"); }
     		set { if (value == null) throw new ArgumentNullException("value"); SetRelatedObjects("Actors", value); }
     								}
     	#endregion

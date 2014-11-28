@@ -1,47 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ConsoleApp2.Mapeamentos;
 
 namespace ConsoleApp2
 {
     class Program
     {
+        const string ConnectionString = "type=embedded;storesdirectory=.\\;storename=Filmes";
+
         static void Main(string[] args)
         {
-            const string connectionString = "type=embedded;storesdirectory=.\\;storename=Films";
-            var context = new MyEntityContext(connectionString);
+            var context = new MyEntityContext(ConnectionString);
 
             LimparABase(context);
-                        
-            var bladeRunner = context.Films.Create();
-            bladeRunner.Name = "Blade Runner";
-
-            var starWars = context.Films.Create();
-            starWars.Name = "StarWars";
-
-            context.Films.Add(new Film
-            { 
-                Name = "Jurassic Park" 
-            });
-
-            var ford = context.Actors.Create();
-            ford.Name = "Harrison Ford";
-            ford.DateOfBirth = new DateTime(1942, 7, 13);
-            ford.Films.Add(starWars);
-            ford.Films.Add(bladeRunner);
-
-            var hamill = context.Actors.Create();
-            hamill.Name = "Mark Hamill";
-            hamill.DateOfBirth = new DateTime(1951, 9, 25);
-            hamill.Films.Add(starWars);
-
-            context.SaveChanges();
+            InserirFilmesEAtoresConhecidos(context);
 
             //não é obrigatório criar um novo contexto
-            context = new MyEntityContext(connectionString);
+            context = new MyEntityContext(ConnectionString);
 
             TesteDesempenhoQuery(context);
 
@@ -66,6 +42,33 @@ namespace ConsoleApp2
             }
 
             Console.ReadLine();
+        }
+
+        private static void InserirFilmesEAtoresConhecidos(MyEntityContext context)
+        {
+            var bladeRunner = context.Films.Create();
+            bladeRunner.Name = "Blade Runner";
+
+            var starWars = context.Films.Create();
+            starWars.Name = "StarWars";
+
+            context.Films.Add(new Film
+            {
+                Name = "Jurassic Park"
+            });
+
+            var ford = context.Actors.Create();
+            ford.Name = "Harrison Ford";
+            ford.DateOfBirth = new DateTime(1942, 7, 13);
+            ford.Films.Add(starWars);
+            ford.Films.Add(bladeRunner);
+
+            var hamill = context.Actors.Create();
+            hamill.Name = "Mark Hamill";
+            hamill.DateOfBirth = new DateTime(1951, 9, 25);
+            hamill.Films.Add(starWars);
+
+            context.SaveChanges();
         }
 
         private static void ImprimirAtoresDoFilme(IFilm filme)
