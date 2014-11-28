@@ -60,10 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mapeamentos\Actor.cs" />
-    <Compile Include="Mapeamentos\IActor.cs" />
-    <Compile Include="Mapeamentos\IFilm.cs" />
-    <Compile Include="Mapeamentos\MyEntityContext.cs">
+    <Compile Include="Entidades\Actor.cs" />
+    <Compile Include="Entidades\IActor.cs" />
+    <Compile Include="Entidades\IFilm.cs" />
+    <Compile Include="Entidades\MyEntityContext.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MyEntityContext.tt</DependentUpon>
@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Mapeamentos\MyEntityContext.tt">
+    <None Include="Entidades\MyEntityContext.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MyEntityContext.cs</LastGenOutput>
     </None>

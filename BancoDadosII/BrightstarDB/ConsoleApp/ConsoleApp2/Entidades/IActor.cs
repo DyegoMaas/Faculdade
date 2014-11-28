@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using BrightstarDB.EntityFramework;
 
-namespace ConsoleApp2.Mapeamentos
+namespace ConsoleApp2.Entidades
 {
     [Entity]
     public interface IActor

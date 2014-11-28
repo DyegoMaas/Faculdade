@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using ConsoleApp2.Mapeamentos;
+using ConsoleApp2.Entidades;
 
 namespace ConsoleApp2
 {

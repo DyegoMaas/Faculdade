@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ConsoleApp2.Mapeamentos
+﻿namespace ConsoleApp2.Entidades
 {
     public partial class Actor
     {
