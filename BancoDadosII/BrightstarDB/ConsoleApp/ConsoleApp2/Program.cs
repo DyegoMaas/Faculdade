@@ -1,30 +1,39 @@
-﻿using ConsoleApp2.Entidades;
+﻿using System.Text;
+using BrightstarDB.Client;
+using ConsoleApp2.Entidades;
 using System;
 using System.Diagnostics;
 using System.Linq;
 
 namespace ConsoleApp2
 {
-    class Program
+    internal class Program
     {
-        const string ConnectionString = "type=embedded;storesdirectory=.\\;storename=Filmes";
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            var contexto = new MyEntityContext(ConnectionString);
+            InserirProdutosDadosManualmente();
+            //ExemploEntityFramework();
+            Console.ReadLine();
+        }
+
+        private static void ExemploEntityFramework()
+        {
+            const string connectionString = "type=embedded;storesdirectory=.\\;storename=Filmes";
+            var contexto = new MyEntityContext(connectionString);
+            LimparFilmesDaBase(contexto);
             
-            LimparABase(contexto);
             InserirFilmesEAtoresConhecidos(contexto);
-            PopularABase(contexto);
+            PopularABaseComFilmesEAtores(contexto);
             ImprimirNomesFilmes(contexto);
 
             //não é obrigatório criar um novo contexto
-            contexto = new MyEntityContext(ConnectionString);
+            contexto = new MyEntityContext(connectionString);
 
-            TesteDesempenhoQueryIgualdade(contexto);
-            TesteDesempenhoQueryContains(contexto);
+            BuscaPorIgualdade(contexto);
+            BuscaContains(contexto);
 
             var atorEncontrado = contexto.Actors.First(ator => ator.Name.Contains("Ford"));
+            Console.WriteLine(atorEncontrado.Id);
             Console.WriteLine(atorEncontrado.Name);
             Console.WriteLine(atorEncontrado.DateOfBirth);
             atorEncontrado.GetOlder(years: 10);
@@ -43,8 +52,6 @@ namespace ConsoleApp2
                 Console.WriteLine("Atores em {0}", filme.Name);
                 ImprimirAtoresDoFilme(filme);
             }
-
-            Console.ReadLine();
         }
 
         private static void ImprimirNomesFilmes(MyEntityContext contexto)
@@ -58,9 +65,9 @@ namespace ConsoleApp2
             ImprimirEmVerde(string.Format("TEMPO PARA IMPRIMIR FILMES: {0}", watch.Elapsed));
         }
 
-        private static void LimparABase(MyEntityContext contexto)
+        private static void LimparFilmesDaBase(MyEntityContext contexto)
         {
-            foreach(var ator in contexto.Actors)
+            foreach (var ator in contexto.Actors)
                 contexto.DeleteObject(ator);
 
             foreach (var filme in contexto.Films)
@@ -94,12 +101,12 @@ namespace ConsoleApp2
             contexto.SaveChanges();
         }
 
-        private static void PopularABase(MyEntityContext contexto)
+        private static void PopularABaseComFilmesEAtores(MyEntityContext contexto)
         {
             ImprimirEmVerde("INICIANDO CADASTRO DOS FILMES");
 
             var watch = Stopwatch.StartNew();
-            for (int numeroFilmes = 1; numeroFilmes <= 500; numeroFilmes++)
+            for (int numeroFilmes = 1; numeroFilmes <= 50; numeroFilmes++)
             {
                 var filmeAleatorioA = contexto.Films.Create();
                 filmeAleatorioA.Name = "Filme aleatório A";
@@ -120,14 +127,14 @@ namespace ConsoleApp2
             }
 
             watch.Stop();
-            ImprimirEmVerde(string.Format("TEMPO PARA CADASTRAR 1000 FILMES: {0}", watch.Elapsed));
+            ImprimirEmVerde(string.Format("TEMPO PARA CADASTRAR 100 FILMES e 500 ATORES: {0}", watch.Elapsed));
         }
 
         private static void ImprimirEmVerde(string texto)
         {
             var corOriginal = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
-            
+
             Console.WriteLine();
             Console.WriteLine(texto);
 
@@ -142,40 +149,35 @@ namespace ConsoleApp2
             }
         }
 
-        private static void TesteDesempenhoQueryIgualdade(MyEntityContext context)
+        private static void BuscaPorIgualdade(MyEntityContext context)
         {
-            ImprimirEmVerde("BUSCANDO 30 VEZES O ATOR Mark Hamill");
-
-            for (int i = 0; i < 30; i++)
-            {
-                var watch = Stopwatch.StartNew();
-                var atorEncontrado = context.Actors.First(ator => ator.Name == "Mark Hamill");
-                watch.Stop();
-
-                Console.WriteLine(watch.Elapsed);
-            }
-
-            //var query = "SELECT ?category WHERE { " +
-            //"<http://www.brightstardb.com/products/brightstar> <http://brightstardb.com/namespaces/default/name> ?category " +
-            //"}";
+            var atorEncontrado = context.Actors.First(ator => ator.Name == "Mark Hamill");
+            Console.WriteLine(atorEncontrado.Name);
         }
 
-        private static void TesteDesempenhoQueryContains(MyEntityContext context)
+        private static void BuscaContains(MyEntityContext context)
         {
-            ImprimirEmVerde("BUSCANDO 30 VEZES O ATOR cujo nome contém com Mark");
+            var atorEncontrado = context.Actors.First(ator => ator.Name.Contains("Mark"));
+            Console.WriteLine(atorEncontrado.Name);
+        }
 
-            for (int i = 0; i < 30; i++)
-            {
-                var watch = Stopwatch.StartNew();
-                var atorEncontrado = context.Actors.First(ator => ator.Name.Contains("Mark"));
-                watch.Stop();
+        private static void InserirProdutosDadosManualmente()
+        {
+            var data = new StringBuilder();
+                data.AppendLine("<http://www.brightstardb.com/products/brightstar> <http://www.brightstardb.com/schemas/product/name> \"BrightstarDB\" .");
+                data.AppendLine("<http://www.brightstardb.com/products/brightstar> <http://www.brightstardb.com/schemas/product/category> <http://www.brightstardb.com/categories/nosql> .");
+                data.AppendLine("<http://www.brightstardb.com/products/brightstar> <http://www.brightstardb.com/schemas/product/category> <http://www.brightstardb.com/categories/.net> .");
+                data.AppendLine("<http://www.brightstardb.com/products/brightstar> <http://www.brightstardb.com/schemas/product/category> <http://www.brightstardb.com/categories/rdf> .");
+                data.AppendLine("<http://www.brightstardb.com/products/outrobanco> <http://www.brightstardb.com/schemas/product/category> <http://www.brightstardb.com/categories/sgbd> .");
 
-                Console.WriteLine(watch.Elapsed);
-            }
+            var client = BrightstarService.GetClient("type=embedded;storesdirectory=.\\");
+            
+            const string storeName = "produtos";
+            if(!client.DoesStoreExist(storeName))
+                client.CreateStore(storeName);
+            client.ListStores().ToList().ForEach(Console.WriteLine);
 
-            //var query = "SELECT ?category WHERE { " +
-            //"<http://www.brightstardb.com/products/brightstar> <http://brightstardb.com/namespaces/default/name> ?category " +
-            //"}";
+            client.ExecuteTransaction(storeName, null, null, data.ToString());
         }
 
 
@@ -200,8 +202,7 @@ namespace ConsoleApp2
 
 
 
-
-        //private static void TesteDesempenhoQuerySPARQLContains(MyEntityContext context)
+    //private static void TesteDesempenhoQuerySPARQLContains(MyEntityContext context)
         //{
         //    ImprimirEmVerde("BUSCANDO 30 VEZES O ATOR cujo nome contém com Mark");
 
