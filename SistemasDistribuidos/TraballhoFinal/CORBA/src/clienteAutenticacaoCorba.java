@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.UUID;
+
 import org.omg.CORBA.*;
 import org.omg.CosNaming.*;
 import org.omg.CosNaming.NamingContextPackage.*;
@@ -21,7 +23,11 @@ public class clienteAutenticacaoCorba {
       Servico_Autenticacao server = Servico_AutenticacaoHelper.narrow(ncRef.resolve_str(name));
 
       // Imprime mensagem de boas-vindas
-      System.out.println(server.autenticar_usuario("vader", "senha"));
+      System.out.println("Autenticando o usuário vader");
+      String tokenRecebido = server.autenticar_usuario("vader", "luke");
+      GerenciadorToken.validarToken(tokenRecebido);
+      
+      System.out.println("Token recebido: " + tokenRecebido);
       Scanner in = new Scanner(System.in);
       in.next();
 
@@ -32,6 +38,8 @@ public class clienteAutenticacaoCorba {
         Scanner in = new Scanner(System.in);
         in.next();
     }
+    
+    
   }
 }
 

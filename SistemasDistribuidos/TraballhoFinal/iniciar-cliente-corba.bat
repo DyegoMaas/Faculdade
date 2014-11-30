@@ -4,4 +4,4 @@ cd C:\dev\Faculdade\SistemasDistribuidos\TraballhoFinal\CORBA\src\
 set classpath=..\bin
 javac -cp "C:\dev\Faculdade\SistemasDistribuidos\TraballhoFinal\CORBA\src" *.java
 
-start java cliente -ORBInitialPort 2000 -ORBInitialHost localhost
+start java clienteAutenticacaoCorba -ORBInitialPort 2000 -ORBInitialHost localhost

@@ -21,8 +21,9 @@ class Servico_AutenticacaoImpl extends Servico_AutenticacaoPOA
 
 	@Override
 	public String autenticar_usuario(String usuario, String senha) {
+		System.out.println("Autenticando usuário " + usuario);
 		if(usuarioExiste(usuario, senha)) {
-			String token = gerarToken();				
+			String token = GerenciadorToken.gerarToken();				
 			Servico_AutenticacaoImpl.tokensAtivos.add(token);
 			
 			return token;
@@ -53,8 +54,4 @@ class Servico_AutenticacaoImpl extends Servico_AutenticacaoPOA
 	private static void cadastrarUsuario(String usuario, String senha) {
 		usuarios.add(new Usuario(usuario, senha));
 	}  
-
-	private String gerarToken(){
-		return java.util.UUID.randomUUID().toString();
-	}
 }
