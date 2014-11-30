@@ -1,0 +1,11 @@
+module BoasVindas {
+
+
+  interface Msg_Boas_Vindas {
+
+    string boas_vindas();
+
+  };
+
+
+};
