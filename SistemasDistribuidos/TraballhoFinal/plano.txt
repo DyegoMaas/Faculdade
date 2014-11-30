@@ -1,9 +1,12 @@
-rmi criarPasta
-rmi uploadArquivo
-rmi downloadArquivo
+rmi criarPasta (recebe o usuário e o caminho da pasta)
+rmi uploadArquivo (recebe o usuário, o arquivo, o nome do arquivo e o caminho do diretório)
+rmi downloadArquivo (recebe o usuário e o caminho do arquivo)
+rmi listaDiretorios (recebe o usuário e o caminho do diretório base)
+rmi listaArquivos (recebe o usuário e o caminho do diretório base)
 
 corba autenticarUsuario (retorna token)
 corba cadastrarUsuario (retorna token)
+corba validarToken (retorna boolean)
 
 ws login -> corba autenticarUsuario
 ws criarUsuario -> corba cadastrarUsuario
