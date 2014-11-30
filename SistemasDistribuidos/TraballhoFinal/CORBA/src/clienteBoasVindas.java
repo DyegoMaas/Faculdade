@@ -6,7 +6,7 @@ import org.omg.CORBA.*;
 import org.omg.CosNaming.*;
 import org.omg.CosNaming.NamingContextPackage.*;
 
-public class cliente {
+public class clienteBoasVindas {
 
   public static void main(String args[]) {
     try {

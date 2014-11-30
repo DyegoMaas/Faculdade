@@ -1,0 +1,12 @@
+module autenticacao{
+
+
+	interface Servico_Autenticacao {
+
+		string autenticar_usuario(in string usuario, in string senha);
+		string cadastrar_usuario(in string usuario, in string senha);
+
+  };
+
+
+};
