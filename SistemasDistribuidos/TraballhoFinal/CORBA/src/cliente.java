@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.util.Scanner;
+
 import BoasVindas.*;
 import org.omg.CORBA.*;
 import org.omg.CosNaming.*;
@@ -20,10 +23,15 @@ public class cliente {
 
       // Imprime mensagem de boas-vindas
       System.out.println(server.boas_vindas());
+      Scanner in = new Scanner(System.in);
+      in.next();
 
     } catch (Exception e) {
         System.out.println("ERROR : " + e) ;
         e.printStackTrace(System.out);
+        
+        Scanner in = new Scanner(System.in);
+        in.next();
     }
   }
 }
