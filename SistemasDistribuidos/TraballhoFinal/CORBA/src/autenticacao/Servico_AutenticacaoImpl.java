@@ -29,6 +29,17 @@ class Servico_AutenticacaoImpl extends Servico_AutenticacaoPOA
 		}
 		return "";
 	}
+
+	@Override
+	public String cadastrar_usuario(String usuario, String senha) {
+		cadastrarUsuario(usuario, senha);
+		return autenticar_usuario(usuario, senha);
+	}
+	
+	@Override
+	public boolean validar_token(String token) {
+		return Servico_AutenticacaoImpl.tokensAtivos.contains(token);
+	}
 	
 	private boolean usuarioExiste(String usuario, String senha){
 		for(Usuario user : Servico_AutenticacaoImpl.usuarios){
@@ -37,12 +48,6 @@ class Servico_AutenticacaoImpl extends Servico_AutenticacaoPOA
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public String cadastrar_usuario(String usuario, String senha) {
-		cadastrarUsuario(usuario, senha);
-		return autenticar_usuario(usuario, senha);
 	}
 
 	private static void cadastrarUsuario(String usuario, String senha) {

@@ -5,6 +5,7 @@ module autenticacao{
 
 		string autenticar_usuario(in string usuario, in string senha);
 		string cadastrar_usuario(in string usuario, in string senha);
+		boolean validar_token(in string token);
 
   };
 
