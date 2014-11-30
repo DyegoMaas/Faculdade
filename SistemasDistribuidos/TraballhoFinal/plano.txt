@@ -1,0 +1,12 @@
+rmi criarPasta
+rmi uploadArquivo
+rmi downloadArquivo
+
+corba autenticarUsuario (retorna token)
+corba cadastrarUsuario (retorna token)
+
+ws login -> corba autenticarUsuario
+ws criarUsuario -> corba cadastrarUsuario
+ws criarPasta -> rmi criarPasta
+ws uploadArquivo -> rmi uploadArquivo
+ws downloadArquivo -> rmi downloadArquivo
