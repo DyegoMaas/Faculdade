@@ -9,9 +9,7 @@ public class ServicoArquivosRemotosCliente {
 		try {	
 			String caminhoServico = String.format("//localhost:%d/ServicoArquivosRemotos", Constantes.Porta);
 			ServicoArquivosRemotos obj = (ServicoArquivosRemotos)Naming.lookup(caminhoServico); 
-			
-	        System.out.println("Mensagem do Servidor: " + obj.helloWorld());
-	        
+				        
 	        obj.criarPasta("pasta1");
 	        obj.criarPasta("pasta2");
 	        
@@ -25,6 +23,9 @@ public class ServicoArquivosRemotosCliente {
 	        for(String arquivos : l2.lista){
 	        	System.out.println("Arquivos: " + arquivos);	
 	        }
+	        
+	        obj.uploadArquivo(new byte[] {1,1,1,0,0,0}, "teste.data");
+	        
 	        Scanner s = new Scanner(System.in);
 	        s.next();
 	     } catch (Exception ex) {

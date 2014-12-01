@@ -2,7 +2,10 @@
 package arquivos;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.*;
@@ -32,12 +35,6 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
 	   } catch (Exception ex) {
 	      System.out.println("Exception: " + ex.getMessage());
 	   } 
-	}
-
-	@Override
-	public String helloWorld() throws RemoteException {
-		// TODO Auto-generated method stub
-		return "Olá :)";
 	}
 
 	@Override
@@ -83,14 +80,36 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
 	
 	@Override
 	public void criarPasta(String nomeDiretorio) throws RemoteException {
-		File diretorioRaiz = new File(caminhoStore);
-		if(!diretorioRaiz.exists()){
-			criarDiretorio(diretorioRaiz);
-		}
+		inicializarDiretorioRaiz();
+		
 		Path caminhoNovoDiretorio = Paths.get(caminhoStore, nomeDiretorio);
 		File novoDiretorio = new File(caminhoNovoDiretorio.toString());
 		if(!novoDiretorio.exists())
 			criarDiretorio(novoDiretorio);
+	}
+	
+	@Override
+	public void uploadArquivo(byte[] arquivo, String nomeArquivo) throws RemoteException {
+		inicializarDiretorioRaiz();
+		
+		Path caminhoArquivo = Paths.get(caminhoStore, nomeArquivo);
+		try {
+			File file = new File(caminhoArquivo.toString());
+			System.out.println(file.getAbsolutePath());
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(arquivo);
+			fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void inicializarDiretorioRaiz() {
+		File diretorioRaiz = new File(caminhoStore);
+		if(!diretorioRaiz.exists()){
+			criarDiretorio(diretorioRaiz);
+		}
 	}
 
 	private void criarDiretorio(File diretorio) {
@@ -107,6 +126,5 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
 //		String diretorioRaiz = ServicoArquivosRemotosServidor.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 //        return diretorio.equalsIgnoreCase(diretorioRaiz);
 	}
-
 
 }
