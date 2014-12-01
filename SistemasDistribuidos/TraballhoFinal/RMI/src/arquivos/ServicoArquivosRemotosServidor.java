@@ -2,10 +2,11 @@
 package arquivos;
 
 import java.rmi.*;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.server.*;
-import java.rmi.registry.*;
 
-public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implements ServicoArquivosRemotos {
+public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implements ServicoArquivosRemotos {	
+	
    public ServicoArquivosRemotosServidor() throws RemoteException {
       super();
    }
@@ -13,8 +14,13 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
    // main()
 	public static void main(String[] args) {
 	   try {
-		   ServicoArquivosRemotosServidor obj = new ServicoArquivosRemotosServidor();
-	      Naming.rebind("//localhost:2020/ServicoArquivosRemotos", obj);
+		   //Runtime.getRuntime().exec("rmiregistry 2020");
+		   LocateRegistry.createRegistry(Constantes.Porta);
+		   Thread.sleep(500);
+		   
+		  ServicoArquivosRemotosServidor obj = new ServicoArquivosRemotosServidor();
+		  String caminhoServico = String.format("//localhost:%d/ServicoArquivosRemotos", Constantes.Porta);
+	      Naming.rebind(caminhoServico, obj);
 	      
 	      System.out.println("subiu");
 	   } catch (Exception ex) {
