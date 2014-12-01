@@ -33,4 +33,12 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
 		// TODO Auto-generated method stub
 		return "Olá :)";
 	}
+
+	@Override
+	public ListaDiretorios listaDiretorios(String diretorioBase) throws RemoteException {
+		ListaDiretorios l = new ListaDiretorios();
+		l.listaArquivos.add("a");
+		l.listaArquivos.add("b");
+		return l;
+	}
 }

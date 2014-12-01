@@ -1,1 +1,1 @@
-start java rmi.arquivos.ServicoArquivosRemotosCliente
+start java arquivos.ServicoArquivosRemotosCliente
