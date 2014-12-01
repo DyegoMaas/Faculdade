@@ -1,6 +1,5 @@
 package arquivos;
 
-import java.net.URL;
 import java.rmi.Naming;
 import java.util.Scanner;
 
@@ -24,12 +23,24 @@ public class ServicoArquivosRemotosCliente {
 	        	System.out.println("Arquivos: " + arquivos);	
 	        }
 	        
-	        obj.uploadArquivo(new byte[] {1,1,1,0,0,0}, "teste.data");
+	        byte[] arquivoEnviado = new byte[] {1,1,1,0,0,0};
+	        Imprimir("Arquivo enviado: ", arquivoEnviado);
+			obj.uploadArquivo(arquivoEnviado, "teste.data");
+	        
+	        byte[] bytes = obj.downloadArquivo("teste.data");
+	        Imprimir("Arquivo baixado: ", bytes);
 	        
 	        Scanner s = new Scanner(System.in);
 	        s.next();
 	     } catch (Exception ex) {
 	        System.out.println("Exception: " + ex.getMessage());
 	     } 
+	}
+	
+	private static void Imprimir(String descricao, byte[] bytes){
+		System.out.print(descricao);
+		for(byte b : bytes)
+			System.out.print(b + ",");
+		System.out.println();
 	}
 }

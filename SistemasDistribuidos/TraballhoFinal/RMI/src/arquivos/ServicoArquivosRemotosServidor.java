@@ -2,6 +2,7 @@
 package arquivos;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -96,6 +97,7 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
 		try {
 			File file = new File(caminhoArquivo.toString());
 			System.out.println(file.getAbsolutePath());
+			
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(arquivo);
 			fos.close();
@@ -103,6 +105,17 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public byte[] downloadArquivo(String nomeArquivo) throws RemoteException, IOException {
+		inicializarDiretorioRaiz();
+		
+		Path caminhoArquivo = Paths.get(caminhoStore, nomeArquivo);
+		File file = new File(caminhoArquivo.toString());
+		System.out.println(file.getAbsolutePath());
+		
+		return Files.readAllBytes(caminhoArquivo);
 	}
 
 	private void inicializarDiretorioRaiz() {
@@ -120,11 +133,4 @@ public class ServicoArquivosRemotosServidor extends UnicastRemoteObject implemen
 			e.printStackTrace();
 		}
 	}
-	
-	private boolean ehDiretorioRaiz(String diretorio) {
-		return diretorio.isEmpty();
-//		String diretorioRaiz = ServicoArquivosRemotosServidor.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-//        return diretorio.equalsIgnoreCase(diretorioRaiz);
-	}
-
 }
