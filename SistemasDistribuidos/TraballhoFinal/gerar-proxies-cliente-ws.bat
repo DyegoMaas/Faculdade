@@ -1,0 +1,1 @@
+gerar-proxies-cliente-ws.bat

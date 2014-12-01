@@ -13,3 +13,5 @@ ws criarUsuario -> corba cadastrarUsuario
 ws criarPasta -> rmi criarPasta
 ws uploadArquivo -> rmi uploadArquivo
 ws downloadArquivo -> rmi downloadArquivo
+ws listaDiretorios -> rmi listaDiretorios
+ws listaArquivos -> rmi listaArquivos
