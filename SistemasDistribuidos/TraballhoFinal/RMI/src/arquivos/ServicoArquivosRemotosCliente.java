@@ -25,9 +25,9 @@ public class ServicoArquivosRemotosCliente {
 	        
 	        byte[] arquivoEnviado = new byte[] {1,1,1,0,0,0};
 	        Imprimir("Arquivo enviado: ", arquivoEnviado);
-			obj.uploadArquivo(arquivoEnviado, "teste.data");
+			obj.uploadArquivo(arquivoEnviado, "pasta1/teste.data");
 	        
-	        byte[] bytes = obj.downloadArquivo("teste.data");
+	        byte[] bytes = obj.downloadArquivo("pasta1/teste.data");
 	        Imprimir("Arquivo baixado: ", bytes);
 	        
 	        Scanner s = new Scanner(System.in);
