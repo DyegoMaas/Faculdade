@@ -28,33 +28,8 @@ namespace ClienteArquivamento
             var imagemBase64 = arquivamentoService.downloadArquivo("arquivo.jpg", token);
             var bytesBaixados = Convert.FromBase64String(imagemBase64);
             SalvarImagem(bytesBaixados);
-            //Task<string> taskAutenticacao = Task<string>.Factory.FromAsync(arquivamentoService.BeginautenticarUsuario,
-            //    arquivamentoService.EndautenticarUsuario, "vader", "luke", null);
-
-            //TaskAwaiter<string> taskAwaiter = taskAutenticacao.GetAwaiter();
-            //taskAwaiter.OnCompleted(() =>
-            //{
-            //    Console.WriteLine("Resultado: " + taskAutenticacao.Result);
-                
-            //});
-
-            
-
-            //taskAutenticacao.Start();
-
-//            arquivamentoService.BeginautenticarUsuario("vader", "luke", e => { }, new object());
-            //arquivamentoService.BeginautenticarUsuario("vader", "luke", e =>
-            //{
-            //    var func = e.AsyncState as Func<string, string, string>;
-            //    string tokenX = func.EndInvoke(e);
-            //    Console.WriteLine(tokenX);
-            //}, new object());
-
-            //Console.WriteLine("Token: " + token);
 
             Console.Read();
-
-            //arquivamentoService.BegincriarPasta("pastinha", )
         }
 
         static string ArquivoImagemEmBase64()
