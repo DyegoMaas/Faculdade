@@ -11,7 +11,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "uploadArquivo", namespace = "http://arquivamento/", propOrder = {
     "arg0",
-    "arg1"
+    "arg1",
+    "arg2"
 })
 public class UploadArquivo {
 
@@ -19,6 +20,8 @@ public class UploadArquivo {
     private String arg0;
     @XmlElement(name = "arg1", namespace = "")
     private String arg1;
+    @XmlElement(name = "arg2", namespace = "")
+    private String arg2;
 
     /**
      * 
@@ -54,6 +57,24 @@ public class UploadArquivo {
      */
     public void setArg1(String arg1) {
         this.arg1 = arg1;
+    }
+
+    /**
+     * 
+     * @return
+     *     returns String
+     */
+    public String getArg2() {
+        return this.arg2;
+    }
+
+    /**
+     * 
+     * @param arg2
+     *     the value for the arg2 property
+     */
+    public void setArg2(String arg2) {
+        this.arg2 = arg2;
     }
 
 }

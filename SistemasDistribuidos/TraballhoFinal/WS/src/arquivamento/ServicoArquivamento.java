@@ -158,6 +158,7 @@ public class ServicoArquivamento {
 			e.printStackTrace();
 			return e.getMessage();
 		}		
+//		return "";
 	}
 	
 	private boolean validarToken(String token){
@@ -174,7 +175,7 @@ public class ServicoArquivamento {
 	private ServicoArquivosRemotos obterServicoArquivos()
 			throws NotBoundException, MalformedURLException, RemoteException {
 		
-		String caminhoServico = String.format("//localhost:%d/ServicoArquivosRemotos", Constantes.Porta);
+		String caminhoServico = String.format("localhost:%d/ServicoArquivosRemotos", Constantes.Porta);
 		ServicoArquivosRemotos servico = (ServicoArquivosRemotos)Naming.lookup(caminhoServico);
 		return servico;
 	}
@@ -182,16 +183,17 @@ public class ServicoArquivamento {
 	private Servico_Autenticacao obterServicoAutenticacao() throws InvalidName, NotFound,
 			CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName {
 		
-		// Cria e inicializa o ORB
-        ORB orb = ORB.init();
+		 // Cria e inicializa o ORB
+	      ORB orb = ORB.init(new String[0], null);
 
-        // Obtem referencia para o servico de nomes
-        org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
-        NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+	      // Obtem referencia para o servico de nomes
+	      org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+	      NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+	 
+	      // Obtem referencia para o servidor
+	      String name = "Servico_Autenticacao";
+	      Servico_Autenticacao server = Servico_AutenticacaoHelper.narrow(ncRef.resolve_str(name));
    
-        // Obtem referencia para o servidor
-        String name = "Servico_Autenticacao";
-        Servico_Autenticacao server = Servico_AutenticacaoHelper.narrow(ncRef.resolve_str(name));
 		return server;
 	}
 }

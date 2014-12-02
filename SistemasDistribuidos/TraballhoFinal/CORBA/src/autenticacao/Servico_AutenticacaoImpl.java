@@ -33,12 +33,14 @@ class Servico_AutenticacaoImpl extends Servico_AutenticacaoPOA
 
 	@Override
 	public String cadastrar_usuario(String usuario, String senha) {
+		System.out.println("cadastrando usuário " + usuario);
 		cadastrarUsuario(usuario, senha);
 		return autenticar_usuario(usuario, senha);
 	}
 	
 	@Override
 	public boolean validar_token(String token) {
+		System.out.println("validando token " + token);
 		return Servico_AutenticacaoImpl.tokensAtivos.contains(token);
 	}
 	

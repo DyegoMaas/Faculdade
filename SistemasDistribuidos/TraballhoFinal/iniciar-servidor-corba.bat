@@ -6,6 +6,6 @@ idlj -fall ServicoAutenticacao.idl
 set classpath=..\bin
 javac -cp "C:\dev\Faculdade\SistemasDistribuidos\TraballhoFinal\CORBA\src" autenticacao\*.java
 
-start orbd -ORBInitialPort 2000
-start java autenticacao.servidor -ORBInitialPort 2000 
+start orbd -ORBInitialPort
+start java autenticacao.servidor
 

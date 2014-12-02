@@ -33,11 +33,13 @@ public partial class ServicoArquivamentoService : System.Web.Services.Protocols.
     
     private System.Threading.SendOrPostCallback loginOperationCompleted;
     
-    private System.Threading.SendOrPostCallback listarDiretoriosOperationCompleted;
-    
     private System.Threading.SendOrPostCallback downloadArquivoOperationCompleted;
     
+    private System.Threading.SendOrPostCallback listarDiretoriosOperationCompleted;
+    
     private System.Threading.SendOrPostCallback listarArquivosOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback autenticarUsuarioOperationCompleted;
     
     private System.Threading.SendOrPostCallback uploadArquivoOperationCompleted;
     
@@ -56,13 +58,16 @@ public partial class ServicoArquivamentoService : System.Web.Services.Protocols.
     public event loginCompletedEventHandler loginCompleted;
     
     /// <remarks/>
-    public event listarDiretoriosCompletedEventHandler listarDiretoriosCompleted;
-    
-    /// <remarks/>
     public event downloadArquivoCompletedEventHandler downloadArquivoCompleted;
     
     /// <remarks/>
+    public event listarDiretoriosCompletedEventHandler listarDiretoriosCompleted;
+    
+    /// <remarks/>
     public event listarArquivosCompletedEventHandler listarArquivosCompleted;
+    
+    /// <remarks/>
+    public event autenticarUsuarioCompletedEventHandler autenticarUsuarioCompleted;
     
     /// <remarks/>
     public event uploadArquivoCompletedEventHandler uploadArquivoCompleted;
@@ -205,48 +210,6 @@ public partial class ServicoArquivamentoService : System.Web.Services.Protocols.
     /// <remarks/>
     [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://arquivamento/", ResponseNamespace="http://arquivamento/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
     [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public string listarDiretorios([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg0) {
-        object[] results = this.Invoke("listarDiretorios", new object[] {
-                    arg0});
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginlistarDiretorios(string arg0, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("listarDiretorios", new object[] {
-                    arg0}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public string EndlistarDiretorios(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void listarDiretoriosAsync(string arg0) {
-        this.listarDiretoriosAsync(arg0, null);
-    }
-    
-    /// <remarks/>
-    public void listarDiretoriosAsync(string arg0, object userState) {
-        if ((this.listarDiretoriosOperationCompleted == null)) {
-            this.listarDiretoriosOperationCompleted = new System.Threading.SendOrPostCallback(this.OnlistarDiretoriosOperationCompleted);
-        }
-        this.InvokeAsync("listarDiretorios", new object[] {
-                    arg0}, this.listarDiretoriosOperationCompleted, userState);
-    }
-    
-    private void OnlistarDiretoriosOperationCompleted(object arg) {
-        if ((this.listarDiretoriosCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.listarDiretoriosCompleted(this, new listarDiretoriosCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://arquivamento/", ResponseNamespace="http://arquivamento/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
     public string downloadArquivo([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg0, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg1) {
         object[] results = this.Invoke("downloadArquivo", new object[] {
                     arg0,
@@ -286,6 +249,48 @@ public partial class ServicoArquivamentoService : System.Web.Services.Protocols.
         if ((this.downloadArquivoCompleted != null)) {
             System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
             this.downloadArquivoCompleted(this, new downloadArquivoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://arquivamento/", ResponseNamespace="http://arquivamento/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+    public string listarDiretorios([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg0) {
+        object[] results = this.Invoke("listarDiretorios", new object[] {
+                    arg0});
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginlistarDiretorios(string arg0, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("listarDiretorios", new object[] {
+                    arg0}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string EndlistarDiretorios(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void listarDiretoriosAsync(string arg0) {
+        this.listarDiretoriosAsync(arg0, null);
+    }
+    
+    /// <remarks/>
+    public void listarDiretoriosAsync(string arg0, object userState) {
+        if ((this.listarDiretoriosOperationCompleted == null)) {
+            this.listarDiretoriosOperationCompleted = new System.Threading.SendOrPostCallback(this.OnlistarDiretoriosOperationCompleted);
+        }
+        this.InvokeAsync("listarDiretorios", new object[] {
+                    arg0}, this.listarDiretoriosOperationCompleted, userState);
+    }
+    
+    private void OnlistarDiretoriosOperationCompleted(object arg) {
+        if ((this.listarDiretoriosCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.listarDiretoriosCompleted(this, new listarDiretoriosCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
         }
     }
     
@@ -333,17 +338,64 @@ public partial class ServicoArquivamentoService : System.Web.Services.Protocols.
     
     /// <remarks/>
     [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://arquivamento/", ResponseNamespace="http://arquivamento/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public void uploadArquivo([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg0, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg1) {
-        this.Invoke("uploadArquivo", new object[] {
+    [return: System.Xml.Serialization.XmlElementAttribute("return", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+    public string autenticarUsuario([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg0, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg1) {
+        object[] results = this.Invoke("autenticarUsuario", new object[] {
                     arg0,
                     arg1});
+        return ((string)(results[0]));
     }
     
     /// <remarks/>
-    public System.IAsyncResult BeginuploadArquivo(string arg0, string arg1, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("uploadArquivo", new object[] {
+    public System.IAsyncResult BeginautenticarUsuario(string arg0, string arg1, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("autenticarUsuario", new object[] {
                     arg0,
                     arg1}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string EndautenticarUsuario(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void autenticarUsuarioAsync(string arg0, string arg1) {
+        this.autenticarUsuarioAsync(arg0, arg1, null);
+    }
+    
+    /// <remarks/>
+    public void autenticarUsuarioAsync(string arg0, string arg1, object userState) {
+        if ((this.autenticarUsuarioOperationCompleted == null)) {
+            this.autenticarUsuarioOperationCompleted = new System.Threading.SendOrPostCallback(this.OnautenticarUsuarioOperationCompleted);
+        }
+        this.InvokeAsync("autenticarUsuario", new object[] {
+                    arg0,
+                    arg1}, this.autenticarUsuarioOperationCompleted, userState);
+    }
+    
+    private void OnautenticarUsuarioOperationCompleted(object arg) {
+        if ((this.autenticarUsuarioCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.autenticarUsuarioCompleted(this, new autenticarUsuarioCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("", RequestNamespace="http://arquivamento/", ResponseNamespace="http://arquivamento/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public void uploadArquivo([System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg0, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg1, [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)] string arg2) {
+        this.Invoke("uploadArquivo", new object[] {
+                    arg0,
+                    arg1,
+                    arg2});
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginuploadArquivo(string arg0, string arg1, string arg2, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("uploadArquivo", new object[] {
+                    arg0,
+                    arg1,
+                    arg2}, callback, asyncState);
     }
     
     /// <remarks/>
@@ -352,18 +404,19 @@ public partial class ServicoArquivamentoService : System.Web.Services.Protocols.
     }
     
     /// <remarks/>
-    public void uploadArquivoAsync(string arg0, string arg1) {
-        this.uploadArquivoAsync(arg0, arg1, null);
+    public void uploadArquivoAsync(string arg0, string arg1, string arg2) {
+        this.uploadArquivoAsync(arg0, arg1, arg2, null);
     }
     
     /// <remarks/>
-    public void uploadArquivoAsync(string arg0, string arg1, object userState) {
+    public void uploadArquivoAsync(string arg0, string arg1, string arg2, object userState) {
         if ((this.uploadArquivoOperationCompleted == null)) {
             this.uploadArquivoOperationCompleted = new System.Threading.SendOrPostCallback(this.OnuploadArquivoOperationCompleted);
         }
         this.InvokeAsync("uploadArquivo", new object[] {
                     arg0,
-                    arg1}, this.uploadArquivoOperationCompleted, userState);
+                    arg1,
+                    arg2}, this.uploadArquivoOperationCompleted, userState);
     }
     
     private void OnuploadArquivoOperationCompleted(object arg) {
@@ -459,32 +512,6 @@ public partial class loginCompletedEventArgs : System.ComponentModel.AsyncComple
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
-public delegate void listarDiretoriosCompletedEventHandler(object sender, listarDiretoriosCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class listarDiretoriosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal listarDiretoriosCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public string Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((string)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
 public delegate void downloadArquivoCompletedEventHandler(object sender, downloadArquivoCompletedEventArgs e);
 
 /// <remarks/>
@@ -511,6 +538,32 @@ public partial class downloadArquivoCompletedEventArgs : System.ComponentModel.A
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+public delegate void listarDiretoriosCompletedEventHandler(object sender, listarDiretoriosCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class listarDiretoriosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal listarDiretoriosCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
 public delegate void listarArquivosCompletedEventHandler(object sender, listarArquivosCompletedEventArgs e);
 
 /// <remarks/>
@@ -522,6 +575,32 @@ public partial class listarArquivosCompletedEventArgs : System.ComponentModel.As
     private object[] results;
     
     internal listarArquivosCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+public delegate void autenticarUsuarioCompletedEventHandler(object sender, autenticarUsuarioCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class autenticarUsuarioCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal autenticarUsuarioCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
             base(exception, cancelled, userState) {
         this.results = results;
     }
