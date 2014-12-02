@@ -175,7 +175,7 @@ public class ServicoArquivamento {
 	private ServicoArquivosRemotos obterServicoArquivos()
 			throws NotBoundException, MalformedURLException, RemoteException {
 		
-		String caminhoServico = String.format("localhost:%d/ServicoArquivosRemotos", Constantes.Porta);
+		String caminhoServico = String.format("//localhost:%d/ServicoArquivosRemotos", Constantes.Porta);
 		ServicoArquivosRemotos servico = (ServicoArquivosRemotos)Naming.lookup(caminhoServico);
 		return servico;
 	}
