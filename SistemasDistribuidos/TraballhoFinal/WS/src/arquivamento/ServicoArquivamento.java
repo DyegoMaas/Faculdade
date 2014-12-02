@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.xml.bind.DatatypeConverter;
 
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
@@ -49,6 +50,22 @@ public class ServicoArquivamento {
 			
 	        System.out.println("cadastrando o usuário " + usuario);
 	        String tokenRecebido = server.cadastrar_usuario(usuario, senha);
+	        
+	        return tokenRecebido;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+        return "";
+	}
+	
+	@WebMethod
+	public String autenticarUsuario(String usuario, String senha){
+		try {
+			Servico_Autenticacao server = obterServicoAutenticacao();
+			
+	        System.out.println("cadastrando o usuário " + usuario);
+	        String tokenRecebido = server.autenticar_usuario(usuario, senha);
 	        
 	        return tokenRecebido;
 		} catch (Exception e) {
@@ -111,13 +128,36 @@ public class ServicoArquivamento {
 	}	
 	
 	@WebMethod
-	public void uploadArquivo(String arquivoBase64, String token){
+	public void uploadArquivo(String arquivoBase64, String nomeArquivo, String token){
+		try {
+			if(!validarToken(token))
+				throw new IllegalArgumentException("token inválido");
+			
+			byte[] bytesArquivo = DatatypeConverter.parseBase64Binary(arquivoBase64);
+			
+			ServicoArquivosRemotos servico = obterServicoArquivos();
+			servico.uploadArquivo(bytesArquivo, nomeArquivo);
 		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@WebMethod
 	public String downloadArquivo(String nomeArquivo, String token){
-		return "";
+		try {
+			if(!validarToken(token))
+				throw new IllegalArgumentException("token inválido");
+						
+			ServicoArquivosRemotos servico = obterServicoArquivos();
+			byte[] bytesArquivo = servico.downloadArquivo(nomeArquivo);
+			
+			return DatatypeConverter.printBase64Binary(bytesArquivo);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}		
 	}
 	
 	private boolean validarToken(String token){
