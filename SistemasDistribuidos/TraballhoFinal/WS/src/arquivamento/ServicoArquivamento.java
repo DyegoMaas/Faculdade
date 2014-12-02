@@ -5,6 +5,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import org.omg.CORBA.ORB;
@@ -24,6 +25,8 @@ import autenticacao.Servico_AutenticacaoHelper;
 
 @WebService
 public class ServicoArquivamento {
+		
+	@WebMethod
 	public String login(String usuario, String senha){
 		try {
 			Servico_Autenticacao server = obterServicoAutenticacao();
@@ -33,13 +36,13 @@ public class ServicoArquivamento {
 	        
 	        return tokenRecebido;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
         return "";
 	}
 	
+	@WebMethod
 	public String criarUsuario(String usuario, String senha){
 		try {
 			Servico_Autenticacao server = obterServicoAutenticacao();
@@ -49,13 +52,13 @@ public class ServicoArquivamento {
 	        
 	        return tokenRecebido;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
         return "";
 	}
 	
+	@WebMethod
 	public String criarPasta(String nomeDiretorio, String token){
 		try {
 			if(!validarToken(token))
@@ -71,6 +74,7 @@ public class ServicoArquivamento {
 		return String.format("diretório %s criado com sucesso", nomeDiretorio);
 	}
 	
+	@WebMethod
 	public String listarDiretorios(String token){
 		try {
 			if(!validarToken(token))
@@ -85,8 +89,10 @@ public class ServicoArquivamento {
 			e.printStackTrace();
 			return e.getMessage();
 		}
+//		return "";
 	}
 	
+	@WebMethod
 	public String listarArquivos(String token){
 		try {
 			if(!validarToken(token))
@@ -101,8 +107,18 @@ public class ServicoArquivamento {
 			e.printStackTrace();
 			return e.getMessage();
 		}
+//		return "";
+	}	
+	
+	@WebMethod
+	public void uploadArquivo(String arquivoBase64, String token){
+		
 	}
 	
+	@WebMethod
+	public String downloadArquivo(String nomeArquivo, String token){
+		return "";
+	}
 	
 	private boolean validarToken(String token){
 		Servico_Autenticacao servicoAutenticacao;
@@ -117,6 +133,7 @@ public class ServicoArquivamento {
 
 	private ServicoArquivosRemotos obterServicoArquivos()
 			throws NotBoundException, MalformedURLException, RemoteException {
+		
 		String caminhoServico = String.format("//localhost:%d/ServicoArquivosRemotos", Constantes.Porta);
 		ServicoArquivosRemotos servico = (ServicoArquivosRemotos)Naming.lookup(caminhoServico);
 		return servico;
@@ -124,6 +141,7 @@ public class ServicoArquivamento {
 
 	private Servico_Autenticacao obterServicoAutenticacao() throws InvalidName, NotFound,
 			CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName {
+		
 		// Cria e inicializa o ORB
         ORB orb = ORB.init();
 
