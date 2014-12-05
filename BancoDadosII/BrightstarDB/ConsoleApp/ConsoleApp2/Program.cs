@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using BrightstarDB.Client;
 using ConsoleApp2.Entidades;
 using System;
@@ -61,6 +62,14 @@ namespace ConsoleApp2
             {
                 Console.WriteLine(filme.Name);
             }
+            //ou ainda
+            var nomesFilmes = from filme in contexto.Films
+                select filme.Name;
+            foreach (var nome in nomesFilmes)
+            {
+                Console.WriteLine(nome);
+            }
+
             watch.Stop();
             ImprimirEmVerde(string.Format("TEMPO PARA IMPRIMIR FILMES: {0}", watch.Elapsed));
         }
