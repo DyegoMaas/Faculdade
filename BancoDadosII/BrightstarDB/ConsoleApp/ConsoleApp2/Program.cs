@@ -12,8 +12,8 @@ namespace ConsoleApp2
     {
         private static void Main(string[] args)
         {
-            InserirProdutosDadosManualmente();
-            //ExemploEntityFramework();
+            //InserirProdutosDadosManualmente();
+            ExemploEntityFramework();
             Console.ReadLine();
         }
 
@@ -178,6 +178,7 @@ namespace ConsoleApp2
                 data.AppendLine("<http://www.brightstardb.com/products/brightstar> <http://www.brightstardb.com/schemas/product/category> <http://www.brightstardb.com/categories/.net> .");
                 data.AppendLine("<http://www.brightstardb.com/products/brightstar> <http://www.brightstardb.com/schemas/product/category> <http://www.brightstardb.com/categories/rdf> .");
                 data.AppendLine("<http://www.brightstardb.com/products/outrobanco> <http://www.brightstardb.com/schemas/product/category> <http://www.brightstardb.com/categories/sgbd> .");
+                data.AppendLine("<http://www.brightstardb.com/products/outrobanco> <http://www.brightstardb.com/schemas/product/name> \"Outro Banco :)\" .");
 
             var client = BrightstarService.GetClient("type=embedded;storesdirectory=.\\");
             
@@ -188,62 +189,5 @@ namespace ConsoleApp2
 
             client.ExecuteTransaction(storeName, null, null, data.ToString());
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //private static void TesteDesempenhoQuerySPARQLContains(MyEntityContext context)
-        //{
-        //    ImprimirEmVerde("BUSCANDO 30 VEZES O ATOR cujo nome contém com Mark");
-
-        //    var client = BrightstarService.GetClient("type=embedded;storesdirectory=.\\");
-        //    for (int i = 0; i < 30; i++)
-        //    {
-        //        var watch = Stopwatch.StartNew();
-
-        //        const string query =
-        //            "PREFIX at: <http://www.brightstardb.com/actors/>" +
-        //            "SELECT ?Name WHERE {" +
-        //                "?ator a at:Actor ." +
-        //                "?ator at:Name ?Name ." +
-        //            " }";
-        //        var resultado = client.ExecuteQuery(storeName: "Filmes", queryExpression: query
-        //            , resultsFormat: SparqlResultsFormat.Json
-        //            , defaultGraphUri: "http://www.brightstardb.com/.well-known/model/defaultgraph"
-        //            );
-
-        //        {
-        //            var buffer = new byte[resultado.Length];
-        //            resultado.Read(buffer, 0, buffer.Length);
-        //            File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "teste.json"), buffer);
-        //        }
-
-        //        watch.Stop();
-        //        Console.WriteLine(watch.Elapsed);
-        //    }
-
-        //    //var query = "SELECT ?category WHERE { " +
-        //    //"<http://www.brightstardb.com/products/brightstar> <http://brightstardb.com/namespaces/default/name> ?category " +
-        //    //"}";
-        //}
     }
 }

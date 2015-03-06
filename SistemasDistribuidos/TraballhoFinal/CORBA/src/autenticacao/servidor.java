@@ -3,12 +3,16 @@ package autenticacao;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
+
 import java.io.*;
 
 public class servidor
 {
   public static void main(String args[]) {
     try{
+    	if(args.length == 0)
+    		args = new String[] {"-ORBInitialPort", "2000"};
+    	
     	//Cria e inicializa o ORB
       ORB orb = ORB.init(args, null);
 

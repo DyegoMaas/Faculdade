@@ -16,29 +16,11 @@ namespace ClienteArquivamento
             Console.Read();
         }
 
-        private static void VersaoSincrona()
-        {
-            var arquivamentoService = new ServicoArquivamentoService();
-
-            var token = arquivamentoService.autenticarUsuario("vader", "luke");
-            arquivamentoService.criarPasta("pastinha", token);
-            arquivamentoService.criarPasta("pastinha2", token);
-            arquivamentoService.uploadArquivo(ArquivoImagemEmBase64(), "arquivo.jpg", token);
-
-            var diretorios = arquivamentoService.listarDiretorios(token);
-            Console.WriteLine("Diretórios: {0}", diretorios);
-
-            var arquivos = arquivamentoService.listarArquivos(token);
-            Console.WriteLine("Arquivos: {0}", arquivos);
-
-            var imagemBase64 = arquivamentoService.downloadArquivo("arquivo.jpg", token);
-            var bytesBaixados = Convert.FromBase64String(imagemBase64);
-            SalvarImagem(bytesBaixados);
-        }
-
         private static async Task<string> VersaoAssincrona()
         {
             var token = Servico.autenticarUsuario("vader", "luke");
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("nao foi possivel autenticar o usuario");
 
             const string nomeArquivoImagem = "arquivo.jpg";
             var grupoTasks1 = new[]
@@ -68,6 +50,29 @@ namespace ClienteArquivamento
             await Task.WhenAll(Task.Run(grupoTasks2[0]));
 
             return "sucesso";
+        }
+
+        private static void VersaoSincrona()
+        {
+            var arquivamentoService = new ServicoArquivamentoService();
+
+            var token = arquivamentoService.autenticarUsuario("vader", "luke");
+            if(string.IsNullOrEmpty(token))
+                throw new Exception("nao foi possivel autenticar o usuario");
+
+            arquivamentoService.criarPasta("pastinha", token);
+            arquivamentoService.criarPasta("pastinha2", token);
+            arquivamentoService.uploadArquivo(ArquivoImagemEmBase64(), "arquivo.jpg", token);
+
+            var diretorios = arquivamentoService.listarDiretorios(token);
+            Console.WriteLine("Diretórios: {0}", diretorios);
+
+            var arquivos = arquivamentoService.listarArquivos(token);
+            Console.WriteLine("Arquivos: {0}", arquivos);
+
+            var imagemBase64 = arquivamentoService.downloadArquivo("arquivo.jpg", token);
+            var bytesBaixados = Convert.FromBase64String(imagemBase64);
+            SalvarImagem(bytesBaixados);
         }
 
         static string ArquivoImagemEmBase64()

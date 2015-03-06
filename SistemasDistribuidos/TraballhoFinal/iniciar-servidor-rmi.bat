@@ -1,4 +1,4 @@
-set path=%path%;"C:\Program Files\Java\jdk1.7.0_80\bin"
+call setar-path.bat
 
 set classpath=C:\dev\Faculdade\SistemasDistribuidos\TraballhoFinal\RMI\src
 rmic -keep arquivos.ServicoArquivosRemotosServidor

@@ -9,8 +9,11 @@ public class servidor
 {
   public static void main(String args[]) {
     try{
+    	if(args.length == 0)
+    		args = new String[] {"-ORBInitialPort", "2000"};
+    	
       // Cria e inicializa o ORB
-      ORB orb = ORB.init(args, null);
+      ORB orb = ORB.init(args, null); //
 
       // Cria a implementação e registra no ORB
       Msg_Boas_VindasImpl impl = new Msg_Boas_VindasImpl();

@@ -184,7 +184,7 @@ public class ServicoArquivamento {
 			CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName {
 		
 		 // Cria e inicializa o ORB
-	      ORB orb = ORB.init(new String[0], null);
+	      ORB orb = ORB.init(new String[] {"-ORBInitialPort", "2000"}, null);
 
 	      // Obtem referencia para o servico de nomes
 	      org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");

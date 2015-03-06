@@ -1,11 +1,11 @@
-set path=%path%;"C:\Program Files\Java\jdk1.7.0_80\bin"
+call setar-path.bat
 
 cd C:\dev\Faculdade\SistemasDistribuidos\TraballhoFinal\CORBA\src\
 idlj -fall ServicoAutenticacao.idl
 
-set classpath=..\bin
+set classpath=.
 javac -cp "C:\dev\Faculdade\SistemasDistribuidos\TraballhoFinal\CORBA\src" autenticacao\*.java
 
-start orbd -ORBInitialPort
-start java autenticacao.servidor
+start orbd -ORBInitialPort 2000
+java autenticacao.servidor -ORBInitialPort 2000
 
