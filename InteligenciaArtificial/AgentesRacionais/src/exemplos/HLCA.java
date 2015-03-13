@@ -13,18 +13,20 @@ public class HLCA implements Estado {
 	private char carneiro;
 	private char alface;
 	private String nomeAcao;
+	private int custoAnterior;
 
-	public HLCA(char ladoHomem, char ladoLobo, char ladoCarneiro, char ladoAlface, String nomeEstado) {
+	public HLCA(char ladoHomem, char ladoLobo, char ladoCarneiro, char ladoAlface, String nomeEstado, int custoAnterior) {
 		this.homem = ladoHomem;
 		this.lobo = ladoLobo;
 		this.carneiro = ladoCarneiro;
 		this.alface = ladoAlface;
 		this.nomeAcao = nomeEstado;
+		this.custoAnterior = custoAnterior;
 	}
 	
 	@Override
 	public int custo() {
-		return 1;
+		return custoAnterior + 1;
 	}
 
 	@Override
@@ -47,7 +49,7 @@ public class HLCA implements Estado {
 	private void levarAlface(List<Estado> sucessores) {
 		char margemOposta = ladoOposto(homem);
 		
-		HLCA novoEstado = new HLCA(margemOposta, lobo, carneiro, margemOposta, "levarAlface");
+		HLCA novoEstado = new HLCA(margemOposta, lobo, carneiro, margemOposta, "levarAlface", custo());
 		
 		if(ehValido(novoEstado)){
 			sucessores.add(novoEstado);
@@ -57,7 +59,7 @@ public class HLCA implements Estado {
 	private void levarCarneiro(List<Estado> sucessores) {
 		char margemOposta = ladoOposto(homem);
 		
-		HLCA novoEstado = new HLCA(margemOposta, lobo, margemOposta, alface, "levarCarneiro");
+		HLCA novoEstado = new HLCA(margemOposta, lobo, margemOposta, alface, "levarCarneiro", custo());
 		
 		if(ehValido(novoEstado)){
 			sucessores.add(novoEstado);
@@ -67,7 +69,7 @@ public class HLCA implements Estado {
 	private void levarLobo(List<Estado> sucessores) {
 		char margemOposta = ladoOposto(homem);
 		
-		HLCA novoEstado = new HLCA(margemOposta, margemOposta, carneiro, alface, "levarLobo");
+		HLCA novoEstado = new HLCA(margemOposta, margemOposta, carneiro, alface, "levarLobo", custo());
 		
 		if(ehValido(novoEstado)){
 			sucessores.add(novoEstado);
@@ -77,7 +79,7 @@ public class HLCA implements Estado {
 	private void levarHomem(List<Estado> sucessores) {
 		char margemOposta = ladoOposto(homem);
 		
-		HLCA novoEstado = new HLCA(margemOposta, lobo, carneiro, alface, "levarHomem");
+		HLCA novoEstado = new HLCA(margemOposta, lobo, carneiro, alface, "levarHomem", custo());
 		
 		if(ehValido(novoEstado)){
 			sucessores.add(novoEstado);
@@ -146,7 +148,7 @@ public class HLCA implements Estado {
 	}
 
 	public static void main(String[] args) {
-		HLCA problema = new HLCA('e', 'e', 'e', 'e', "inicial");
+		HLCA problema = new HLCA('e', 'e', 'e', 'e', "inicial", 1);
 		
 		BuscaLargura buscaLargura = new BuscaLargura();
 		Nodo nodo = buscaLargura.busca(problema);
