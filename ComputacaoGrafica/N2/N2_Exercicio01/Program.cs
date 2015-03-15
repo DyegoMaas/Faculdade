@@ -1,10 +1,10 @@
-﻿using OpenTK;
+﻿using System;
+using System.Drawing;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using System;
-using System.Drawing;
 
-namespace N2
+namespace N2_Exercicio01
 {
     class Program
     {
