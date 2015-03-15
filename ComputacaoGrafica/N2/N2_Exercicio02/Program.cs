@@ -40,7 +40,7 @@ namespace N2_Exercicio02
 
                 gameWindow.Load += (sender, e) =>
                 {
-                    GL.ClearColor(Color.LightGray);
+                    GL.ClearColor(Color.White);
                 };
 
                 gameWindow.Resize += (sender, e) =>
