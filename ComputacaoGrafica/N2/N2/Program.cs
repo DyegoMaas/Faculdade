@@ -43,7 +43,7 @@ namespace N2
             const float ortho2DMaxY = 400f;
 
             var posicaoInicialJanela = new Point(50, 50);
-            var tamanhoInicialJanela = new Size(400, 400);
+            var tamanhoInicialJanela = new Size(800, 800);
 
             var sistemaReferenciaUniverso = new SistemaReferenciaUniverso();
 
@@ -74,10 +74,9 @@ namespace N2
                     GL.MatrixMode(MatrixMode.Projection);
                     GL.LoadIdentity();
 
-                    var matriz = Matrix4.CreateOrthographicOffCenter(ortho2DMinx, ortho2DMaxX, ortho2DMinY, ortho2DMaxY, 0, 10);
+                    var matriz = Matrix4.CreateOrthographicOffCenter(ortho2DMinx, ortho2DMaxX, ortho2DMinY, ortho2DMaxY, 0, 1);
                     GL.LoadMatrix(ref matriz);
-
-                    //GL.MultMatrix();
+                    
                     GL.MatrixMode(MatrixMode.Modelview);
                     GL.LoadIdentity();
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);   
@@ -97,6 +96,19 @@ namespace N2
             GL.DisableClientState(ArrayCap.TextureCoordArray);
             GL.Disable(EnableCap.Lighting);
 
+            GL.Color3(Color.Blue);
+            GL.PointSize(1.5f);
+            GL.Begin(PrimitiveType.Points);
+            {
+                foreach (var ponto in sru.PontosCirculo)
+                {
+                    GL.Vertex2(ponto.X, ponto.Y);
+                    GL.Vertex3(ponto.X, ponto.Y, 0);
+                }
+            }
+            GL.End();
+
+
             GL.LineWidth(1f);
 
             // eixo x
@@ -114,18 +126,6 @@ namespace N2
             {
                 GL.Vertex2(0, -100);
                 GL.Vertex2(0, 100);
-            }
-            GL.End();
-
-            GL.Color3(Color.Blue);
-            GL.PointSize(1.5f);
-            GL.Begin(PrimitiveType.Points);
-            {
-                foreach (var ponto in sru.PontosCirculo)
-                {
-                    GL.Vertex2(ponto.X, ponto.Y); 
-                    GL.Vertex3(ponto.X, ponto.Y, 0);
-                }
             }
             GL.End();
         }
