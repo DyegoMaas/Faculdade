@@ -3,16 +3,13 @@ using System.Drawing;
 
 namespace N2_Exercicio02
 {
-    public class SistemaReferenciaUniverso
+    public class CirculoReferencia
     {
-        public PointF[] PontosCirculo { get; private set; }
+        public PointF[] Pontos { get; private set; }
 
-        public SistemaReferenciaUniverso()
+        public CirculoReferencia(int raio, int numeroPontos)
         {
-            const int numeroPontos = 72;
-            const int raio = 50;
-
-            PontosCirculo = new PointF[numeroPontos];
+            Pontos = new PointF[numeroPontos];
             for (var i = 0; i < numeroPontos; i++)
             {
                 var theta = 2 * (float)Math.PI * i / numeroPontos;
@@ -20,7 +17,7 @@ namespace N2_Exercicio02
                 var x = raio * (float)Math.Cos(theta);
                 var y = raio * (float)Math.Sin(theta);
 
-                PontosCirculo[i] = new PointF(x, y);
+                Pontos[i] = new PointF(x, y);
             }
         }
     }

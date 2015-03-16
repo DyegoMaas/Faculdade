@@ -15,8 +15,8 @@ namespace N2_Exercicio02
         private float ortho2DMaxY = 400f;
 
         private readonly Point posicaoInicialJanela = new Point(50, 50);
-        private readonly Size tamanhoInicialJanela = new Size(800, 800);
-        private readonly SistemaReferenciaUniverso sistemaReferenciaUniverso = new SistemaReferenciaUniverso();
+        private readonly Size tamanhoInicialJanela = new Size(400, 400);
+        private readonly CirculoReferencia circuloReferencia = new CirculoReferencia(raio:100, numeroPontos:72);
 
         /// <summary>
         /// Para evitar 100% de uso da CPU http://www.opentk.com/doc/intro/cpu-usage
@@ -65,7 +65,7 @@ namespace N2_Exercicio02
                     GL.LoadIdentity();
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                    SRU(sistemaReferenciaUniverso);
+                    SRU(circuloReferencia);
 
                     gameWindow.SwapBuffers();
                 };
@@ -128,7 +128,7 @@ namespace N2_Exercicio02
             CarregarMatrizOrtografica();
         }
 
-        private void SRU(SistemaReferenciaUniverso sru)
+        private void SRU(CirculoReferencia sru)
         {
             GL.Disable(EnableCap.Texture2D);
             GL.DisableClientState(ArrayCap.TextureCoordArray);
@@ -138,7 +138,7 @@ namespace N2_Exercicio02
             GL.PointSize(1.5f);
             GL.Begin(PrimitiveType.Points);
             {
-                foreach (var ponto in sru.PontosCirculo)
+                foreach (var ponto in sru.Pontos)
                 {
                     GL.Vertex2(ponto.X, ponto.Y);
                     GL.Vertex3(ponto.X, ponto.Y, 0);
@@ -153,8 +153,8 @@ namespace N2_Exercicio02
             GL.Color3(Color.Red);
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex2(-100, 0);
-                GL.Vertex2(100, 0);
+                GL.Vertex2(-200, 0);
+                GL.Vertex2(200, 0);
             }
             GL.End();
 
@@ -162,8 +162,8 @@ namespace N2_Exercicio02
             GL.Color3(Color.FromArgb(0, 255, 0));
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex2(0, -100);
-                GL.Vertex2(0, 100);
+                GL.Vertex2(0, -200);
+                GL.Vertex2(0, 200);
             }
             GL.End();
         }
