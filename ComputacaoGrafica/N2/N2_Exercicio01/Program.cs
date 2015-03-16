@@ -8,28 +8,6 @@ namespace N2_Exercicio01
 {
     class Program
     {
-        private class SistemaReferenciaUniverso
-        {
-            public PointF[] PontosCirculo { get; private set; }
-
-            public SistemaReferenciaUniverso()
-            {
-                const int numeroPontos = 72;
-                const int raio = 50;
-
-                PontosCirculo = new PointF[numeroPontos];
-                for (var i = 0; i < numeroPontos; i++)
-                {
-                    var theta = 2 * (float) Math.PI * i / numeroPontos;
-
-                    var x = raio * (float)Math.Cos(theta);
-                    var y = raio * (float)Math.Sin(theta);
-
-                    PontosCirculo[i] = new PointF(x, y);
-                }
-            }
-        }
-
         /// <summary>
         /// Para evitar 100% de uso da CPU http://www.opentk.com/doc/intro/cpu-usage
         /// </summary>
@@ -43,9 +21,9 @@ namespace N2_Exercicio01
             const float ortho2DMaxY = 400f;
 
             var posicaoInicialJanela = new Point(50, 50);
-            var tamanhoInicialJanela = new Size(800, 800);
+            var tamanhoInicialJanela = new Size(400, 400);
 
-            var sistemaReferenciaUniverso = new SistemaReferenciaUniverso();
+            var circuloReferencia = new CirculoReferencia(raio:100, numeroPontos:72);
 
             // Creates a 3.0-compatible GraphicsContext with 32bpp color, 24bpp depth
             // 8bpp stencil
@@ -61,12 +39,10 @@ namespace N2_Exercicio01
 
                 gameWindow.Resize += (sender, e) =>
                 {
-
                 };
 
                 gameWindow.UpdateFrame += (sender, e) =>
                 {
-
                 };
 
                 gameWindow.RenderFrame += (sender, e) =>
@@ -81,7 +57,7 @@ namespace N2_Exercicio01
                     GL.LoadIdentity();
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);   
                     
-                    SRU(sistemaReferenciaUniverso);
+                    SRU(circuloReferencia);
 
                     gameWindow.SwapBuffers();
                 };
@@ -90,7 +66,7 @@ namespace N2_Exercicio01
             }
         }
 
-        private static void SRU(SistemaReferenciaUniverso sru)
+        private static void SRU(CirculoReferencia sru)
         {
             GL.Disable(EnableCap.Texture2D);
             GL.DisableClientState(ArrayCap.TextureCoordArray);
@@ -100,7 +76,7 @@ namespace N2_Exercicio01
             GL.PointSize(1.5f);
             GL.Begin(PrimitiveType.Points);
             {
-                foreach (var ponto in sru.PontosCirculo)
+                foreach (var ponto in sru.Pontos)
                 {
                     GL.Vertex2(ponto.X, ponto.Y);
                     GL.Vertex3(ponto.X, ponto.Y, 0);
@@ -115,8 +91,8 @@ namespace N2_Exercicio01
             GL.Color3(Color.Red);
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex2(-100, 0);
-                GL.Vertex2(100, 0);
+                GL.Vertex2(-200, 0);
+                GL.Vertex2(200, 0);
             }
             GL.End();
 
@@ -124,8 +100,8 @@ namespace N2_Exercicio01
             GL.Color3(Color.FromArgb(0, 255, 0));
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex2(0, -100);
-                GL.Vertex2(0, 100);
+                GL.Vertex2(0, -200);
+                GL.Vertex2(0, 200);
             }
             GL.End();
         }
