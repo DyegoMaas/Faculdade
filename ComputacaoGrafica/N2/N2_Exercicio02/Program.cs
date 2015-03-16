@@ -36,7 +36,7 @@ namespace N2_Exercicio02
             using (var gameWindow = new GameWindow(tamanhoInicialJanela.Width, tamanhoInicialJanela.Height, new GraphicsMode(32, 24, 8, 0)))
             {
                 gameWindow.Location = posicaoInicialJanela;
-                gameWindow.Title = "CG-Respostas-N2_exe01";
+                gameWindow.Title = "CG-Respostas-N2_exe02";
 
                 gameWindow.Load += (sender, e) =>
                 {
