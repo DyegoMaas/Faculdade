@@ -396,8 +396,8 @@ public class Estado8Puzzle implements Estado, Heuristica, Antecessor {
     }
     
     public static void main(String[] a) {
-        //Estado8Puzzle e8 = getEstadoFacil();
-        Estado8Puzzle e8 = getEstadoDificil();
+        Estado8Puzzle e8 = getEstadoFacil();
+        //Estado8Puzzle e8 = getEstadoDificil();
         //Estado8Puzzle e8 = getEstadoMuitoDificil();
         System.out.println("estado inicial (h="+((Heuristica)e8).h()+") ="+e8);
         
