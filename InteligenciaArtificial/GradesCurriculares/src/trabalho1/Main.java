@@ -17,9 +17,6 @@ import com.google.gson.JsonSyntaxException;
 public class Main {
 
 	public static void main(String[] args) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		System.out.println("Hello world!");
-	
-		
 		Gson gson = new Gson();
 		GradeCurricular grade = gson.fromJson(new FileReader(new File("input.json")), GradeCurricular.class);
 		
@@ -38,11 +35,14 @@ public class Main {
 		 *	*Desalocar matéria de um horário
 		 * 
 		 * Estado inicial:
+		 * json entrada
+		 * json saida
 		 * 
+		 * Objetivo:
+		 * *Preencher o máximo de matérias que conseguir usando os dois horários de cada matéria (tenta 5, depois 4... no mínimo 1)
 		 * 
-		 * Estado obejtivo:
-		 * 
-		 * 
+		 * restrição:
+		 * *tem que encaixar a matéria nos dois dias/horarios
 		 */
 		
 	}

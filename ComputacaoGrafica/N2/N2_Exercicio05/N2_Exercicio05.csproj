@@ -7,8 +7,8 @@
     <ProjectGuid>{39296F11-972D-4759-A21C-6315D829B651}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>N2_Exercicio04</RootNamespace>
-    <AssemblyName>N2_Exercicio04</AssemblyName>
+    <RootNamespace>N2_Exercicio05</RootNamespace>
+    <AssemblyName>N2_Exercicio05</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
