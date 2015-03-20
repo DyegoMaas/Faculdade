@@ -1,38 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System;
+using System.Drawing;
 
 namespace N2_Exercicio04
 {
     class Program
     {
-        private static float Raio = 100f;
-        private static float Angulo = 45f;
-        private static float xref = 0f;
-        private static float yref = 0f;
-        private static RetaInclinada retaInclinada = new RetaInclinada();
+        private static float raio = 100f;
+        private static float angulo = 45f;
+        private static float xRef = 0f;
+        private static float yRef = 0f;
+        private static PointF pontoCentral;
+        private static PointF pontoDistante;
 
-        private class RetaInclinada
+        private static void AtualizarLinha()
         {
-            public PointF PontoCentral = new PointF();
-            public PointF PontoDistante = new PointF();
-
-            public RetaInclinada()
-            {
-                var theta = 2 * (float)Math.PI * Angulo / 360;
-                var x = xref + Raio * (float)Math.Cos(theta);
-                var y = yref + Raio * (float)Math.Sin(theta);
-                PontoDistante = new PointF(x, y);
-                PontoCentral = new PointF(xref, yref);
-            }
+            var theta = 2 * (float)Math.PI * angulo / 360;
+            var x = xRef + raio * (float)Math.Cos(theta);
+            var y = yRef + raio * (float)Math.Sin(theta);
+            pontoDistante = new PointF(x, y);
+            pontoCentral = new PointF(xRef, yRef);
         }
-
+        
         static void Main(string[] args)
         {
             using (var gameWindow = new GameWindow(400, 400))
@@ -40,6 +31,7 @@ namespace N2_Exercicio04
                 gameWindow.Load += (sender, e) =>
                 {
                     GL.ClearColor(Color.LightGray);
+                    AtualizarLinha();
                 };
 
                 gameWindow.UpdateFrame += (sender, e) =>
@@ -48,30 +40,30 @@ namespace N2_Exercicio04
 
                     if (state.IsKeyDown(Key.Q))
                     {
-                        xref--;
+                        xRef--;
                     }
                     if (state.IsKeyDown(Key.W))
                     {
-                        xref++;
+                        xRef++;
                     }
                     if (state.IsKeyDown(Key.A))
                     {
-                        Raio--;
+                        raio--;
                     }
                     if (state.IsKeyDown(Key.S))
                     {
-                        Raio++;
+                        raio++;
                     }
                     if (state.IsKeyDown(Key.Z))
                     {
-                        Angulo--;
+                        angulo--;
                     }
                     if (state.IsKeyDown(Key.X))
                     {
-                        Angulo++;
+                        angulo++;
                     }
 
-                    retaInclinada = new RetaInclinada();
+                    AtualizarLinha();
                 };
 
                 gameWindow.RenderFrame += (sender, e) =>
@@ -86,7 +78,8 @@ namespace N2_Exercicio04
                     GL.LoadIdentity();
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-                    MeuDesenho();
+                    SRU();
+                    DesenharLinha();
 
                     gameWindow.SwapBuffers();
                 };
@@ -95,9 +88,8 @@ namespace N2_Exercicio04
             }
         }
 
-        private static void MeuDesenho()
+        private static void SRU()
         {
-
             // eixo x
             GL.Color3(Color.Red);
             GL.Begin(PrimitiveType.Lines);
@@ -115,21 +107,23 @@ namespace N2_Exercicio04
                 GL.Vertex2(0, 200);
             }
             GL.End();
-           
+        }
 
+        private static void DesenharLinha()
+        {
             GL.PointSize(3);
             GL.Color3(Color.Black);
             GL.Begin(PrimitiveType.Points);
             {
-                GL.Vertex2(retaInclinada.PontoCentral.X, retaInclinada.PontoCentral.Y);
-                GL.Vertex2(retaInclinada.PontoDistante.X, retaInclinada.PontoDistante.Y);
+                GL.Vertex2(pontoCentral.X, pontoCentral.Y);
+                GL.Vertex2(pontoDistante.X, pontoDistante.Y);
             }
             GL.End();
 
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex2(retaInclinada.PontoCentral.X, retaInclinada.PontoCentral.Y);
-                GL.Vertex2(retaInclinada.PontoDistante.X, retaInclinada.PontoDistante.Y);
+                GL.Vertex2(pontoCentral.X, pontoCentral.Y);
+                GL.Vertex2(pontoDistante.X, pontoDistante.Y);
             }
             GL.End();
         }
