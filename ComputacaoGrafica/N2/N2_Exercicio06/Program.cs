@@ -8,10 +8,10 @@ namespace N2_Exercicio06
 {
     class Program
     {
-        private const float Ortho2DMinX = -400f;
-        private const float Ortho2DMaxX = 400f;
-        private const float Ortho2DMinY = -400f;
-        private const float Ortho2DMaxY = 400f;
+        private float ortho2DMinX = -400f;
+        private float ortho2DMaxX = 400f;
+        private float ortho2DMinY = -400f;
+        private float ortho2DMaxY = 400f;
 
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Size tamanhoInicialJanela = new Size(400, 400);
@@ -70,6 +70,10 @@ namespace N2_Exercicio06
                 var estadoInicialMouse = new MouseState();
                 gameWindow.UpdateFrame += (sender, e) =>
                 {
+                    var teclado = Keyboard.GetState();
+                    Pan(teclado);
+                    Zoom(teclado);
+
                     var atual = Mouse.GetState();
                     if (atual != antigo && antigo != estadoInicialMouse)
                     {
@@ -101,10 +105,7 @@ namespace N2_Exercicio06
                 {
                     GL.MatrixMode(MatrixMode.Projection);
                     GL.LoadIdentity();
-
-                    var matriz = Matrix4.CreateOrthographicOffCenter(Ortho2DMinX, Ortho2DMaxX, Ortho2DMinY, Ortho2DMaxY, 0, 1);
-                    GL.LoadMatrix(ref matriz);
-
+                    CarregarMatrizOrtografica();
                     GL.MatrixMode(MatrixMode.Modelview);
                     GL.LoadIdentity();
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -220,5 +221,64 @@ namespace N2_Exercicio06
             return p1p2p3p4;
         }
 
+        private void Pan(KeyboardState teclado)
+        {
+            float panX = 0;
+            float panY = 0;
+
+            // pan x
+            if (teclado.IsKeyDown(Key.E) || teclado.IsKeyDown(Key.A))
+            {
+                panX += 1;
+            }
+            if (teclado.IsKeyDown(Key.D))
+            {
+                panX -= 1;
+            }
+
+            // pan y
+            if (teclado.IsKeyDown(Key.C) || teclado.IsKeyDown(Key.W))
+            {
+                panY -= 1;
+            }
+            if (teclado.IsKeyDown(Key.B) || teclado.IsKeyDown(Key.S))
+            {
+                panY += 1;
+            }
+
+            ortho2DMinX += panX;
+            ortho2DMaxX += panX;
+            ortho2DMinY += panY;
+            ortho2DMaxY += panY;
+
+            CarregarMatrizOrtografica();
+        }
+
+        private void Zoom(KeyboardState teclado)
+        {
+            float zoom = 0;
+
+            if (teclado.IsKeyDown(Key.I))
+            {
+                zoom += 1;
+            }
+            if (teclado.IsKeyDown(Key.O))
+            {
+                zoom -= 1;
+            }
+
+            ortho2DMinX += zoom;
+            ortho2DMaxX -= zoom;
+            ortho2DMinY += zoom;
+            ortho2DMaxY -= zoom;
+
+            CarregarMatrizOrtografica();
+        }
+
+        private void CarregarMatrizOrtografica()
+        {
+            var matriz = Matrix4.CreateOrthographicOffCenter(ortho2DMinX, ortho2DMaxX, ortho2DMinY, ortho2DMaxY, 0, 1);
+            GL.LoadMatrix(ref matriz);
+        }
     }
 }

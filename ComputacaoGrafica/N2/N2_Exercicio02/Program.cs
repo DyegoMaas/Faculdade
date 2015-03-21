@@ -60,27 +60,6 @@ namespace N2_Exercicio02
             }
         }
 
-        private void Zoom(KeyboardState teclado)
-        {
-            float zoom = 0;
-
-            if (teclado.IsKeyDown(Key.I))
-            {
-                zoom += 1;
-            }
-            if (teclado.IsKeyDown(Key.O))
-            {
-                zoom -= 1;
-            }
-
-            ortho2DMinX += zoom;
-            ortho2DMaxX -= zoom;
-            ortho2DMinY += zoom;
-            ortho2DMaxY -= zoom;
-
-            CarregarMatrizOrtografica();
-        }
-
         private void Pan(KeyboardState teclado)
         {
             float panX = 0;
@@ -110,6 +89,27 @@ namespace N2_Exercicio02
             ortho2DMaxX += panX;
             ortho2DMinY += panY;
             ortho2DMaxY += panY;
+
+            CarregarMatrizOrtografica();
+        }
+
+        private void Zoom(KeyboardState teclado)
+        {
+            float zoom = 0;
+
+            if (teclado.IsKeyDown(Key.I))
+            {
+                zoom += 1;
+            }
+            if (teclado.IsKeyDown(Key.O))
+            {
+                zoom -= 1;
+            }
+
+            ortho2DMinX += zoom;
+            ortho2DMaxX -= zoom;
+            ortho2DMinY += zoom;
+            ortho2DMaxY -= zoom;
 
             CarregarMatrizOrtografica();
         }
