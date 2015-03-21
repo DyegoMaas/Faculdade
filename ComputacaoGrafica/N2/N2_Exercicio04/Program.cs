@@ -90,6 +90,8 @@ namespace N2_Exercicio04
 
         private static void SRU()
         {
+            GL.LineWidth(1f);
+
             // eixo x
             GL.Color3(Color.Red);
             GL.Begin(PrimitiveType.Lines);
@@ -111,7 +113,7 @@ namespace N2_Exercicio04
 
         private static void DesenharLinha()
         {
-            GL.PointSize(3);
+            GL.PointSize(3f);
             GL.Color3(Color.Black);
             GL.Begin(PrimitiveType.Points);
             {
@@ -120,6 +122,7 @@ namespace N2_Exercicio04
             }
             GL.End();
 
+            GL.LineWidth(2f);
             GL.Begin(PrimitiveType.Lines);
             {
                 GL.Vertex2(pontoCentral.X, pontoCentral.Y);
