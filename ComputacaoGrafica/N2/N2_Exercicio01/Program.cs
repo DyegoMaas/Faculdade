@@ -1,8 +1,7 @@
-﻿using System;
-using System.Drawing;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using System.Drawing;
 
 namespace N2_Exercicio01
 {
@@ -12,7 +11,6 @@ namespace N2_Exercicio01
         /// Para evitar 100% de uso da CPU http://www.opentk.com/doc/intro/cpu-usage
         /// </summary>
         /// <param name="args"></param>
-        [STAThread]
         static void Main(string[] args)
         {
             const float ortho2DMinx = -400f;
@@ -32,18 +30,7 @@ namespace N2_Exercicio01
                 gameWindow.Location = posicaoInicialJanela;
                 gameWindow.Title = "CG-Respostas-N2_exe01";
 
-                gameWindow.Load += (sender, e) =>
-                {
-                    GL.ClearColor(Color.LightGray);
-                };
-
-                gameWindow.Resize += (sender, e) =>
-                {
-                };
-
-                gameWindow.UpdateFrame += (sender, e) =>
-                {
-                };
+                gameWindow.Load += (sender, e) => GL.ClearColor(Color.LightGray);
 
                 gameWindow.RenderFrame += (sender, e) =>
                 {

@@ -8,23 +8,20 @@ namespace N2_Exercicio04
 {
     class Program
     {
-        private static float raio = 100f;
-        private static float angulo = 45f;
-        private static float xRef = 0f;
-        private static float yRef = 0f;
-        private static PointF pontoCentral;
-        private static PointF pontoDistante;
+        private float raio = 100f;
+        private float angulo = 45f;
+        private float xRef = 0f;
+        private float yRef = 0f;
+        private PointF pontoCentral;
+        private PointF pontoDistante;
 
-        private static void AtualizarLinha()
-        {
-            var theta = 2 * (float)Math.PI * angulo / 360;
-            var x = xRef + raio * (float)Math.Cos(theta);
-            var y = yRef + raio * (float)Math.Sin(theta);
-            pontoDistante = new PointF(x, y);
-            pontoCentral = new PointF(xRef, yRef);
-        }
-        
         static void Main(string[] args)
+        {
+            var program = new Program();
+            program.Executar();
+        }
+
+        private void Executar()
         {
             using (var gameWindow = new GameWindow(400, 400))
             {
@@ -88,7 +85,16 @@ namespace N2_Exercicio04
             }
         }
 
-        private static void SRU()
+        private void AtualizarLinha()
+        {
+            var theta = 2 * (float)Math.PI * angulo / 360;
+            var x = xRef + raio * (float)Math.Cos(theta);
+            var y = yRef + raio * (float)Math.Sin(theta);
+            pontoDistante = new PointF(x, y);
+            pontoCentral = new PointF(xRef, yRef);
+        }
+
+        private void SRU()
         {
             GL.LineWidth(1f);
 
@@ -111,7 +117,7 @@ namespace N2_Exercicio04
             GL.End();
         }
 
-        private static void DesenharLinha()
+        private void DesenharLinha()
         {
             GL.PointSize(3f);
             GL.Color3(Color.Black);

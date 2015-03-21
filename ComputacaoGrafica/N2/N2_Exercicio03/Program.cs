@@ -24,11 +24,6 @@ namespace N2_Exercicio03
             new Circulo(RaioCirculos, 0, -RaioCirculos), 
         };
 
-        /// <summary>
-        /// Para evitar 100% de uso da CPU http://www.opentk.com/doc/intro/cpu-usage
-        /// </summary>
-        /// <param name="args"></param>
-        [STAThread]
         static void Main(string[] args)
         {
             var program = new Program();

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Drawing;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System.Drawing;
 
 namespace N2_Exercicio02
 {
@@ -18,11 +17,6 @@ namespace N2_Exercicio02
         private readonly Size tamanhoInicialJanela = new Size(400, 400);
         private readonly CirculoReferencia circuloReferencia = new CirculoReferencia(raio:100, numeroPontos:72);
 
-        /// <summary>
-        /// Para evitar 100% de uso da CPU http://www.opentk.com/doc/intro/cpu-usage
-        /// </summary>
-        /// <param name="args"></param>
-        [STAThread]
         static void Main(string[] args)
         {
             var program = new Program();
@@ -38,15 +32,7 @@ namespace N2_Exercicio02
                 gameWindow.Location = posicaoInicialJanela;
                 gameWindow.Title = "CG-Respostas-N2_exe02";
 
-                gameWindow.Load += (sender, e) =>
-                {
-                    GL.ClearColor(Color.White);
-                };
-
-                gameWindow.Resize += (sender, e) =>
-                {
-
-                };
+                gameWindow.Load += (sender, e) => GL.ClearColor(Color.White);
 
                 gameWindow.UpdateFrame += (sender, e) =>
                 {

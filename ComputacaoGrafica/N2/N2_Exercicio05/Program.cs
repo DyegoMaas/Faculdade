@@ -1,9 +1,8 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using System;
-using System.Drawing;
 using OpenTK.Input;
+using System.Drawing;
 
 namespace N2_Exercicio04
 {
@@ -18,11 +17,6 @@ namespace N2_Exercicio04
         private readonly Size tamanhoInicialJanela = new Size(400, 400);
         private readonly Primitivas primitivas = new Primitivas();
         
-        /// <summary>
-        /// Para evitar 100% de uso da CPU http://www.opentk.com/doc/intro/cpu-usage
-        /// </summary>
-        /// <param name="args"></param>
-        [STAThread]
         static void Main(string[] args)
         {
             var program = new Program();
@@ -38,7 +32,7 @@ namespace N2_Exercicio04
             using (var gameWindow = new GameWindow(tamanhoInicialJanela.Width, tamanhoInicialJanela.Height, new GraphicsMode(32, 24, 8, 0)))
             {
                 gameWindow.Location = posicaoInicialJanela;
-                gameWindow.Title = "CG-Respostas-N2_exe04";
+                gameWindow.Title = "CG-Respostas-N2_exe05";
 
                 gameWindow.Load += (sender, e) =>
                 {
