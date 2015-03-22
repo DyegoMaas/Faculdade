@@ -1,4 +1,4 @@
-package trabalho1;
+package grades.entradas;
 
 public class Horario {
 	public int dia;

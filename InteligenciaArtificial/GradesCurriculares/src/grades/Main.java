@@ -1,17 +1,14 @@
-package trabalho1;
+package grades;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.StringReader;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+
+import grades.entradas.GradeCurricular;
 
 
 public class Main {
