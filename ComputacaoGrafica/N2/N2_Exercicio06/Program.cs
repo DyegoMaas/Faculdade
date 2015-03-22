@@ -120,7 +120,7 @@ namespace N2_Exercicio06
             }
         }
 
-        private static void SRU()
+        private void SRU()
         {
             GL.Disable(EnableCap.Texture2D);
             GL.DisableClientState(ArrayCap.TextureCoordArray);
