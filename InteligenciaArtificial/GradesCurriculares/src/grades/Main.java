@@ -5,11 +5,73 @@ import java.util.List;
 import busca.Estado;
 
 public class Main {
-
+	
 	private class Grade implements Estado {
-
+		private String[] segunda = new String[2];
+		private String[] terca = new String[2];
+		private String[] quarta = new String[2];
+		private String[] quinta = new String[2];
+		private String[] sexta = new String[2];
+		
+		public Grade() {
+		}
+		
+		public Grade clonar(){
+			Grade grade = new Grade();
+			grade.segunda = segunda;
+			grade.terca = terca;
+			grade.quarta = quarta;
+			grade.quinta = quinta;
+			grade.sexta = sexta;
+			
+			return grade;
+		}
+		
+		private void adicionarMateria(String idMateria, int dia1, int horario1, int dia2, int horario2) {
+			String[] dia1DaSemana, dia2DaSemana;
+			switch(dia1){
+			case 1:
+				dia1DaSemana = segunda;
+				break;
+			case 2:
+				dia1DaSemana = terca;
+				break;
+			case 3:
+				dia1DaSemana = quarta;
+				break;
+			case 4:
+				dia1DaSemana = quinta;
+				break;
+			default:
+				dia1DaSemana = sexta;
+				break;				
+			}
+			
+			switch(dia2){
+			case 1:
+				dia2DaSemana = segunda;
+				break;
+			case 2:
+				dia2DaSemana = terca;
+				break;
+			case 3:
+				dia2DaSemana = quarta;
+				break;
+			case 4:
+				dia2DaSemana = quinta;
+				break;
+			default:
+				dia2DaSemana = sexta;
+				break;				
+			}
+			
+			dia1DaSemana[horario1 - 1] = idMateria;
+			dia2DaSemana[horario2 - 1] = idMateria;
+		}
+		
 		@Override
 		public int custo() {
+			curso = null;
 			return 1;
 		}
 
@@ -61,7 +123,7 @@ public class Main {
 	private Materia[] curso = new Materia[] {
 		//TODO marcar alguns como concluídos
 		new MateriaBuilder(1, "11", "Introdução à Computação").lecionadaNa(SEGUNDA, 1).eNa(SEGUNDA, 2).construir(),
-		new MateriaBuilder(1, "12", "Computação Digital").lecionadaNa(SEGUNDA, 1).eNa(SEGUNDA, 2).construir(),
+		new MateriaBuilder(1, "12", "Computação Digital").lecionadaNa(TERCA, 1).eNa(SEGUNDA, 2).construir(),
 		new MateriaBuilder(1, "13", "Programação de Computadores").lecionadaNa(SEGUNDA, 1).eNa(SEGUNDA, 2).construir(),
 		new MateriaBuilder(1, "14", "Universidade, Ciência e Pesquisa").lecionadaNa(SEGUNDA, 1).eNa(SEGUNDA, 2).construir(),
 		new MateriaBuilder(1, "15", "Fundamentos Matemáticos para Computação").lecionadaNa(SEGUNDA, 1).eNa(SEGUNDA, 2).construir(),
