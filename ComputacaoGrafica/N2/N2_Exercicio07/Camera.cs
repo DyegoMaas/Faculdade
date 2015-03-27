@@ -6,10 +6,10 @@ namespace N2_Exercicio07
 {
     public class Camera
     {
-        private float ortho2DMinX = -400f;
-        private float ortho2DMaxX = 400f;
-        private float ortho2DMinY = -400f;
-        private float ortho2DMaxY = 400f;
+        private float ortho2DMinX;
+        private float ortho2DMaxX = 800f;
+        private float ortho2DMinY;
+        private float ortho2DMaxY = 800f;
         
         public void Update()
         {
