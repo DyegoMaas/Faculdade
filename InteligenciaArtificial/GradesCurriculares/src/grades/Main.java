@@ -3,11 +3,13 @@ package grades;
 import grades.entradas.Materia;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import busca.AEstrela;
 import busca.BuscaLargura;
 import busca.Estado;
+import busca.Heuristica;
 import busca.MostraStatusConsole;
 import busca.Nodo;
 
@@ -15,12 +17,12 @@ public class Main {
 	
 	private final int NUMERO_MATERIAS_ALOCADAS = 5;
 	
-	private class Grade implements Estado {
-		private String[] segunda = new String[2];
-		private String[] terca = new String[2];
-		private String[] quarta = new String[2];
-		private String[] quinta = new String[2];
-		private String[] sexta = new String[2];
+	private class Grade implements Estado, Heuristica {
+		private Materia[] segunda = new Materia[2];
+		private Materia[] terca = new Materia[2];
+		private Materia[] quarta = new Materia[2];
+		private Materia[] quinta = new Materia[2];
+		private Materia[] sexta = new Materia[2];
 		private int materiasAlocadas;
 		
 		public Grade() {
@@ -40,15 +42,15 @@ public class Main {
 		}
 		
 		private void adicionarMateria(Materia materia) {
-			String[] dia1DaSemana = obterDia(materia.dia1);
-			String[] dia2DaSemana = obterDia(materia.dia2);
+			Materia[] dia1DaSemana = obterDia(materia.dia1);
+			Materia[] dia2DaSemana = obterDia(materia.dia2);
 						
-			dia1DaSemana[materia.horarioDia1 - 1] = materia.id;
-			dia2DaSemana[materia.horarioDia2 - 1] = materia.id;
+			dia1DaSemana[materia.horarioDia1 - 1] = materia;
+			dia2DaSemana[materia.horarioDia2 - 1] = materia;
 			materiasAlocadas++;
 		}
 		
-		private String[] obterDia(int dia) {
+		private Materia[] obterDia(int dia) {
 			switch(dia){
 			case 1:
 				return segunda;
@@ -98,7 +100,7 @@ public class Main {
 		}
 
 		private boolean estahDisponivel(int dia, int horario) {
-			String[] diaDaSemana = obterDia(dia);
+			Materia[] diaDaSemana = obterDia(dia);
 			return diaDaSemana[horario - 1] == null;
 		}
 		
@@ -109,8 +111,8 @@ public class Main {
 	    	if (o instanceof Grade) {
 	    		Grade e = (Grade)o;
 	            for (int dia = 1; dia <= 5; dia++) {
-					String[] diaSemanaOutro = e.obterDia(dia);
-					String[] diaSemana = this.obterDia(dia);
+	            	Materia[] diaSemanaOutro = e.obterDia(dia);
+	            	Materia[] diaSemana = this.obterDia(dia);
 					if(diaSemanaOutro[0] != diaSemana[0]) 
 						return false;
 					
@@ -129,10 +131,10 @@ public class Main {
 	    public String toString() {
 	    	StringBuffer stringBuffer = new StringBuffer();
 	    	for (int dia = 1; dia <= 5; dia++) {
-				String[] diaSemana = this.obterDia(dia);
+	    		Materia[] diaSemana = this.obterDia(dia);
 				for (int horario = 0; horario < diaSemana.length; horario++) {
 					stringBuffer
-						.append(diaSemana[horario])
+						.append(diaSemana[horario] != null ? diaSemana[horario].id : "")
 						.append(" no dia ").append(dia)
 						.append(" no horário ").append(horario + 1)
 						.append(" / ");	
@@ -142,6 +144,32 @@ public class Main {
 	            
 	        return stringBuffer.toString();
 	    }
+
+		@Override
+		public int h() {
+			int h1 = heuristicaMenorSemestrePrimeiro();
+			
+			return h1;
+		}
+		
+		private int heuristicaMenorSemestrePrimeiro() {
+			ArrayList<Materia> materias = new ArrayList<Materia>();
+			for (int dia = 1; dia <= 5; dia++) {
+				Materia[] diaSemana = this.obterDia(dia);
+				for (int horario = 0; horario < diaSemana.length; horario++) {
+					Materia materia = diaSemana[horario];
+					if(materia != null && !materias.contains(materia)){
+						materias.add(materia);
+					}
+				}				
+			}
+			int somaSemestres = 0;
+			for (Materia materia : materias) {
+				somaSemestres += materia.semestre;
+			}
+			
+			return somaSemestres;
+		}
 	}
 	
 	public static void main(String[] args) {		
@@ -241,8 +269,8 @@ public class Main {
 	            return;
 	        }*/
 	        
-	        //Nodo s = new AEstrela().busca(e8);
-	        Nodo s = new BuscaLargura(new MostraStatusConsole()).busca(gradeVazia);
+	        Nodo s = new AEstrela().busca(gradeVazia);
+	        //Nodo s = new BuscaLargura(new MostraStatusConsole()).busca(gradeVazia);
 	        //Nodo s = new AEstrela(new MostraStatusConsole()).busca(gradeVazia);
 	        //Nodo s = new BuscaIterativo(new MostraStatusConsole()).busca(e8);
 	        //Nodo s = new BuscaProfundidade(25,new MostraStatusConsole()).busca(e8);
