@@ -43,25 +43,23 @@ namespace N2_Exercicio07
                     circuloMenor = new Circulo(new Vector2(200f), 50f, 120);
                 };
 
+                float xAcumulado = 0f, yAcumulado = 0f;
+
                 var estadoInicialMouse = new MouseState();
                 var estadoAntigoMouse = new MouseState();
                 gameWindow.UpdateFrame += (sender, e) =>
                 {
                     camera.Update();
-
                     var estadoAtualMouse = Mouse.GetState();
-                    if (estadoAtualMouse != estadoAntigoMouse && estadoAntigoMouse != estadoInicialMouse)
+                    if (estadoAtualMouse != estadoInicialMouse && estadoAtualMouse != estadoInicialMouse)
                     {
-                        if (estadoAtualMouse.IsButtonDown(MouseButton.Left))
-                        {
-                            if (circuloMenor.EstahDentro(gameWindow.Mouse.X, gameWindow.Mouse.Y))
-                            {
-                                Console.Write("dentro");
+                        var deltaX = estadoAtualMouse.X - estadoInicialMouse.X;
+                        var deltaY = -(estadoAtualMouse.Y - estadoInicialMouse.Y);
 
+                        xAcumulado += deltaX / 50f;
+                        yAcumulado += deltaY / 50f;
 
-                                
-                            }
-                        }
+                        circuloMenor.Deslocar(xAcumulado, yAcumulado);
                     }
 
                     estadoAntigoMouse = estadoAtualMouse;
@@ -216,40 +214,6 @@ namespace N2_Exercicio07
             PontoInferiorDireito = new Vector2(centro.X + metadeLargura, centro.Y);
             PontoSuperiorDireito = new Vector2(centro.X + metadeLargura, centro.Y + metadeLargura);
             PontoSuperiorEsquerdo = new Vector2(centro.X - metadeLargura, centro.Y + metadeLargura);
-        }
-    }
-
-    public class Circulo
-    {
-        public Vector2[] Pontos { get; private set; }
-        public Vector2 Centro { get; private set; }
-        public float Raio { get; private set; }
-
-        public Circulo(Vector2 centro, float raio, int numeroPontos)
-        {
-            Raio = raio;
-            Centro = centro;
-            Pontos = new Vector2[numeroPontos];
-
-            for (var i = 0; i < numeroPontos; i++)
-            {
-                var theta = 2 * (float)Math.PI * i / numeroPontos;
-                var x = centro.X + raio * (float)Math.Cos(theta);
-                var y = centro.Y + raio * (float)Math.Sin(theta);
-
-                Pontos[i] = new Vector2(x, y);
-            }
-        }
-
-        public bool EstahDentro(float x, float y)
-        {
-            var distancia = Distancia(x, y, Centro.X, Centro.Y);
-            return distancia <= Raio;
-        }
-
-        private float Distancia(float x1, float y1, float x2, float y2)
-        {
-            return (float) Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
         }
     }
 }
