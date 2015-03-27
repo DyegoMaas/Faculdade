@@ -79,6 +79,9 @@ public class Main {
 			List<Estado> sucessores = new ArrayList<Estado>();
 			
 			for(Materia materia : curso) {
+				if(materia.completada)
+					continue;
+				
 				boolean horario1Disponivel = estahDisponivel(materia.dia1, materia.horarioDia1);
 				boolean horario2Disponivel = estahDisponivel(materia.dia2, materia.horarioDia2);
 				
