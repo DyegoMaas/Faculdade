@@ -26,7 +26,8 @@ public class Main {
 		public Grade() {
 		}
 		
-		public Grade clonar(){
+		@Override
+		public Grade clone(){
 			Grade grade = new Grade();
 			grade.materiasAlocadas = materiasAlocadas;
 			grade.segunda = segunda.clone();
@@ -70,29 +71,25 @@ public class Main {
 		@Override
 		public boolean ehMeta() {
 			return materiasAlocadas == NUMERO_MATERIAS_ALOCADAS;
-		}
+		}		
 
 		@Override
 		public List<Estado> sucessores() {			
 			List<Estado> sucessores = new ArrayList<Estado>();
 			
 			for(Materia materia : curso) {
-				Grade grade = this.clonar();
-				
-				boolean horario1Disponivel = grade.estahDisponivel(materia.dia1, materia.horarioDia1);
-				boolean horario2Disponivel = grade.estahDisponivel(materia.dia2, materia.horarioDia2);
+				boolean horario1Disponivel = estahDisponivel(materia.dia1, materia.horarioDia1);
+				boolean horario2Disponivel = estahDisponivel(materia.dia2, materia.horarioDia2);
 				
 				if(!horario1Disponivel || !horario2Disponivel)
 					continue;
 				
-				boolean preRequisitosCompletos = true;
-				if(materia.preRequisito != null){
-					preRequisitosCompletos = materiasConcluidas.contains(materia.preRequisito);
+				if(materia.preRequisito != null && !materiasConcluidas.contains(materia.preRequisito)) {
+					continue;
 				}
 				
-				if(preRequisitosCompletos) {
-					grade.adicionarMateria(materia);
-				}
+				Grade grade = this.clone();
+				grade.adicionarMateria(materia);
 				
 				sucessores.add(grade);
 			}
