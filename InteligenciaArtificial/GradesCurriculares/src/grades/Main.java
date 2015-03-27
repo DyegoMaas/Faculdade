@@ -3,7 +3,6 @@ package grades;
 import grades.entradas.Materia;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import busca.AEstrela;
@@ -15,7 +14,7 @@ import busca.Nodo;
 
 public class Main {
 	
-	private final int NUMERO_MATERIAS_ALOCADAS = 5;
+	private int NUMERO_MATERIAS_ALOCADAS = 5;
 	
 	private class Grade implements Estado, Heuristica {
 		private Materia[] segunda = new Materia[2];
@@ -172,31 +171,27 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Agentes:
+	 * 
+	 * 
+	 * Ações possíveis:
+	 *	*Alocar materia em um horario de um dia da semana
+	 * 
+	 * Estado inicial:
+	 * Grade vazia; curso com 5 matérias definidas por semestre com 2 horários cada em dias diferentes
+	 * 
+	 * Objetivo:
+	 * *Preencher o máximo de matérias que conseguir usando os dois horários de cada matéria (tenta 5, depois 4... no mínimo 1)
+	 * 
+	 * restrição:
+	 * *tem que encaixar a matéria nos dois dias/horarios
+	 */
 	public static void main(String[] args) {		
 		Main main = new Main();
-		main.executar();
-		
-		
-		/**
-		 * Agentes:
-		 * 
-		 * 
-		 * Ações possíveis:
-		 *	*Alocar materia em um horario de um dia da semana
-		 *	*Desalocar matéria de um horário
-		 * 
-		 * Estado inicial:
-		 * json entrada
-		 * json saida
-		 * 
-		 * Objetivo:
-		 * *Preencher o máximo de matérias que conseguir usando os dois horários de cada matéria (tenta 5, depois 4... no mínimo 1)
-		 * 
-		 * restrição:
-		 * *tem que encaixar a matéria nos dois dias/horarios
-		 */
-		
+		main.executar();	
 	}
+	
 	private final int SEGUNDA = 1;
 	private final int TERCA = 2; 
 	private final int QUARTA = 3; 
@@ -267,17 +262,30 @@ public class Main {
 		/* if (! gradeVazia.temSolucao()) {
 	            System.out.println(gradeVazia+"nao tem solucao!");
 	            return;
-	        }*/
+        }*/
 	        
-	        Nodo s = new AEstrela().busca(gradeVazia);
-	        //Nodo s = new BuscaLargura(new MostraStatusConsole()).busca(gradeVazia);
+		NUMERO_MATERIAS_ALOCADAS = 5;      
+        while(NUMERO_MATERIAS_ALOCADAS >= 1) {
+        	System.out.printf("Buscando montar uma grade com %d matérias \r", NUMERO_MATERIAS_ALOCADAS);
+        	Nodo s = new AEstrela().busca(gradeVazia);
+        	 
+        	//Nodo s = new BuscaLargura(new MostraStatusConsole()).busca(gradeVazia);
 	        //Nodo s = new AEstrela(new MostraStatusConsole()).busca(gradeVazia);
 	        //Nodo s = new BuscaIterativo(new MostraStatusConsole()).busca(e8);
 	        //Nodo s = new BuscaProfundidade(25,new MostraStatusConsole()).busca(e8);
 	        //Nodo s = new BuscaBidirecional(new MostraStatusConsole()).busca(e8, getEstadoMeta());
-	        if (s != null) {
-	            System.out.println("solucao ("+s.getProfundidade()+")= "+s.montaCaminho());
-	        }        
+        	 
+        	if (s != null) {
+ 	            System.out.println("solucao ("+s.getProfundidade()+")= "+s.montaCaminho());
+ 	            break;
+ 	        }
+        	
+        	System.out.println("--------------------------------");
+        	System.out.println("-----TENTANDO NOVAMENTE---------");
+        	System.out.println("--------------------------------");
+        	
+        	NUMERO_MATERIAS_ALOCADAS--;
+        }           
 	}
 	
 	private class MateriaBuilder {
