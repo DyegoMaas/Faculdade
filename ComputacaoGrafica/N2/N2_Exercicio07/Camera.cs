@@ -1,21 +1,41 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
 namespace N2_Exercicio07
 {
+    [Flags]
+    public enum RecursosCamera
+    {
+        Nenhum = 0,
+        Zoom = 1,
+        Pan = 2
+    }
+
     public class Camera
     {
         private float ortho2DMinX = -400f;
         private float ortho2DMaxX = 400f;
         private float ortho2DMinY = -400f;
         private float ortho2DMaxY = 400f;
+
+        private RecursosCamera recursosHabilitados = RecursosCamera.Nenhum;
+        
+        public void Habilitar(RecursosCamera recursosHabilitar)
+        {
+            recursosHabilitados = recursosHabilitados | recursosHabilitar;
+        }
         
         public void Update()
         {
             var teclado = Keyboard.GetState();
-            Pan(teclado);
-            Zoom(teclado);
+
+            if((recursosHabilitados & RecursosCamera.Pan) == RecursosCamera.Pan)
+                Pan(teclado);
+
+            if ((recursosHabilitados & RecursosCamera.Zoom) == RecursosCamera.Zoom)
+                Zoom(teclado);
         }
 
         public void CarregarMatrizOrtografica()

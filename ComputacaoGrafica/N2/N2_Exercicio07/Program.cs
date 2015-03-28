@@ -34,6 +34,7 @@ namespace N2_Exercicio07
             {
                 gameWindow.Location = posicaoInicialJanela;
                 gameWindow.Title = "CG-Respostas-N2_exe06";
+                camera.Habilitar(RecursosCamera.Pan | RecursosCamera.Zoom); 
 
                 gameWindow.Load += (sender, e) =>
                 {
