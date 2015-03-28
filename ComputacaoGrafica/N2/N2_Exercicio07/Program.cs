@@ -114,20 +114,11 @@ namespace N2_Exercicio07
                 : Color.Yellow;
             DesenharComCor(corQuadrado, () => DesenharQuadrado(quadrado));
 
-            DesenharCirculoMaior(circuloMaior);
-            DesenharCirculoMenor(circuloMenor);
-
-            //TODO centro do círculo
-            //var centroX = esquerdaInferiorQuadrado.X + largura / 2f;
-            //var centroY = esquerdaInferiorQuadrado.Y + largura / 2f;
-            //GL.Color3(Color.Black);
-            //GL.PointSize(4f);
-            //GL.Begin(PrimitiveType.Points);
-            //{
-            //    GL.Vertex2(centroX, centroY);
-            //}
-            //GL.End();
-
+            DesenharComCor(Color.Black, () =>
+            {
+                DesenharCirculo(circuloMaior);
+                DesenharCirculoMenor(circuloMenor);    
+            });
         }
 
         private void DesenharComCor(Color cor, Action acaoDesenho)
@@ -148,35 +139,26 @@ namespace N2_Exercicio07
             GL.End();
         }
 
-        private void DesenharCirculoMaior(Circulo circulo)
-        {
-            GL.Color3(Color.Black);
-            GL.Begin(PrimitiveType.LineLoop);
-            {
-                for (var t = 0; t < NumeroPontosCirculo; t++)
-                {
-                    GL.Vertex2(circuloMaior.ObterPonto(t, NumeroPontosCirculo));
-                }
-            }
-            GL.End();
-        }
-
         private void DesenharCirculoMenor(Circulo circulo)
         {
-            GL.Color3(Color.Black);
-            GL.Begin(PrimitiveType.LineLoop);
-            {
-                for (var t = 0; t < NumeroPontosCirculo; t++)
-                {
-                    GL.Vertex2(circuloMenor.ObterPonto(t, NumeroPontosCirculo));
-                }
-            }
-            GL.End();
+            DesenharCirculo(circulo);
 
             GL.PointSize(5f);
             GL.Begin(PrimitiveType.Points);
             {
                 GL.Vertex2(circulo.Centro);
+            }
+            GL.End();
+        }
+
+        private void DesenharCirculo(Circulo circulo)
+        {
+            GL.Begin(PrimitiveType.LineLoop);
+            {
+                for (var ponto = 0; ponto < NumeroPontosCirculo; ponto++)
+                {
+                    GL.Vertex2(circulo.ObterPonto(ponto, NumeroPontosCirculo));
+                }
             }
             GL.End();
         }
