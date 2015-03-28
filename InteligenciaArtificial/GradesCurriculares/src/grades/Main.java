@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import busca.AEstrela;
+import busca.BuscaIterativo;
 import busca.BuscaLargura;
+import busca.BuscaProfundidade;
 import busca.Estado;
 import busca.Heuristica;
 import busca.MostraStatusConsole;
@@ -270,13 +272,12 @@ public class Main {
 		NUMERO_MATERIAS_ALOCADAS = 5;      
         while(NUMERO_MATERIAS_ALOCADAS >= 1) {
         	System.out.printf("Buscando montar uma grade com %d matérias \r", NUMERO_MATERIAS_ALOCADAS);
-        	Nodo s = new AEstrela().busca(gradeVazia);
-        	 
+        	//Nodo s = new AEstrela().busca(gradeVazia);        	 
         	//Nodo s = new BuscaLargura(new MostraStatusConsole()).busca(gradeVazia);
 	        //Nodo s = new AEstrela(new MostraStatusConsole()).busca(gradeVazia);
-	        //Nodo s = new BuscaIterativo(new MostraStatusConsole()).busca(e8);
-	        //Nodo s = new BuscaProfundidade(25,new MostraStatusConsole()).busca(e8);
-	        //Nodo s = new BuscaBidirecional(new MostraStatusConsole()).busca(e8, getEstadoMeta());
+	        Nodo s = new BuscaIterativo(new MostraStatusConsole()).busca(gradeVazia);
+	        //Nodo s = new BuscaProfundidade(25, new MostraStatusConsole()).busca(gradeVazia);
+	        //Nodo s = new BuscaBidirecional(new MostraStatusConsole()).busca(gradeVazia, getEstadoMeta());
         	 
         	if (s != null) {
  	            System.out.println("solucao ("+s.getProfundidade()+")= "+s.montaCaminho());
