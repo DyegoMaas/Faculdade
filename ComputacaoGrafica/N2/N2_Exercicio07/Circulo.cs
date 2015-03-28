@@ -23,20 +23,9 @@ namespace N2_Exercicio07
             return new Vector2(x, y);
         }
 
-        public bool EstahDentro(float x, float y)
-        {
-            var distancia = Distancia(x, y, Centro.X, Centro.Y);
-            return distancia <= Raio;
-        }
-
         public Circulo Deslocar(float x, float y)
         {
             return new Circulo(Centro + new Vector2(x, y), Raio);
-        }
-
-        private float Distancia(float x1, float y1, float x2, float y2)
-        {
-            return (float) Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
         }
     }
 }

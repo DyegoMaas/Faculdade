@@ -17,6 +17,8 @@ namespace N2_Exercicio07
         private Circulo circuloMenor;
         private Circulo circuloMaior;
         private const int NumeroPontosCirculo = 120;
+
+        private bool circuloMenorEstahDentroQuadrado = true;
         
         static void Main(string[] args)
         {
@@ -54,10 +56,21 @@ namespace N2_Exercicio07
                     {
                         var deltaX = (estadoAtualMouse.X - estadoInicialMouse.X) / 50f;
                         var deltaY = -(estadoAtualMouse.Y - estadoInicialMouse.Y) / 50f;
+                        
+                        var novoCentro = circuloMenor.Centro.Deslocar(deltaX, deltaY);
 
-                        var novoCirculo = circuloMenor.Deslocar(deltaX, deltaY);
-                        if(circuloMaior.EstahDentro(novoCirculo.Centro.X, novoCirculo.Centro.Y))
-                            circuloMenor = novoCirculo;
+                        circuloMenorEstahDentroQuadrado = quadrado.Contem(novoCentro);
+                        if (circuloMenorEstahDentroQuadrado)
+                        {
+                            circuloMenor = circuloMenor.Deslocar(deltaX, deltaY);
+                        }
+                        else
+                        {
+                            if (novoCentro.EstahDentro(circuloMaior))
+                            {
+                                circuloMenor = circuloMenor.Deslocar(deltaX, deltaY);
+                            }
+                        }
                     }
 
                     estadoAntigoMouse = estadoAtualMouse;
@@ -111,7 +124,7 @@ namespace N2_Exercicio07
 
         private void DesenharCoisas()
         {
-            var corQuadrado = quadrado.EstahDentro(circuloMenor.Centro) 
+            var corQuadrado = circuloMenorEstahDentroQuadrado 
                 ? Color.LightPink 
                 : Color.Yellow;
             DesenharComCor(corQuadrado, () => DesenharQuadrado(quadrado));
@@ -184,15 +197,15 @@ namespace N2_Exercicio07
             PontoSuperiorEsquerdo = new Vector2(posicao.X, posicao.Y + largura);
         }
 
-        public bool EstahDentro(float x, float y)
+        public bool Contem(float x, float y)
         {
             return x > PontoInferiorEsquerdo.X && x < PontoSuperiorDireito.X && 
                 y > PontoInferiorEsquerdo.Y && y < PontoSuperiorDireito.Y;
         }
 
-        public bool EstahDentro(Vector2 posicao)
+        public bool Contem(Vector2 posicao)
         {
-            return EstahDentro(posicao.X, posicao.Y);
+            return Contem(posicao.X, posicao.Y);
         }
     }
 
