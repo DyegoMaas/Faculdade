@@ -3,10 +3,10 @@ using OpenTK;
 
 namespace N2_Exercicio07
 {
-    public class Circulo
+    public struct Circulo
     {
         public Vector2 Centro;
-        public float Raio { get; private set; }
+        public float Raio;
 
         public Circulo(Vector2 centro, float raio)
         {
