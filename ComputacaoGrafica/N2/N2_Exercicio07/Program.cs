@@ -55,7 +55,9 @@ namespace N2_Exercicio07
                         var deltaX = (estadoAtualMouse.X - estadoInicialMouse.X) / 50f;
                         var deltaY = -(estadoAtualMouse.Y - estadoInicialMouse.Y) / 50f;
 
-                        circuloMenor = circuloMenor.Deslocar(deltaX, deltaY);
+                        var novoCirculo = circuloMenor.Deslocar(deltaX, deltaY);
+                        if(circuloMaior.EstahDentro(novoCirculo.Centro.X, novoCirculo.Centro.Y))
+                            circuloMenor = novoCirculo;
                     }
 
                     estadoAntigoMouse = estadoAtualMouse;
