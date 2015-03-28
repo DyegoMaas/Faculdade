@@ -5,29 +5,22 @@ namespace N2_Exercicio07
 {
     public class Circulo
     {
-        public Vector2[] Pontos { get; private set; }
-        public Vector2 Centro { get; private set; }
+        public Vector2 Centro;
         public float Raio { get; private set; }
 
-        public Circulo(Vector2 centro, float raio, int numeroPontos)
+        public Circulo(Vector2 centro, float raio)
         {
             Raio = raio;
             Centro = centro;
-            GerarPontos(centro, numeroPontos);
         }
 
-        private void GerarPontos(Vector2 centro, int numeroPontos)
+        public Vector2 ObterPonto(float ponto, int numeroPontos)
         {
-            Pontos = new Vector2[numeroPontos];
+            var theta = 2 * (float)Math.PI * ponto / numeroPontos;
+            var x = Centro.X + Raio * (float)Math.Cos(theta);
+            var y = Centro.Y + Raio * (float)Math.Sin(theta);
 
-            for (var i = 0; i < numeroPontos; i++)
-            {
-                var theta = 2*(float) Math.PI*i/numeroPontos;
-                var x = centro.X + Raio*(float) Math.Cos(theta);
-                var y = centro.Y + Raio*(float) Math.Sin(theta);
-
-                Pontos[i] = new Vector2(x, y);
-            }
+            return new Vector2(x, y);
         }
 
         public bool EstahDentro(float x, float y)
@@ -36,9 +29,9 @@ namespace N2_Exercicio07
             return distancia <= Raio;
         }
 
-        public void Deslocar(float x, float y)
+        public Circulo Deslocar(float x, float y)
         {
-            GerarPontos(Centro + new Vector2(x, y), Pontos.Length);
+            return new Circulo(Centro + new Vector2(x, y), Raio);
         }
 
         private float Distancia(float x1, float y1, float x2, float y2)
