@@ -46,7 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EngineGrafica\BBox.cs" />
+    <Compile Include="EngineGrafica\Camera.cs" />
     <Compile Include="EngineGrafica\Mundo.cs" />
+    <Compile Include="EngineGrafica\NoArvoreObjetosGraficos.cs" />
+    <Compile Include="EngineGrafica\ObjetoGrafico.cs" />
+    <Compile Include="EngineGrafica\Transformacao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
