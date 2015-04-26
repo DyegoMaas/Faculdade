@@ -1,6 +1,6 @@
 using NHibernate;
 
-namespace Core
+namespace Core.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
+using Core;
+using Dominio.Pessoas;
 using Nancy.Hosting.Self;
 using Topshelf;
 
@@ -44,6 +47,8 @@ namespace ApresentacaoNancy
     {
         public void Iniciar()
         {
+            NHibernateSessionFactory.IniciarSessionFactory(new [] { typeof(PessoaMap) });
+
             var hostConfiguration = new HostConfiguration
             {
                 UrlReservations = new UrlReservations { CreateAutomatically = true }

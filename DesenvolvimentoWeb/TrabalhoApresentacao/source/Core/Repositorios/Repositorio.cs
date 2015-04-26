@@ -1,6 +1,6 @@
 namespace Core.Repositorios
 {
-    public class Repositorio : RepositorioBase<long>
+    public class Repositorio : RepositorioBase<long>, IRepositorio
     {
     }
 }

@@ -4,7 +4,7 @@ using NHibernate;
 
 namespace Core.Repositorios
 {
-    public abstract class RepositorioBase<TId> : IRepositorio<TId>
+    public abstract class RepositorioBase<TId> : IRepositorioBase<TId>
         where TId : struct 
     {
         public T Obter<T>(TId id) where T : class, IEntidade<TId>

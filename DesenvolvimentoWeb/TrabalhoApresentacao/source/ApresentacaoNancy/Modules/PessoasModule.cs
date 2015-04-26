@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Repositorios;
+using Core.UnitOfWork;
 using Dominio.Pessoas;
 using Nancy;
 using Nancy.ModelBinding;
 
 namespace ApresentacaoNancy.Modules
 {
-    public class PessoaModule : NancyModule
+    public class PessoasModule : NancyModule
     {
         static readonly List<Pessoa> Pessoas = new List<Pessoa>
         {
@@ -31,39 +33,38 @@ namespace ApresentacaoNancy.Modules
             }
         };
 
-        public PessoaModule() : base("/pessoas")
+        public PessoasModule(IRepositorio repositorio) : base("/pessoas")
         {
-            Get["/"] = _ => Pessoas;
+            Get["/"] = _ => repositorio.ObterTodos<Pessoa>();
 
             Get["/{id:long}"] = _ =>
             {
                 var id = (long)_.id;
-                var pessoa = Pessoas.FirstOrDefault(p => p.Id == id);
-                if(pessoa == null)
-                    throw new Exception(string.Format("Pessoa com id {0} não encontrada.", id));
-
-                return pessoa;
+                return repositorio.Obter<Pessoa>(id);
             };
 
             Post["/"] = _ =>
             {
                 var pessoa = this.BindAndValidate<Pessoa>();
-                pessoa.Id = Pessoas.Max(p => p.Id + 1);
 
-                Pessoas.Add(pessoa);
-                return true;
+                using (var uow = new UnitOfWork())
+                {
+                    throw new Exception();
+                    repositorio.SalvarOuAtualizar(pessoa);
+                }
+
+                return pessoa.Id;
             };
 
             Put["/{id:long}"] = _ =>
             {
                 var id = (long)_.id;
-                var pessoa = Pessoas.FirstOrDefault(p => p.Id == id);
-                if (pessoa == null)
-                    throw new Exception(string.Format("Pessoa com id {0} não encontrada.", id));
-
                 var model = this.BindAndValidate<Pessoa>();
+
+                var pessoa = repositorio.Obter<Pessoa>(id);
                 pessoa.Nome = model.Nome;
                 pessoa.Cpf = model.Cpf;
+                repositorio.SalvarOuAtualizar(pessoa);
 
                 return true;
             };
