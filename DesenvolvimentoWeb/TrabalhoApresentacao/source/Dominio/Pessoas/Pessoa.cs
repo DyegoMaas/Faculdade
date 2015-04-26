@@ -1,4 +1,7 @@
-﻿namespace Dominio.Pessoas
+﻿using Core;
+using Core.Entidades;
+
+namespace Dominio.Pessoas
 {
     public class Pessoa : Entidade
     {

@@ -58,6 +58,7 @@
       <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Integracao\Dominio\Pessoas\PessoaTeste.cs" />
+    <Compile Include="Integracao\Core\RepositorioTeste.cs" />
+    <Compile Include="TesteIntegracaoBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,13 +77,17 @@
       <Project>{6b597c47-d20a-4bd3-9941-08e27b64616a}</Project>
       <Name>ApresentacaoNancy</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{36a603ee-8df6-4977-b33b-b6a029c5dd38}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dominio\Dominio.csproj">
       <Project>{5bc042f1-df3e-4584-8698-d172ab81b9b0}</Project>
       <Name>Dominio</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NHibernate.config" />
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
