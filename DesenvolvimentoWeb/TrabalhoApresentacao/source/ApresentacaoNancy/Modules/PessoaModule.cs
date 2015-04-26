@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dominio.Pessoas;
 using Nancy;
 using Nancy.ModelBinding;
 
@@ -78,12 +79,5 @@ namespace ApresentacaoNancy.Modules
                 return true;
             };
         }
-    }
-
-    public class Pessoa
-    {
-        public long? Id { get; set; }
-        public string Nome { get; set; }
-        public long Cpf { get; set; }
     }
 }
