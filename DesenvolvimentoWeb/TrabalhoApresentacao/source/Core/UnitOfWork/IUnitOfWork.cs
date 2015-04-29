@@ -5,8 +5,7 @@ namespace Core.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        ISession CurrentSession { get; }
-        void Commit();
-        void Rollback();
+        ISession SessaoAtual { get; }
+        void ExecutarEmTransacao(Action acao);
     }
 }

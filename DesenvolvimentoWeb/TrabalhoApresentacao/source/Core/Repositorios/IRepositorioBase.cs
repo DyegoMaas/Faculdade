@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Core.Entidades;
 
 namespace Core.Repositorios
@@ -11,5 +13,7 @@ namespace Core.Repositorios
         IList<T> ObterTodos<T>() where T: class, IEntidade<TId>;
         void Remover<T>(TId id) where T : class, IEntidade<TId>;
         void Remover<T>(T entidade) where T: class, IEntidade<TId>;
+        int Contar<T>() where T : class, IEntidade<TId>;
+        int Contar<T>(Expression<Func<T, bool>> filtros) where T : class, IEntidade<TId>;
     }
 }

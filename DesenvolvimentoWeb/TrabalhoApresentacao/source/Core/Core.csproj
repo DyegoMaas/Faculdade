@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Entidades\Entidade.cs" />
     <Compile Include="Entidades\IEntidade.cs" />
+    <Compile Include="ErroNegocioException.cs" />
     <Compile Include="Repositorios\IRepositorio.cs" />
     <Compile Include="Repositorios\IRepositorioBase.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
@@ -59,7 +60,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\Repositorio.cs" />
     <Compile Include="Repositorios\RepositorioBase.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

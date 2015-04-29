@@ -1,5 +1,4 @@
-﻿using Core;
-using Core.Entidades;
+﻿using Core.Entidades;
 
 namespace Dominio.Pessoas
 {

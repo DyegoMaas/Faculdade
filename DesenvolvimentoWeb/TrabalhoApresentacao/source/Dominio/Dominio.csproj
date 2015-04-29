@@ -51,6 +51,7 @@
     <Compile Include="Pessoas\Pessoa.cs" />
     <Compile Include="Pessoas\PessoaMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidadorCpf.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

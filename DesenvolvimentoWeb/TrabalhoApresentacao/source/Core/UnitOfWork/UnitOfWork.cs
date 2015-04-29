@@ -1,34 +1,51 @@
+using System;
 using NHibernate;
 
 namespace Core.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ITransaction transaction;
+        private ITransaction transacao;
+        public ISession SessaoAtual { get; private set; }
 
-        public UnitOfWork()
+        public UnitOfWork(ISession sessao)
         {
-            CurrentSession = NHibernateSessionFactory.ObterSessaoAtual(); 
-            transaction = CurrentSession.BeginTransaction();
+            SessaoAtual = sessao; 
         }
 
-        public ISession CurrentSession { get; private set; }
+        public void ExecutarEmTransacao(Action acao)
+        {
+            transacao = SessaoAtual.BeginTransaction();
+            try
+            {
+                acao.Invoke();
+                Commit();
+            }
+            catch (Exception)
+            {
+                Rollback();
+                throw;
+            }
+        }
 
         public void Dispose()
         {
-            CurrentSession.Dispose();
+            SessaoAtual.Dispose();
             NHibernateSessionFactory.RemoverSessao();
-            CurrentSession = null;
+            SessaoAtual = null;
         }
 
-        public void Commit()
+        private void Commit()
         {
-            transaction.Commit();
+            transacao.Commit();
         }
 
-        public void Rollback()
+        private void Rollback()
         {
-            if (transaction.IsActive) transaction.Rollback();
+            if (transacao != null && transacao.IsActive)
+            {
+                transacao.Rollback();
+            }
         }
     }
 }

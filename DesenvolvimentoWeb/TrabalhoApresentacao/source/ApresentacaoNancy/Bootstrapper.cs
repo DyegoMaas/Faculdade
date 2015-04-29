@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using Core;
 using log4net;
 using Nancy;
 using Nancy.Bootstrapper;
+using Nancy.Responses;
 using Nancy.Responses.Negotiation;
 using Nancy.TinyIoc;
 
@@ -46,11 +48,21 @@ namespace ApresentacaoNancy
             pipelines.OnError.AddItemToEndOfPipeline((ctx, excecao) =>
             {
                 log.Error(excecao.Message, excecao);
-                var response = new Response
+
+                Response response;
+                if (excecao is ErroNegocioException)
                 {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    ReasonPhrase = excecao.Message
-                };
+                    var resultadoOperacao = ResultadoOperacao.ComErros(excecao.Message);
+                    response = new JsonResponse(resultadoOperacao, new DefaultJsonSerializer());
+                }
+                else
+                {
+                    response = new Response
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        ReasonPhrase = excecao.Message
+                    };
+                }
 
                 ConfigurarCabecalhos(response);
 

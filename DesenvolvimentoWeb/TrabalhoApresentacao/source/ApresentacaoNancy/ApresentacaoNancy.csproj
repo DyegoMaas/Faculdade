@@ -86,7 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Models\PessoaModel.cs" />
     <Compile Include="Modules\PessoasModule.cs" />
+    <Compile Include="ResultadoOperacao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TinyIoCInstaller.cs" />

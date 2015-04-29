@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Core.Entidades;
 using NHibernate;
+using NHibernate.Criterion;
 
 namespace Core.Repositorios
 {
@@ -30,6 +34,21 @@ namespace Core.Repositorios
         public void Remover<T>(T entidade) where T : class, IEntidade<TId>
         {
             Sessao.Delete(entidade);
+        }
+
+        public int Contar<T>() where T : class, IEntidade<TId>
+        {
+            return Contar<T>(null);
+        }
+
+        public int Contar<T>(Expression<Func<T, bool>> filtros) where T : class, IEntidade<TId>
+        {
+            var query = Sessao.QueryOver<T>();
+            if (filtros != null)
+            {
+                query.Where(filtros);
+            }
+            return query.Select(Projections.RowCount()).List<int>().FirstOrDefault();
         }
 
         protected static ISession Sessao
