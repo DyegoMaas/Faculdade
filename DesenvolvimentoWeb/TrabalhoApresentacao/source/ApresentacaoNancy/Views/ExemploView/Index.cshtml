@@ -1,0 +1,14 @@
+﻿@using System.Linq
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <h1>@string.Join(", ", @Enumerable.Repeat("a", 1000))</h1>
+</head>
+<body>
+
+</body>
+</html>

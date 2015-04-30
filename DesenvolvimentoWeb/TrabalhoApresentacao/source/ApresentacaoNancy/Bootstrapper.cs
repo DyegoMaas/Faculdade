@@ -21,7 +21,11 @@ namespace ApresentacaoNancy
             {
                 return NancyInternalConfiguration.WithOverrides(x =>
                 {
-                    x.ResponseProcessors = new[] { typeof(JsonProcessor) };
+                    x.ResponseProcessors = new[]
+                    {
+                        typeof(JsonProcessor),
+                        typeof(ViewProcessor)
+                    };
                 });
             }
         }
