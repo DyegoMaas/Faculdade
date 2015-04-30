@@ -34,7 +34,7 @@ namespace ApresentacaoNancy.Modules
                     return ResultadoOperacao.ComErros(erros.ToArray());
                 }
 
-                if (JaExisteAlguemComCpf(repositorio, model))
+                if (ExisteOutraPessoaComCpf(repositorio, model))
                 {
                     throw new ErroNegocioException(string.Format("Já existe uma pessoa cadastrada com o CPF {0}", model.Cpf.Value));
                 }
@@ -62,7 +62,7 @@ namespace ApresentacaoNancy.Modules
                     return ResultadoOperacao.ComErros(erros.ToArray());
                 }
 
-                if (JaExisteAlguemComCpf(repositorio, model))
+                if (ExisteOutraPessoaComCpf(repositorio, model))
                 {
                     throw new ErroNegocioException(string.Format("Já existe uma pessoa cadastrada com o CPF {0}", model.Cpf));
                 }
@@ -103,9 +103,16 @@ namespace ApresentacaoNancy.Modules
             }
         }
 
-        private static bool JaExisteAlguemComCpf(IRepositorio repositorio, PessoaModel model)
+        private static bool ExisteOutraPessoaComCpf(IRepositorio repositorio, PessoaModel model)
         {
-            return repositorio.Contar<Pessoa>(p => p.Cpf == model.Cpf.Value && p.Id != model.Id.Value) > 0;
+            var cpf = model.Cpf.Value;
+            var pessoa = repositorio.BuscarUm<Pessoa>(p => p.Cpf == cpf);
+            if (pessoa == null)
+                return false;
+
+            if (!model.Id.HasValue)
+                return true;
+            return model.Id.Value != pessoa.Id;
         }
     }
 }

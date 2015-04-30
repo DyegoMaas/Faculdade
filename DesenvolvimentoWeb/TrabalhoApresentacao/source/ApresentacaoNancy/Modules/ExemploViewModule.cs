@@ -9,7 +9,11 @@ namespace ApresentacaoNancy.Modules
         {
             Get["/"] = _ =>
             {
-                return View["Index"];
+                return View["Index", new
+                {
+                    Valor = "a",
+                    Quantidade = 1000
+                }];
             };
         }
     }

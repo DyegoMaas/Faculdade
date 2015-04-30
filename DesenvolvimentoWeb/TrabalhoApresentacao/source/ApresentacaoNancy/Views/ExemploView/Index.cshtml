@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <h1>@string.Join(", ", @Enumerable.Repeat("a", 1000))</h1>
+    <h1>@string.Join(", ", @Enumerable.Repeat(@Model.Valor, @Model.Quantidade))</h1>
 </head>
 <body>
 

@@ -47,7 +47,7 @@ namespace ApresentacaoNancy
     {
         public void Iniciar()
         {
-            //NHibernateSessionFactory.IniciarSessionFactory(new [] { typeof(PessoaMap) });
+            NHibernateSessionFactory.IniciarSessionFactory(new [] { typeof(PessoaMap) });
 
             var hostConfiguration = new HostConfiguration
             {

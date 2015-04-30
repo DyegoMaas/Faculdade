@@ -11,6 +11,14 @@ namespace Core.Repositorios
     public abstract class RepositorioBase<TId> : IRepositorioBase<TId>
         where TId : struct 
     {
+        public T BuscarUm<T>(Expression<Func<T, bool>> filtros) where T : class, IEntidade<TId>
+        {
+            var query = Sessao.QueryOver<T>();
+            if (filtros != null)
+                query.Where(filtros);
+            return query.List().FirstOrDefault();
+        }
+
         public T Obter<T>(TId id) where T : class, IEntidade<TId>
         {
             return Sessao.Get<T>(id);
