@@ -2,8 +2,8 @@
 {
     public sealed class Ponto4D
     {
-        public double X { get; private set; }
-        public double Y { get; private set; }
+        public double X { get; set; }
+        public double Y { get; set; }
         public double Z { get; private set; }
         public double W { get; private set; }
 

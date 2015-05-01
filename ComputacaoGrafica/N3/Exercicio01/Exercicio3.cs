@@ -14,7 +14,7 @@ namespace Exercicio01
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
         private readonly Input input;
 
-        private ObjetoGrafico objetoEmEdicao = new ObjetoGrafico();
+        private ObjetoGrafico objetoEmEdicao = null;
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
 
         public Exercicio3()
@@ -27,7 +27,7 @@ namespace Exercicio01
             Load += (sender, e) =>
             {
                 GL.ClearColor(Color.White);
-                mundo.ObjetosGraficos.Add(objetoEmEdicao);
+               // mundo.ObjetosGraficos.Add(objetoEmEdicao);
             };
 
             UpdateFrame += OnUpdateFrame;
@@ -56,20 +56,47 @@ namespace Exercicio01
             SwapBuffers();
         }
 
-        }
-
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.IsPressed.Equals(MouseButton.Right))
+            if (e.Button.Equals(MouseButton.Left))
             {
-                var ponto = new Ponto4D(e.X, e.Y);
+                var ponto = input.ObterPosicaoMouseNaTela();
 
-                objetoEmEdicao.Vertices.Add(ponto);
+                if (objetoEmEdicao == null)
+                {
+                    objetoEmEdicao = new ObjetoGrafico();
+                    mundo.ObjetosGraficos.Add(objetoEmEdicao);
+
+                    objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                    objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                }
+                else
+                {
+                    objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                }
+                
+            }
+            else if (e.Button.Equals(MouseButton.Right))
+            {
+                objetoEmEdicao = null;
             }
         }
 
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
+            var ponto = input.ObterPosicaoMouseNaTela();
+
+            if (objetoEmEdicao != null)
+            {
+                var vertice = objetoEmEdicao.Vertices.Last();
+
+                if (vertice != null)
+                {
+                    vertice.X = ponto.X;
+                    vertice.Y = ponto.Y;
+                }
+            }
+        }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
