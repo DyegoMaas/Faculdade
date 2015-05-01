@@ -27,7 +27,6 @@ namespace Exercicio01
             Load += (sender, e) =>
             {
                 GL.ClearColor(Color.White);
-               // mundo.ObjetosGraficos.Add(objetoEmEdicao);
             };
 
             UpdateFrame += OnUpdateFrame;
@@ -58,27 +57,30 @@ namespace Exercicio01
 
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.Button.Equals(MouseButton.Left))
+            if (modoExecucao == ModoExecucao.Criacao)
             {
-                var ponto = input.ObterPosicaoMouseNaTela();
-
-                if (objetoEmEdicao == null)
+                if (e.Button.Equals(MouseButton.Left))
                 {
-                    objetoEmEdicao = new ObjetoGrafico();
-                    mundo.ObjetosGraficos.Add(objetoEmEdicao);
+                    var ponto = input.ObterPosicaoMouseNaTela();
 
-                    objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
-                    objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                    if (objetoEmEdicao == null)
+                    {
+                        objetoEmEdicao = new ObjetoGrafico();
+                        mundo.ObjetosGraficos.Add(objetoEmEdicao);
+
+                        objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                        objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                    }
+                    else
+                    {
+                        objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                    }
+
                 }
-                else
+                else if (e.Button.Equals(MouseButton.Right))
                 {
-                    objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                    objetoEmEdicao = null;
                 }
-                
-            }
-            else if (e.Button.Equals(MouseButton.Right))
-            {
-                objetoEmEdicao = null;
             }
         }
 
@@ -140,7 +142,7 @@ namespace Exercicio01
 
         private void AtivarModoCriacao()
         {
-            modoExecucao = ModoExecucao.Edicao;
+            modoExecucao = ModoExecucao.Criacao;
         }
 
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -163,6 +165,13 @@ namespace Exercicio01
                 else if (e.Key == Key.F9)
                 {
                     RemoverVertice();
+                }
+            }
+            else
+            {
+                if (e.Key == Key.Right)
+                {
+                    objetoEmEdicao.Transformacao4D.AtribuirTranslacao(1, 0, 0);
                 }
             }
         }
@@ -204,6 +213,15 @@ namespace Exercicio01
             {
                 GL.Vertex2(400, 200);
                 GL.Vertex2(400, 600);
+            }
+            GL.End();
+
+            GL.PointSize(10);
+            var corQuadrado = modoExecucao == ModoExecucao.Criacao ? Color.Black : Color.FromArgb(0, 255, 0);
+            GL.Color3(corQuadrado);
+            GL.Begin(PrimitiveType.Points);
+            {
+                GL.Vertex2(800, 800);
             }
             GL.End();
         }
