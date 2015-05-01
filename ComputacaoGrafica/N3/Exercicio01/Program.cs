@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using Exercicio01.EngineGrafica;
 using OpenTK;
 using OpenTK.Graphics;
@@ -13,6 +13,7 @@ namespace Exercicio01
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Size tamanhoInicialJanela = new Size(800, 800);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
+        private Input input;
         //private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, -800));
 
         public static void Main(string[] args)
@@ -21,7 +22,7 @@ namespace Exercicio01
             program.Executar();
         }
 
-        private IList<Ponto4D> vertices = new List<Ponto4D>(); 
+        private ObjetoGrafico objetoEmEdicao = new ObjetoGrafico();
 
         private void Executar()
         {
@@ -29,12 +30,15 @@ namespace Exercicio01
             // 8bpp stencil
             using (var gameWindow = new GameWindow(tamanhoInicialJanela.Width, tamanhoInicialJanela.Height, new GraphicsMode(32, 24, 8, 0)))
             {
+                input = new Input(gameWindow);
                 gameWindow.Location = posicaoInicialJanela;
                 gameWindow.Title = "N3-Exercicio01";
 
                 gameWindow.Load += (sender, e) =>
                 {
                     GL.ClearColor(Color.White);
+
+                    mundo.ObjetosGraficos.Add(objetoEmEdicao);
                 };
 
                 gameWindow.UpdateFrame += (sender, e) =>
@@ -72,9 +76,16 @@ namespace Exercicio01
                     }
                 };
 
-                gameWindow.MouseUp += (sender, e) =>
+                gameWindow.KeyDown += (sender, e) =>
                 {
-                    vertices.Add(new Ponto4D(e.X, tamanhoInicialJanela.Width - e.Y));
+                    if (e.Key == Key.F1)
+                    {
+                        AdicionarVertice();
+                    }
+                    else if (e.Key == Key.F2)
+                    {
+                        RemoverVertice();
+                    }
                 };
                 
                 gameWindow.RenderFrame += (sender, e) =>
@@ -92,12 +103,26 @@ namespace Exercicio01
                         objetoGrafico.Desenhar();
                     }
 
-                    DesenharCliques();
-
                     gameWindow.SwapBuffers();
                 };
 
                 gameWindow.Run(120, 60);
+            }
+        }
+
+        private void AdicionarVertice()
+        {
+            var posicaoMouse = input.ObterPosicaoMouseNaTela();
+            var vertice = new Ponto4D(posicaoMouse.X, posicaoMouse.Y);
+            objetoEmEdicao.Vertices.Add(vertice);
+        }
+
+        private void RemoverVertice()
+        {
+            if (objetoEmEdicao.Vertices.Any())
+            {
+                var indiceUltimoVertice = objetoEmEdicao.Vertices.Count - 1;
+                objetoEmEdicao.Vertices.RemoveAt(indiceUltimoVertice);
             }
         }
 
@@ -106,63 +131,7 @@ namespace Exercicio01
             GL.Disable(EnableCap.Texture2D);
             GL.DisableClientState(ArrayCap.TextureCoordArray);
             GL.Disable(EnableCap.Lighting);
-
-            GL.LineWidth(1f);
-
-            // eixo centroX
-            GL.Color3(Color.Black);
-            GL.Begin(PrimitiveType.Lines);
-            {
-                GL.Vertex2(210, 0);
-                GL.Vertex2(610, 0);
-            }
-            GL.End();
-
-            // eixo centroY
-            GL.Color3(Color.Black);
-            GL.Begin(PrimitiveType.Lines);
-            {
-                GL.Vertex2(10, 200);
-                GL.Vertex2(10, 600);
-            }
-            GL.End();
-
-
-
-
-
-
-            GL.PointSize(3);
-            GL.Begin(PrimitiveType.Points);
-            {
-                GL.Vertex2(0,0);
-            }
-            GL.End();
-
-            GL.PointSize(5);
-            GL.Begin(PrimitiveType.Points);
-            {
-                GL.Vertex2(0, 800);
-            }
-            GL.End();
-
-            GL.PointSize(10);
-            GL.Begin(PrimitiveType.Points);
-            {
-                GL.Vertex2(800, 0);
-            }
-            GL.End();
-
-            GL.PointSize(20);
-            GL.Begin(PrimitiveType.Points);
-            {
-                GL.Vertex2(800, 800);
-            }
-            GL.End();
-
-
-
-
+            
             // eixo centroX
             GL.Color3(Color.Red);
             GL.Begin(PrimitiveType.Lines);
@@ -180,20 +149,49 @@ namespace Exercicio01
                 GL.Vertex2(400, 600);
             }
             GL.End();
+
+            //GL.PointSize(3);
+            //GL.Begin(PrimitiveType.Points);
+            //{
+            //    GL.Vertex2(0, 0);
+            //}
+            //GL.End();
+
+            //GL.PointSize(5);
+            //GL.Begin(PrimitiveType.Points);
+            //{
+            //    GL.Vertex2(0, 800);
+            //}
+            //GL.End();
+
+            //GL.PointSize(10);
+            //GL.Begin(PrimitiveType.Points);
+            //{
+            //    GL.Vertex2(800, 0);
+            //}
+            //GL.End();
+
+            //GL.PointSize(20);
+            //GL.Begin(PrimitiveType.Points);
+            //{
+            //    GL.Vertex2(800, 800);
+            //}
+            //GL.End();
+        }
+    }
+
+    public class Input
+    {
+        private readonly GameWindow gameWindow;
+
+        public Input(GameWindow gameWindow)
+        {
+            this.gameWindow = gameWindow;
         }
 
-        private void DesenharCliques()
+        public Vector2 ObterPosicaoMouseNaTela()
         {
-            GL.Color3(Color.FromArgb(160, 80, 128));
-            GL.PointSize(5);
-            GL.Begin(PrimitiveType.Points);
-            {
-                foreach (var clique in vertices)
-                {
-                    GL.Vertex2(clique.X, clique.Y);
-                }
-            }
-            GL.End();
+            return new Vector2(gameWindow.Mouse.X, gameWindow.Width - gameWindow.Mouse.Y);
         }
     }
 }
