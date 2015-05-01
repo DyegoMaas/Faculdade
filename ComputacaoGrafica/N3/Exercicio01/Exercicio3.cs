@@ -61,21 +61,14 @@ namespace Exercicio01
             {
                 if (e.Button.Equals(MouseButton.Left))
                 {
-                    var ponto = input.ObterPosicaoMouseNaTela();
-
                     if (objetoEmEdicao == null)
                     {
                         objetoEmEdicao = new ObjetoGrafico();
                         mundo.ObjetosGraficos.Add(objetoEmEdicao);
 
-                        objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
-                        objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
+                        AdicionarVertice();
                     }
-                    else
-                    {
-                        objetoEmEdicao.Vertices.Add(new Ponto4D(ponto.X, ponto.Y));
-                    }
-
+                    AdicionarVertice();
                 }
                 else if (e.Button.Equals(MouseButton.Right))
                 {
@@ -179,8 +172,7 @@ namespace Exercicio01
         private void AdicionarVertice()
         {
             var posicaoMouse = input.ObterPosicaoMouseNaTela();
-            var vertice = new Ponto4D(posicaoMouse.X, posicaoMouse.Y);
-            objetoEmEdicao.Vertices.Add(vertice);
+            objetoEmEdicao.Vertices.Add(new Ponto4D(posicaoMouse.X, posicaoMouse.Y));
         }
 
         private void RemoverVertice()
@@ -216,6 +208,7 @@ namespace Exercicio01
             }
             GL.End();
 
+            //modo de criação
             GL.PointSize(10);
             var corQuadrado = modoExecucao == ModoExecucao.Criacao ? Color.Black : Color.FromArgb(0, 255, 0);
             GL.Color3(corQuadrado);
