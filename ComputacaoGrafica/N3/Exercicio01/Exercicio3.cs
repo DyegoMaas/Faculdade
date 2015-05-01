@@ -27,17 +27,12 @@ namespace Exercicio01
             Location = posicaoInicialJanela;
             Title = "N3-Exercicio01";
 
-            Load += (sender, e) =>
-            {
-                GL.ClearColor(Color.White);
-            };
-
+            Load += (sender, e) => GL.ClearColor(Color.White);
             UpdateFrame += OnUpdateFrame;
+            RenderFrame += OnRenderFrame;
             KeyDown += OnKeyDown;
             MouseDown += OnMouseDown;
             MouseMove += OnMouseMove;
-
-            RenderFrame += OnRenderFrame;
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -86,8 +81,7 @@ namespace Exercicio01
 
             if (objetoEmEdicao != null)
             {
-                var vertice = objetoEmEdicao.ObjetoGrafico.Vertices.Last();
-
+                var vertice = objetoEmEdicao.ObjetoGrafico.Vertices.LastOrDefault();
                 if (vertice != null)
                 {
                     vertice.X = ponto.X;
@@ -218,7 +212,7 @@ namespace Exercicio01
             GL.End();
 
             //modo de criação
-            GL.PointSize(10);
+            GL.PointSize(25);
             var corQuadrado = modoExecucao == ModoExecucao.Criacao ? Color.Black : Color.FromArgb(0, 255, 0);
             GL.Color3(corQuadrado);
             GL.Begin(PrimitiveType.Points);
