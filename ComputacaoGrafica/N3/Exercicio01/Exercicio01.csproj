@@ -55,6 +55,7 @@
     <Compile Include="EngineGrafica\Transformacao.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Exercicio3.cs" />
+    <Compile Include="ModoExecucao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

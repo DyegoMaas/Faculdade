@@ -12,9 +12,10 @@ namespace Exercicio01
     {
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
-        private Input input;
+        private readonly Input input;
 
         private ObjetoGrafico objetoEmEdicao = new ObjetoGrafico();
+        private ModoExecucao modoExecucao = ModoExecucao.Criacao;
 
         public Exercicio3()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
@@ -30,7 +31,7 @@ namespace Exercicio01
             };
 
             UpdateFrame += OnUpdateFrame;
-            KeyDown +=OnKeyDown;
+            KeyDown += OnKeyDown;
             RenderFrame += OnRenderFrame;
         }
 
@@ -50,18 +51,6 @@ namespace Exercicio01
             }
 
             SwapBuffers();
-        }
-
-        void OnKeyDown(object sender, KeyboardKeyEventArgs e)
-        {
-            if (e.Key == Key.F1)
-            {
-                AdicionarVertice();
-            }
-            else if (e.Key == Key.F2)
-            {
-                RemoverVertice();
-            }
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
@@ -96,6 +85,40 @@ namespace Exercicio01
             if (teclado.IsKeyDown(Key.O))
             {
                 mundo.Camera.FatorZoom -= .01f;
+            }
+        }
+
+        private void AtivarModoEdicao()
+        {
+            modoExecucao = ModoExecucao.Edicao;
+        }
+
+        private void AtivarModoCriacao()
+        {
+            modoExecucao = ModoExecucao.Edicao;
+        }
+
+        void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        {
+            if (e.Key == Key.F1)
+            {
+                AtivarModoCriacao();
+            }
+            else if (e.Key == Key.F2)
+            {
+                AtivarModoEdicao();
+            }
+
+            if (modoExecucao == ModoExecucao.Criacao)
+            {
+                if (e.Key == Key.F8)
+                {
+                    AdicionarVertice();
+                }
+                else if (e.Key == Key.F9)
+                {
+                    RemoverVertice();
+                }
             }
         }
 
