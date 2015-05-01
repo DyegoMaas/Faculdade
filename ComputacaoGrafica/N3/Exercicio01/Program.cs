@@ -1,4 +1,5 @@
-﻿using Exercicio01.EngineGrafica;
+﻿using System.Collections.Generic;
+using Exercicio01.EngineGrafica;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -10,16 +11,17 @@ namespace Exercicio01
     class Program
     {
         private readonly Point posicaoInicialJanela = new Point(50, 50);
-        private readonly Size tamanhoInicialJanela = new Size(400, 400);
-        private readonly Mundo mundo = new Mundo(new Camera(-400f, 400f, -400f, 400f));
-
-        private float fatorZoom = 1f;
+        private readonly Size tamanhoInicialJanela = new Size(800, 800);
+        private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
+        //private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, -800));
 
         public static void Main(string[] args)
         {
             var program = new Program();
             program.Executar();
         }
+
+        private IList<PointF> vertices = new List<PointF>(); 
 
         private void Executar()
         {
@@ -60,16 +62,19 @@ namespace Exercicio01
                     }
                     mundo.Camera.Pan(panX, panY);
 
-                    var zoom = 0f;
                     if (teclado.IsKeyDown(Key.I))
                     {
-                        zoom += .01f;
+                        mundo.Camera.FatorZoom += .01f;
                     }
                     if (teclado.IsKeyDown(Key.O))
                     {
-                        zoom -= .01f;
+                        mundo.Camera.FatorZoom -= .01f;
                     }
-                    mundo.Camera.FatorZoom += zoom;
+                };
+
+                gameWindow.MouseUp += (sender, e) =>
+                {
+                    vertices.Add(new PointF(e.X, tamanhoInicialJanela.Width - e.Y));
                 };
                 
                 gameWindow.RenderFrame += (sender, e) =>
@@ -87,6 +92,8 @@ namespace Exercicio01
                         objetoGrafico.Desenhar();
                     }
 
+                    DesenharCliques();
+
                     gameWindow.SwapBuffers();
                 };
 
@@ -103,11 +110,65 @@ namespace Exercicio01
             GL.LineWidth(1f);
 
             // eixo centroX
+            GL.Color3(Color.Black);
+            GL.Begin(PrimitiveType.Lines);
+            {
+                GL.Vertex2(210, 0);
+                GL.Vertex2(610, 0);
+            }
+            GL.End();
+
+            // eixo centroY
+            GL.Color3(Color.Black);
+            GL.Begin(PrimitiveType.Lines);
+            {
+                GL.Vertex2(10, 200);
+                GL.Vertex2(10, 600);
+            }
+            GL.End();
+
+
+
+
+
+
+            GL.PointSize(3);
+            GL.Begin(PrimitiveType.Points);
+            {
+                GL.Vertex2(0,0);
+            }
+            GL.End();
+
+            GL.PointSize(5);
+            GL.Begin(PrimitiveType.Points);
+            {
+                GL.Vertex2(0, 800);
+            }
+            GL.End();
+
+            GL.PointSize(10);
+            GL.Begin(PrimitiveType.Points);
+            {
+                GL.Vertex2(800, 0);
+            }
+            GL.End();
+
+            GL.PointSize(20);
+            GL.Begin(PrimitiveType.Points);
+            {
+                GL.Vertex2(800, 800);
+            }
+            GL.End();
+
+
+
+
+            // eixo centroX
             GL.Color3(Color.Red);
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex2(-200, 0);
-                GL.Vertex2(200, 0);
+                GL.Vertex2(200, 400);
+                GL.Vertex2(600, 400);
             }
             GL.End();
 
@@ -115,8 +176,22 @@ namespace Exercicio01
             GL.Color3(Color.FromArgb(0, 255, 0));
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex2(0, -200);
-                GL.Vertex2(0, 200);
+                GL.Vertex2(400, 200);
+                GL.Vertex2(400, 600);
+            }
+            GL.End();
+        }
+
+        private void DesenharCliques()
+        {
+            GL.Color3(Color.FromArgb(160, 80, 128));
+            GL.PointSize(5);
+            GL.Begin(PrimitiveType.Points);
+            {
+                foreach (var clique in vertices)
+                {
+                    GL.Vertex2(clique.X, clique.Y);
+                }
             }
             GL.End();
         }

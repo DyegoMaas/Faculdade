@@ -16,6 +16,8 @@ namespace Exercicio01.EngineGrafica
         private float yMaxOrtho2D;
 
         private float fatorZoom = 1f;
+        private float panX;
+        private float panY;
 
         public float FatorZoom
         {
@@ -23,7 +25,7 @@ namespace Exercicio01.EngineGrafica
             set 
             {
                 fatorZoom = value;
-                AplicarZoom(fatorZoom);
+                CarregarMatrizOrtografica();
             }
         }
 
@@ -42,26 +44,20 @@ namespace Exercicio01.EngineGrafica
 
         public void Pan(float deslocamentoX, float deslocamentoY)
         {
-            xMinOrtho2D += deslocamentoX;
-            xMaxOrtho2D += deslocamentoX;
-            yMinOrtho2D += deslocamentoY;
-            yMaxOrtho2D += deslocamentoY;
+            panX += deslocamentoX;
+            panY += deslocamentoY;
 
             CarregarMatrizOrtografica();
         }
-
-        private void AplicarZoom(float fator)
-        {
-            xMinOrtho2D = xMinOrtho2DOriginal * fator;
-            xMaxOrtho2D = xMaxOrtho2DOriginal * fator;
-            yMinOrtho2D = yMinOrtho2DOriginal * fator;
-            yMaxOrtho2D = yMaxOrtho2DOriginal * fator;
-
-            CarregarMatrizOrtografica();
-        }
-
+        
         public void CarregarMatrizOrtografica()
         {
+            var fatorZoomAplicado = fatorZoom > 0 ? fatorZoom : 1;
+            xMinOrtho2D = (xMinOrtho2DOriginal + panX) / fatorZoomAplicado;
+            xMaxOrtho2D = (xMaxOrtho2DOriginal + panX) / fatorZoomAplicado;
+            yMinOrtho2D = (yMinOrtho2DOriginal + panY) / fatorZoomAplicado;
+            yMaxOrtho2D = (yMaxOrtho2DOriginal + panY) / fatorZoomAplicado;
+
             var matriz = Matrix4.CreateOrthographicOffCenter(xMinOrtho2D, xMaxOrtho2D, yMinOrtho2D, yMaxOrtho2D, 0, 1);
             GL.LoadMatrix(ref matriz);
         }
