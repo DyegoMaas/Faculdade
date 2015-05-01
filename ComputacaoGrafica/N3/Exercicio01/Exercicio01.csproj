@@ -54,7 +54,7 @@
     <Compile Include="EngineGrafica\Ponto.cs" />
     <Compile Include="EngineGrafica\Transformacao.cs" />
     <Compile Include="Input.cs" />
-    <Compile Include="N1.cs" />
+    <Compile Include="Exercicio3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

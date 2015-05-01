@@ -8,7 +8,7 @@ using OpenTK.Input;
 
 namespace Exercicio01
 {
-    public class N1 : GameWindow
+    public class Exercicio3 : GameWindow
     {
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
@@ -16,7 +16,7 @@ namespace Exercicio01
 
         private ObjetoGrafico objetoEmEdicao = new ObjetoGrafico();
 
-        public N1()
+        public Exercicio3()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
             input = new Input(this);
