@@ -14,10 +14,6 @@ namespace Exercicio01.Editor
             this.input = input;
         }
 
-        private double translacaoX;
-        private double translacaoY;
-        private double translacaoZ;
-
         /// <summary>
         /// Em radianos
         /// </summary>
@@ -35,10 +31,7 @@ namespace Exercicio01.Editor
 
         public void Mover(double x, double y, double z)
         {
-            translacaoX += x;
-            translacaoY += y;
-            translacaoZ += z;
-            ObjetoGrafico.Transformacao.AtribuirTranslacao(translacaoX, translacaoY, translacaoZ);
+            ObjetoGrafico.Mover(x, y, z);
         }
 
         public void AdicionarVertice()

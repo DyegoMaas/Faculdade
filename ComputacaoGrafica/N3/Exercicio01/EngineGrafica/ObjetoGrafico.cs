@@ -41,5 +41,16 @@ namespace Exercicio01.EngineGrafica
             GL.End();
             GL.PopMatrix();
         }
+
+        public void Mover(double x, double y, double z)
+        {
+            var translacao = new Transformacao4D();
+            translacao.AtribuirTranslacao(x, y, z);
+
+            var matrizObjeto = Transformacao;
+            var matrizResultante = translacao.TransformarMatriz(matrizObjeto);
+
+            Transformacao.Data = matrizResultante.Data;
+        }
     }
 }
