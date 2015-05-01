@@ -34,6 +34,11 @@ namespace Exercicio01.Editor
             ObjetoGrafico.Mover(x, y, z);
         }
 
+        public void Redimensionar(double escalaX, double escalaY)
+        {
+            ObjetoGrafico.Redimensionar(escalaX, escalaY);
+        }
+
         public void AdicionarVertice()
         {
             var posicaoMouse = input.ObterPosicaoMouseNaTela();

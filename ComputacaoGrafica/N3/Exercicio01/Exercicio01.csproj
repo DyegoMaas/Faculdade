@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editor\OperacaoSobreObjeto.cs" />
     <Compile Include="EngineGrafica\BBox.cs" />
     <Compile Include="EngineGrafica\Camera.cs" />
     <Compile Include="EngineGrafica\Mundo.cs" />

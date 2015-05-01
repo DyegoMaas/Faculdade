@@ -44,12 +44,19 @@ namespace Exercicio01.EngineGrafica
 
         public void Mover(double x, double y, double z)
         {
-            var translacao = new Transformacao4D();
-            translacao.AtribuirTranslacao(x, y, z);
+            var matrizTranslacao = new Transformacao4D();
+            matrizTranslacao.AtribuirTranslacao(x, y, z);
 
-            var matrizObjeto = Transformacao;
-            var matrizResultante = translacao.TransformarMatriz(matrizObjeto);
+            var matrizResultante = matrizTranslacao.TransformarMatriz(Transformacao);
+            Transformacao.Data = matrizResultante.Data;
+        }
 
+        public void Redimensionar(double escalaX, double escalaY)
+        {
+            var matrizEscala = new Transformacao4D();
+            matrizEscala.AtribuirEscala(escalaX, escalaY, 1.0);
+
+            var matrizResultante = matrizEscala.TransformarMatriz(Transformacao);
             Transformacao.Data = matrizResultante.Data;
         }
     }
