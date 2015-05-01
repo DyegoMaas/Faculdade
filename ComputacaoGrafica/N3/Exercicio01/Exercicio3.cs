@@ -1,20 +1,23 @@
-using System.Drawing;
 using System.Linq;
+using Exercicio01.Editor;
 using Exercicio01.EngineGrafica;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System.Drawing;
 
 namespace Exercicio01
 {
     public class Exercicio3 : GameWindow
     {
+        private const double VelocidadeTranslacao = 1;
+
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
         private readonly Input input;
 
-        private ObjetoGrafico objetoEmEdicao = null;
+        private ObjetoEmEdicao objetoEmEdicao = null;
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
 
         public Exercicio3()
@@ -63,8 +66,8 @@ namespace Exercicio01
                 {
                     if (objetoEmEdicao == null)
                     {
-                        objetoEmEdicao = new ObjetoGrafico();
-                        mundo.ObjetosGraficos.Add(objetoEmEdicao);
+                        objetoEmEdicao = new ObjetoEmEdicao(new ObjetoGrafico());
+                        mundo.ObjetosGraficos.Add(objetoEmEdicao.ObjetoGrafico);
 
                         AdicionarVertice();
                     }
@@ -83,7 +86,7 @@ namespace Exercicio01
 
             if (objetoEmEdicao != null)
             {
-                var vertice = objetoEmEdicao.Vertices.Last();
+                var vertice = objetoEmEdicao.ObjetoGrafico.Vertices.Last();
 
                 if (vertice != null)
                 {
@@ -96,46 +99,8 @@ namespace Exercicio01
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
             var teclado = OpenTK.Input.Keyboard.GetState();
-
-            float panX = 0f, panY = 0f;
-            // pan x
-            if (teclado.IsKeyDown(Key.E) || teclado.IsKeyDown(Key.A))
-            {
-                panX += 1;
-            }
-            if (teclado.IsKeyDown(Key.D))
-            {
-                panX -= 1;
-            }
-            // pan y
-            if (teclado.IsKeyDown(Key.C) || teclado.IsKeyDown(Key.W))
-            {
-                panY -= 1;
-            }
-            if (teclado.IsKeyDown(Key.B) || teclado.IsKeyDown(Key.S))
-            {
-                panY += 1;
-            }
-            mundo.Camera.Pan(panX, panY);
-
-            if (teclado.IsKeyDown(Key.I))
-            {
-                mundo.Camera.FatorZoom += .01f;
-            }
-            if (teclado.IsKeyDown(Key.O))
-            {
-                mundo.Camera.FatorZoom -= .01f;
-            }
-        }
-
-        private void AtivarModoEdicao()
-        {
-            modoExecucao = ModoExecucao.Edicao;
-        }
-
-        private void AtivarModoCriacao()
-        {
-            modoExecucao = ModoExecucao.Criacao;
+            Pan(teclado);
+            Zoom(teclado);
         }
 
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -162,25 +127,84 @@ namespace Exercicio01
             }
             else
             {
+                var velocidadeTranslacao = e.Shift ? VelocidadeTranslacao * 5 : VelocidadeTranslacao;
                 if (e.Key == Key.Right)
                 {
-                    objetoEmEdicao.Transformacao4D.AtribuirTranslacao(1, 0, 0);
+                    objetoEmEdicao.Mover(velocidadeTranslacao, 0, 0);
+                }
+                if (e.Key == Key.Left)
+                {
+                    objetoEmEdicao.Mover(-velocidadeTranslacao, 0, 0);
+                }
+                if (e.Key == Key.Up)
+                {
+                    objetoEmEdicao.Mover(0, velocidadeTranslacao, 0);
+                }
+                if (e.Key == Key.Down)
+                {
+                    objetoEmEdicao.Mover(0, -velocidadeTranslacao, 0);
                 }
             }
+        }
+
+        private void Zoom(KeyboardState teclado)
+        {
+            if (teclado.IsKeyDown(Key.I))
+            {
+                mundo.Camera.FatorZoom += .01f;
+            }
+            if (teclado.IsKeyDown(Key.O))
+            {
+                mundo.Camera.FatorZoom -= .01f;
+            }
+        }
+
+        private void Pan(KeyboardState teclado)
+        {
+            float panX = 0f, panY = 0f;
+            // pan x
+            if (teclado.IsKeyDown(Key.E) || teclado.IsKeyDown(Key.A))
+            {
+                panX += 1;
+            }
+            if (teclado.IsKeyDown(Key.D))
+            {
+                panX -= 1;
+            }
+            // pan y
+            if (teclado.IsKeyDown(Key.C) || teclado.IsKeyDown(Key.W))
+            {
+                panY -= 1;
+            }
+            if (teclado.IsKeyDown(Key.B) || teclado.IsKeyDown(Key.S))
+            {
+                panY += 1;
+            }
+            mundo.Camera.Pan(panX, panY);
+        }
+
+        private void AtivarModoEdicao()
+        {
+            modoExecucao = ModoExecucao.Edicao;
+        }
+
+        private void AtivarModoCriacao()
+        {
+            modoExecucao = ModoExecucao.Criacao;
         }
 
         private void AdicionarVertice()
         {
             var posicaoMouse = input.ObterPosicaoMouseNaTela();
-            objetoEmEdicao.Vertices.Add(new Ponto4D(posicaoMouse.X, posicaoMouse.Y));
+            objetoEmEdicao.ObjetoGrafico.Vertices.Add(new Ponto4D(posicaoMouse.X, posicaoMouse.Y));
         }
 
         private void RemoverVertice()
         {
-            if (objetoEmEdicao.Vertices.Any())
+            if (objetoEmEdicao.ObjetoGrafico.Vertices.Any())
             {
-                var indiceUltimoVertice = objetoEmEdicao.Vertices.Count - 1;
-                objetoEmEdicao.Vertices.RemoveAt(indiceUltimoVertice);
+                var indiceUltimoVertice = objetoEmEdicao.ObjetoGrafico.Vertices.Count - 1;
+                objetoEmEdicao.ObjetoGrafico.Vertices.RemoveAt(indiceUltimoVertice);
             }
         }
 

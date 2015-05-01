@@ -53,9 +53,10 @@
     <Compile Include="EngineGrafica\ObjetoGrafico.cs" />
     <Compile Include="EngineGrafica\Ponto.cs" />
     <Compile Include="EngineGrafica\Transformacao4D.cs" />
-    <Compile Include="Input.cs" />
+    <Compile Include="Editor\Input.cs" />
     <Compile Include="Exercicio3.cs" />
-    <Compile Include="ModoExecucao.cs" />
+    <Compile Include="Editor\ModoExecucao.cs" />
+    <Compile Include="Editor\ObjetoEmEdicao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

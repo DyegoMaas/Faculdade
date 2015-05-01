@@ -99,13 +99,16 @@ namespace Exercicio01.EngineGrafica
             return pointResult;
         }
 
-        public Transformacao4D TransofrmarMatriz(Transformacao4D t)
+        public Transformacao4D TransformarMatriz(Transformacao4D t)
         {
             var result = new Transformacao4D();
-            for (int i = 0; i < 16; ++i)
-                result.matriz[i] =
-                      matriz[i % 4] * t.matriz[i / 4 * 4] + matriz[(i % 4) + 4] * t.matriz[i / 4 * 4 + 1]
-                    + matriz[(i % 4) + 8] * t.matriz[i / 4 * 4 + 2] + matriz[(i % 4) + 12] * t.matriz[i / 4 * 4 + 3];
+            for (var i = 0; i < matriz.Length; ++i)
+            {
+                result.matriz[i] = matriz[i % 4] * t.matriz[i / 4 * 4] +
+                                   matriz[(i % 4) + 4] * t.matriz[i / 4 * 4 + 1] +
+                                   matriz[(i % 4) + 8] * t.matriz[i / 4 * 4 + 2] +
+                                   matriz[(i % 4) + 12] * t.matriz[i / 4 * 4 + 3];
+            }
             return result;
         }
 

@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 
-namespace Exercicio01
+namespace Exercicio01.Editor
 {
     public class Input
     {

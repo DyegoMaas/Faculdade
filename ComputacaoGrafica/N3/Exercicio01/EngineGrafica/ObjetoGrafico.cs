@@ -6,7 +6,7 @@ namespace Exercicio01.EngineGrafica
 {
     public class ObjetoGrafico : NoArvoreObjetosGraficos
     {
-        public Transformacao4D Transformacao4D { get; private set; }
+        public Transformacao4D Transformacao { get; private set; }
 
         public float TamanhoPonto { get; set; }
         public float LarguraLinha { get; set; }
@@ -20,7 +20,7 @@ namespace Exercicio01.EngineGrafica
             LarguraLinha = 1;
             Primitiva = PrimitiveType.LineStrip;
             Vertices = new List<Ponto4D>();
-            Transformacao4D = new Transformacao4D();
+            Transformacao = new Transformacao4D();
         }
 
         public void Desenhar()
@@ -28,6 +28,9 @@ namespace Exercicio01.EngineGrafica
             GL.Color3(Cor);
             GL.LineWidth(LarguraLinha);
 
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            GL.MultMatrix(Transformacao.Data);
             GL.Begin(Primitiva);
             {
                 for (int i = 0; i < Vertices.Count; i++)
@@ -36,6 +39,7 @@ namespace Exercicio01.EngineGrafica
                 }    
             }
             GL.End();
+            GL.PopMatrix();
         }
     }
 }

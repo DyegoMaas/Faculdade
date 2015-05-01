@@ -1,4 +1,4 @@
-namespace Exercicio01
+namespace Exercicio01.Editor
 {
     internal enum ModoExecucao
     {
