@@ -5,17 +5,34 @@ namespace Exercicio01.EngineGrafica
 {
     public class Camera
     {
+        private readonly float xMinOrtho2DOriginal;
+        private readonly float xMaxOrtho2DOriginal;
+        private readonly float yMinOrtho2DOriginal;
+        private readonly float yMaxOrtho2DOriginal;
+
         private float xMinOrtho2D;
         private float xMaxOrtho2D;
         private float yMinOrtho2D;
         private float yMaxOrtho2D;
 
+        private float fatorZoom = 1f;
+
+        public float FatorZoom
+        {
+            get { return fatorZoom; }
+            set 
+            {
+                fatorZoom = value;
+                AplicarZoom(fatorZoom);
+            }
+        }
+
         public Camera(float xMinOrtho2D, float xMaxOrtho2D, float yMinOrtho2D, float yMaxOrtho2D)
         {
-            this.xMinOrtho2D = xMinOrtho2D;
-            this.xMaxOrtho2D = xMaxOrtho2D;
-            this.yMinOrtho2D = yMinOrtho2D;
-            this.yMaxOrtho2D = yMaxOrtho2D;
+            xMinOrtho2DOriginal = this.xMinOrtho2D = xMinOrtho2D;
+            xMaxOrtho2DOriginal = this.xMaxOrtho2D = xMaxOrtho2D;
+            yMinOrtho2DOriginal = this.yMinOrtho2D = yMinOrtho2D;
+            yMaxOrtho2DOriginal = this.yMaxOrtho2D = yMaxOrtho2D;
         }
 
         public void Pan(Vector2 deslocamento)
@@ -33,22 +50,12 @@ namespace Exercicio01.EngineGrafica
             CarregarMatrizOrtografica();
         }
 
-        public void ZoomPorFator(float fator)
+        private void AplicarZoom(float fator)
         {
-            xMinOrtho2D *= fator;
-            xMaxOrtho2D *= fator;
-            yMinOrtho2D *= fator;
-            yMaxOrtho2D *= fator;
-
-            CarregarMatrizOrtografica();
-        }
-
-        public void Zoom(int zoom)
-        {
-            xMinOrtho2D += zoom;
-            xMaxOrtho2D -= zoom;
-            yMinOrtho2D += zoom;
-            yMaxOrtho2D -= zoom;
+            xMinOrtho2D = xMinOrtho2DOriginal * fator;
+            xMaxOrtho2D = xMaxOrtho2DOriginal * fator;
+            yMinOrtho2D = yMinOrtho2DOriginal * fator;
+            yMaxOrtho2D = yMaxOrtho2DOriginal * fator;
 
             CarregarMatrizOrtografica();
         }

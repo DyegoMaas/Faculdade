@@ -60,16 +60,16 @@ namespace Exercicio01
                     }
                     mundo.Camera.Pan(panX, panY);
 
-                    var zoom = 0;
+                    var zoom = 0f;
                     if (teclado.IsKeyDown(Key.I))
                     {
-                        zoom += 1;
+                        zoom += .01f;
                     }
                     if (teclado.IsKeyDown(Key.O))
                     {
-                        zoom -= 1;
+                        zoom -= .01f;
                     }
-                    mundo.Camera.Zoom(zoom);
+                    mundo.Camera.FatorZoom += zoom;
                 };
                 
                 gameWindow.RenderFrame += (sender, e) =>
