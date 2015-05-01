@@ -13,7 +13,7 @@ namespace Exercicio01
 
         public Vector2 ObterPosicaoMouseNaTela()
         {
-            return new Vector2(gameWindow.Mouse.X, gameWindow.Height- gameWindow.Mouse.Y);
+            return new Vector2(gameWindow.Mouse.X, gameWindow.Height - gameWindow.Mouse.Y);
         }
     }
 }
