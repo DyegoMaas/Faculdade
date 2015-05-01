@@ -21,7 +21,7 @@ namespace Exercicio01
             program.Executar();
         }
 
-        private IList<PointF> vertices = new List<PointF>(); 
+        private IList<Ponto4D> vertices = new List<Ponto4D>(); 
 
         private void Executar()
         {
@@ -74,7 +74,7 @@ namespace Exercicio01
 
                 gameWindow.MouseUp += (sender, e) =>
                 {
-                    vertices.Add(new PointF(e.X, tamanhoInicialJanela.Width - e.Y));
+                    vertices.Add(new Ponto4D(e.X, tamanhoInicialJanela.Width - e.Y));
                 };
                 
                 gameWindow.RenderFrame += (sender, e) =>
