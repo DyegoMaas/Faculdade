@@ -15,7 +15,7 @@ namespace Exercicio01
 
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
-        private readonly Input input;
+        private readonly InputManager input;
 
         private ObjetoEmEdicao objetoEmEdicao = null;
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
@@ -23,7 +23,7 @@ namespace Exercicio01
         public Exercicio3()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
-            input = new Input(this);
+            input = new InputManager(this);
             Location = posicaoInicialJanela;
             Title = "N3-Exercicio01";
 
@@ -66,12 +66,12 @@ namespace Exercicio01
                 {
                     if (objetoEmEdicao == null)
                     {
-                        objetoEmEdicao = new ObjetoEmEdicao(new ObjetoGrafico());
+                        objetoEmEdicao = new ObjetoEmEdicao(new ObjetoGrafico(), input);
                         mundo.ObjetosGraficos.Add(objetoEmEdicao.ObjetoGrafico);
 
-                        AdicionarVertice();
+                        objetoEmEdicao.AdicionarVertice();
                     }
-                    AdicionarVertice();
+                    objetoEmEdicao.AdicionarVertice();
                 }
                 else if (e.Button.Equals(MouseButton.Right))
                 {
@@ -118,11 +118,11 @@ namespace Exercicio01
             {
                 if (e.Key == Key.F8)
                 {
-                    AdicionarVertice();
+                    objetoEmEdicao.AdicionarVertice();
                 }
                 else if (e.Key == Key.F9)
                 {
-                    RemoverVertice();
+                    objetoEmEdicao.RemoverVertice();
                 }
             }
             else
@@ -191,21 +191,6 @@ namespace Exercicio01
         private void AtivarModoCriacao()
         {
             modoExecucao = ModoExecucao.Criacao;
-        }
-
-        private void AdicionarVertice()
-        {
-            var posicaoMouse = input.ObterPosicaoMouseNaTela();
-            objetoEmEdicao.ObjetoGrafico.Vertices.Add(new Ponto4D(posicaoMouse.X, posicaoMouse.Y));
-        }
-
-        private void RemoverVertice()
-        {
-            if (objetoEmEdicao.ObjetoGrafico.Vertices.Any())
-            {
-                var indiceUltimoVertice = objetoEmEdicao.ObjetoGrafico.Vertices.Count - 1;
-                objetoEmEdicao.ObjetoGrafico.Vertices.RemoveAt(indiceUltimoVertice);
-            }
         }
 
         private void SRU()

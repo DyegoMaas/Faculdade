@@ -2,11 +2,11 @@
 
 namespace Exercicio01.Editor
 {
-    public class Input
+    public class InputManager
     {
         private readonly GameWindow gameWindow;
 
-        public Input(GameWindow gameWindow)
+        public InputManager(GameWindow gameWindow)
         {
             this.gameWindow = gameWindow;
         }
