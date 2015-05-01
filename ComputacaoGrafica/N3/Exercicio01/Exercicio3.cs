@@ -32,6 +32,9 @@ namespace Exercicio01
 
             UpdateFrame += OnUpdateFrame;
             KeyDown += OnKeyDown;
+            MouseDown += OnMouseDown;
+            MouseMove += OnMouseMove;
+
             RenderFrame += OnRenderFrame;
         }
 
@@ -52,6 +55,21 @@ namespace Exercicio01
 
             SwapBuffers();
         }
+
+        }
+
+        void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.IsPressed.Equals(MouseButton.Right))
+            {
+                var ponto = new Ponto4D(e.X, e.Y);
+
+                objetoEmEdicao.Vertices.Add(ponto);
+            }
+        }
+
+        void OnMouseMove(object sender, MouseMoveEventArgs e)
+        {
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
