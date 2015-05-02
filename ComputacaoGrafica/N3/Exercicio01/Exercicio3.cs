@@ -31,7 +31,15 @@ namespace Exercicio01
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
         private readonly InputManager input;
 
-        private ObjetoEmEdicao objetoEmEdicao = null;
+        /// <summary>
+        /// Acessar pela propriedade ObjetoEmEdicao
+        /// </summary>
+        private ObjetoEmEdicao _objetoEmEdicao = null;
+        public ObjetoEmEdicao ObjetoEmEdicao
+        {
+            get { return _objetoEmEdicao ?? (_objetoEmEdicao = new ObjetoEmEdicao(input)); }
+        }
+
         private ObjetoGrafico objetoSelcionado = null;
         private Ponto4D verticeSelecionado = null;
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
@@ -76,16 +84,12 @@ namespace Exercicio01
             {
                 if (e.Button.Equals(MouseButton.Left))
                 {
-                    if (objetoEmEdicao == null)
-                    {
-                        objetoEmEdicao = new ObjetoEmEdicao(input);
-                        mundo.ObjetosGraficos.Add(objetoEmEdicao.ObjetoGrafico);
-                    }
-                    objetoEmEdicao.AdicionarVertice();
+                    mundo.ObjetosGraficos.Add(ObjetoEmEdicao.ObjetoGrafico);
+                    ObjetoEmEdicao.AdicionarVertice();
                 }
                 else if (e.Button.Equals(MouseButton.Right))
                 {
-                    objetoEmEdicao = null;
+                    FinalizarObjetoEmEdicao();
                 }
             }
             else
@@ -103,11 +107,16 @@ namespace Exercicio01
             }
         }
 
+        private void FinalizarObjetoEmEdicao()
+        {
+            _objetoEmEdicao = null;
+        }
+
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
-            if (modoExecucao == ModoExecucao.Criacao && objetoEmEdicao != null)
+            if (modoExecucao == ModoExecucao.Criacao && ObjetoEmEdicao != null)
             {
-                var vertice = objetoEmEdicao.ObjetoGrafico.Vertices.LastOrDefault();
+                var vertice = ObjetoEmEdicao.ObjetoGrafico.Vertices.LastOrDefault();
                 if (vertice != null)
                 {
                     var ponto = input.ObterPosicaoMouseNaTela();
@@ -146,24 +155,24 @@ namespace Exercicio01
             if (modoExecucao == ModoExecucao.Criacao)
             {
                 //TODO remover?? ou mudar para outro ponto
-                if (e.Key == Key.F9) objetoEmEdicao.RemoverVertice();
+                if (e.Key == Key.F9) ObjetoEmEdicao.RemoverVertice();
                 
                 switch (e.Key)
                 {
                     case Key.M:
-                        objetoEmEdicao.ObjetoGrafico.Primitiva = PrimitiveType.LineLoop;
+                        ObjetoEmEdicao.ObjetoGrafico.Primitiva = PrimitiveType.LineLoop;
                         break;
                     case Key.N:
-                        objetoEmEdicao.ObjetoGrafico.Primitiva = PrimitiveType.LineStrip;
+                        ObjetoEmEdicao.ObjetoGrafico.Primitiva = PrimitiveType.LineStrip;
                         break;
                     case Key.R:
-                        objetoEmEdicao.ObjetoGrafico.Cor = Color.Red;
+                        ObjetoEmEdicao.ObjetoGrafico.Cor = Color.Red;
                         break;
                     case Key.G:
-                        objetoEmEdicao.ObjetoGrafico.Cor = Color.Green;
+                        ObjetoEmEdicao.ObjetoGrafico.Cor = Color.Green;
                         break;
                     case Key.B:
-                        objetoEmEdicao.ObjetoGrafico.Cor = Color.Black;
+                        ObjetoEmEdicao.ObjetoGrafico.Cor = Color.Black;
                         break;
                 }
             }
@@ -176,16 +185,16 @@ namespace Exercicio01
 
                 if (e.Key == Key.Delete) mundo.RemoverVerticeSelecionado(verticeSelecionado);
 
-                if (objetoEmEdicao != null)
+                if (ObjetoEmEdicao != null)
                 switch (operacao)
                 {
                     case OperacaoSobreObjeto.Translacao:
                     {
                         var velocidadeTranslacao = e.Shift ? VelocidadeTranslacao * 5 : VelocidadeTranslacao;
-                        if (e.Key == Key.Right) objetoEmEdicao.Mover(velocidadeTranslacao, 0, 0);
-                        if (e.Key == Key.Left) objetoEmEdicao.Mover(-velocidadeTranslacao, 0, 0);
-                        if (e.Key == Key.Up) objetoEmEdicao.Mover(0, velocidadeTranslacao, 0);
-                        if (e.Key == Key.Down) objetoEmEdicao.Mover(0, -velocidadeTranslacao, 0);
+                        if (e.Key == Key.Right) ObjetoEmEdicao.Mover(velocidadeTranslacao, 0, 0);
+                        if (e.Key == Key.Left) ObjetoEmEdicao.Mover(-velocidadeTranslacao, 0, 0);
+                        if (e.Key == Key.Up) ObjetoEmEdicao.Mover(0, velocidadeTranslacao, 0);
+                        if (e.Key == Key.Down) ObjetoEmEdicao.Mover(0, -velocidadeTranslacao, 0);
                         break;
                     }
                     case OperacaoSobreObjeto.Escala:
@@ -194,20 +203,20 @@ namespace Exercicio01
                         var velocidadeEscala = e.Shift ? VelocidadeEscala * 1.1d : VelocidadeEscala;
 
                         if (e.Key == Key.Up)
-                            objetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(velocidadeEscala);
+                            ObjetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(velocidadeEscala);
 
                         if (e.Key == Key.Down)
                         {
                             velocidadeEscala = 1 - (velocidadeEscala - 1);
-                            objetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(velocidadeEscala);
+                            ObjetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(velocidadeEscala);
                         }
                         break;
                     }
                     case OperacaoSobreObjeto.Rotacao:
                     {
                         var velocidadeRotacao = e.Shift ? VelocidadeRotacao * 2 : VelocidadeRotacao;
-                        if (e.Key == Key.Right) objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(-velocidadeRotacao);
-                        if (e.Key == Key.Left) objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(velocidadeRotacao);
+                        if (e.Key == Key.Right) ObjetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(-velocidadeRotacao);
+                        if (e.Key == Key.Left) ObjetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(velocidadeRotacao);
                         break;
                     }
                 }
