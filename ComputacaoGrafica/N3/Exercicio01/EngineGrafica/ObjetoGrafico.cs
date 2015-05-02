@@ -17,13 +17,19 @@ namespace Exercicio01.EngineGrafica
         public float TamanhoPonto { get; set; }
         public float LarguraLinha { get; set; }
 
-        public ObjetoGrafico() //TODO receber um (ou dois) vértice no construtor, para garantir a consistência do objeto, como ter uma BBox válida, por exemplo
+        /// <summary>
+        /// Cria um objeto gráfico.
+        /// </summary>
+        /// <param name="verticeInicial">Primeiro vértice. É necessário informar um vértice para garantir a consistência da Boudary Box</param>
+        public ObjetoGrafico(Ponto4D verticeInicial)
         {
             TamanhoPonto = 1;
             LarguraLinha = 1;
             Primitiva = PrimitiveType.LineStrip;
             vertices = new List<Ponto4D>();
             Transformacao = new Transformacao4D();
+
+            AdicionarVertice(verticeInicial);
         }
 
         public void Desenhar()

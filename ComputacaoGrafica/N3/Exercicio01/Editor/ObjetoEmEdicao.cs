@@ -8,10 +8,12 @@ namespace Exercicio01.Editor
         public readonly ObjetoGrafico ObjetoGrafico;
         private readonly InputManager input;
 
-        public ObjetoEmEdicao(ObjetoGrafico objetoGrafico, InputManager input)
+        public ObjetoEmEdicao(InputManager input)
         {
-            ObjetoGrafico = objetoGrafico;
             this.input = input;
+
+            var verticeInicial = CriarVerticeNaPosicaoAtualDoMouse();
+            ObjetoGrafico = new ObjetoGrafico(verticeInicial);
         }
         
         public void Mover(double x, double y, double z)
@@ -30,8 +32,15 @@ namespace Exercicio01.Editor
 
         public void AdicionarVertice()
         {
+            var vertice = CriarVerticeNaPosicaoAtualDoMouse();
+            ObjetoGrafico.AdicionarVertice(vertice);
+        }
+
+        private Ponto4D CriarVerticeNaPosicaoAtualDoMouse()
+        {
             var posicaoMouse = input.ObterPosicaoMouseNaTela();
-            ObjetoGrafico.AdicionarVertice(new Ponto4D(posicaoMouse.X, posicaoMouse.Y));
+            var vertice = new Ponto4D(posicaoMouse.X, posicaoMouse.Y);
+            return vertice;
         }
 
         public void RemoverVertice()

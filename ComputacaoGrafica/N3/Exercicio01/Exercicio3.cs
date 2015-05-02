@@ -65,10 +65,8 @@ namespace Exercicio01
                 {
                     if (objetoEmEdicao == null)
                     {
-                        objetoEmEdicao = new ObjetoEmEdicao(new ObjetoGrafico(), input);
+                        objetoEmEdicao = new ObjetoEmEdicao(input);
                         mundo.ObjetosGraficos.Add(objetoEmEdicao.ObjetoGrafico);
-
-                        objetoEmEdicao.AdicionarVertice();
                     }
                     objetoEmEdicao.AdicionarVertice();
                 }
@@ -81,13 +79,12 @@ namespace Exercicio01
 
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
-            var ponto = input.ObterPosicaoMouseNaTela();
-
-            if (objetoEmEdicao != null)
+            if (modoExecucao == ModoExecucao.Criacao && objetoEmEdicao != null)
             {
                 var vertice = objetoEmEdicao.ObjetoGrafico.Vertices.LastOrDefault();
                 if (vertice != null)
                 {
+                    var ponto = input.ObterPosicaoMouseNaTela();
                     vertice.X = ponto.X;
                     vertice.Y = ponto.Y;
                 }
@@ -136,7 +133,7 @@ namespace Exercicio01
                     if (operacao == OperacaoSobreObjeto.Escala)
                     {
                         //TODO aumentar e diminuir em relação ao centro da bbox (mover para a origem e depois voltar)
-                        var velocidadeEscala = e.Shift ? VelocidadeEscala * 5 : VelocidadeEscala;
+                        var velocidadeEscala = e.Shift ? VelocidadeEscala * 1.1d : VelocidadeEscala;
 
                         if (e.Key == Key.Up)
                             objetoEmEdicao.Redimensionar(velocidadeEscala, velocidadeEscala);
