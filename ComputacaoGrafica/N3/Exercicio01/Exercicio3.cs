@@ -11,6 +11,18 @@ namespace Exercicio01
 {
     public class Exercicio3 : GameWindow
     {
+        /*
+         * TECLAS ATALHO:
+         * 
+         * N - Alterar modo de polígno para fechado
+         * M - Alterar modo de polígno para aberto
+         * 
+         * R - Mudar para cor vermelho
+         * G - Mudar para cor verde
+         * B - Mudar para cor preta
+         * 
+         */
+
         private const double VelocidadeTranslacao = 1;
         private const double VelocidadeEscala = 1.005f;
 
@@ -110,6 +122,25 @@ namespace Exercicio01
             {
                 //TODO remover?? ou mudar para outro ponto
                 if (e.Key == Key.F9) objetoEmEdicao.RemoverVertice();
+                
+                switch (e.Key)
+                {
+                    case Key.M:
+                        objetoEmEdicao.ObjetoGrafico.Primitiva = PrimitiveType.LineLoop;
+                        break;
+                    case Key.N:
+                        objetoEmEdicao.ObjetoGrafico.Primitiva = PrimitiveType.LineStrip;
+                        break;
+                    case Key.R:
+                        objetoEmEdicao.ObjetoGrafico.Cor = Color.Red;
+                        break;
+                    case Key.G:
+                        objetoEmEdicao.ObjetoGrafico.Cor = Color.Green;
+                        break;
+                    case Key.B:
+                        objetoEmEdicao.ObjetoGrafico.Cor = Color.Black;
+                        break;
+                }
             }
             else
             {
