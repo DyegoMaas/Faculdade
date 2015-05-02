@@ -6,7 +6,9 @@ namespace Exercicio01.EngineGrafica
     {
         public const double DegToRad = 0.017453292519943295769236907684886;
 
-        /// \brief Cria uma matriz de Trasnformacao com uma matriz Identidade.
+        /// <summary>
+        /// Cria uma matriz de transformação com uma matriz Identidade.
+        /// </summary>
         private readonly double[] matriz = {	
                 1, 0, 0, 0,
                 0, 1, 0, 0,
@@ -25,7 +27,9 @@ namespace Exercicio01.EngineGrafica
             }
         }
 
+        /// <summary>
         /// Atribui os valores de uma matriz Identidade a matriz de Transformacao.
+        /// </summary>
         public void AtribuirIdentidade()
         {
             for (int i = 0; i < 16; ++i)
@@ -35,8 +39,10 @@ namespace Exercicio01.EngineGrafica
             matriz[0] = matriz[5] = matriz[10] = matriz[15] = 1.0;
         }
 
+        /// <summary>
         /// Atribui os valores de Translacao (tx,ty,tz) a matriz de Transformacao.
         /// Elemento Neutro eh 0 (zero).
+        /// </summary>
         public void AtribuirTranslacao(double tx, double ty, double tz)
         {
             AtribuirIdentidade();
@@ -45,9 +51,11 @@ namespace Exercicio01.EngineGrafica
             matriz[14] = tz;
         }
 
+        /// <summary>
         /// Atribui o valor de Escala (Ex,Ey,Ez) a matriz de Transformacao.
         /// Elemento Neutro eh 1 (um).
         /// Se manter os valores iguais de Ex,Ey e Ez o objeto vai ser reduzido ou ampliado proporcionalmente.
+        /// </summary>
         public void AtribuirEscala(double sX, double sY, double sZ)
         {
             AtribuirIdentidade();
@@ -56,8 +64,10 @@ namespace Exercicio01.EngineGrafica
             matriz[10] = sZ;
         }
 
+        /// <summary>
         /// Atribui o valor de Rotacao (angulo) no eixo X a matriz de Transformacao.
         /// Elemento Neutro eh 0 (zero).
+        /// </summary>
         public void AtribuirRotacaoX(double radianos)
         {
             AtribuirIdentidade();
@@ -67,8 +77,10 @@ namespace Exercicio01.EngineGrafica
             matriz[10] = Math.Cos(radianos);
         }
 
+        /// <summary>
         /// Atribui o valor de Rotacao (angulo) no eixo Y a matriz de Transformacao.
         /// Elemento Neutro eh 0 (zero).
+        /// </summary>
         public void AtribuirRotacaoY(double radianos)
         {
             AtribuirIdentidade();
@@ -78,8 +90,10 @@ namespace Exercicio01.EngineGrafica
             matriz[10] = Math.Cos(radianos);
         }
 
+        /// <summary>
         /// Atribui o valor de Rotacao (angulo) no eixo Z a matriz de Transformacao.
         /// Elemento Neutro eh 0 (zero).
+        /// </summary>
         public void AtribuirRotacaoZ(double radianos)
         {
             AtribuirIdentidade();
