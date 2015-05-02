@@ -1,6 +1,4 @@
-﻿using OpenTK;
-
-namespace Exercicio01.EngineGrafica
+﻿namespace Exercicio01.EngineGrafica
 {
     public class BBox
     {
@@ -9,11 +7,11 @@ namespace Exercicio01.EngineGrafica
         public double MinY { get; private set; }
         public double MaxY { get; private set; }
 
-        public Vector2d Centro
+        public Ponto4D Centro
         {
             get
             {
-                return new Vector2d(
+                return new Ponto4D(
                     MinX + ((MaxX - MinX) / 2f),
                     MinY + ((MaxY - MinY) / 2f));
             }

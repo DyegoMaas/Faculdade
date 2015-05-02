@@ -1,5 +1,5 @@
-using System.Linq;
 using Exercicio01.EngineGrafica;
+using System.Linq;
 
 namespace Exercicio01.Editor
 {
@@ -21,13 +21,16 @@ namespace Exercicio01.Editor
             ObjetoGrafico.Mover(x, y, z);
         }
 
-        public void Redimensionar(double escalaX, double escalaY)
+        public void RedimensionarEmRelacaoAoCentroDoObjeto(double escala)
         {
-            var centroBBox = ObjetoGrafico.BoundaryBox.Centro;
+            var ponto4D = ObjetoGrafico.BoundaryBox.Centro.InverterSinal();
+            ObjetoGrafico.Redimensionar(escala, ponto4D);
+        }
 
-            Mover(-centroBBox.X, -centroBBox.Y, 0);
-            ObjetoGrafico.Redimensionar(escalaX, escalaY);
-            Mover(centroBBox.X, centroBBox.Y, 0);
+        public void RotacionarEmRelacaoAoCentroDoObjeto(double angulo)
+        {
+            var ponto4D = ObjetoGrafico.BoundaryBox.Centro.InverterSinal();
+            ObjetoGrafico.RotacionarNoEixoZ(angulo, ponto4D);
         }
 
         public void AdicionarVertice()

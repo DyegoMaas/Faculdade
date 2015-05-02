@@ -4,8 +4,8 @@
     {
         public double X { get; set; }
         public double Y { get; set; }
-        public double Z { get; private set; }
-        public double W { get; private set; }
+        public double Z { get; set; }
+        public double W { get; set; }
 
         /// Cria o ponto (0,0,0,1).
         public Ponto4D()
@@ -20,8 +20,11 @@
             Z = z;
             W = w;
         }
+    }
 
-        public Ponto4D InverterSinal(Ponto4D ponto)
+    public static class Ponto4DExtensions
+    {
+        public static Ponto4D InverterSinal(this Ponto4D ponto)
         {
             ponto.X *= -1;
             ponto.Y *= -1;

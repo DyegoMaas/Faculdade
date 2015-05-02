@@ -11,6 +11,9 @@ namespace Exercicio01
 {
     public class Exercicio3 : GameWindow
     {
+        private const double VelocidadeTranslacao = 1d;
+        private const double VelocidadeEscala = 1.005d;
+        private const double VelocidadeRotacao = 1d;
         /*
          * TECLAS ATALHO:
          * 
@@ -23,8 +26,6 @@ namespace Exercicio01
          * 
          */
 
-        private const double VelocidadeTranslacao = 1;
-        private const double VelocidadeEscala = 1.005f;
 
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
@@ -47,7 +48,6 @@ namespace Exercicio01
             UpdateFrame += OnUpdateFrame;
             RenderFrame += OnRenderFrame;
             KeyDown += OnKeyDown;
-            KeyUp += OnKeyUp;
             MouseDown += OnMouseDown;
             MouseMove += OnMouseMove;
         }
@@ -176,7 +176,7 @@ namespace Exercicio01
 
                 if (e.Key == Key.Delete) mundo.RemoverVerticeSelecionado(verticeSelecionado);
 
-                if (objetoEmEdicao == null) return;
+                if (objetoEmEdicao != null)
                 switch (operacao)
                 {
                     case OperacaoSobreObjeto.Translacao:
@@ -194,22 +194,24 @@ namespace Exercicio01
                         var velocidadeEscala = e.Shift ? VelocidadeEscala * 1.1d : VelocidadeEscala;
 
                         if (e.Key == Key.Up)
-                            objetoEmEdicao.Redimensionar(velocidadeEscala, velocidadeEscala);
+                            objetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(velocidadeEscala);
 
                         if (e.Key == Key.Down)
                         {
-                            var escala = 1 - (velocidadeEscala - 1);
-                            objetoEmEdicao.Redimensionar(escala, escala);
+                            velocidadeEscala = 1 - (velocidadeEscala - 1);
+                            objetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(velocidadeEscala);
                         }
                         break;
                     }
-
+                    case OperacaoSobreObjeto.Rotacao:
+                    {
+                        var velocidadeRotacao = e.Shift ? VelocidadeRotacao * 2 : VelocidadeRotacao;
+                        if (e.Key == Key.Right) objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(-velocidadeRotacao);
+                        if (e.Key == Key.Left) objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(velocidadeRotacao);
+                        break;
+                    }
                 }
             }
-        }
-
-        void OnKeyUp(object sender, KeyboardKeyEventArgs e)
-        {
         }
 
         private void Zoom(KeyboardState teclado)

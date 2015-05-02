@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System;
@@ -8,6 +9,12 @@ namespace Exercicio01.EngineGrafica
     public class ObjetoGrafico : NoArvoreObjetosGraficos
     {
         public Transformacao4D Transformacao { get; private set; }
+
+        private static readonly Transformacao4D MatrizTmpTranslacao = new Transformacao4D();
+        private static readonly Transformacao4D MatrizTmpTranslacaoInversa = new Transformacao4D();
+        private static readonly Transformacao4D MatrizTmpEscala = new Transformacao4D();
+        private static readonly Transformacao4D MatrizTmpRotacaoZ = new Transformacao4D();
+        private static Transformacao4D matrizGlobal = new Transformacao4D();
 
         private readonly IList<Ponto4D> vertices = new List<Ponto4D>();
         public IEnumerable<Ponto4D> Vertices { get { return vertices; } }
@@ -72,6 +79,12 @@ namespace Exercicio01.EngineGrafica
             vertices.Remove(vertice);
         }
 
+        /// <summary>
+        /// Move o objeto
+        /// </summary>
+        /// <param name="x">Distância em que o objeto será movido no eixo X</param>
+        /// <param name="y">Distância em que o objeto será movido no eixo Y</param>
+        /// <param name="z">Distância em que o objeto será movido no eixo Z</param>
         public void Mover(double x, double y, double z)
         {
             var matrizTranslacao = new Transformacao4D();
@@ -80,12 +93,52 @@ namespace Exercicio01.EngineGrafica
             Transformacao = matrizTranslacao.TransformarMatriz(Transformacao);
         }
 
-        public void Redimensionar(double escalaX, double escalaY)
+        /// <summary>
+        /// Redimensiona o objeto em relação ao pivô
+        /// </summary>
+        /// <param name="escala">A escala pela qual o objeto será redimensionado</param>
+        /// <param name="pivo">Ponto ao redor do qual o objeto será redimensionado</param>
+        public void Redimensionar(double escala, Ponto4D pivo)
         {
-            var matrizEscala = new Transformacao4D();
-            matrizEscala.AtribuirEscala(escalaX, escalaY, 1.0);
+            matrizGlobal.AtribuirIdentidade();
 
-            Transformacao = matrizEscala.TransformarMatriz(Transformacao);
+            ExecutarEmRelacaoAoPivo(pivo, () =>
+            {
+                MatrizTmpEscala.AtribuirEscala(escala, escala, 1.0);
+                matrizGlobal = MatrizTmpEscala.TransformarMatriz(matrizGlobal);
+            });
+
+            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+        }
+
+        /// <summary>
+        /// Rotaciona o objeto em relação ao pivô
+        /// </summary>
+        /// <param name="angulo">Ângulo em graus</param>
+        /// <param name="pivo">Ponto ao redor do qual o objeto será rotacionado</param>
+        public void RotacionarNoEixoZ(double angulo, Ponto4D pivo)
+        {
+            matrizGlobal.AtribuirIdentidade();
+
+            ExecutarEmRelacaoAoPivo(pivo, () =>
+            {
+                MatrizTmpRotacaoZ.AtribuirRotacaoZ(angulo * Transformacao4D.DegToRad);
+                matrizGlobal = MatrizTmpRotacaoZ.TransformarMatriz(matrizGlobal);
+            });
+
+            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+        }
+
+        private void ExecutarEmRelacaoAoPivo(Ponto4D pivo, Action acao)
+        {
+            MatrizTmpTranslacao.AtribuirTranslacao(pivo.X, pivo.Y, pivo.Z);
+            matrizGlobal = MatrizTmpTranslacao.TransformarMatriz(matrizGlobal);
+
+            acao.Invoke();
+
+            pivo.InverterSinal();
+            MatrizTmpTranslacaoInversa.AtribuirTranslacao(pivo.X, pivo.Y, pivo.Z);
+            matrizGlobal = MatrizTmpTranslacaoInversa.TransformarMatriz(matrizGlobal);
         }
 
         public Ponto4D ProcurarVertice(double x, double y)
