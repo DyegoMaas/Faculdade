@@ -1,6 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
 using System.Drawing;
+using System;
 
 namespace Exercicio01.EngineGrafica
 {
@@ -85,6 +86,24 @@ namespace Exercicio01.EngineGrafica
             matrizEscala.AtribuirEscala(escalaX, escalaY, 1.0);
 
             Transformacao = matrizEscala.TransformarMatriz(Transformacao);
+        }
+
+        public Ponto4D ProcurarVertice(double x, double y)
+        {
+            foreach(var vertice in vertices)
+            {
+                if (Math.Abs(vertice.X - x) < 15 && Math.Abs(vertice.Y - y) < 15)
+                {
+                    return vertice;
+                }
+            }
+
+            return null;
+        }
+
+        internal void RemoverVerticeSelecionado(Ponto4D vertice)
+        {
+            vertices.Remove(vertice);
         }
     }
 }

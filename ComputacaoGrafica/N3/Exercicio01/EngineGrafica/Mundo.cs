@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Exercicio01.Editor;
+using System.Collections.Generic;
 
 namespace Exercicio01.EngineGrafica
 {
@@ -11,6 +12,24 @@ namespace Exercicio01.EngineGrafica
         {
             Camera = camera;
             ObjetosGraficos = new List<ObjetoGrafico>();
+        }
+
+        public Ponto4D BuscarVerticeSelecionado(double x, double y)
+        {
+            foreach(var objetoGrafico in ObjetosGraficos)
+            {
+                return objetoGrafico.ProcurarVertice(x, y);
+            }
+
+            return null;
+        }
+
+        public void RemoverVerticeSelecionado(Ponto4D vertice)
+        {
+            foreach(var objetoGrafico in ObjetosGraficos)
+            {
+                objetoGrafico.RemoverVerticeSelecionado(vertice);
+            }
         }
     }
 }

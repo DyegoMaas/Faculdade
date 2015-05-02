@@ -31,6 +31,8 @@ namespace Exercicio01
         private readonly InputManager input;
 
         private ObjetoEmEdicao objetoEmEdicao = null;
+        private ObjetoGrafico objetoSelcionado = null;
+        private Ponto4D verticeSelecionado = null;
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
         private OperacaoSobreObjeto operacao = OperacaoSobreObjeto.Translacao;
 
@@ -86,6 +88,19 @@ namespace Exercicio01
                     objetoEmEdicao = null;
                 }
             }
+            else
+            {
+                var ponto = input.ObterPosicaoMouseNaTela();
+
+                if (verticeSelecionado == null)
+                {
+                    verticeSelecionado = mundo.BuscarVerticeSelecionado(ponto.X, ponto.Y);
+                }
+                else
+                {
+                    verticeSelecionado = null;
+                }
+            }
         }
 
         void OnMouseMove(object sender, MouseMoveEventArgs e)
@@ -98,6 +113,16 @@ namespace Exercicio01
                     var ponto = input.ObterPosicaoMouseNaTela();
                     vertice.X = ponto.X;
                     vertice.Y = ponto.Y;
+                }
+            }
+            else
+            {
+                if (verticeSelecionado != null)
+                {
+                    var ponto = input.ObterPosicaoMouseNaTela();
+
+                    verticeSelecionado.X = ponto.X;
+                    verticeSelecionado.Y = ponto.Y;
                 }
             }
         }
@@ -148,6 +173,8 @@ namespace Exercicio01
                 if (e.Key == Key.W) operacao = OperacaoSobreObjeto.Translacao;
                 if (e.Key == Key.E) operacao = OperacaoSobreObjeto.Escala;
                 if (e.Key == Key.R) operacao = OperacaoSobreObjeto.Rotacao;
+
+                if (e.Key == Key.Delete) mundo.RemoverVerticeSelecionado(verticeSelecionado);
 
                 if (objetoEmEdicao == null) return;
                 switch (operacao)
