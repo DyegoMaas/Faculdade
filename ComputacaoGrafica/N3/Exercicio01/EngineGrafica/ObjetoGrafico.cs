@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System;
 
 namespace Exercicio01.EngineGrafica
 {
@@ -143,6 +142,8 @@ namespace Exercicio01.EngineGrafica
 
         public Ponto4D ProcurarVertice(double x, double y)
         {
+            //TODO tem que transformar o ponto para a Transacao para que funcione depois de o objeto ter sido movido, redimensionado e rotacionado
+            //TODO usar Transformacao.TransformarPonto(ponto)
             foreach(var vertice in vertices)
             {
                 if (Math.Abs(vertice.X - x) < 15 && Math.Abs(vertice.Y - y) < 15)
