@@ -23,11 +23,11 @@ namespace Exercicio01.Editor
 
         public void Redimensionar(double escalaX, double escalaY)
         {
-            var xTemp = ObjetoGrafico.BoundaryBox.MinX;
-            var yTemp = ObjetoGrafico.BoundaryBox.MinY;
-            Mover(-xTemp, -yTemp, 0);
+            var centroBBox = ObjetoGrafico.BoundaryBox.Centro;
+
+            Mover(-centroBBox.X, -centroBBox.Y, 0);
             ObjetoGrafico.Redimensionar(escalaX, escalaY);
-            Mover(xTemp, yTemp, 0);
+            Mover(centroBBox.X, centroBBox.Y, 0);
         }
 
         public void AdicionarVertice()

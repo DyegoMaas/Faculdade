@@ -58,7 +58,7 @@ namespace Exercicio01.EngineGrafica
             vertices.Add(vertice);
             if (BoundaryBox == null)
             {
-                BoundaryBox = BBox.Calcular(this);
+                BoundaryBox = new BBox(vertice);
             }
             else
             {
