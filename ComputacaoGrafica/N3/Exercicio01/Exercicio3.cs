@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Exercicio01.Editor;
 using Exercicio01.EngineGrafica;
 using OpenTK;
@@ -7,6 +5,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Drawing;
+using System.Linq;
 
 namespace Exercicio01
 {
@@ -119,18 +118,19 @@ namespace Exercicio01
                 if (e.Key == Key.E) operacao = OperacaoSobreObjeto.Escala;
                 if (e.Key == Key.R) operacao = OperacaoSobreObjeto.Rotacao;
 
-                if (objetoEmEdicao != null)
+                if (objetoEmEdicao == null) return;
+                switch (operacao)
                 {
-                    if (operacao == OperacaoSobreObjeto.Translacao)
+                    case OperacaoSobreObjeto.Translacao:
                     {
                         var velocidadeTranslacao = e.Shift ? VelocidadeTranslacao * 5 : VelocidadeTranslacao;
                         if (e.Key == Key.Right) objetoEmEdicao.Mover(velocidadeTranslacao, 0, 0);
                         if (e.Key == Key.Left) objetoEmEdicao.Mover(-velocidadeTranslacao, 0, 0);
                         if (e.Key == Key.Up) objetoEmEdicao.Mover(0, velocidadeTranslacao, 0);
                         if (e.Key == Key.Down) objetoEmEdicao.Mover(0, -velocidadeTranslacao, 0);
+                        break;
                     }
-
-                    if (operacao == OperacaoSobreObjeto.Escala)
+                    case OperacaoSobreObjeto.Escala:
                     {
                         //TODO aumentar e diminuir em relação ao centro da bbox (mover para a origem e depois voltar)
                         var velocidadeEscala = e.Shift ? VelocidadeEscala * 1.1d : VelocidadeEscala;
@@ -143,7 +143,9 @@ namespace Exercicio01
                             var escala = 1 - (velocidadeEscala - 1);
                             objetoEmEdicao.Redimensionar(escala, escala);
                         }
+                        break;
                     }
+
                 }
             }
         }
