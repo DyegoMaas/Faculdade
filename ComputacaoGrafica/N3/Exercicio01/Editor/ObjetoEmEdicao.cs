@@ -13,22 +13,7 @@ namespace Exercicio01.Editor
             ObjetoGrafico = objetoGrafico;
             this.input = input;
         }
-
-        /// <summary>
-        /// Em radianos
-        /// </summary>
-        public double RotacaoX { get; set; }
-
-        /// <summary>
-        /// Em radianos
-        /// </summary>
-        public double RotacaoY { get; set; }
-
-        /// <summary>
-        /// Em radianos
-        /// </summary>
-        public double RotacaoZ { get; set; }
-
+        
         public void Mover(double x, double y, double z)
         {
             ObjetoGrafico.Mover(x, y, z);
@@ -36,21 +21,25 @@ namespace Exercicio01.Editor
 
         public void Redimensionar(double escalaX, double escalaY)
         {
+            var xTemp = ObjetoGrafico.BoundaryBox.MinX;
+            var yTemp = ObjetoGrafico.BoundaryBox.MinY;
+            Mover(-xTemp, -yTemp, 0);
             ObjetoGrafico.Redimensionar(escalaX, escalaY);
+            Mover(xTemp, yTemp, 0);
         }
 
         public void AdicionarVertice()
         {
             var posicaoMouse = input.ObterPosicaoMouseNaTela();
-            ObjetoGrafico.Vertices.Add(new Ponto4D(posicaoMouse.X, posicaoMouse.Y));
+            ObjetoGrafico.AdicionarVertice(new Ponto4D(posicaoMouse.X, posicaoMouse.Y));
         }
 
         public void RemoverVertice()
         {
-            if (ObjetoGrafico.Vertices.Any())
+            var vertice = ObjetoGrafico.Vertices.LastOrDefault();
+            if(vertice != null)
             {
-                var indiceUltimoVertice = ObjetoGrafico.Vertices.Count - 1;
-                ObjetoGrafico.Vertices.RemoveAt(indiceUltimoVertice);
+                ObjetoGrafico.RemoverVertice(vertice);
             }
         }
     }

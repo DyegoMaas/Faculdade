@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Exercicio01.Editor;
 using Exercicio01.EngineGrafica;
@@ -12,6 +13,7 @@ namespace Exercicio01
     public class Exercicio3 : GameWindow
     {
         private const double VelocidadeTranslacao = 1;
+        private const double VelocidadeEscala = 1.005f;
 
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
@@ -32,6 +34,7 @@ namespace Exercicio01
             UpdateFrame += OnUpdateFrame;
             RenderFrame += OnRenderFrame;
             KeyDown += OnKeyDown;
+            KeyUp += OnKeyUp;
             MouseDown += OnMouseDown;
             MouseMove += OnMouseMove;
         }
@@ -114,14 +117,14 @@ namespace Exercicio01
             }
             else
             {
-                if(e.Key == Key.Q) operacao = OperacaoSobreObjeto.Pan;
-                if(e.Key == Key.W) operacao = OperacaoSobreObjeto.Translacao;
-                if(e.Key == Key.E) operacao = OperacaoSobreObjeto.Rotacao;
-                if(e.Key == Key.R) operacao = OperacaoSobreObjeto.Escala;
+                if (e.Key == Key.Q) operacao = OperacaoSobreObjeto.Pan;
+                if (e.Key == Key.W) operacao = OperacaoSobreObjeto.Translacao;
+                if (e.Key == Key.E) operacao = OperacaoSobreObjeto.Escala;
+                if (e.Key == Key.R) operacao = OperacaoSobreObjeto.Rotacao;
 
-                if (operacao == OperacaoSobreObjeto.Translacao)
+                if (objetoEmEdicao != null)
                 {
-                    if (objetoEmEdicao != null)
+                    if (operacao == OperacaoSobreObjeto.Translacao)
                     {
                         var velocidadeTranslacao = e.Shift ? VelocidadeTranslacao * 5 : VelocidadeTranslacao;
                         if (e.Key == Key.Right) objetoEmEdicao.Mover(velocidadeTranslacao, 0, 0);
@@ -129,8 +132,27 @@ namespace Exercicio01
                         if (e.Key == Key.Up) objetoEmEdicao.Mover(0, velocidadeTranslacao, 0);
                         if (e.Key == Key.Down) objetoEmEdicao.Mover(0, -velocidadeTranslacao, 0);
                     }
+
+                    if (operacao == OperacaoSobreObjeto.Escala)
+                    {
+                        //TODO aumentar e diminuir em relação ao centro da bbox (mover para a origem e depois voltar)
+                        var velocidadeEscala = e.Shift ? VelocidadeEscala * 5 : VelocidadeEscala;
+
+                        if (e.Key == Key.Up)
+                            objetoEmEdicao.Redimensionar(velocidadeEscala, velocidadeEscala);
+
+                        if (e.Key == Key.Down)
+                        {
+                            var escala = 1 - (velocidadeEscala - 1);
+                            objetoEmEdicao.Redimensionar(escala, escala);
+                        }
+                    }
                 }
             }
+        }
+
+        void OnKeyUp(object sender, KeyboardKeyEventArgs e)
+        {
         }
 
         private void Zoom(KeyboardState teclado)
