@@ -41,9 +41,7 @@ namespace Exercicio01.Editor
 
         private Ponto4D CriarVerticeNaPosicaoAtualDoMouse()
         {
-            var posicaoMouse = input.ObterPosicaoMouseNaTela();
-            var vertice = new Ponto4D(posicaoMouse.X, posicaoMouse.Y);
-            return vertice;
+            return input.ObterPosicaoMouseNaTela();
         }
 
         public void RemoverVertice()

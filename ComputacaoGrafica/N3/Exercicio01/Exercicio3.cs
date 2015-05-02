@@ -11,21 +11,44 @@ namespace Exercicio01
 {
     public class Exercicio3 : GameWindow
     {
-        private const double VelocidadeTranslacao = 1d;
-        private const double VelocidadeEscala = 1.005d;
-        private const double VelocidadeRotacao = 1d;
         /*
          * TECLAS ATALHO:
          * 
+         * F1 - Ativar modo de criação
+         * F2 - Ativar modo de edição
+         * 
+         * Um indicador do modo de operação é exibido no canto superior direito da tela
+         * -----------------------
+         * 
+         * Modo de Criação:
          * N - Alterar modo de polígno para fechado
          * M - Alterar modo de polígno para aberto
          * 
-         * R - Mudar para cor vermelho
-         * G - Mudar para cor verde
-         * B - Mudar para cor preta
+         * R - Mudar cor do objeto para vermelho
+         * G - Mudar cor do objeto para verde
+         * B - Mudar cor do objeto para preta
+         * ------------------------------
+         * Modo de Edição:
          * 
+         * Q - Ativar a operação Pan
+         * A câmera pode ser controlada com as SETAS. Segurar Shift faz mover mais rápido
+         * 
+         * W - Ativar a operação Translação
+         * O objeto selecionado pode ser movido com as SETAS. 
+         * Segurar Shift faz com que o objeto seja movido mais rapidamento.
+         * 
+         * E - Ativar a operação Escala
+         * O objeto selecionado pode ser redimensionado utilizando as SETAS CIMA e BAIXO. 
+         * Segurar Shift faz com que o objeto seja redimensionado mais rapidamente.
+         * 
+         * R - Ativar a operação Rotação
+         * O objeto selecionado pode ser rotacionado utilizando as SETAS ESQUERDA e DIREITA.
+         * Segurar Shift faz com que o objeto seja rotacionado mais rapidamente.
          */
 
+        private const double VelocidadeTranslacao = 1d;
+        private const double VelocidadeEscala = 1.005d;
+        private const double VelocidadeRotacao = 1d;
 
         private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));

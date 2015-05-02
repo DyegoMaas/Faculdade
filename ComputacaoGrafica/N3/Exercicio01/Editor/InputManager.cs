@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using Exercicio01.EngineGrafica;
+using OpenTK;
 
 namespace Exercicio01.Editor
 {
@@ -11,9 +12,9 @@ namespace Exercicio01.Editor
             this.gameWindow = gameWindow;
         }
 
-        public Vector2 ObterPosicaoMouseNaTela()
+        public Ponto4D ObterPosicaoMouseNaTela()
         {
-            return new Vector2(gameWindow.Mouse.X, gameWindow.Height - gameWindow.Mouse.Y);
+            return new Ponto4D(gameWindow.Mouse.X, gameWindow.Height - gameWindow.Mouse.Y);
         }
     }
 }
