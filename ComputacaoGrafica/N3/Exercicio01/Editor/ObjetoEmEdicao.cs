@@ -33,9 +33,14 @@ namespace Exercicio01.Editor
             ObjetoGrafico.RotacionarNoEixoZ(angulo, ponto4D);
         }
 
-        public void AdicionarVertice()
+        public void AdicionarVerticeNaPosicaoAtual()
         {
             var vertice = CriarVerticeNaPosicaoAtualDoMouse();
+            ObjetoGrafico.AdicionarVertice(vertice);
+        }
+
+        public void AdicionarVertice(Ponto4D vertice)
+        {
             ObjetoGrafico.AdicionarVertice(vertice);
         }
 
