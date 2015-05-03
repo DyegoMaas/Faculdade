@@ -117,6 +117,10 @@ namespace Exercicio01
             {
                 objetoGrafico.Desenhar();
             }
+            if (objetoEmEdicao != null)
+            {
+                objetoEmEdicao.ObjetoGrafico.DesenharBBox();
+            }
 
             SwapBuffers();
         }

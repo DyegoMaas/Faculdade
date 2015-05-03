@@ -68,6 +68,19 @@ namespace Exercicio01.EngineGrafica
             GL.PopMatrix();
         }
 
+        public void DesenharBBox()
+        {
+            GL.Color3(Color.Bisque);
+            GL.Begin(PrimitiveType.LineLoop);
+            {
+                GL.Vertex2(BoundaryBox.MinX, BoundaryBox.MinY);       
+                GL.Vertex2(BoundaryBox.MinX, BoundaryBox.MaxY);       
+                GL.Vertex2(BoundaryBox.MaxX, BoundaryBox.MaxY);       
+                GL.Vertex2(BoundaryBox.MaxX, BoundaryBox.MinY);       
+            }
+            GL.End();
+        }
+
         public void AdicionarVertice(Ponto4D vertice)
         {
             vertices.Add(vertice);
