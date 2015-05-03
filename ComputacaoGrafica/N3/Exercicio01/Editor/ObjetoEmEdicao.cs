@@ -5,21 +5,23 @@ namespace Exercicio01.Editor
 {
     public sealed class ObjetoEmEdicao
     {
+        public static InputManager Input { get; set; }
         public readonly ObjetoGrafico ObjetoGrafico;
-        private readonly InputManager input;
 
-        public ObjetoEmEdicao(InputManager input)
+        public ObjetoEmEdicao(NoGrafoCena pai, string nome)
         {
-            this.input = input;
-
             var verticeInicial = CriarVerticeNaPosicaoAtualDoMouse();
-            ObjetoGrafico = new ObjetoGrafico(verticeInicial);
+            ObjetoGrafico = new ObjetoGrafico(pai, nome, verticeInicial);
         }
 
-        public ObjetoEmEdicao(InputManager input, Ponto4D verticeInicial, params Ponto4D[] vertices)
+        public ObjetoEmEdicao(NoGrafoCena pai, string nome, Ponto4D verticeInicial, params Ponto4D[] vertices)
         {
-            this.input = input;
-            ObjetoGrafico = new ObjetoGrafico(verticeInicial, vertices);
+            ObjetoGrafico = new ObjetoGrafico(pai, nome, verticeInicial, vertices);
+        }
+
+        public void DefinirNome(string nome)
+        {
+            ObjetoGrafico.Nome = nome;
         }
         
         public void Mover(double x, double y, double z)
@@ -52,7 +54,7 @@ namespace Exercicio01.Editor
 
         private Ponto4D CriarVerticeNaPosicaoAtualDoMouse()
         {
-            return input.ObterPosicaoMouseNaTela();
+            return Input.ObterPosicaoMouseNaTela();
         }
 
         public void RemoverVertice()

@@ -1,4 +1,6 @@
-﻿namespace Exercicio01.EngineGrafica
+﻿using System.Collections.Generic;
+
+namespace Exercicio01.EngineGrafica
 {
     public class BBox
     {
@@ -25,12 +27,25 @@
             MaxY = vertice.Y;
         }
 
-        public void AtualizarCom(Ponto4D novoVertice)
+        public void AtualizarCom(Ponto4D vertice)
         {
-            if (novoVertice.X < MinX) MinX = novoVertice.X;
-            if (novoVertice.X > MaxX) MaxX = novoVertice.X;
-            if (novoVertice.Y < MinY) MinY = novoVertice.Y;
-            if (novoVertice.Y > MaxY) MaxY = novoVertice.Y;
+            if (vertice.X < MinX) MinX = vertice.X;
+            if (vertice.X > MaxX) MaxX = vertice.X;
+            if (vertice.Y < MinY) MinY = vertice.Y;
+            if (vertice.Y > MaxY) MaxY = vertice.Y;
+        }
+
+        public void RecalcularPara(IEnumerable<Ponto4D> vertices)
+        {
+            MinX = MinY = double.MaxValue;
+            MaxX = MaxY = double.MinValue;
+            foreach (var vertice in vertices)
+            {
+                if (vertice.X < MinX) MinX = vertice.X;
+                if (vertice.X > MaxX) MaxX = vertice.X;
+                if (vertice.Y < MinY) MinY = vertice.Y;
+                if (vertice.Y > MaxY) MaxY = vertice.Y;    
+            }
         }
     }
 }

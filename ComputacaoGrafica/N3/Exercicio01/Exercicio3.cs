@@ -68,6 +68,7 @@ namespace Exercicio01
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
             input = new InputManager(this);
+            ObjetoEmEdicao.Input = input;
             Location = posicaoInicialJanela;
             Title = "N3-Exercicio01";
 
@@ -75,26 +76,21 @@ namespace Exercicio01
             {
                 GL.ClearColor(Color.White);
 
-                //teste do grafo de cena
-                objetoEmEdicao = new ObjetoEmEdicao(input, 
-                    new Ponto4D(100,100),
-                    new Ponto4D(100,300),
-                    new Ponto4D(300,300),
-                    new Ponto4D(300,100));
-                objetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(2);
-                objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(45);
-                mundo.ObjetosGraficos.Add(objetoEmEdicao.ObjetoGrafico);
+                ////teste do grafo de cena
+                //var quadrado1 = new ObjetoEmEdicao(mundo, "pai",
+                //    new Ponto4D(100,100),
+                //    new Ponto4D(100,300),
+                //    new Ponto4D(300,300),
+                //    new Ponto4D(300,100));
+                //quadrado1.RedimensionarEmRelacaoAoCentroDoObjeto(2);
+                //quadrado1.RotacionarEmRelacaoAoCentroDoObjeto(45);
 
-                var objPai = objetoEmEdicao;
-                objetoEmEdicao = new ObjetoEmEdicao(input,
-                    new Ponto4D(100, 100),
-                    new Ponto4D(100, 300),
-                    new Ponto4D(300, 300),
-                    new Ponto4D(300, 100));
-                objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(20);
-                objPai.ObjetoGrafico.AdicionarObjetoGrafico(objetoEmEdicao.ObjetoGrafico);
-
-                objetoEmEdicao = objPai;
+                //objetoEmEdicao = new ObjetoEmEdicao(quadrado1.ObjetoGrafico, "filho",
+                //    new Ponto4D(200, 200),
+                //    new Ponto4D(200, 300),
+                //    new Ponto4D(300, 300),
+                //    new Ponto4D(300, 200));
+                //objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(20);
             };
             UpdateFrame += OnUpdateFrame;
             RenderFrame += OnRenderFrame;
@@ -133,8 +129,8 @@ namespace Exercicio01
                 {
                     if (objetoEmEdicao == null)
                     {
-                        objetoEmEdicao = CriarObjetoEmEdicao();
-                        mundo.ObjetosGraficos.Add(objetoEmEdicao.ObjetoGrafico);
+                        objetoEmEdicao = CriarObjetoEmEdicao(pai:null);
+                        mundo.AdicionarObjetoGrafico(objetoEmEdicao.ObjetoGrafico);
                     }
                     objetoEmEdicao.AdicionarVerticeNaPosicaoAtual();
                 }
@@ -158,9 +154,9 @@ namespace Exercicio01
             }
         }
 
-        private ObjetoEmEdicao CriarObjetoEmEdicao()
+        private ObjetoEmEdicao CriarObjetoEmEdicao(NoGrafoCena pai)
         {
-            return new ObjetoEmEdicao(input);
+            return new ObjetoEmEdicao(pai, "objx");
         }
 
         private void FinalizarObjetoEmEdicao()

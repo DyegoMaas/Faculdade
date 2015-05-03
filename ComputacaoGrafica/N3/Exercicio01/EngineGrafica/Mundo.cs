@@ -1,17 +1,12 @@
-﻿using Exercicio01.Editor;
-using System.Collections.Generic;
-
-namespace Exercicio01.EngineGrafica
+﻿namespace Exercicio01.EngineGrafica
 {
-    public class Mundo : NoArvoreObjetosGraficos
+    public class Mundo : NoGrafoCena
     {
         public Camera Camera { get; private set; }
-        public List<ObjetoGrafico> ObjetosGraficos { get; private set; }
 
         public Mundo(Camera camera)
         {
             Camera = camera;
-            ObjetosGraficos = new List<ObjetoGrafico>();
         }
 
         public Ponto4D BuscarVerticeSelecionado(double x, double y)
@@ -26,7 +21,7 @@ namespace Exercicio01.EngineGrafica
 
         public void RemoverVerticeSelecionado(Ponto4D vertice)
         {
-            foreach(var objetoGrafico in ObjetosGraficos)
+            foreach (var objetoGrafico in ObjetosGraficos)
             {
                 objetoGrafico.RemoverVerticeSelecionado(vertice);
             }

@@ -50,7 +50,7 @@
     <Compile Include="EngineGrafica\BBox.cs" />
     <Compile Include="EngineGrafica\Camera.cs" />
     <Compile Include="EngineGrafica\Mundo.cs" />
-    <Compile Include="EngineGrafica\NoArvoreObjetosGraficos.cs" />
+    <Compile Include="EngineGrafica\NoGrafoCena.cs" />
     <Compile Include="EngineGrafica\ObjetoGrafico.cs" />
     <Compile Include="EngineGrafica\Ponto.cs" />
     <Compile Include="EngineGrafica\Transformacao4D.cs" />

@@ -1,11 +1,12 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using System.Linq;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 
 namespace Exercicio01.EngineGrafica
 {
-    public class ObjetoGrafico : NoArvoreObjetosGraficos
+    public class ObjetoGrafico : NoGrafoCena
     {
         public Transformacao4D Transformacao { get; private set; }
 
@@ -23,22 +24,29 @@ namespace Exercicio01.EngineGrafica
         public PrimitiveType Primitiva { get; set; }
         public float TamanhoPonto { get; set; }
         public float LarguraLinha { get; set; }
+        public string Nome { get; set; }
 
         /// <summary>
         /// Cria um objeto gráfico.
         /// </summary>
         /// <param name="verticeInicial">Primeiro vértice. É necessário informar um vértice para garantir a consistência da Boudary Box</param>
-        public ObjetoGrafico(Ponto4D verticeInicial, params Ponto4D[] vertices)
+        public ObjetoGrafico(NoGrafoCena pai, string nome, Ponto4D verticeInicial, params Ponto4D[] vertices)
         {
+            Nome = nome;
             TamanhoPonto = 1;
             LarguraLinha = 1;
             Primitiva = PrimitiveType.LineStrip;
             this.vertices = new List<Ponto4D>();
             Transformacao = new Transformacao4D();
+            
+            if(pai != null)
+                pai.AdicionarObjetoGrafico(this);
 
             AdicionarVertice(verticeInicial);
             for (int i = 0; i < vertices.Length; i++)
+            {
                 AdicionarVertice(vertices[i]);
+            }
         }
 
         public void Desenhar()
@@ -60,7 +68,7 @@ namespace Exercicio01.EngineGrafica
                 }
                 GL.End();
 
-                foreach (var objetoGrafico in Filhos)
+                foreach (var objetoGrafico in ObjetosGraficos)
                 {
                     objetoGrafico.Desenhar();
                 }
@@ -84,13 +92,15 @@ namespace Exercicio01.EngineGrafica
         public void AdicionarVertice(Ponto4D vertice)
         {
             vertices.Add(vertice);
+
+            var verticeAjustado = TransformarPontoParaEsteObjetoGrafico(vertice);
             if (BoundaryBox == null)
             {
-                BoundaryBox = new BBox(vertice);
+                BoundaryBox = new BBox(verticeAjustado);
             }
             else
             {
-                BoundaryBox.AtualizarCom(vertice);
+                BoundaryBox.AtualizarCom(verticeAjustado);
             }
         }
 
@@ -111,6 +121,7 @@ namespace Exercicio01.EngineGrafica
             matrizTranslacao.AtribuirTranslacao(x, y, z);
 
             Transformacao = matrizTranslacao.TransformarMatriz(Transformacao);
+            RecalcularBBox();
         }
 
         /// <summary>
@@ -129,6 +140,7 @@ namespace Exercicio01.EngineGrafica
             });
 
             Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+            RecalcularBBox();
         }
 
         /// <summary>
@@ -147,6 +159,7 @@ namespace Exercicio01.EngineGrafica
             });
 
             Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+            RecalcularBBox();
         }
 
         private void ExecutarEmRelacaoAoPivo(Ponto4D pivo, Action acao)
@@ -179,6 +192,31 @@ namespace Exercicio01.EngineGrafica
         internal void RemoverVerticeSelecionado(Ponto4D vertice)
         {
             vertices.Remove(vertice);
+        }
+
+        public Ponto4D TransformarPontoParaEsteObjetoGrafico(Ponto4D vertice)
+        {
+            NoGrafoCena no = this;
+            while (no != null)
+            {
+                var objeto = no as ObjetoGrafico;
+                if (objeto != null)
+                {
+                    var transformacao = objeto.Transformacao;
+                    vertice = transformacao.TransformarPonto(vertice);
+                }
+                no = no.Pai;
+            }
+            return vertice;
+        }
+
+        /// <summary>
+        /// Recalcula a BBox aplicando as transformações da hierarquia do objeto no grafo de cena
+        /// </summary>
+        private void RecalcularBBox()
+        {
+            var verticesAjustados = Vertices.Select(TransformarPontoParaEsteObjetoGrafico);
+            BoundaryBox.RecalcularPara(verticesAjustados);
         }
     }
 }
