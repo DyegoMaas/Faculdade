@@ -19,8 +19,8 @@ namespace Exercicio01
     /// -----------------------
     /// 
     /// Modo de Criação:
-    /// N - Alterar modo de polígno para fechado
-    /// M - Alterar modo de polígno para aberto
+    /// N - Alterar modo de polígono para fechado
+    /// M - Alterar modo de polígono para aberto
     /// 
     /// R - Mudar cor do objeto para vermelho
     /// G - Mudar cor do objeto para verde
@@ -71,7 +71,31 @@ namespace Exercicio01
             Location = posicaoInicialJanela;
             Title = "N3-Exercicio01";
 
-            Load += (sender, e) => GL.ClearColor(Color.White);
+            Load += (sender, e) =>
+            {
+                GL.ClearColor(Color.White);
+
+                //teste do grafo de cena
+                objetoEmEdicao = new ObjetoEmEdicao(input, 
+                    new Ponto4D(100,100),
+                    new Ponto4D(100,300),
+                    new Ponto4D(300,300),
+                    new Ponto4D(300,100));
+                objetoEmEdicao.RedimensionarEmRelacaoAoCentroDoObjeto(2);
+                objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(45);
+                mundo.ObjetosGraficos.Add(objetoEmEdicao.ObjetoGrafico);
+
+                var objPai = objetoEmEdicao;
+                objetoEmEdicao = new ObjetoEmEdicao(input,
+                    new Ponto4D(100, 100),
+                    new Ponto4D(100, 300),
+                    new Ponto4D(300, 300),
+                    new Ponto4D(300, 100));
+                objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(20);
+                objPai.ObjetoGrafico.AdicionarObjetoGrafico(objetoEmEdicao.ObjetoGrafico);
+
+                objetoEmEdicao = objPai;
+            };
             UpdateFrame += OnUpdateFrame;
             RenderFrame += OnRenderFrame;
             KeyDown += OnKeyDown;

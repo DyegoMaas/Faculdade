@@ -15,6 +15,12 @@ namespace Exercicio01.Editor
             var verticeInicial = CriarVerticeNaPosicaoAtualDoMouse();
             ObjetoGrafico = new ObjetoGrafico(verticeInicial);
         }
+
+        public ObjetoEmEdicao(InputManager input, Ponto4D verticeInicial, params Ponto4D[] vertices)
+        {
+            this.input = input;
+            ObjetoGrafico = new ObjetoGrafico(verticeInicial, vertices);
+        }
         
         public void Mover(double x, double y, double z)
         {

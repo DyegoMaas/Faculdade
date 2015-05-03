@@ -28,20 +28,23 @@ namespace Exercicio01.EngineGrafica
         /// Cria um objeto gráfico.
         /// </summary>
         /// <param name="verticeInicial">Primeiro vértice. É necessário informar um vértice para garantir a consistência da Boudary Box</param>
-        public ObjetoGrafico(Ponto4D verticeInicial)
+        public ObjetoGrafico(Ponto4D verticeInicial, params Ponto4D[] vertices)
         {
             TamanhoPonto = 1;
             LarguraLinha = 1;
             Primitiva = PrimitiveType.LineStrip;
-            vertices = new List<Ponto4D>();
+            this.vertices = new List<Ponto4D>();
             Transformacao = new Transformacao4D();
 
             AdicionarVertice(verticeInicial);
+            for (int i = 0; i < vertices.Length; i++)
+                AdicionarVertice(vertices[i]);
         }
 
         public void Desenhar()
         {
             GL.Color3(Cor);
+            GL.PointSize(TamanhoPonto);
             GL.LineWidth(LarguraLinha);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -50,12 +53,17 @@ namespace Exercicio01.EngineGrafica
                 GL.MultMatrix(Transformacao.Data);
                 GL.Begin(Primitiva);
                 {
-                    for (int i = 0; i < vertices.Count; i++)
+                    foreach (var vertice in vertices)
                     {
-                        GL.Vertex3(vertices[i].X, vertices[i].Y, vertices[i].Z);
+                        GL.Vertex3(vertice.X, vertice.Y, vertice.Z);
                     }
                 }
                 GL.End();
+
+                foreach (var objetoGrafico in Filhos)
+                {
+                    objetoGrafico.Desenhar();
+                }
             }
             GL.PopMatrix();
         }
