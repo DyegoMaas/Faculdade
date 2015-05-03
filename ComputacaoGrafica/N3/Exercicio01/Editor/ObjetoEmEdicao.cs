@@ -7,7 +7,7 @@ namespace Exercicio01.Editor
     public sealed class ObjetoEmEdicao
     {
         public static InputManager Input { get; set; }
-        public readonly ObjetoGrafico ObjetoGrafico;
+        public ObjetoGrafico ObjetoGrafico { get; private set; }
 
         public ObjetoEmEdicao(NoGrafoCena pai, string nome)
         {
@@ -18,6 +18,19 @@ namespace Exercicio01.Editor
         public ObjetoEmEdicao(NoGrafoCena pai, string nome, Ponto4D verticeInicial, params Ponto4D[] vertices)
         {
             ObjetoGrafico = new ObjetoGrafico(pai, nome, verticeInicial, vertices);
+        }
+
+        private ObjetoEmEdicao()
+        {
+        }
+
+        public static ObjetoEmEdicao Editar(ObjetoGrafico objetoGrafico)
+        {
+            var objetoEmEdicao = new ObjetoEmEdicao
+            {
+                ObjetoGrafico = objetoGrafico
+            };
+            return objetoEmEdicao;
         }
 
         public void DefinirNome(string nome)

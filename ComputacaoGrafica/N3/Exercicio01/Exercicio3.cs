@@ -16,8 +16,8 @@ namespace Exercicio01
     /// F2 - Ativar modo de edição
     /// 
     /// Um indicador do modo de operação é exibido no canto superior direito da tela
-    /// -----------------------
     /// 
+    /// -----------------------------------------------------------------------------
     /// Modo de Criação:
     /// N - Alterar modo de polígono para fechado
     /// M - Alterar modo de polígono para aberto
@@ -25,7 +25,8 @@ namespace Exercicio01
     /// R - Mudar cor do objeto para vermelho
     /// G - Mudar cor do objeto para verde
     /// B - Mudar cor do objeto para preta
-    /// ------------------------------
+    /// 
+    /// -----------------------------------------------------------------------------
     /// Modo de Edição:
     /// 
     /// Q - Ativar a operação Pan
@@ -42,7 +43,12 @@ namespace Exercicio01
     /// R - Ativar a operação Rotação
     /// O objeto selecionado pode ser rotacionado utilizando as SETAS ESQUERDA e DIREITA.
     /// Segurar Shift faz com que o objeto seja rotacionado mais rapidamente.
-    ///
+    /// 
+    /// -----------------------------------------------------------------------------
+    /// Seleção de objetos no grafo de cena (teclado numérico):
+    /// Keypd8 ou Keypad6 - Selecionar o próximo objeto gráfico
+    /// Keypd4 ou Keypad2 - Selecionar o objeto gráfico anterior
+    /// 
     /// </summary>
     public class Exercicio3 : GameWindow
     {
@@ -58,7 +64,6 @@ namespace Exercicio01
         /// Acessar pela propriedade ObjetoEmEdicao
         /// </summary>
         private ObjetoEmEdicao objetoEmEdicao = null;
-        private ObjetoGrafico objetoSelcionado = null;
 
         private Ponto4D verticeSelecionado = null;
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
@@ -278,6 +283,9 @@ namespace Exercicio01
                     }
                 }
             }
+
+            if (e.Key == Key.Keypad4 || e.Key == Key.Keypad8) SelecionarObjetoAnteriorNoGrafoCena();
+            if (e.Key == Key.Keypad2 || e.Key == Key.Keypad6) SelecionarProximoObjetoNoGrafoCena();
         }
 
         private void Zoom(KeyboardState teclado)
@@ -403,11 +411,12 @@ namespace Exercicio01
         private void DesenharHierarquia(ObjetoGrafico objetoGrafico, ref int itens, int profundidade)
         {
             itens++;
+            var x = profundidade * 5;
+            var y = Height - itens * AlturaRetangulo - itens * 2;
+
             GL.Color3(objetoGrafico.Cor);
             GL.Begin(PrimitiveType.Quads);
             {
-                var x = profundidade * 5;
-                var y = Height - itens * AlturaRetangulo - itens * 2;
                 GL.Vertex2(x, y);
                 GL.Vertex2(x + 100, y);
                 GL.Vertex2(x + 100, y - AlturaRetangulo);
@@ -415,9 +424,61 @@ namespace Exercicio01
             }
             GL.End();
 
+            //se for o objeto em edição, desenhar um contorno vermelho
+            if (objetoEmEdicao != null)
+            {
+                if (objetoGrafico == objetoEmEdicao.ObjetoGrafico)
+                {
+                    y -= 1;
+                    GL.Color3(Color.Red);
+                    GL.Begin(PrimitiveType.LineLoop);
+                    {
+                        GL.Vertex2(x - 1, y + 1);
+                        GL.Vertex2(x + 100, y + 1);
+                        GL.Vertex2(x + 100, y - AlturaRetangulo);
+                        GL.Vertex2(x - 1, y - AlturaRetangulo);
+                    }
+                    GL.End();
+                }
+            }
+
             foreach (var objetoFilho in objetoGrafico.ObjetosGraficos)
             {
                 DesenharHierarquia(objetoFilho, ref itens, profundidade + 1);
+            }
+        }
+
+        private void SelecionarObjetoAnteriorNoGrafoCena()
+        {
+            if (objetoEmEdicao == null)
+                return;
+
+            var objetoGrafico = objetoEmEdicao.ObjetoGrafico;
+            var anterior = UltimoFilhoDoAnterior(objetoGrafico) ?? objetoGrafico.Anterior ?? objetoGrafico.Pai as ObjetoGrafico;
+            if (anterior != null)
+            {
+                objetoEmEdicao = ObjetoEmEdicao.Editar(anterior);
+            }
+        }
+
+        private static ObjetoGrafico UltimoFilhoDoAnterior(ObjetoGrafico objetoGrafico)
+        {
+            var anterior = objetoGrafico.Anterior;
+            if (anterior == null) return null;
+
+            return anterior.UltimoFilho;
+        }
+
+        private void SelecionarProximoObjetoNoGrafoCena()
+        {
+            if (objetoEmEdicao == null)
+                return;
+
+            var objetoGrafico = objetoEmEdicao.ObjetoGrafico;
+            var proximo = objetoGrafico.PrimeiroFilho ?? objetoGrafico.Proximo ?? objetoGrafico.Pai.Proximo;
+            if (proximo != null)
+            {
+                objetoEmEdicao = ObjetoEmEdicao.Editar(proximo);
             }
         }
     }
