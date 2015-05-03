@@ -76,21 +76,25 @@ namespace Exercicio01
             {
                 GL.ClearColor(Color.White);
 
-                ////teste do grafo de cena
-                //var quadrado1 = new ObjetoEmEdicao(mundo, "pai",
-                //    new Ponto4D(100,100),
-                //    new Ponto4D(100,300),
-                //    new Ponto4D(300,300),
-                //    new Ponto4D(300,100));
-                //quadrado1.RedimensionarEmRelacaoAoCentroDoObjeto(2);
-                //quadrado1.RotacionarEmRelacaoAoCentroDoObjeto(45);
+                //teste do grafo de cena
+                var quadrado1 = new ObjetoEmEdicao(mundo, "pai",
+                    new Ponto4D(100, 100),
+                    new Ponto4D(100, 300),
+                    new Ponto4D(300, 300),
+                    new Ponto4D(300, 100));
+                quadrado1.DefinirCor(Color.BlueViolet);
+                quadrado1.RedimensionarEmRelacaoAoCentroDoObjeto(2);
+                quadrado1.RotacionarEmRelacaoAoCentroDoObjeto(45);
 
-                //objetoEmEdicao = new ObjetoEmEdicao(quadrado1.ObjetoGrafico, "filho",
-                //    new Ponto4D(200, 200),
-                //    new Ponto4D(200, 300),
-                //    new Ponto4D(300, 300),
-                //    new Ponto4D(300, 200));
-                //objetoEmEdicao.RotacionarEmRelacaoAoCentroDoObjeto(20);
+                var quadrado2 = new ObjetoEmEdicao(quadrado1.ObjetoGrafico, "filho",
+                    new Ponto4D(200, 200),
+                    new Ponto4D(200, 300),
+                    new Ponto4D(300, 300),
+                    new Ponto4D(300, 200));
+                quadrado2.RotacionarEmRelacaoAoCentroDoObjeto(20);
+                quadrado2.DefinirCor(Color.CadetBlue);
+
+                objetoEmEdicao = quadrado1;
             };
             UpdateFrame += OnUpdateFrame;
             RenderFrame += OnRenderFrame;
@@ -104,11 +108,13 @@ namespace Exercicio01
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             mundo.Camera.CarregarMatrizOrtografica();
+
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             SRU();
+            DesenharGrafoCena();
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {
                 objetoGrafico.Desenhar();
@@ -156,7 +162,7 @@ namespace Exercicio01
 
         private ObjetoEmEdicao CriarObjetoEmEdicao(NoGrafoCena pai)
         {
-            return new ObjetoEmEdicao(pai, "objx");
+            return new ObjetoEmEdicao(pai, "NomeObjeto");
         }
 
         private void FinalizarObjetoEmEdicao()
@@ -181,7 +187,6 @@ namespace Exercicio01
                 if (verticeSelecionado != null)
                 {
                     var ponto = input.ObterPosicaoMouseNaTela();
-
                     verticeSelecionado.X = ponto.X;
                     verticeSelecionado.Y = ponto.Y;
                 }
@@ -381,6 +386,38 @@ namespace Exercicio01
                     GL.Vertex2(800, 780);
                 }
                 GL.End();
+            }
+        }
+
+        private const float AlturaRetangulo = 5f;
+        private void DesenharGrafoCena()
+        {
+            var itensDesenhados = 0;
+
+            foreach (var objetoGrafico in mundo.ObjetosGraficos)
+            {
+                DesenharHierarquia(objetoGrafico, ref itensDesenhados, 1);
+            }
+        }
+
+        private void DesenharHierarquia(ObjetoGrafico objetoGrafico, ref int itens, int profundidade)
+        {
+            itens++;
+            GL.Color3(objetoGrafico.Cor);
+            GL.Begin(PrimitiveType.Quads);
+            {
+                var x = profundidade * 5;
+                var y = Height - itens * AlturaRetangulo - itens * 2;
+                GL.Vertex2(x, y);
+                GL.Vertex2(x + 100, y);
+                GL.Vertex2(x + 100, y - AlturaRetangulo);
+                GL.Vertex2(x, y - AlturaRetangulo);
+            }
+            GL.End();
+
+            foreach (var objetoFilho in objetoGrafico.ObjetosGraficos)
+            {
+                DesenharHierarquia(objetoFilho, ref itens, profundidade + 1);
             }
         }
     }

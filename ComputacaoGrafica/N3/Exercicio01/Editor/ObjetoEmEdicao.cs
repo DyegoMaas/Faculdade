@@ -1,3 +1,4 @@
+using System.Drawing;
 using Exercicio01.EngineGrafica;
 using System.Linq;
 
@@ -64,6 +65,11 @@ namespace Exercicio01.Editor
             {
                 ObjetoGrafico.RemoverVertice(vertice);
             }
+        }
+
+        public void DefinirCor(Color cor)
+        {
+            ObjetoGrafico.Cor = cor;
         }
     }
 }
