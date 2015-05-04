@@ -165,11 +165,14 @@ namespace Exercicio01
 
                 if (verticeSelecionado == null)
                 {
-                    objetoSelecionado = mundo.BuscarObjetoSelecionado(ponto.X, ponto.Y);
-                }
-                else
-                {
-                    objetoSelecionado = null;
+                    if (objetoSelecionado == null)
+                    {
+                        objetoSelecionado = mundo.BuscarObjetoSelecionado(ponto.X, ponto.Y);
+                    }
+                    else
+                    {
+                        objetoSelecionado = null;
+                    }
                 }
             }
         }

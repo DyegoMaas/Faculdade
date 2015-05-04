@@ -233,16 +233,29 @@ namespace Exercicio01.EngineGrafica
         {
             vertices.Remove(vertice);
             RecalcularBBox();
+        }
 
+        /// <summary>
+        /// Tenta buscar objeto selecionado através da BBox e depois do ScanLina
+        /// </summary>
         public ObjetoGrafico BuscarObjetoSelecionado(double x, double y)
         {
-            if (VerificarScanLine(x, y))
-                return this;
+            if (BoundaryBox.Contem(new Ponto4D(x, y)))
+            {
+                if (VerificarScanLine(x, y))
+                {
+                    return this;
+                }
             }
 
             return null;
         }
-
+        
+        /// <summary>
+        /// Verificação ScanLine
+        /// </summary>
+        /// <param name="x">Cordenada x a ser testada</param>
+        /// <param name="y">Cordenada y</param>
         public bool VerificarScanLine(double x, double y)
         {
             int cont = 0;
