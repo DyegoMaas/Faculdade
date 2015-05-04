@@ -20,6 +20,12 @@
             Z = z;
             W = w;
         }
+
+        public bool EstaProximo(Ponto4D ponto, double tolerancia)
+        {
+            return ponto.X >= X - tolerancia && ponto.X <= X + tolerancia &&
+                   ponto.Y >= Y - tolerancia && ponto.Y <= Y + tolerancia;
+        }
     }
 
     public static class Ponto4DExtensions

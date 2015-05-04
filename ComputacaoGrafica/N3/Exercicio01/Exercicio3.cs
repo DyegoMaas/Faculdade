@@ -65,7 +65,7 @@ namespace Exercicio01
         /// </summary>
         private ObjetoEmEdicao objetoEmEdicao = null;
 
-        private Ponto4D verticeSelecionado = null;
+        private VerticeSelecionado verticeSelecionado = null;
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
         private OperacaoSobreObjeto operacao = OperacaoSobreObjeto.Translacao;
 
@@ -120,6 +120,7 @@ namespace Exercicio01
 
             SRU();
             DesenharGrafoCena();
+            DesenharVerticeSelecionado();
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {
                 objetoGrafico.Desenhar();
@@ -192,8 +193,8 @@ namespace Exercicio01
                 if (verticeSelecionado != null)
                 {
                     var ponto = input.ObterPosicaoMouseNaTela();
-                    verticeSelecionado.X = ponto.X;
-                    verticeSelecionado.Y = ponto.Y;
+                    verticeSelecionado.Ponto.X = ponto.X;
+                    verticeSelecionado.Ponto.Y = ponto.Y;
                 }
             }
         }
@@ -245,7 +246,11 @@ namespace Exercicio01
                 if (e.Key == Key.E) operacao = OperacaoSobreObjeto.Escala;
                 if (e.Key == Key.R) operacao = OperacaoSobreObjeto.Rotacao;
 
-                if (e.Key == Key.Delete) mundo.RemoverVerticeSelecionado(verticeSelecionado);
+                if (e.Key == Key.Delete)
+                {
+                    verticeSelecionado.ExcluirDoObjetoGrafico();
+                    verticeSelecionado = null;
+                }
 
                 if (objetoEmEdicao != null)
                 switch (operacao)
@@ -398,6 +403,7 @@ namespace Exercicio01
         }
 
         private const float AlturaRetangulo = 5f;
+
         private void DesenharGrafoCena()
         {
             var itensDesenhados = 0;
@@ -445,6 +451,23 @@ namespace Exercicio01
             foreach (var objetoFilho in objetoGrafico.ObjetosGraficos)
             {
                 DesenharHierarquia(objetoFilho, ref itens, profundidade + 1);
+            }
+        }
+
+        private void DesenharVerticeSelecionado()
+        {
+            if (modoExecucao == ModoExecucao.Edicao)
+            {
+                if (verticeSelecionado != null)
+                {
+                    GL.PointSize(5);
+                    GL.Color3(Color.Purple);
+                    GL.Begin(PrimitiveType.Points);
+                    {
+                        GL.Vertex2(verticeSelecionado.Ponto.X, verticeSelecionado.Ponto.Y);
+                    }
+                    GL.End();
+                }
             }
         }
 

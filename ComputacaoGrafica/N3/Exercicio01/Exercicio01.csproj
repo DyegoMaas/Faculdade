@@ -55,6 +55,7 @@
     <Compile Include="EngineGrafica\Ponto.cs" />
     <Compile Include="EngineGrafica\Transformacao4D.cs" />
     <Compile Include="Editor\InputManager.cs" />
+    <Compile Include="EngineGrafica\VerticeSelecionado.cs" />
     <Compile Include="Exercicio3.cs" />
     <Compile Include="Editor\ModoExecucao.cs" />
     <Compile Include="Editor\ObjetoEmEdicao.cs" />

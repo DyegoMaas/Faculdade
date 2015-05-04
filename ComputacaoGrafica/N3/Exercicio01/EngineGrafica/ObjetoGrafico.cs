@@ -174,15 +174,24 @@ namespace Exercicio01.EngineGrafica
             matrizGlobal = MatrizTmpTranslacaoInversa.TransformarMatriz(matrizGlobal);
         }
 
-        public Ponto4D ProcurarVertice(double x, double y)
+        private const double Tolerancia = 5;
+        public VerticeSelecionado ProcurarVertice(double x, double y)
         {
-            //TODO tem que transformar o ponto para a Transacao para que funcione depois de o objeto ter sido movido, redimensionado e rotacionado
-            //TODO usar Transformacao.TransformarPonto(ponto)
-            foreach(var vertice in vertices)
+            var ponto = Transformacao.TransformarPonto(new Ponto4D(x, y));
+            foreach (var vertice in vertices)
             {
-                if (Math.Abs(vertice.X - x) < 15 && Math.Abs(vertice.Y - y) < 15)
+                if(vertice.EstaProximo(ponto, Tolerancia))
                 {
-                    return vertice;
+                    return new VerticeSelecionado(vertice, this);
+                }
+            }
+
+            foreach (var objetosGrafico in ObjetosGraficos)
+            {
+                var verticeEncontrado = objetosGrafico.ProcurarVertice(x, y);
+                if (verticeEncontrado != null)
+                {
+                    return verticeEncontrado;
                 }
             }
 
@@ -217,6 +226,11 @@ namespace Exercicio01.EngineGrafica
         {
             var verticesAjustados = Vertices.Select(TransformarPontoParaEsteObjetoGrafico);
             BoundaryBox.RecalcularPara(verticesAjustados);
+        }
+
+        public void ExcluirPonto(Ponto4D vertice)
+        {
+            vertices.Remove(vertice);
         }
     }
 }

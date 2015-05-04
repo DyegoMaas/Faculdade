@@ -9,22 +9,18 @@
             Camera = camera;
         }
 
-        public Ponto4D BuscarVerticeSelecionado(double x, double y)
+        public VerticeSelecionado BuscarVerticeSelecionado(double x, double y)
         {
             foreach(var objetoGrafico in ObjetosGraficos)
             {
-                return objetoGrafico.ProcurarVertice(x, y);
+                var verticeEncontrado = objetoGrafico.ProcurarVertice(x, y);
+                if (verticeEncontrado != null)
+                {
+                    return verticeEncontrado;
+                }
             }
 
             return null;
-        }
-
-        public void RemoverVerticeSelecionado(Ponto4D vertice)
-        {
-            foreach (var objetoGrafico in ObjetosGraficos)
-            {
-                objetoGrafico.RemoverVerticeSelecionado(vertice);
-            }
         }
     }
 }
