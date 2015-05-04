@@ -233,6 +233,10 @@ namespace Exercicio01.EngineGrafica
         {
             vertices.Remove(vertice);
             RecalcularBBox();
+
+        public ObjetoGrafico BuscarObjetoSelecionado(double x, double y)
+        {
+            if (VerificarScanLine(x, y))
                 return this;
             }
 

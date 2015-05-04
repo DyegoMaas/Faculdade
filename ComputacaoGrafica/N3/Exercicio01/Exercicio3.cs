@@ -61,6 +61,8 @@ namespace Exercicio01
         private readonly InputManager input;
 
         private ObjetoEmEdicao objetoEmEdicao = null;
+        private ObjetoGrafico objetoSelecionado = null;
+
         private VerticeSelecionado verticeSelecionado = null;
 
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
@@ -165,6 +167,10 @@ namespace Exercicio01
                 {
                     objetoSelecionado = mundo.BuscarObjetoSelecionado(ponto.X, ponto.Y);
                 }
+                else
+                {
+                    objetoSelecionado = null;
+                }
             }
         }
 
@@ -203,7 +209,7 @@ namespace Exercicio01
                 {
                     var ponto4D = objetoSelecionado.BoundaryBox.Centro.InverterSinal();
 
-                    objetoSelecionado.Mover(Math.Abs(ponto4D.X) - ponto.X, Math.Abs(ponto4D.Y) - ponto.Y, Math.Abs(ponto4D.Z) - ponto.Z);
+                    objetoSelecionado.Mover(-(Math.Abs(ponto4D.X) - ponto.X), -(Math.Abs(ponto4D.Y) - ponto.Y), Math.Abs(ponto4D.Z) - ponto.Z);
                 }
             }
         }
