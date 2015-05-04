@@ -45,6 +45,9 @@ namespace Exercicio01
     /// O objeto selecionado pode ser rotacionado utilizando as SETAS ESQUERDA e DIREITA.
     /// Segurar Shift faz com que o objeto seja rotacionado mais rapidamente.
     /// 
+    /// Insert - Inserir um filho no objeto selecionado
+    /// Se houver um objeto selecionado, será criado um filho.
+    /// 
     /// -----------------------------------------------------------------------------
     /// Seleção de objetos no grafo de cena (teclado numérico):
     /// Keypd8 ou Keypad6 - Selecionar o próximo objeto gráfico
@@ -214,12 +217,12 @@ namespace Exercicio01
                     verticeSelecionado.Relocar(ponto.X, ponto.Y);
                 }
 
-                if (objetoSelecionado != null)
-                {
-                    var deltaX = posicaoMouseNaTela.X - posicaoAnterior.X;
-                    var deltaY = posicaoMouseNaTela.Y - posicaoAnterior.Y;
-                    objetoSelecionado.Mover(deltaX, deltaY, 0);
-                }
+                //if (objetoSelecionado != null)
+                //{
+                //    var deltaX = posicaoMouseNaTela.X - posicaoAnterior.X;
+                //    var deltaY = posicaoMouseNaTela.Y - posicaoAnterior.Y;
+                //    objetoSelecionado.Mover(deltaX, deltaY, 0);
+                //}
             }
             posicaoAnterior = posicaoMouseNaTela;
         }
@@ -262,6 +265,16 @@ namespace Exercicio01
                     case Key.B:
                         objetoEmEdicao.ObjetoGrafico.Cor = Color.Black;
                         break;
+                }
+
+                if (e.Key == Key.Insert)
+                {
+                    if (objetoEmEdicao != null)
+                    {
+                        var objetoGraficoPai = objetoEmEdicao.ObjetoGrafico;
+                        objetoEmEdicao = CriarObjetoEmEdicao(pai: objetoGraficoPai);
+                        objetoEmEdicao.AdicionarVerticeNaPosicaoAtual();
+                    }
                 }
             }
             else
@@ -508,7 +521,13 @@ namespace Exercicio01
         private void SelecionarObjetoAnteriorNoGrafoCena()
         {
             if (objetoEmEdicao == null)
-                return;
+            {
+                var ultimoObjetoDoMundo = mundo.ObjetosGraficos.LastOrDefault();
+                if (ultimoObjetoDoMundo != null)
+                {
+                    objetoEmEdicao = ObjetoEmEdicao.Editar(ultimoObjetoDoMundo);
+                }
+            }
 
             var objetoGrafico = objetoEmEdicao.ObjetoGrafico;
             var anterior = UltimoFilhoDoAnterior(objetoGrafico) ?? objetoGrafico.Anterior ?? objetoGrafico.Pai as ObjetoGrafico;
@@ -529,10 +548,16 @@ namespace Exercicio01
         private void SelecionarProximoObjetoNoGrafoCena()
         {
             if (objetoEmEdicao == null)
-                return;
+            {
+                var primeiroObjetoDoMundo = mundo.ObjetosGraficos.FirstOrDefault();
+                if (primeiroObjetoDoMundo != null)
+                {
+                    objetoEmEdicao = ObjetoEmEdicao.Editar(primeiroObjetoDoMundo);
+                }
+            }
 
             var objetoGrafico = objetoEmEdicao.ObjetoGrafico;
-            var proximo = objetoGrafico.PrimeiroFilho ?? objetoGrafico.Proximo ?? objetoGrafico.Pai.Proximo;
+            var proximo = objetoGrafico.PrimeiroFilho ?? objetoGrafico.Proximo ?? objetoGrafico.Pai.Proximo ?? mundo.ObjetosGraficos.FirstOrDefault();
             if (proximo != null)
             {
                 objetoEmEdicao = ObjetoEmEdicao.Editar(proximo);

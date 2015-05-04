@@ -179,14 +179,16 @@ namespace Exercicio01.EngineGrafica
 
         // O problema aqui é que a escala e a rotação são feitas em relação ao centro da bbox, e não conseguimos aplicar 
         // transformação equivalente no ponto porque não temos como saber a ordem em que as operações foram feitas
-        private const double Tolerancia = 4;
+        private const double Tolerancia = 20;//4;
         public VerticeSelecionado ProcurarVertice(Ponto4D ponto)
         {
+            //ponto = Transformacao.TransformarPonto(ponto);
             ponto = Transformacao.TransformarPonto(ponto);
             if (BoundaryBox.Contem(ponto, 10d))
             {
                 foreach (var vertice in vertices)
                 {
+                    //// O processo seria mais ou menos esse...
                     //var d = Transformacao.Data;
                     //var matrix4 = new Matrix4(
                     //    (float)d[0], (float)d[1], (float)d[2], (float)d[3], 
@@ -251,19 +253,33 @@ namespace Exercicio01.EngineGrafica
             return null;
         }
 
+
+        /// <summary>
+        /// Aplica as transformações da hierarquia do objeto ao ponto (a transformação, da raiz para o filho do filho do filho ate chegar ao objeto atual
+        /// </summary>
+        /// <param name="vertice">Ponto para transformar</param>
+        /// <returns>Ponto transformado</returns>
         public Ponto4D TransformarPontoParaEsteObjetoGrafico(Ponto4D vertice)
         {
+            var transformacoes = new Stack<Transformacao4D>();
+
             NoGrafoCena no = this;
             while (no != null)
             {
                 var objeto = no as ObjetoGrafico;
                 if (objeto != null)
                 {
-                    var transformacao = objeto.Transformacao;
-                    vertice = transformacao.TransformarPonto(vertice);
+                    transformacoes.Push(objeto.Transformacao);
                 }
                 no = no.Pai;
             }
+
+            while (transformacoes.Count > 0)
+            {
+                var transformacao = transformacoes.Pop();
+                vertice = transformacao.TransformarPonto(vertice);
+            }
+
             return vertice;
         }
 
