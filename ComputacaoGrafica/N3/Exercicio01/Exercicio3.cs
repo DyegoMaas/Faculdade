@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Drawing;
 using System.Linq;
+using System;
 
 namespace Exercicio01
 {
@@ -159,6 +160,11 @@ namespace Exercicio01
                 {
                     verticeSelecionado = null;
                 }
+
+                if (verticeSelecionado == null)
+                {
+                    objetoSelecionado = mundo.BuscarObjetoSelecionado(ponto.X, ponto.Y);
+                }
             }
         }
 
@@ -186,10 +192,18 @@ namespace Exercicio01
             }
             else
             {
+                var ponto = input.ObterPosicaoMouseNaTela();
+                
                 if (verticeSelecionado != null)
                 {
-                    var ponto = input.ObterPosicaoMouseNaTela();
                     verticeSelecionado.Relocar(ponto.X, ponto.Y);
+                }
+
+                if (objetoSelecionado != null)
+                {
+                    var ponto4D = objetoSelecionado.BoundaryBox.Centro.InverterSinal();
+
+                    objetoSelecionado.Mover(Math.Abs(ponto4D.X) - ponto.X, Math.Abs(ponto4D.Y) - ponto.Y, Math.Abs(ponto4D.Z) - ponto.Z);
                 }
             }
         }

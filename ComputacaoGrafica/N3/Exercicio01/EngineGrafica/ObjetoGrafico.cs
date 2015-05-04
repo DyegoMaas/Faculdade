@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Exercicio01.Editor;
 
 namespace Exercicio01.EngineGrafica
 {
@@ -232,6 +233,31 @@ namespace Exercicio01.EngineGrafica
         {
             vertices.Remove(vertice);
             RecalcularBBox();
+                return this;
+            }
+
+            return null;
+        }
+
+        public bool VerificarScanLine(double x, double y)
+        {
+            int cont = 0;
+
+            for (int i = 0; i < Vertices.Count(); i++)
+            {
+                Ponto4D verticeA = vertices[i];
+                Ponto4D verticeB = vertices[(i + 1) % vertices.Count()];
+
+                double fi = (y - verticeA.Y) / (verticeB.Y - verticeA.Y);
+                double xi = verticeA.X + (verticeB.X - verticeA.X) * fi;
+
+                if (fi >= 0 && fi <= 1 && xi >= x)
+                {
+                    cont++;
+                }
+            }
+
+            return cont % 2 == 1;
         }
     }
 }

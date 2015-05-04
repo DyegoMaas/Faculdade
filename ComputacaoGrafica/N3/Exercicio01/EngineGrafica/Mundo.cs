@@ -1,4 +1,5 @@
-﻿namespace Exercicio01.EngineGrafica
+﻿using Exercicio01.Editor;
+namespace Exercicio01.EngineGrafica
 {
     public class Mundo : NoGrafoCena
     {
@@ -22,6 +23,23 @@
             }
 
             return null;
+        }
+
+        public ObjetoGrafico BuscarObjetoSelecionado(double x, double y)
+        {
+            ObjetoGrafico objetoResultado = null;
+            
+            foreach (var objeto in ObjetosGraficos)
+            {
+                objetoResultado = objeto.BuscarObjetoSelecionado(x, y);
+
+                if (objetoResultado != null)
+                {
+                    break;
+                }
+            }
+
+            return objetoResultado;
         }
     }
 }
