@@ -13,7 +13,14 @@
 
         public void ExcluirDoObjetoGrafico()
         {
-            DonoDoPonto.ExcluirPonto(Ponto);
+            DonoDoPonto.ExcluirVertice(Ponto);
+        }
+
+        public void Relocar(double novoX, double novoY)
+        {
+            Ponto.X = novoX;
+            Ponto.Y = novoY;
+            DonoDoPonto.RecalcularBBox();
         }
     }
 }

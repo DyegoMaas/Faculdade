@@ -13,7 +13,8 @@
         {
             foreach(var objetoGrafico in ObjetosGraficos)
             {
-                var verticeEncontrado = objetoGrafico.ProcurarVertice(x, y);
+                var ponto = new Ponto4D(x, y);
+                var verticeEncontrado = objetoGrafico.ProcurarVertice(ponto);
                 if (verticeEncontrado != null)
                 {
                     return verticeEncontrado;

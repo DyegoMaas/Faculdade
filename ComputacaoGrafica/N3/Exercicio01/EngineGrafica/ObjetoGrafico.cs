@@ -174,21 +174,26 @@ namespace Exercicio01.EngineGrafica
             matrizGlobal = MatrizTmpTranslacaoInversa.TransformarMatriz(matrizGlobal);
         }
 
-        private const double Tolerancia = 5;
-        public VerticeSelecionado ProcurarVertice(double x, double y)
+        private const double Tolerancia = 25;
+        public VerticeSelecionado ProcurarVertice(Ponto4D ponto)
         {
-            var ponto = Transformacao.TransformarPonto(new Ponto4D(x, y));
-            foreach (var vertice in vertices)
+            ponto = Transformacao.TransformarPonto(ponto);
+            if (BoundaryBox.Contem(ponto, 15d))
             {
-                if(vertice.EstaProximo(ponto, Tolerancia))
+                foreach (var vertice in vertices)
                 {
-                    return new VerticeSelecionado(vertice, this);
+                    var verticeAjustado = TransformarPontoParaEsteObjetoGrafico(vertice);
+                    //var verticeAjustado = Transformacao.TransformarPonto(vertice);
+                    if (verticeAjustado.EstaProximo(ponto, Tolerancia))
+                    {
+                        return new VerticeSelecionado(vertice, this);
+                    }
                 }
             }
 
             foreach (var objetosGrafico in ObjetosGraficos)
             {
-                var verticeEncontrado = objetosGrafico.ProcurarVertice(x, y);
+                var verticeEncontrado = objetosGrafico.ProcurarVertice(ponto);
                 if (verticeEncontrado != null)
                 {
                     return verticeEncontrado;
@@ -196,11 +201,6 @@ namespace Exercicio01.EngineGrafica
             }
 
             return null;
-        }
-
-        internal void RemoverVerticeSelecionado(Ponto4D vertice)
-        {
-            vertices.Remove(vertice);
         }
 
         public Ponto4D TransformarPontoParaEsteObjetoGrafico(Ponto4D vertice)
@@ -222,15 +222,16 @@ namespace Exercicio01.EngineGrafica
         /// <summary>
         /// Recalcula a BBox aplicando as transformações da hierarquia do objeto no grafo de cena
         /// </summary>
-        private void RecalcularBBox()
+        public void RecalcularBBox()
         {
             var verticesAjustados = Vertices.Select(TransformarPontoParaEsteObjetoGrafico);
             BoundaryBox.RecalcularPara(verticesAjustados);
         }
 
-        public void ExcluirPonto(Ponto4D vertice)
+        public void ExcluirVertice(Ponto4D vertice)
         {
             vertices.Remove(vertice);
+            RecalcularBBox();
         }
     }
 }

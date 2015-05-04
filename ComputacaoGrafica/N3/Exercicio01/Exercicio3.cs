@@ -56,16 +56,12 @@ namespace Exercicio01
         private const double VelocidadeEscala = 1.005d;
         private const double VelocidadeRotacao = 1d;
 
-        private readonly Point posicaoInicialJanela = new Point(50, 50);
         private readonly Mundo mundo = new Mundo(new Camera(0, 800, 0, 800));
         private readonly InputManager input;
 
-        /// <summary>
-        /// Acessar pela propriedade ObjetoEmEdicao
-        /// </summary>
         private ObjetoEmEdicao objetoEmEdicao = null;
-
         private VerticeSelecionado verticeSelecionado = null;
+
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
         private OperacaoSobreObjeto operacao = OperacaoSobreObjeto.Translacao;
 
@@ -74,32 +70,32 @@ namespace Exercicio01
         {
             input = new InputManager(this);
             ObjetoEmEdicao.Input = input;
-            Location = posicaoInicialJanela;
+            Location = new Point(50, 50);
             Title = "N3-Exercicio01";
 
             Load += (sender, e) =>
             {
                 GL.ClearColor(Color.White);
 
-                //teste do grafo de cena
-                var quadrado1 = new ObjetoEmEdicao(mundo, "pai",
-                    new Ponto4D(100, 100),
-                    new Ponto4D(100, 300),
-                    new Ponto4D(300, 300),
-                    new Ponto4D(300, 100));
-                quadrado1.DefinirCor(Color.BlueViolet);
-                quadrado1.RedimensionarEmRelacaoAoCentroDoObjeto(2);
-                quadrado1.RotacionarEmRelacaoAoCentroDoObjeto(45);
+                ////teste do grafo de cena
+                //var quadrado1 = new ObjetoEmEdicao(mundo, "pai",
+                //    new Ponto4D(100, 100),
+                //    new Ponto4D(100, 300),
+                //    new Ponto4D(300, 300),
+                //    new Ponto4D(300, 100));
+                //quadrado1.DefinirCor(Color.BlueViolet);
+                //quadrado1.RedimensionarEmRelacaoAoCentroDoObjeto(2);
+                //quadrado1.RotacionarEmRelacaoAoCentroDoObjeto(45);
 
-                var quadrado2 = new ObjetoEmEdicao(quadrado1.ObjetoGrafico, "filho",
-                    new Ponto4D(200, 200),
-                    new Ponto4D(200, 300),
-                    new Ponto4D(300, 300),
-                    new Ponto4D(300, 200));
-                quadrado2.RotacionarEmRelacaoAoCentroDoObjeto(20);
-                quadrado2.DefinirCor(Color.CadetBlue);
+                //var quadrado2 = new ObjetoEmEdicao(quadrado1.ObjetoGrafico, "filho",
+                //    new Ponto4D(200, 200),
+                //    new Ponto4D(200, 300),
+                //    new Ponto4D(300, 300),
+                //    new Ponto4D(300, 200));
+                //quadrado2.RotacionarEmRelacaoAoCentroDoObjeto(20);
+                //quadrado2.DefinirCor(Color.CadetBlue);
 
-                objetoEmEdicao = quadrado1;
+                //objetoEmEdicao = quadrado1;
             };
             UpdateFrame += OnUpdateFrame;
             RenderFrame += OnRenderFrame;
@@ -193,8 +189,7 @@ namespace Exercicio01
                 if (verticeSelecionado != null)
                 {
                     var ponto = input.ObterPosicaoMouseNaTela();
-                    verticeSelecionado.Ponto.X = ponto.X;
-                    verticeSelecionado.Ponto.Y = ponto.Y;
+                    verticeSelecionado.Relocar(ponto.X, ponto.Y);
                 }
             }
         }

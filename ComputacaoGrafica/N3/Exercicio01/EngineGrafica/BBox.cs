@@ -51,7 +51,7 @@ namespace Exercicio01.EngineGrafica
         public bool Contem(Ponto4D ponto, double tolerancia = 0d)
         {
             return ponto.X >= MinX - tolerancia && ponto.X <= MaxX + tolerancia &&
-                   ponto.Y >= MinY - tolerancia && ponto.Y <= MinY + tolerancia;
+                   ponto.Y >= MinY - tolerancia && ponto.Y <= MaxY + tolerancia;
         }
     }
 }
