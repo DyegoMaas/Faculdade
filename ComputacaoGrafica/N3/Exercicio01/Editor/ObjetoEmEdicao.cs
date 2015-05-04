@@ -84,5 +84,10 @@ namespace Exercicio01.Editor
         {
             ObjetoGrafico.Cor = cor;
         }
+
+        public void ExcluirObjetoGrafico()
+        {
+            ObjetoGrafico.Pai.RemoverObjetoGrafico(ObjetoGrafico);
+        }
     }
 }

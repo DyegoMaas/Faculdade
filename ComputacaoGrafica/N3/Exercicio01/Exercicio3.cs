@@ -168,6 +168,10 @@ namespace Exercicio01
                     if (objetoSelecionado == null)
                     {
                         objetoSelecionado = mundo.BuscarObjetoSelecionado(ponto.X, ponto.Y);
+                        if (objetoSelecionado != null)
+                        {
+                            objetoEmEdicao = ObjetoEmEdicao.Editar(objetoSelecionado);
+                        }
                     }
                     else
                     {
@@ -187,21 +191,23 @@ namespace Exercicio01
             objetoEmEdicao = null;
         }
 
+        private Ponto4D posicaoAnterior;
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
+            var posicaoMouseNaTela = input.ObterPosicaoMouseNaTela();
             if (modoExecucao == ModoExecucao.Criacao && objetoEmEdicao != null)
             {
                 var vertice = objetoEmEdicao.ObjetoGrafico.Vertices.LastOrDefault();
                 if (vertice != null)
                 {
-                    var ponto = input.ObterPosicaoMouseNaTela();
+                    var ponto = posicaoMouseNaTela;
                     vertice.X = ponto.X;
                     vertice.Y = ponto.Y;
                 }
             }
             else
             {
-                var ponto = input.ObterPosicaoMouseNaTela();
+                var ponto = posicaoMouseNaTela;
                 
                 if (verticeSelecionado != null)
                 {
@@ -210,11 +216,12 @@ namespace Exercicio01
 
                 if (objetoSelecionado != null)
                 {
-                    var ponto4D = objetoSelecionado.BoundaryBox.Centro.InverterSinal();
-
-                    objetoSelecionado.Mover(-(Math.Abs(ponto4D.X) - ponto.X), -(Math.Abs(ponto4D.Y) - ponto.Y), Math.Abs(ponto4D.Z) - ponto.Z);
+                    var deltaX = posicaoMouseNaTela.X - posicaoAnterior.X;
+                    var deltaY = posicaoMouseNaTela.Y - posicaoAnterior.Y;
+                    objetoSelecionado.Mover(deltaX, deltaY, 0);
                 }
             }
+            posicaoAnterior = posicaoMouseNaTela;
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
@@ -266,8 +273,17 @@ namespace Exercicio01
 
                 if (e.Key == Key.Delete)
                 {
-                    verticeSelecionado.ExcluirDoObjetoGrafico();
-                    verticeSelecionado = null;
+                    if (verticeSelecionado != null)
+                    {
+                        verticeSelecionado.ExcluirDoObjetoGrafico();
+                        verticeSelecionado = null;
+                    }
+
+                    if (objetoSelecionado != null)
+                    {
+                        objetoEmEdicao.ExcluirObjetoGrafico();
+                        objetoEmEdicao = null;
+                    }
                 }
 
                 if (objetoEmEdicao != null)

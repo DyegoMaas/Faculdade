@@ -1,5 +1,4 @@
-﻿using Exercicio01.Editor;
-namespace Exercicio01.EngineGrafica
+﻿namespace Exercicio01.EngineGrafica
 {
     public class Mundo : NoGrafoCena
     {
@@ -31,7 +30,8 @@ namespace Exercicio01.EngineGrafica
             
             foreach (var objeto in ObjetosGraficos)
             {
-                objetoResultado = objeto.BuscarObjetoSelecionado(x, y);
+                var ponto = new Ponto4D(x, y);
+                objetoResultado = objeto.BuscarObjetoSelecionado(ponto);
 
                 if (objetoResultado != null)
                 {

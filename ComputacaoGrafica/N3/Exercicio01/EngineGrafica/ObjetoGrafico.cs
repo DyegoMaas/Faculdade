@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Drawing.Drawing2D;
+using System.Linq;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
@@ -175,16 +177,44 @@ namespace Exercicio01.EngineGrafica
             matrizGlobal = MatrizTmpTranslacaoInversa.TransformarMatriz(matrizGlobal);
         }
 
-        private const double Tolerancia = 25;
+        // O problema aqui é que a escala e a rotação são feitas em relação ao centro da bbox, e não conseguimos aplicar 
+        // transformação equivalente no ponto porque não temos como saber a ordem em que as operações foram feitas
+        private const double Tolerancia = 4;
         public VerticeSelecionado ProcurarVertice(Ponto4D ponto)
         {
             ponto = Transformacao.TransformarPonto(ponto);
-            if (BoundaryBox.Contem(ponto, 15d))
+            if (BoundaryBox.Contem(ponto, 10d))
             {
                 foreach (var vertice in vertices)
                 {
+                    //var d = Transformacao.Data;
+                    //var matrix4 = new Matrix4(
+                    //    (float)d[0], (float)d[1], (float)d[2], (float)d[3], 
+                    //    (float)d[4], (float)d[5], (float)d[6], (float)d[7], 
+                    //    (float)d[8], (float)d[9], (float)d[10], (float)d[11], 
+                    //    (float)d[12], (float)d[13], (float)d[14], (float)d[15])
+                    //    .Inverted();
+
+                    //var transformacao4D = new Transformacao4D();
+                    //transformacao4D.SetElement(0, matrix4.M11);
+                    //transformacao4D.SetElement(1, matrix4.M12);
+                    //transformacao4D.SetElement(2, matrix4.M13);
+                    //transformacao4D.SetElement(3, matrix4.M14);
+                    //transformacao4D.SetElement(4, matrix4.M21);
+                    //transformacao4D.SetElement(5, matrix4.M22);
+                    //transformacao4D.SetElement(6, matrix4.M23);
+                    //transformacao4D.SetElement(7, matrix4.M24);
+                    //transformacao4D.SetElement(8, matrix4.M31);
+                    //transformacao4D.SetElement(9, matrix4.M32);
+                    //transformacao4D.SetElement(10, matrix4.M33);
+                    //transformacao4D.SetElement(11, matrix4.M34);
+                    //transformacao4D.SetElement(12, matrix4.M41);
+                    //transformacao4D.SetElement(13, matrix4.M42);
+                    //transformacao4D.SetElement(14, matrix4.M43);
+                    //transformacao4D.SetElement(15, matrix4.M44);
+                    //var verticeAjustado = transformacao4D.TransformarPonto(vertice);
+
                     var verticeAjustado = TransformarPontoParaEsteObjetoGrafico(vertice);
-                    //var verticeAjustado = Transformacao.TransformarPonto(vertice);
                     if (verticeAjustado.EstaProximo(ponto, Tolerancia))
                     {
                         return new VerticeSelecionado(vertice, this);
@@ -198,6 +228,23 @@ namespace Exercicio01.EngineGrafica
                 if (verticeEncontrado != null)
                 {
                     return verticeEncontrado;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Tenta buscar objeto selecionado através da BBox e depois do ScanLina
+        /// </summary>
+        public ObjetoGrafico BuscarObjetoSelecionado(Ponto4D ponto)
+        {
+            ponto = Transformacao.TransformarPonto(ponto);
+            if (BoundaryBox.Contem(ponto))
+            {
+                if (VerificarScanLine(ponto.X, ponto.Y))
+                {
+                    return this;
                 }
             }
 
@@ -235,22 +282,6 @@ namespace Exercicio01.EngineGrafica
             RecalcularBBox();
         }
 
-        /// <summary>
-        /// Tenta buscar objeto selecionado através da BBox e depois do ScanLina
-        /// </summary>
-        public ObjetoGrafico BuscarObjetoSelecionado(double x, double y)
-        {
-            if (BoundaryBox.Contem(new Ponto4D(x, y)))
-            {
-                if (VerificarScanLine(x, y))
-                {
-                    return this;
-                }
-            }
-
-            return null;
-        }
-        
         /// <summary>
         /// Verificação ScanLine
         /// </summary>
