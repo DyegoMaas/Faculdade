@@ -51,7 +51,7 @@ namespace Exercicio01
     /// Keypd4 ou Keypad2 - Selecionar o objeto gráfico anterior
     /// 
     /// </summary>
-    public class Exercicio3 : GameWindow
+    public class N3 : GameWindow
     {
         private const double VelocidadeTranslacao = 1d;
         private const double VelocidadeEscala = 1.005d;
@@ -68,7 +68,7 @@ namespace Exercicio01
         private ModoExecucao modoExecucao = ModoExecucao.Criacao;
         private OperacaoSobreObjeto operacao = OperacaoSobreObjeto.Translacao;
 
-        public Exercicio3()
+        public N3()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
             input = new InputManager(this);

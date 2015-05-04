@@ -4,8 +4,8 @@
     {
         public static void Main(string[] args)
         {
-            var n1 = new Exercicio3();
-            n1.Run(120, 60);
+            var n3 = new N3();
+            n3.Run(120, 60);
         }
     }
 }
