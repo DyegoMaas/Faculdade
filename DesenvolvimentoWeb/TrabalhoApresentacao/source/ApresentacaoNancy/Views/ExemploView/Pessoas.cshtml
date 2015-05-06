@@ -1,0 +1,30 @@
+﻿@using System.Linq
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<dynamic>
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cpf</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pessoa in @Model.Pessoas)
+            {
+                <tr>
+                    <td>@pessoa.Nome</td>
+                    <td>@pessoa.Cpf</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,10 +1,12 @@
-﻿using Nancy;
+﻿using Core.Repositorios;
+using Dominio.Pessoas;
+using Nancy;
 
 namespace ApresentacaoNancy.Modules
 {
     public class ExemploViewModule : NancyModule
     {
-        public ExemploViewModule()
+        public ExemploViewModule(IRepositorio repositorio)
             : base("/index")
         {
             Get["/"] = _ =>
@@ -14,6 +16,12 @@ namespace ApresentacaoNancy.Modules
                     Valor = "a",
                     Quantidade = 1000
                 }];
+            };
+
+            Get["/pessoas"] = _ =>
+            {
+                var pessoas = repositorio.ObterTodos<Pessoa>();
+                return View["Pessoas", new { Pessoas = pessoas }];
             };
         }
     }

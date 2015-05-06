@@ -108,6 +108,9 @@
     <Content Include="Views\ExemploView\Index.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\ExemploView\Pessoas.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
