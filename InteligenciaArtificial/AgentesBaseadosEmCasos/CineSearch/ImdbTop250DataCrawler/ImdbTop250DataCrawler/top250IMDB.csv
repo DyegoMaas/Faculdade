@@ -1,0 +1,251 @@
+Posicao;Nota;Nome;Gênero;Duracao;Faixa Etária;Ano
+1; 9.3 ;Um Sonho de Liberdade;Crime,Drama;142;16;1994
+2; 9.2 ;O Poderoso Chefão;Crime,Drama;175;14;1972
+3; 9.1 ;O Poderoso Chefão II;Crime,Drama;200;14;1974
+4; 9.0 ;Batman: O Cavaleiro das Trevas;Ação,Crime,Drama;152;12;2008
+5; 8.9 ;Pulp Fiction: Tempo de Violência;Crime,Drama;154;18;1994
+6; 8.9 ;A Lista de Schindler;Biografia,Drama,História;195;14;1993
+7; 8.9 ;12 Homens e uma Sentença;Drama;96;0;1957
+8; 8.9 ;Três Homens em Conflito;Western;161;14;1966
+9; 8.9 ;O Senhor dos Anéis: O Retorno do Rei;Aventura,Fantasia;201;12;2003
+10; 8.9 ;Clube da Luta;Drama;139;18;1999
+11; 8.8 ;O Senhor dos Anéis: A Sociedade do Anel;Aventura,Fantasia;178;12;2001
+12; 8.8 ;Star Guerras: Episódio V - O Império Contra-Ataca;Ação,Aventura,Fantasia;124;0;1980
+13; 8.8 ;Forrest Gump: O Contador de Histórias;Drama,Romance;142;14;1994
+14; 8.8 ;A Origem;Ação,Mistério,Sci-Fi;148;14;2010
+15; 8.7 ;Um Estranho no Ninho;Drama;133;14;1975
+16; 8.8 ;O Senhor dos Anéis: As Duas Torres;Aventura,Fantasia;179;12;2002
+17; 8.7 ;Os Bons Companheiros;Biografia,Crime,Drama;146;14;1990
+18; 8.7 ;Matrix;Ação,Sci-Fi;136;12;1999
+19; 8.7 ;Guerra nas Estrelas;Ação,Aventura,Fantasia;121;0;1977
+20; 8.7 ;Os Sete Samurais;Drama;207;10;1954
+21; 8.7 ;Cidade de Deus;Crime,Drama;130;18;2002
+22; 8.7 ;Seven: Os Sete Crimes Capitais;Drama,Mistério,Thriller;127;14;1995
+23; 8.7 ;Os Suspeitos;Crime,Drama,Thriller;106;14;1995
+24; 8.6 ;O Silêncio dos Inocentes;Thriller;118;14;1991
+25; 8.7 ;Interestelar;Aventura,Sci-Fi;169;10;2014
+26; 8.7 ;A Felicidade Não Se Compra;Drama,Família,Fantasia;130;0;1946
+27; 8.6 ;O Profissional;Crime,Drama,Thriller;110;14;1994
+28; 8.6 ;A Vida É Bela;Comédia,Drama,Romance;116;0;1997
+29; 8.6 ;Era uma Vez no Oeste;Western;175;14;1968
+30; 8.6 ;Casablanca;Drama,Romance,Guerra;102;12;1942
+31; 8.6 ;A Outra História Americana;Crime,Drama;119;14;1998
+32; 8.6 ;O Resgate do Soldado Ryan;Ação,Drama,Guerra;169;14;1998
+33; 8.6 ;Os Caçadores da Arca Perdida;Ação,Aventura;115;0;1981
+34; 8.6 ;A Viagem de Chihiro;Animação,Aventura,Família;125;0;2001
+35; 8.6 ;Luzes da Cidade;Comédia,Drama,Romance;87;0;1931
+36; 8.6 ;Psicose;Horror,Mistério,Thriller;109;14;1960
+37; 8.6 ;Janela Indiscreta;Mistério,Thriller;112;12;1954
+38; 8.6 ;Intocáveis;Biografia,Comédia,Drama;112;14;2011
+39; 8.6 ;Whiplash: Em Busca da Perfeição;Drama,Musical;107;12;2014
+40; 8.6 ;Os Tempos Modernos;Comédia,Drama;87;0;1936
+41; 8.5 ;À Espera de um Milagre;Crime,Drama,Fantasia;189;14;1999
+42; 8.5 ;O Exterminador do Futuro 2: O Julgamento Final;Ação,Sci-Fi;137;12;1991
+43; 8.5 ;Amnésia;Mistério,Thriller;113;16;2000
+44; 8.5 ;O Pianista;Biografia,Drama,Guerra;150;14;2002
+45; 8.5 ;Os Infiltrados;Crime,Drama,Thriller;151;18;2006
+46; 8.5 ;Gladiador;Ação,Drama;155;14;2000
+47; 8.5 ;Apocalypse Now;Drama,Guerra;153;0;1979
+48; 8.5 ;Crepúsculo dos Deuses;Drama,Film-Noir;110;0;1950
+49; 8.5 ;Dr. Fantástico;Comédia,Guerra;95;10;1964
+50; 8.5 ;De Volta para o Futuro;Aventura,Comédia,Romance;116;0;1985
+51; 8.5 ;Alien, o Oitavo Passageiro;Horror,Sci-Fi;117;14;1979
+52; 8.5 ;O Grande Truque;Drama,Mistério,Thriller;130;14;2006
+53; 8.5 ;O Rei Leão;Animação,Aventura,Drama;89;0;1994
+54; 8.5 ;O Grande Ditador;Comédia,Drama,Guerra;125;0;1940
+55; 8.5 ;A Vida dos Outros;Drama,Thriller;137;12;2006
+56; 8.5 ;Cinema Paradiso;Drama;155;0;1988
+57; 8.5 ;O Iluminado;Horror;146;14;1980
+58; 8.5 ;Django Livre;Western;165;16;2012
+59; 8.5 ;Glória Feita de Sangue;Drama,Guerra;88;14;1957
+60; 8.5 ;Batman: O Cavaleiro das Trevas Ressurge;Ação,Thriller;165;12;2012
+61; 8.4 ;Beleza Americana;Drama,Romance;122;14;1999
+62; 8.4 ;WALL·E;Animação,Aventura,Família;98;0;2008
+63; 8.4 ;Intriga Internacional;Aventura,Mistério,Thriller;136;14;1959
+64; 8.4 ;Aliens, O Resgate;Ação,Aventura,Sci-Fi;137;14;1986
+65; 8.4 ;Cidadão Kane;Drama,Mistério;119;0;1941
+66; 8.5 ;Túmulo dos Vagalumes;Animação,Drama,Guerra;89;0;1988
+67; 8.4 ;Um Corpo Que Cai;Mistério,Romance,Thriller;128;14;1958
+68; 8.4 ;M, O Vampiro de Dusseldorf;Crime,Drama,Thriller;117;0;1931
+69; 8.4 ;Oldboy;Drama,Mistério,Thriller;120;18;2003
+70; 8.4 ;O Fabuloso Destino de Amélie Poulain;Comédia,Romance;122;14;2001
+71; 8.4 ;O Barco: Inferno no Mar;Aventura,Drama,Guerra;149;14;1981
+72; 8.4 ;Princesa Mononoke;Animação,Aventura,Fantasia;134;12;1997
+73; 8.4 ;Star Guerras, Episódio VI - O Retorno do Jedi;Ação,Aventura,Fantasia;134;0;1983
+74; 8.4 ;Era Uma Vez na América;Crime,Drama;229;18;1984
+75; 8.4 ;Toy Story 3;Animação,Aventura,Comédia;103;0;2010
+76; 8.4 ;Cães de Aluguel;Crime,Drama;99;18;1992
+77; 8.4 ;Laranja Mecânica;Crime,Drama,Sci-Fi;136;16;1971
+78; 8.4 ;Coração Valente;Ação,Biografia,Drama;177;16;1995
+79; 8.4 ;Taxi Driver;Crime,Drama;113;14;1976
+80; 8.4 ;Pacto de Sangue;Crime,Drama,Film-Noir;107;0;1944
+81; 8.4 ;Réquiem Para um Sonho;Drama;102;18;2000
+82; 8.4 ;Testemunha de Acusação;Crime,Drama,Mistério;116;0;1957
+83; 8.4 ;O Sol É Para Todos;Drama;129;0;1962
+84; 8.4 ;Lawrence da Arábia;Aventura,Biografia,Drama;216;14;1962
+85; 8.4 ;Brilho Eterno de uma Mente Sem Lembranças;Drama,Romance,Sci-Fi;108;14;2004
+86; 8.3 ;Nascido Para Matar;Drama,Guerra;116;16;1987
+87; 8.4 ;Golpe de Mestre;Comédia,Crime,Drama;129;0;1973
+88; 8.4 ;Ladrões de Bicicletas;Drama;93;0;1948
+89; 8.4 ;Cantando na Chuva;Comédia,Musicalal,Romance;103;0;1952
+90; 8.4 ;Amadeus;Biografia,Drama,Musical;160;0;1984
+91; 8.3 ;Monty Python em Busca do Cálice Sagrado;Aventura,Comédia,Fantasia;91;18;1975
+92; 8.3 ;Snatch: Porcos e Diamantes;Comédia,Crime;104;16;2000
+93; 8.3 ;2001: Uma Odisseia no Espaço;Mistério,Sci-Fi;160;0;1968
+94; 8.3 ;Por uns Dólares a Mais;Western;132;12;1965
+95; 8.4 ;Rashomon;Crime,Drama,Mistério;88;0;1950
+96; 8.3 ;Los Angeles - Cidade Proibida;Crime,Drama,Mistério;138;18;1997
+97; 8.4 ;O Garoto;Comédia,Drama,Família;68;0;1921
+98; 8.4 ;A Malvada;Drama;138;0;1950
+99; 8.3 ;Se Meu Apartamento Falasse;Comédia,Drama,Romance;125;0;1960
+100; 8.3 ;Bastardos Inglórios;Aventura,Drama,Guerra;153;18;2009
+101; 8.3 ;Toy Story;Animação,Aventura,Comédia;81;0;1995
+102; 8.3 ;O Tesouro da Sierra Madre;Ação,Aventura,Drama;126;0;1948
+103; 8.4 ;A Separação;Drama;123;12;2011
+104; 8.3 ;Indiana Jones e a Última Cruzada;Ação,Aventura;127;0;1989
+105; 8.4 ;Yojimbo - O Guarda-Costas;Ação,Drama;110;0;1961
+106; 8.3 ;O 3º Homem;Film-Noir,Mistério,Thriller;104;14;1949
+107; 8.3 ;Quanto Mais Quente Melhor;Comédia;120;0;1959
+108; 8.3 ;Metrópolis;Drama,Sci-Fi;153;0;1927
+109; 8.3 ;Batman Begins;Ação,Aventura;140;10;2005
+110; 8.3 ;Os Imperdoáveis;Western;131;12;1992
+111; 8.3 ;Scarface;Crime,Drama;170;18;1983
+112; 8.5 ;Como Estrelas na Terra;Drama,Família;165;0;2007
+113; 8.3 ;Touro Indomável;Biografia,Drama,Sport;129;16;1980
+114; 8.3 ;Up: Altas Aventuras;Animação,Aventura,Comédia;96;0;2009
+115; 8.5 ;3 Idiotas;Comédia,Drama;170;0;2009
+116; 8.3 ;A Queda! As Últimas Horas de Hitler;Biografia,Drama,História;156;16;2004
+117; 8.3 ;Chinatown;Drama,Mistério,Thriller;130;12;1974
+118; 8.3 ;Fugindo do Inferno;Aventura,Drama,História;172;12;1963
+119; 8.3 ;Duro de Matar;Ação,Thriller;131;14;1988
+120; 8.3 ;A Caça;Drama;115;0;2012
+121; 8.3 ;Sindicato de Ladrões;Crime,Drama;108;14;1954
+122; 8.3 ;Fogo Contra Fogo;Ação,Crime,Drama;170;14;1995
+123; 8.3 ;O Labirinto do Fauno;Drama,Fantasia,Guerra;118;16;2006
+124; 8.3 ;A Mulher Faz o Homem;Drama;129;0;1939
+125; 8.3 ;Gênio Indomável;Drama;126;14;1997
+126; 8.3 ;A Ponte do Rio Kwai;Aventura,Drama,Guerra;161;12;1957
+127; 8.3 ;Meu Amigo Totoro;Animação,Família,Fantasia;86;0;1988
+128; 8.3 ;Viver;Drama;143;0;1952
+129; 8.3 ;O Sétimo Selo;Drama,Fantasia;96;0;1957
+130; 8.3 ;Em Busca do Ouro;Aventura,Comédia,Drama;95;0;1925
+131; 8.3 ;Ran;Ação,Drama,Guerra;162;0;1985
+132; 8.3 ;Morangos Silvestres;Drama;91;0;1957
+133; 8.3 ;General;Ação,Aventura,Comédia;107;0;1926
+134; 8.2 ;Blade Runner, o Caçador de Andróides;Sci-Fi,Thriller;117;14;1982
+135; 8.2 ;O Homem Elefante;Biografia,Drama;124;10;1980
+136; 8.2 ;Jogos, Trapaças e Dois Canos Fumegantes;Comédia,Crime;107;18;1998
+137; 8.3 ;O Segredo dos Seus Olhos;Drama,Mistério,Thriller;129;16;2009
+138; 8.2 ;O Lobo de Wall Street;Biografia,Comédia,Crime;180;18;2013
+139; 8.2 ;Cassino;Biografia,Crime,Drama;178;18;1995
+140; 8.2 ;Gran Torino;Drama;116;14;2008
+141; 8.2 ;O Castelo Animado;Animação,Aventura,Família;119;0;2004
+142; 8.2 ;Guerreiro;Drama,Sport;140;12;2011
+143; 8.6 ;O Bandido;Crime,Drama,Thriller;128;0;1996
+144; 8.2 ;O Grande Lebowski;Comédia,Crime;117;14;1998
+145; 8.2 ;V de Vingança;Ação,Drama,Thriller;132;16;2005
+146; 8.2 ;Rebecca, A Mulher Inesquecível;Mistério,Thriller;130;0;1940
+147; 8.2 ;Garota Exemplar;Drama,Mistério,Thriller;149;14;2014
+148; 8.2 ;O Franco Atirador;Drama,Guerra;182;18;1978
+149; 8.3 ;Julgamento em Nuremberg;Drama,História,Guerra;186;0;1961
+150; 8.2 ;Como Treinar o Seu Dragão;Animação,Aventura,Família;98;0;2010
+151; 8.2 ;Rebeldia Indomável;Crime,Drama;126;0;1967
+152; 8.2 ;Aconteceu Naquela Noite;Comédia,Romance;105;0;1934
+153; 8.2 ;Fargo;Crime,Drama,Thriller;98;18;1996
+154; 8.2 ;Uma Mente Brilhante;Biografia,Drama;135;12;2001
+155; 8.2 ;...E o Vento Levou;Drama,Romance,Guerra;238;0;1939
+156; 8.2 ;Trainspotting - Sem Limites;Drama;94;18;1996
+157; 8.2 ;Na Natureza Selvagem;Aventura,Biografia,Drama;148;12;2007
+158; 8.2 ;Rush: No Limite da Emoção;Ação,Biografia,Drama;123;0;2013
+159; 8.2 ;Disque M para Matar;Crime,Thriller;105;16;1954
+160; 8.2 ;Relíquia Macabra (O Falcão Maltês);Crime,Drama,Film-Noir;100;12;1941
+161; 8.2 ;O Sexto Sentido;Drama,Mistério,Thriller;107;12;1999
+162; 8.2 ;Mary e Max: Uma Amizade Diferente;Animação,Comédia,Drama;92;12;2009
+163; 8.2 ;O Enigma de Outro Mundo;Horror,Sci-Fi;109;14;1982
+164; 8.2 ;Procurando Nemo;Animação,Aventura,Comédia;100;0;2003
+165; 8.3 ;O Salário do Medo;Aventura,Drama,Thriller;131;0;1953
+166; 8.2 ;Hotel Ruanda;Drama,História,Guerra;121;14;2004
+167; 8.1 ;Onde os Fracos não Têm Vez;Crime,Drama,Thriller;122;16;2007
+168; 8.4 ;Pinte de Açafrão;Drama;157;0;2006
+169; 8.2 ;Incêndios;Drama,Mistério,Guerra;139;0;2010
+170; 8.1 ;Kill Bill: Volume 1;Ação;111;18;2003
+171; 8.1 ;Platoon;Drama,Guerra;120;14;1986
+172; 8.2 ;A Vida de Brian;Comédia;94;18;1979
+173; 8.2 ;Butch Cassidy;Biografia,Crime,Western;110;12;1969
+174; 8.4 ;Munna Bhai M.B.B.S.;Comédia,Drama;156;0;2003
+175; 8.4 ;A Wednesday;Crime,Drama,Mistério;104;0;2008
+176; 8.2 ;Rede de Intrigas;Drama;121;0;1976
+177; 8.2 ;A Marca da Maldade;Crime,Film-Noir,Thriller;95;0;1958
+178; 8.1 ;Sangue Negro;Drama;158;14;2007
+179; 8.1 ;12 Anos de Escravidão;Biografia,Drama,História;134;14;2013
+180; 8.1 ;Noivo Neurótico, Noiva Nervosa;Comédia,Drama,Romance;93;14;1977
+181; 8.1 ;Conta Comigo;Aventura,Drama;89;12;1986
+182; 8.2 ;Os Incompreendidos;Crime,Drama;99;0;1959
+183; 8.2 ;A Princesa Prometida;Aventura,Comédia,Família;98;0;1987
+184; 8.1 ;O Grande Hotel Budapeste;Aventura,Comédia,Drama;99;14;2014
+185; 8.2 ;Quando Duas Mulheres Pecam;Drama;85;0;1966
+186; 8.2 ;As Diabólicas;Horror,Mistério,Thriller;116;0;1955
+187; 8.1 ;Amores Brutos;Drama,Thriller;154;0;2000
+188; 8.1 ;Ben-Hur;Aventura,Drama,História;212;12;1959
+189; 8.1 ;Em Nome do Pai;Biografia,Drama,História;133;16;1993
+190; 8.2 ;Vinhas da Ira;Drama;129;12;1940
+191; 8.1 ;Menina de Ouro;Drama,Sport;132;12;2004
+192; 8.1 ;Sin City: A Cidade do Pecado;Crime,Thriller;124;16;2005
+193; 8.2 ;Sempre ao Seu Lado;Drama,Família;93;0;2009
+194; 8.2 ;Nausicaä do Vale do Vento;Animação,Aventura,Fantasia;117;0;1984
+195; 8.1 ;O Mágico de Oz;Aventura,Família,Fantasia;102;0;1939
+196; 8.2 ;Os Melhores Anos de Nossa Vida;Drama,Romance,Guerra;172;0;1946
+197; 8.1 ;Gandhi;Biografia,Drama,História;191;14;1982
+198; 8.2 ;The Avengers: Os Vingadores;Ação,Aventura,Sci-Fi;143;12;2012
+199; 8.1 ;O Ultimato Bourne;Ação,Thriller;115;14;2007
+200; 8.1 ;Donnie Darko;Drama,Mistério,Sci-Fi;113;14;2001
+201; 8.1 ;Ilha do Medo;Mistério,Thriller;138;16;2010
+202; 8.1 ;Guardiões da Galáxia;Ação,Aventura,Sci-Fi;121;12;2014
+203; 8.2 ;Stalker;Drama,Sci-Fi;163;0;1979
+204; 8.1 ;8½;Drama,Fantasia;138;0;1963
+205; 8.1 ;Pacto Sinistro;Crime,Film-Noir,Thriller;101;16;1951
+206; 8.1 ;Conflitos Internos;Crime,Mistério,Thriller;101;18;2002
+207; 8.1 ;Os 12 Macacos;Mistério,Sci-Fi,Thriller;129;14;1995
+208; 8.1 ;Boyhood: Da Infância à Juventude;Drama;165;14;2014
+209; 8.2 ;Alexander;Drama;188;14;1982
+210; 8.1 ;Antes do Amanhecer;Drama,Romance;105;12;1995
+211; 8.1 ;O Jogo da Imitação;Biografia,Drama,Thriller;114;12;2014
+212; 8.1 ;Tubarão;Drama,Thriller;124;14;1975
+213; 8.1 ;Matar ou Morrer;Drama,Thriller,Western;85;12;1952
+214; 8.2 ;A Batalha de Argel;Crime,Drama,História;121;14;1966
+215; 8.1 ;O Exterminador do Futuro;Ação,Sci-Fi;107;14;1984
+216; 8.1 ;Feitiço do Tempo;Comédia,Fantasia,Romance;101;0;1993
+217; 8.1 ;Harry Potter e as Relíquias da Morte: Parte 2;Aventura,Fantasia,Mistério;130;14;2011
+218; 8.1 ;O Discurso do Rei;Biografia,Drama,História;118;12;2010
+219; 8.1 ;Memórias de um Assassino;Crime,Drama,Mistério;130;0;2003
+220; 8.1 ;O Grande Mestre;Ação,Biografia,Drama;106;0;2008
+221; 8.1 ;Interlúdio;Drama,Film-Noir,Romance;101;0;1946
+222; 8.1 ;Monstros S.A.;Animação,Aventura,Comédia;92;0;2001
+223; 8.1 ;Rocky: Um Lutador;Drama,Sport;119;12;1976
+224; 8.1 ;Um Dia de Cão;Crime,Drama;125;14;1975
+225; 8.1 ;Barry Lyndon;Aventura,Drama,História;184;0;1975
+226; 8.1 ;O Ódio;Crime,Drama;98;0;1995
+227; 8.3 ;O Que o Coração Deseja;Comédia,Drama;183;0;2001
+228; 8.1 ;O Show de Truman;Drama;103;12;1998
+229; 8.1 ;Mensageiro do Diabo;Crime,Drama,Film-Noir;92;14;1955
+230; 8.1 ;Quem Tem Medo de Virginia Woolf?;Drama,Romance;131;0;1966
+231; 8.1 ;Por Um Punhado de Dólares;Ação,Western;99;14;1964
+232; 8.2 ;Lagaan: Era uma Vez na Índia;Aventura,Drama,Musicalal;224;0;2001
+233; 8.1 ;Piratas do Caribe: A Maldição do Pérola Negra;Aventura,Fantasia;143;14;2003
+234; 8.1 ;O Castelo no Céu;Animação,Aventura,Família;124;0;1986
+235; 8.0 ;Jurassic Park: O Parque dos Dinossauros;Aventura,Sci-Fi,Thriller;127;0;1993
+236; 8.1 ;X-Men: Dias de um Futuro Esquecido;Ação,Aventura,Sci-Fi;131;12;2014
+237; 8.1 ;A Estrada da Vida;Drama;108;0;1954
+238; 8.1 ;Histórias Cruzadas;Drama;146;12;2011
+239; 8.1 ;A Princesa e o Plebeu;Comédia,Romance;118;0;1953
+240; 8.2 ;Relatos Selvagens;Comédia,Drama,Thriller;122;0;2014
+241; 8.1 ;À Beira do Abismo;Crime,Film-Noir,Mistério;114;0;1946
+242; 8.1 ;Os Suspeitos;Crime,Drama,Mistério;153;16;2013
+243; 8.1 ;Primavera, Verão, Outono, Inverno... E Primavera;Drama;103;0;2003
+244; 8.1 ;O Samurai;Crime,Drama,Mistério;105;0;1967
+245; 8.0 ;A Primeira Noite de um Homem;Comédia,Drama,Romance;106;14;1967
+246; 8.1 ;Papillon;Biografia,Crime,Drama;151;0;1973
+247; 8.2 ;Underground - Mentiras de Guerra;Comédia,Drama,Guerra;170;0;1995
+248; 8.0 ;A Bela e a Fera;Animação,Família,Fantasia;84;0;1991
+249; 8.1 ;Solaris;Drama,Sci-Fi;167;0;1972
+250; 8.1 ;A Fraternidade É Vermelha;Drama,Mistério,Romance;99;0;1994

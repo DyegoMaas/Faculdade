@@ -5,44 +5,51 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Abot.Crawler;
-using Abot.Poco;
 
 namespace ImdbTop250DataCrawler
 {
     class Program
     {
-        private const string Top250IMDB = "http://www.imdb.com/chart/top?ref_=nv_ch_250_4";
-        //private static IEnumerable<string> Top250IMDB
-        //{
-        //    get
-        //    {
-        //        for (int i = 1; i <= 250; i++)
-        //        {
-        //            yield return "http://www.imdb.com/title/tt0111495/?ref_=chttp_tt_" + i;
-        //        }
-        //    }
-        //} 
-
         static void Main(string[] args)
         {
-            //var webRequest = HttpWebRequest.Create("http://www.imdb.com/chart/top?ref_=nv_ch_250_4");
-            //var webResponse = webRequest.GetResponse();
+            var linksTop250 = ObterLinksTop250().ToArray();
 
-            var linksTop250 = ObterLinksTop250();
-
-            //var webCrawler = new PoliteWebCrawler();
-            //webCrawler.PageCrawlStartingAsync += webCrawler_PageCrawlStartingAsync;
-            //webCrawler.PageCrawlCompletedAsync += webCrawler_PageCrawlCompletedAsync;
-            //webCrawler.PageCrawlDisallowedAsync += webCrawler_PageCrawlDisallowedAsync;
-            //webCrawler.PageLinksCrawlDisallowedAsync += webCrawler_PageLinksCrawlDisallowedAsync;
-
-            foreach (var link in linksTop250)
+            using (var arquivoCsv = new FileStream("top250IMDB.csv", FileMode.Create))
             {
-                ExtrairInformacoesPagina(link);
-                //webCrawler.Crawl(new Uri(link));
+                var bytes = ToByteArray("Posicao;Nota;Nome;Gênero;Duracao;Faixa Etária;Ano" + Environment.NewLine);
+                arquivoCsv.Write(bytes, 0, bytes.Length);
+
+                for (int i = 0; i < linksTop250.Length; i++)
+                {
+                    Console.WriteLine("Extraindo informacoes do filme " + (i+1));
+
+                    var filmeIMDB = ExtrairInformacoesPagina(linksTop250[i]);
+                    var linhaCsv = MontarLinhaCsv(filmeIMDB, i+1);
+
+                    bytes = Encoding.UTF8.GetBytes(linhaCsv + Environment.NewLine);
+                    arquivoCsv.Write(bytes, 0, bytes.Length);
+                }
             }
+
+            Console.WriteLine("Good job!");
+            Console.Read();
+        }
+
+        private static byte[] ToByteArray(string texto)
+        {
+            return Encoding.UTF8.GetBytes(texto);
+        }
+
+        private static string MontarLinhaCsv(IFilmeIMDB filme, int posicao)
+        {
+            return string.Format("{0};{1};{2};{3};{4};{5};{6}", 
+                posicao,
+                filme.Nota,
+                filme.Nome,
+                string.Join(",", filme.Generos),
+                filme.DuracaoMinutos,
+                filme.FaixaEtaria,
+                filme.Ano);
         }
 
         private static IEnumerable<string> ObterLinksTop250()
@@ -66,46 +73,27 @@ namespace ImdbTop250DataCrawler
             return obterLinksTop250;
         }
 
-        private static void ExtrairInformacoesPagina(string link)
+        private static IFilmeIMDB ExtrairInformacoesPagina(string link)
         {
             using (var client = new WebClient())
             {
-                var htmlPaginaFilme = client.DownloadString(link);
-                var extrator = new ExtratorInformacoesFilmeIMDB(htmlPaginaFilme);
-                var nota = extrator.Nota;
-                var ano = extrator.Ano;
-                var nome = extrator.Nome;
-                var generos = extrator.Generos;
+                var htmlPaginaFilme = Encoding.UTF8.GetString(client.DownloadData(link));
+                return new ExtratorInformacoesFilmeIMDB(htmlPaginaFilme);
             }
-        }
-
-        
-
-        static void webCrawler_PageCrawlStartingAsync(object sender, PageCrawlStartingArgs e)
-        {
-        }
-
-        static void webCrawler_PageCrawlCompletedAsync(object sender, PageCrawlCompletedArgs e)
-        {
-            //var links = e.CrawledPage.ParsedLinks.Select(link =>
-            //{
-            //    return true;
-            //});
-            
-
-            throw new NotImplementedException();
-        }
-
-        static void webCrawler_PageCrawlDisallowedAsync(object sender, PageCrawlDisallowedArgs e)
-        {
-        }
-
-        static void webCrawler_PageLinksCrawlDisallowedAsync(object sender, PageLinksCrawlDisallowedArgs e)
-        {
         }
     }
 
-    class ExtratorInformacoesFilmeIMDB
+    internal interface IFilmeIMDB
+    {
+        string Nome { get; }
+        string Nota { get; }
+        int Ano { get; }
+        string DuracaoMinutos { get; }
+        int FaixaEtaria { get; }
+        IList<string> Generos { get; }
+    }
+
+    class ExtratorInformacoesFilmeIMDB : IFilmeIMDB
     {
         private readonly string htmlPagina;
 
@@ -126,7 +114,33 @@ namespace ImdbTop250DataCrawler
 
         public int Ano
         {
-            get { return int.Parse(Extrair("<a href=\"\\/year\\/(\\d{4})\\/")); }
+            get
+            {
+                var ano = Extrair("<a href=\"\\/year\\/(\\d{4})\\/");
+                if (ano.Length == 1)
+                    ano = "0" + ano;
+
+                if (ano.Length == 2)
+                    ano = "20" + ano;
+                
+                return int.Parse(ano);
+            }
+        }
+
+        public string DuracaoMinutos
+        {
+            get { return Extrair("(\\d+) min"); }
+        }
+
+        public int FaixaEtaria
+        {
+            get
+            {
+                var extrair = Extrair("itemprop=\"contentRating\" content=\"(\\d+)\"");
+                if (extrair == string.Empty)
+                    return 0;//tratar
+                return int.Parse(extrair);
+            }
         }
 
         public IList<string> Generos
@@ -134,21 +148,16 @@ namespace ImdbTop250DataCrawler
             get
             {
                 var generos = new List<string>();
-                //var match = Regex.Match(htmlPagina, "itemprop=\"genre\">(.*)<\\/span>");
-                //while (match != null)
-                //{
-                //    var genero = match.Value;
-                //    if (!generos.Contains(genero))
-                //    {
-                //        generos.Add(genero);
-                //    }
 
-                //    match = match.NextMatch();
-                //}
                 var matches = Regex.Matches(htmlPagina, "itemprop=\"genre\">(.*)<\\/span>");
                 foreach (var match in matches)
                 {
                     var genero = ((Match)match).Groups[1].Value;
+
+                    var indiceMenor = genero.IndexOf("<");
+                    if (indiceMenor > -1)
+                        genero = genero.Substring(0, indiceMenor);
+
                     if (!generos.Contains(genero))
                     {
                         generos.Add(genero);
