@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using Tao.OpenGl;
 
-namespace Labirinto.EngineGrafica
+namespace JogoLabirinto.EngineGrafica
 {
     public class Camera
     {

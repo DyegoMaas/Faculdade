@@ -7,8 +7,8 @@
     <ProjectGuid>{3A213FFA-40EB-4B1B-9533-1CF9E7F3DA34}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Labirinto</RootNamespace>
-    <AssemblyName>Labirinto</AssemblyName>
+    <RootNamespace>JogoLabirinto</RootNamespace>
+    <AssemblyName>JogoLabirinto</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -95,7 +95,7 @@
     <Compile Include="EngineGrafica\Ponto4D.cs" />
     <Compile Include="EngineGrafica\Transformacao4D.cs" />
     <Compile Include="Regras\InputManager.cs" />
-    <Compile Include="JogoLabirinto.cs" />
+    <Compile Include="Jogo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regras\Labirinto.cs" />

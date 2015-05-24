@@ -1,5 +1,5 @@
-using Labirinto.EngineGrafica;
-using Labirinto.Regras;
+using JogoLabirinto.EngineGrafica;
+using JogoLabirinto.Regras;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -8,15 +8,15 @@ using System.Drawing;
 using Tao.FreeGlut;
 using Tao.OpenGl;
 
-namespace Labirinto
+namespace JogoLabirinto
 {
-    public class JogoLabirinto : GameWindow
+    public class Jogo : GameWindow
     {
         private readonly Mundo mundo = new Mundo(new Camera());
-        private Regras.Labirinto labirinto;
+        private Labirinto labirinto;
         private readonly InputManager input;
 
-        public JogoLabirinto()
+        public Jogo()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
             input = new InputManager(this);
@@ -52,11 +52,11 @@ namespace Labirinto
                 {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
                 {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
                 {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'}
-            });
-
-
+            }, 
+            tamanhoBlocosPiso: 10);
+            
             labirinto = new Regras.Labirinto(configuracaoLabirinto);
-            labirinto.Mover(40, 0, 0);
+            labirinto.Mover(0, 0, 0);
             mundo.AdicionarObjetoGrafico(labirinto);
         }
 
@@ -66,7 +66,7 @@ namespace Labirinto
             GL.LoadIdentity();
 
             var alvo = labirinto.Posicao;
-            Glu.gluLookAt(0, 0, 200, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
+            Glu.gluLookAt(0, 200, 0, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
 
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {

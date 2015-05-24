@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Labirinto.EngineGrafica
+namespace JogoLabirinto.EngineGrafica
 {
     public class Transformacao4D
     {

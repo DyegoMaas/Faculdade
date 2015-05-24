@@ -1,7 +1,7 @@
-using OpenTK.Graphics.OpenGL;
 using System;
+using OpenTK.Graphics.OpenGL;
 
-namespace Labirinto.EngineGrafica
+namespace JogoLabirinto.EngineGrafica
 {
     public abstract class ObjetoGrafico : NoGrafoCena
     {

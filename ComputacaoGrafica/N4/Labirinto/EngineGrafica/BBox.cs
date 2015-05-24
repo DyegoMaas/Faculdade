@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Labirinto.EngineGrafica
+namespace JogoLabirinto.EngineGrafica
 {
     public class BBox
     {
