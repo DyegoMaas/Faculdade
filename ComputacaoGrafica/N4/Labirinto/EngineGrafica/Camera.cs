@@ -1,6 +1,5 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using Tao.OpenGl;
 
 namespace JogoLabirinto.EngineGrafica
 {
@@ -23,7 +22,6 @@ namespace JogoLabirinto.EngineGrafica
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
-            Gl.glViewport(0, 0, largura, altura);
             var perspectiva = Matrix4.CreatePerspectiveFieldOfView(1.04f, largura / (float)altura, 1f, 10000f);
             GL.LoadMatrix(ref perspectiva);
 

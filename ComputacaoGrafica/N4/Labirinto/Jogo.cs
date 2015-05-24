@@ -12,9 +12,11 @@ namespace JogoLabirinto
 {
     public class Jogo : GameWindow
     {
+        private const float SensibilidadeMouse = .1f;
         private readonly Mundo mundo = new Mundo(new Camera());
         private Labirinto labirinto;
         private readonly InputManager input;
+        private CuboSolido cuboSolido;
 
         public Jogo()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
@@ -38,12 +40,17 @@ namespace JogoLabirinto
             MouseMove += OnMouseMove;
         }
 
+        /*  
+         * c = chão
+         * p = parede
+         * e = esfera
+         */
         private void ConfigurarCena()
         {
             var configuracaoLabirinto = new ConfiguracaoLabirinto(new[,]
             {
                 {'p', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'e', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
@@ -56,9 +63,14 @@ namespace JogoLabirinto
             tamanhoBlocosPiso: 10,
             tamanhoParede: new Vector3d(1, 1, 1));
             
-            labirinto = new Regras.Labirinto(configuracaoLabirinto);
-            labirinto.Mover(-50, 0, 0);
+            labirinto = new Labirinto(configuracaoLabirinto);
+            //labirinto.Mover(-50, 0, -50);
             mundo.AdicionarObjetoGrafico(labirinto);
+
+
+            cuboSolido = new CuboSolido(Color.LawnGreen);
+            cuboSolido.Redimensionar(20, new Ponto4D());
+            mundo.AdicionarObjetoGrafico(cuboSolido);
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -66,13 +78,30 @@ namespace JogoLabirinto
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
+
             var alvo = labirinto.Posicao;
-            Glu.gluLookAt(150, 100, 150, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
+            //a transformação do lookAt está interferindo na rotação do cenário.
+            Glu.gluLookAt(
+                150, 100, 150,
+                //100,0,0,
+                alvo.X, alvo.Y, alvo.Z,
+                0, 1, 0);
 
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {
                 objetoGrafico.DesenharObjetoGrafico();
             }
+
+            GL.Color3(Color.Blue);
+            GL.PointSize(5f);
+            GL.Begin(PrimitiveType.Points);
+            {
+                //GL.Vertex3(ponto.X, ponto.Y, ponto.Z);
+                GL.Vertex3(0,0,0);
+            }
+            GL.End();
+
+            
 
             SwapBuffers();
         }
@@ -81,21 +110,26 @@ namespace JogoLabirinto
         {
            
         }
-        
-        private Ponto4D posicaoAnterior;
+
+        private Ponto4D ponto = new Ponto4D();
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
-            var posicaoMouseNaTela = input.ObterPosicaoMouseNaTela();
-           
+            if (e.YDelta > 10 || e.XDelta > 10)
+                return;
 
-            posicaoAnterior = posicaoMouseNaTela;
+            //var pivoLabirinto = new Ponto4D(200, 100, 200).InverterSinal();
+            var pivoLabirinto = labirinto.Centro.InverterSinal();
+            ponto = pivoLabirinto.InverterSinal();
+            labirinto.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, pivoLabirinto);
+            labirinto.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, pivoLabirinto);
+
+            var pivoCubo = cuboSolido.Posicao.InverterSinal();
+            cuboSolido.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, pivoCubo);
+            cuboSolido.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, pivoCubo);
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
-            var teclado = OpenTK.Input.Keyboard.GetState();
-
-            Zoom(teclado);
         }
 
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)

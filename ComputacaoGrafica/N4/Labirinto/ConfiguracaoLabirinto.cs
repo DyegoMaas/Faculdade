@@ -4,21 +4,21 @@ namespace JogoLabirinto
 {
     public class ConfiguracaoLabirinto
     {
-        private readonly char[,] configuracao;
+        private readonly char[,] matrizConfiguracao;
         
         public readonly int TamanhoBlocosPiso;
         public readonly Vector3d TamanhoParede;
 
-        public ConfiguracaoLabirinto(char[,] configuracao, int tamanhoBlocosPiso, Vector3d tamanhoParede)
+        public ConfiguracaoLabirinto(char[,] matrizConfiguracao, int tamanhoBlocosPiso, Vector3d tamanhoParede)
         {
-            this.configuracao = configuracao;
+            this.matrizConfiguracao = matrizConfiguracao;
             TamanhoBlocosPiso = tamanhoBlocosPiso;
             TamanhoParede = tamanhoParede;
         }
 
-        public char[,] Configuracao
+        public char[,] MatrizConfiguracao
         {
-            get { return configuracao; }
+            get { return matrizConfiguracao; }
         }
     }
 }

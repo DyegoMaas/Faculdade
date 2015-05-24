@@ -10,7 +10,7 @@ namespace JogoLabirinto.EngineGrafica
         private static readonly Transformacao4D MatrizTmpTranslacao = new Transformacao4D();
         private static readonly Transformacao4D MatrizTmpTranslacaoInversa = new Transformacao4D();
         private static readonly Transformacao4D MatrizTmpEscala = new Transformacao4D();
-        private static readonly Transformacao4D MatrizTmpRotacaoZ = new Transformacao4D();
+        private static readonly Transformacao4D MatrizTmpRotacao = new Transformacao4D();
         private static Transformacao4D matrizGlobal = new Transformacao4D();
 
         public Ponto4D Posicao
@@ -89,6 +89,34 @@ namespace JogoLabirinto.EngineGrafica
             RecalcularBBox();
         }
 
+        public void RotacionarNoEixoX(double angulo, Ponto4D pivo)
+        {
+            matrizGlobal.AtribuirIdentidade();
+
+            ExecutarEmRelacaoAoPivo(pivo, () =>
+            {
+                MatrizTmpRotacao.AtribuirRotacaoX(angulo * Transformacao4D.DegToRad);
+                matrizGlobal = MatrizTmpRotacao.TransformarMatriz(matrizGlobal);
+            });
+
+            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+            RecalcularBBox();
+        }
+
+        public void RotacionarNoEixoY(double angulo, Ponto4D pivo)
+        {
+            matrizGlobal.AtribuirIdentidade();
+
+            ExecutarEmRelacaoAoPivo(pivo, () =>
+            {
+                MatrizTmpRotacao.AtribuirRotacaoY(angulo * Transformacao4D.DegToRad);
+                matrizGlobal = MatrizTmpRotacao.TransformarMatriz(matrizGlobal);
+            });
+
+            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+            RecalcularBBox();
+        }
+
         /// <summary>
         /// Rotaciona o objeto em relação ao pivô
         /// </summary>
@@ -100,8 +128,8 @@ namespace JogoLabirinto.EngineGrafica
 
             ExecutarEmRelacaoAoPivo(pivo, () =>
             {
-                MatrizTmpRotacaoZ.AtribuirRotacaoZ(angulo * Transformacao4D.DegToRad);
-                matrizGlobal = MatrizTmpRotacaoZ.TransformarMatriz(matrizGlobal);
+                MatrizTmpRotacao.AtribuirRotacaoZ(angulo * Transformacao4D.DegToRad);
+                matrizGlobal = MatrizTmpRotacao.TransformarMatriz(matrizGlobal);
             });
 
             Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
