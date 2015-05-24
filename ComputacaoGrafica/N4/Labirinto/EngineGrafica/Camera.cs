@@ -1,13 +1,12 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Tao.OpenGl;
 
 namespace Labirinto.EngineGrafica
 {
     public class Camera
     {
         private float fatorZoom = 1f;
-        private float panX;
-        private float panY;
 
         public float FatorZoom
         {
@@ -15,7 +14,6 @@ namespace Labirinto.EngineGrafica
             set 
             {
                 fatorZoom = value;
-                //CarregarMatrizOrtografica();
             }
         }
 
@@ -24,32 +22,12 @@ namespace Labirinto.EngineGrafica
             GL.Viewport(0, 0, largura, altura);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Frustum(-1d, 1d, -1d, 1d, 1.5d, 20d);
+
+            Gl.glViewport(0, 0, largura, altura);
+            var perspectiva = Matrix4.CreatePerspectiveFieldOfView(1.04f, largura / (float)altura, 1f, 10000f);
+            GL.LoadMatrix(ref perspectiva);
+
+            GL.MatrixMode(MatrixMode.Modelview);
         }
-
-        public void Pan(Vector2 deslocamento)
-        {
-            Pan(deslocamento.X, deslocamento.Y);
-        }
-
-        public void Pan(float deslocamentoX, float deslocamentoY)
-        {
-            panX += deslocamentoX;
-            panY += deslocamentoY;
-
-            //CarregarMatrizOrtografica();
-        }
-        
-        //public void CarregarMatrizOrtografica()
-        //{
-        //    var fatorZoomAplicado = fatorZoom > 0 ? fatorZoom : 1;
-        //    xMinOrtho2D = (xMinOrtho2DOriginal + panX) / fatorZoomAplicado;
-        //    xMaxOrtho2D = (xMaxOrtho2DOriginal + panX) / fatorZoomAplicado;
-        //    yMinOrtho2D = (yMinOrtho2DOriginal + panY) / fatorZoomAplicado;
-        //    yMaxOrtho2D = (yMaxOrtho2DOriginal + panY) / fatorZoomAplicado;
-
-        //    var matriz = Matrix4.CreateOrthographicOffCenter(xMinOrtho2D, xMaxOrtho2D, yMinOrtho2D, yMaxOrtho2D, 0, 1);
-        //    GL.LoadMatrix(ref matriz);
-        //}
     }
 }

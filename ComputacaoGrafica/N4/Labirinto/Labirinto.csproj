@@ -53,8 +53,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tao.Cg">
+      <HintPath>..\lib\TaoFramework\Tao.Cg.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.DevIl">
+      <HintPath>..\lib\TaoFramework\Tao.DevIl.dll</HintPath>
+    </Reference>
     <Reference Include="Tao.FreeGlut">
       <HintPath>..\lib\TaoFramework\Tao.FreeGlut.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Glfw">
+      <HintPath>..\lib\TaoFramework\Tao.Glfw.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Ode">
+      <HintPath>..\lib\TaoFramework\Tao.Ode.dll</HintPath>
     </Reference>
     <Reference Include="Tao.OpenGl">
       <HintPath>..\lib\TaoFramework\Tao.OpenGl.dll</HintPath>
@@ -64,6 +76,12 @@
     </Reference>
     <Reference Include="Tao.OpenGl.Glu">
       <HintPath>..\lib\TaoFramework\Tao.OpenGl.Glu.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Platform.Windows">
+      <HintPath>..\lib\TaoFramework\Tao.Platform.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Sdl">
+      <HintPath>..\lib\TaoFramework\Tao.Sdl.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

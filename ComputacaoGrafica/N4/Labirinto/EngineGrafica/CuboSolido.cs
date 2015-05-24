@@ -13,7 +13,7 @@ namespace Labirinto.EngineGrafica
             this.cor = cor;
         }
 
-        public override void Desenhar()
+        protected override void Desenhar()
         {
             GL.Color3(cor);
             Glut.glutSolidCube(1f);

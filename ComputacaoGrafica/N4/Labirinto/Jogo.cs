@@ -6,12 +6,14 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Drawing;
 using Tao.FreeGlut;
+using Tao.OpenGl;
 
 namespace Labirinto
 {
     public class Jogo : GameWindow
     {
         private readonly Mundo2 mundo = new Mundo2(new Camera());
+        private Tabuleiro tabuleiro;
         private readonly InputManager input;
 
         public Jogo()
@@ -25,7 +27,7 @@ namespace Labirinto
             {
                 Glut.glutInit();
 
-                GL.ClearColor(Color.Black);
+                GL.ClearColor(Color.CornflowerBlue);
                 ConfigurarCena();
             };
             Resize += (sender, e) => mundo.Camera.Reshape(ClientSize.Width, ClientSize.Height);
@@ -38,29 +40,25 @@ namespace Labirinto
 
         private void ConfigurarCena()
         {
-            var tabuleiro = new Tabuleiro();
+            tabuleiro = new Tabuleiro();
             var tabuleiroGrafico = tabuleiro.Chao;
+            tabuleiro.Chao.Mover(40,0,0);
 
             mundo.AdicionarObjetoGrafico(tabuleiroGrafico);
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
         {
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.LoadIdentity();
 
-            //SRU();
-            //DesenharGrafoCena();
-            //DesenharVerticeSelecionado();
+            var alvo = tabuleiro.Chao.Posicao;
+            Glu.gluLookAt(20, 20, 20, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
+
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {
-                objetoGrafico.Desenhar();
+                objetoGrafico.DesenharObjetoGrafico();
             }
-            //if (objetoEmEdicao != null)
-            //{
-            //    objetoEmEdicao.ObjetoGrafico.DesenharBBox();
-            //}
 
             SwapBuffers();
         }
@@ -84,10 +82,6 @@ namespace Labirinto
             var teclado = OpenTK.Input.Keyboard.GetState();
 
             Zoom(teclado);
-            //if (operacao == OperacaoSobreObjeto.Pan)
-            //{
-            //    Pan(teclado);
-            //}
         }
 
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -105,30 +99,6 @@ namespace Labirinto
             {
                 mundo.Camera.FatorZoom -= .01f;
             }
-        }
-
-        private void Pan(KeyboardState teclado)
-        {
-            float panX = 0f, panY = 0f;
-            // pan x
-            if (teclado.IsKeyDown(Key.Left))
-            {
-                panX += 1;
-            }
-            if (teclado.IsKeyDown(Key.Right))
-            {
-                panX -= 1;
-            }
-            // pan y
-            if (teclado.IsKeyDown(Key.Up))
-            {
-                panY -= 1;
-            }
-            if (teclado.IsKeyDown(Key.Down))
-            {
-                panY += 1;
-            }
-            mundo.Camera.Pan(panX, panY);
         }
     }
 }

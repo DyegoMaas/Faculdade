@@ -9,7 +9,7 @@ namespace Labirinto
 
         public Tabuleiro()
         {
-            Chao = new CuboSolido(Color.LightGray);
+            Chao = new CuboSolido(Color.Crimson);
         }
     }
 }
