@@ -1,5 +1,5 @@
-using System;
 using OpenTK.Graphics.OpenGL;
+using System;
 
 namespace JogoLabirinto.EngineGrafica
 {
@@ -67,11 +67,21 @@ namespace JogoLabirinto.EngineGrafica
         /// <param name="pivo">Ponto ao redor do qual o objeto será redimensionado</param>
         public void Redimensionar(double escala, Ponto4D pivo)
         {
+            Redimensionar(escala, escala, escala, pivo);
+        }
+
+        /// <summary>
+        /// Redimensiona o objeto em relação ao pivô
+        /// </summary>
+        /// <param name="escala">A escala pela qual o objeto será redimensionado</param>
+        /// <param name="pivo">Ponto ao redor do qual o objeto será redimensionado</param>
+        public void Redimensionar(double escalaX, double escalaY, double escalaZ, Ponto4D pivo)
+        {
             matrizGlobal.AtribuirIdentidade();
 
             ExecutarEmRelacaoAoPivo(pivo, () =>
             {
-                MatrizTmpEscala.AtribuirEscala(escala, escala, 1.0);
+                MatrizTmpEscala.AtribuirEscala(escalaX, escalaY, escalaZ);
                 matrizGlobal = MatrizTmpEscala.TransformarMatriz(matrizGlobal);
             });
 

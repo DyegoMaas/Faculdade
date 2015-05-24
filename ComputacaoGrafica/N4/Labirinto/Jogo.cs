@@ -42,21 +42,22 @@ namespace JogoLabirinto
         {
             var configuracaoLabirinto = new ConfiguracaoLabirinto(new[,]
             {
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
-                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'}
+                {'p', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'p'}
             }, 
-            tamanhoBlocosPiso: 10);
+            tamanhoBlocosPiso: 10,
+            tamanhoParede: new Vector3d(1, 1, 1));
             
             labirinto = new Regras.Labirinto(configuracaoLabirinto);
-            labirinto.Mover(0, 0, 0);
+            labirinto.Mover(-50, 0, 0);
             mundo.AdicionarObjetoGrafico(labirinto);
         }
 
@@ -66,7 +67,7 @@ namespace JogoLabirinto
             GL.LoadIdentity();
 
             var alvo = labirinto.Posicao;
-            Glu.gluLookAt(0, 200, 0, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
+            Glu.gluLookAt(150, 100, 150, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
 
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {
