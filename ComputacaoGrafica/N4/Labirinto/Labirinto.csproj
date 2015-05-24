@@ -89,9 +89,9 @@
     <Compile Include="EngineGrafica\BBox.cs" />
     <Compile Include="EngineGrafica\Camera.cs" />
     <Compile Include="EngineGrafica\CuboSolido.cs" />
-    <Compile Include="EngineGrafica\Mundo2.cs" />
-    <Compile Include="EngineGrafica\NoGrafoCenaSimples.cs" />
-    <Compile Include="EngineGrafica\ObjetoGraficoSimples.cs" />
+    <Compile Include="EngineGrafica\Mundo.cs" />
+    <Compile Include="EngineGrafica\NoGrafoCena.cs" />
+    <Compile Include="EngineGrafica\ObjetoGrafico.cs" />
     <Compile Include="EngineGrafica\Ponto4D.cs" />
     <Compile Include="EngineGrafica\Transformacao4D.cs" />
     <Compile Include="Regras\InputManager.cs" />

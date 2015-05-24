@@ -4,7 +4,7 @@ using Tao.FreeGlut;
 
 namespace Labirinto.EngineGrafica
 {
-    public class CuboSolido : ObjetoGraficoSimples
+    public class CuboSolido : ObjetoGrafico
     {
         private Color cor;
 

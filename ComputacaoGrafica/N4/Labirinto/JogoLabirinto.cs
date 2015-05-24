@@ -12,7 +12,7 @@ namespace Labirinto
 {
     public class JogoLabirinto : GameWindow
     {
-        private readonly Mundo2 mundo = new Mundo2(new Camera());
+        private readonly Mundo mundo = new Mundo(new Camera());
         private Regras.Labirinto labirinto;
         private readonly InputManager input;
 

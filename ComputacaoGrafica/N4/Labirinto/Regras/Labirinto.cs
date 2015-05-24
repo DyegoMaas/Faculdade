@@ -4,12 +4,12 @@ using System.Drawing;
 
 namespace Labirinto.Regras
 {
-    public class Labirinto : ObjetoGraficoSimples
+    public class Labirinto : ObjetoGrafico
     {
         private const int TamanhoBlocos = 10;
 
-        private readonly List<ObjetoGraficoSimples> blocosPiso = new List<ObjetoGraficoSimples>();
-        public IEnumerable<ObjetoGraficoSimples> BlocosPiso { get { return blocosPiso; } }
+        private readonly List<ObjetoGrafico> blocosPiso = new List<ObjetoGrafico>();
+        public IEnumerable<ObjetoGrafico> BlocosPiso { get { return blocosPiso; } }
 
         public Labirinto(ConfiguracaoLabirinto configuracao)
         {

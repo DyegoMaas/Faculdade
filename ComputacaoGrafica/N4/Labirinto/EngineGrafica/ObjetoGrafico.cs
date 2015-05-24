@@ -3,7 +3,7 @@ using System;
 
 namespace Labirinto.EngineGrafica
 {
-    public abstract class ObjetoGraficoSimples : NoGrafoCenaSimples
+    public abstract class ObjetoGrafico : NoGrafoCena
     {
         public Transformacao4D Transformacao { get; private set; }
 
@@ -18,7 +18,7 @@ namespace Labirinto.EngineGrafica
             get { return Transformacao.TransformarPonto(new Ponto4D()); }
         }
 
-        protected ObjetoGraficoSimples()
+        protected ObjetoGrafico()
         {
             Transformacao = new Transformacao4D();
         }
