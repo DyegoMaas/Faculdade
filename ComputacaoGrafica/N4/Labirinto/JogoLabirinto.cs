@@ -1,5 +1,5 @@
-using Labirinto.Editor;
 using Labirinto.EngineGrafica;
+using Labirinto.Regras;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -10,13 +10,13 @@ using Tao.OpenGl;
 
 namespace Labirinto
 {
-    public class Jogo : GameWindow
+    public class JogoLabirinto : GameWindow
     {
         private readonly Mundo2 mundo = new Mundo2(new Camera());
-        private Tabuleiro tabuleiro;
+        private Regras.Labirinto labirinto;
         private readonly InputManager input;
 
-        public Jogo()
+        public JogoLabirinto()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
             input = new InputManager(this);
@@ -40,11 +40,24 @@ namespace Labirinto
 
         private void ConfigurarCena()
         {
-            tabuleiro = new Tabuleiro();
-            var tabuleiroGrafico = tabuleiro.Chao;
-            tabuleiro.Chao.Mover(40,0,0);
+            var configuracaoLabirinto = new ConfiguracaoLabirinto(new[,]
+            {
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'},
+                {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'}
+            });
 
-            mundo.AdicionarObjetoGrafico(tabuleiroGrafico);
+
+            labirinto = new Regras.Labirinto(configuracaoLabirinto);
+            labirinto.Mover(40, 0, 0);
+            mundo.AdicionarObjetoGrafico(labirinto);
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -52,8 +65,8 @@ namespace Labirinto
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
-            var alvo = tabuleiro.Chao.Posicao;
-            Glu.gluLookAt(20, 20, 20, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
+            var alvo = labirinto.Posicao;
+            Glu.gluLookAt(0, 0, 200, alvo.X, alvo.Y, alvo.Z, 0, 1, 0);
 
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {

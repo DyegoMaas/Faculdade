@@ -7,7 +7,7 @@
     {
         public static void Main(string[] args)
         {
-            var n3 = new Jogo();
+            var n3 = new JogoLabirinto();
             n3.Run(120, 60);
         }
     }
