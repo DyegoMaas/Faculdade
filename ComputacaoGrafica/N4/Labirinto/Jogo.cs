@@ -12,12 +12,13 @@ namespace JogoLabirinto
 {
     public class Jogo : GameWindow
     {
-        private const float SensibilidadeMouse = .1f;
+        private const double SensibilidadeMouse = .25d;
         private readonly Mundo mundo = new Mundo(new Camera());
         private Labirinto labirinto;
         private readonly InputManager input;
         private CuboSolido cuboSolido;
 
+        private Ponto4D centroTabuleiro;
         public Jogo()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
@@ -28,8 +29,12 @@ namespace JogoLabirinto
             Load += (sender, e) =>
             {
                 Glut.glutInit();
+                
+                GL.Enable(EnableCap.CullFace);
+                GL.Enable(EnableCap.DepthTest);
 
                 GL.ClearColor(Color.CornflowerBlue);
+
                 ConfigurarCena();
             };
             Resize += (sender, e) => mundo.Camera.Reshape(ClientSize.Width, ClientSize.Height);
@@ -64,12 +69,13 @@ namespace JogoLabirinto
             tamanhoParede: new Vector3d(1, 1, 1));
             
             labirinto = new Labirinto(configuracaoLabirinto);
-            //labirinto.Mover(-50, 0, -50);
+            centroTabuleiro = labirinto.Centro;
+            //labirinto.Mover(-50,0,-150);
             mundo.AdicionarObjetoGrafico(labirinto);
 
 
             cuboSolido = new CuboSolido(Color.LawnGreen);
-            cuboSolido.Redimensionar(20, new Ponto4D());
+            cuboSolido.Redimensionar(20d, new Ponto4D());
             mundo.AdicionarObjetoGrafico(cuboSolido);
         }
 
@@ -80,12 +86,12 @@ namespace JogoLabirinto
 
 
             var alvo = labirinto.Posicao;
-            //a transformação do lookAt está interferindo na rotação do cenário.
+            //a transformação do lookAt parece estar interferindo na rotação do cenário.
             Glu.gluLookAt(
-                150, 100, 150,
-                //100,0,0,
-                alvo.X, alvo.Y, alvo.Z,
-                0, 1, 0);
+                centroTabuleiro.X, centroTabuleiro.Y + 100, centroTabuleiro.Z+70,
+                60d, 50d, 50d,
+                //alvo.X, alvo.Y, alvo.Z,
+                0d, 1d, 0d);
 
             foreach (var objetoGrafico in mundo.ObjetosGraficos)
             {
@@ -118,14 +124,18 @@ namespace JogoLabirinto
                 return;
 
             //var pivoLabirinto = new Ponto4D(200, 100, 200).InverterSinal();
-            var pivoLabirinto = labirinto.Centro.InverterSinal();
-            ponto = pivoLabirinto.InverterSinal();
-            labirinto.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, pivoLabirinto);
-            labirinto.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, pivoLabirinto);
+            //var pivoLabirinto = labirinto.Centro.InverterSinal();
+            //ponto = pivoLabirinto.InverterSinal();
+            //labirinto.RotacionarNoEixoY(-e.YDelta * SensibilidadeMouse, centroTabuleiro);
+            //labirinto.RotacionarNoEixoY(-e.YDelta * SensibilidadeMouse, Ponto4D.Zero);
 
-            var pivoCubo = cuboSolido.Posicao.InverterSinal();
-            cuboSolido.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, pivoCubo);
-            cuboSolido.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, pivoCubo);
+            
+            //labirinto.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, centroTabuleiro);
+            labirinto.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, centroTabuleiro);
+
+            //var pivoCubo = cuboSolido.Posicao.InverterSinal();
+            //cuboSolido.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, pivoCubo);
+            //cuboSolido.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, pivoCubo);
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)

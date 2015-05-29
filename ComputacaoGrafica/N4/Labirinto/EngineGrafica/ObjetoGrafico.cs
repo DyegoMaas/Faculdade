@@ -89,7 +89,7 @@ namespace JogoLabirinto.EngineGrafica
             RecalcularBBox();
         }
 
-        public void RotacionarNoEixoX(double angulo, Ponto4D pivo)
+        public virtual void RotacionarNoEixoX(double angulo, Ponto4D pivo)
         {
             matrizGlobal.AtribuirIdentidade();
 
@@ -103,7 +103,7 @@ namespace JogoLabirinto.EngineGrafica
             RecalcularBBox();
         }
 
-        public void RotacionarNoEixoY(double angulo, Ponto4D pivo)
+        public virtual void RotacionarNoEixoY(double angulo, Ponto4D pivo)
         {
             matrizGlobal.AtribuirIdentidade();
 
@@ -122,7 +122,7 @@ namespace JogoLabirinto.EngineGrafica
         /// </summary>
         /// <param name="angulo">Ângulo em graus</param>
         /// <param name="pivo">Ponto ao redor do qual o objeto será rotacionado</param>
-        public void RotacionarNoEixoZ(double angulo, Ponto4D pivo)
+        public virtual void RotacionarNoEixoZ(double angulo, Ponto4D pivo)
         {
             matrizGlobal.AtribuirIdentidade();
 
@@ -138,6 +138,7 @@ namespace JogoLabirinto.EngineGrafica
 
         private void ExecutarEmRelacaoAoPivo(Ponto4D pivo, Action acao)
         {
+            pivo.InverterSinal();
             MatrizTmpTranslacao.AtribuirTranslacao(pivo.X, pivo.Y, pivo.Z);
             matrizGlobal = MatrizTmpTranslacao.TransformarMatriz(matrizGlobal);
 

@@ -103,13 +103,13 @@ namespace JogoLabirinto.EngineGrafica
             matriz[5] = Math.Cos(radianos);
         }
 
-        public Ponto4D TransformarPonto(Ponto4D point)
+        public Ponto4D TransformarPonto(Ponto4D ponto)
         {
             var pointResult = new Ponto4D(
-                    matriz[0] * point.X + matriz[4] * point.Y + matriz[8] * point.Z + matriz[12] *  point.W,
-                    matriz[1] * point.X + matriz[5] * point.Y + matriz[9] * point.Z + matriz[13] *  point.W,
-                    matriz[2] * point.X + matriz[6] * point.Y + matriz[10] * point.Z + matriz[14] * point.W,
-                    matriz[3] * point.X + matriz[7] * point.Y + matriz[11] * point.Z + matriz[15] * point.W);
+                    matriz[0] * ponto.X + matriz[4] * ponto.Y + matriz[8] * ponto.Z + matriz[12] *  ponto.W,
+                    matriz[1] * ponto.X + matriz[5] * ponto.Y + matriz[9] * ponto.Z + matriz[13] *  ponto.W,
+                    matriz[2] * ponto.X + matriz[6] * ponto.Y + matriz[10] * ponto.Z + matriz[14] * ponto.W,
+                    matriz[3] * ponto.X + matriz[7] * ponto.Y + matriz[11] * ponto.Z + matriz[15] * ponto.W);
             return pointResult;
         }
 

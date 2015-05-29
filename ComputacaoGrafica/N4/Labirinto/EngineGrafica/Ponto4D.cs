@@ -7,6 +7,9 @@
         public double Z { get; set; }
         public double W { get; set; }
 
+        private static readonly Ponto4D zero = new Ponto4D();
+        public static Ponto4D Zero { get { return zero; } }
+
         /// Cria o ponto (0,0,0,1).
         public Ponto4D()
             : this(0, 0, 0, 1)

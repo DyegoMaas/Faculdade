@@ -1,10 +1,14 @@
+using System;
 using JogoLabirinto.EngineGrafica;
 using System.Drawing;
 
 namespace JogoLabirinto.Regras
 {
+    //TODO Separar as transformações de rotação dos eixos X e Z para o labirinto
     public class Labirinto : ObjetoGrafico
     {
+        private const double AnguloLimiteRotacao = 15d;
+
         private readonly ConfiguracaoLabirinto configuracaoLabirinto;
 
         public Ponto4D Centro
@@ -45,6 +49,28 @@ namespace JogoLabirinto.Regras
             }
 
             SRU();
+        }
+
+        private double rotacaoAcumuladaX;
+        public override void RotacionarNoEixoX(double angulo, Ponto4D pivo)
+        {
+            var novaRotacaoAcumulada = rotacaoAcumuladaX + angulo;
+            if (Math.Abs(novaRotacaoAcumulada) > AnguloLimiteRotacao)
+                return;
+            rotacaoAcumuladaX = novaRotacaoAcumulada;
+
+            base.RotacionarNoEixoX(angulo, pivo);
+        }
+
+        private double rotacaoAcumuladaZ;
+        public override void RotacionarNoEixoZ(double angulo, Ponto4D pivo)
+        {
+            var novaRotacaoAcumulada = rotacaoAcumuladaZ + angulo;
+            if (Math.Abs(novaRotacaoAcumulada) > AnguloLimiteRotacao)
+                return;
+            rotacaoAcumuladaZ = novaRotacaoAcumulada;
+
+            base.RotacionarNoEixoZ(angulo, pivo);
         }
 
         private void SRU()

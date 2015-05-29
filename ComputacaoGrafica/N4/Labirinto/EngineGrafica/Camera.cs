@@ -5,9 +5,9 @@ namespace JogoLabirinto.EngineGrafica
 {
     public class Camera
     {
-        private float fatorZoom = 1f;
+        private double fatorZoom = 1f;
 
-        public float FatorZoom
+        public double FatorZoom
         {
             get { return fatorZoom; }
             set 
