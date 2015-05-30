@@ -1,5 +1,4 @@
-﻿using JogoLabirinto.AntigaImplementacao;
-
+﻿
 namespace JogoLabirinto
 {
     /// <summary>
@@ -9,8 +8,8 @@ namespace JogoLabirinto
     {
         public static void Main(string[] args)
         {
-            var n3 = new Jogo();
-            n3.Run(120, 60);
+            var n4 = new Jogo();
+            n4.Run(120, 60);
         }
     }
 }

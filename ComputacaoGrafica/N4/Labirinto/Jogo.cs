@@ -11,7 +11,7 @@ namespace JogoLabirinto
     {
         private const double SensibilidadeMouse = .25d;
         private readonly Mundo mundo = new Mundo(new Camera());
-        private Labirinto labirinto;
+        //private Labirinto labirinto;
         private CuboSolido cuboSolido;
 
         private Ponto4D centroTabuleiro;

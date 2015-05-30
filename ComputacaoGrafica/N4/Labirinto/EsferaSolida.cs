@@ -4,7 +4,7 @@ using Tao.FreeGlut;
 
 namespace JogoLabirinto
 {
-    public class EsferaSolida : CoisaSolida
+    public class EsferaSolida
     {
         private Color cor;
 
