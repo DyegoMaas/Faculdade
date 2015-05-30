@@ -1,4 +1,4 @@
-﻿namespace JogoLabirinto.EngineGrafica
+﻿namespace JogoLabirinto.AntigaImplementacao.EngineGrafica
 {
     public class Mundo : NoGrafoCena
     {

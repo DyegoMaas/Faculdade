@@ -1,6 +1,6 @@
 using OpenTK;
 
-namespace JogoLabirinto
+namespace JogoLabirinto.AntigaImplementacao
 {
     public class ConfiguracaoLabirinto
     {

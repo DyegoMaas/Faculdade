@@ -1,8 +1,8 @@
 using System;
-using JogoLabirinto.EngineGrafica;
 using System.Drawing;
+using JogoLabirinto.AntigaImplementacao.EngineGrafica;
 
-namespace JogoLabirinto.Regras
+namespace JogoLabirinto.AntigaImplementacao.Regras
 {
     //TODO Separar as transformações de rotação dos eixos X e Z para o labirinto
     public class Labirinto : ObjetoGrafico

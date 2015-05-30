@@ -1,7 +1,7 @@
-﻿using JogoLabirinto.EngineGrafica;
+﻿using JogoLabirinto.AntigaImplementacao.EngineGrafica;
 using OpenTK;
 
-namespace JogoLabirinto.Regras
+namespace JogoLabirinto.AntigaImplementacao.Regras
 {
     public class InputManager
     {

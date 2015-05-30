@@ -2,7 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using Tao.FreeGlut;
 
-namespace JogoLabirinto.EngineGrafica
+namespace JogoLabirinto.AntigaImplementacao.EngineGrafica
 {
     public class CuboSolido : ObjetoGrafico
     {
