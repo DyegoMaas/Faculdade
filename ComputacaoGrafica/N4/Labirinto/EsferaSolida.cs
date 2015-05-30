@@ -1,10 +1,10 @@
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using Tao.FreeGlut;
 
-namespace JogoLabirinto.AntigaImplementacao.EngineGrafica
+namespace JogoLabirinto
 {
-    internal class EsferaSolida : ObjetoGrafico
+    public class EsferaSolida : CoisaSolida
     {
         private Color cor;
 
@@ -13,10 +13,10 @@ namespace JogoLabirinto.AntigaImplementacao.EngineGrafica
             this.cor = cor;
         }
 
-        protected override void Desenhar()
+        protected void Desenhar()
         {
             GL.Color3(cor);
             Glut.glutSolidSphere(.5, 100, 10);
-        }
+        } 
     }
 }

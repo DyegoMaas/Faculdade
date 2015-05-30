@@ -1,7 +1,7 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace JogoLabirinto.AntigaImplementacao.EngineGrafica
+namespace JogoLabirinto
 {
     public class Camera
     {

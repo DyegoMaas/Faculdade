@@ -85,21 +85,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoisaSolida.cs" />
     <Compile Include="ConfiguracaoLabirinto.cs" />
-    <Compile Include="EngineGrafica\BBox.cs" />
-    <Compile Include="EngineGrafica\Camera.cs" />
-    <Compile Include="EngineGrafica\CuboSolido.cs" />
-    <Compile Include="EngineGrafica\EsferaSolida.cs" />
-    <Compile Include="EngineGrafica\Mundo.cs" />
-    <Compile Include="EngineGrafica\NoGrafoCena.cs" />
-    <Compile Include="EngineGrafica\ObjetoGrafico.cs" />
-    <Compile Include="EngineGrafica\Ponto4D.cs" />
-    <Compile Include="EngineGrafica\Transformacao4D.cs" />
-    <Compile Include="Regras\InputManager.cs" />
+    <Compile Include="AntigaImplementacao\EngineGrafica\BBox.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="AntigaImplementacao\EngineGrafica\CuboSolido.cs" />
+    <Compile Include="AntigaImplementacao\EngineGrafica\EsferaSolida.cs" />
+    <Compile Include="AntigaImplementacao\EngineGrafica\Mundo.cs" />
+    <Compile Include="AntigaImplementacao\EngineGrafica\NoGrafoCena.cs" />
+    <Compile Include="AntigaImplementacao\EngineGrafica\ObjetoGrafico.cs" />
+    <Compile Include="CuboSolido.cs" />
+    <Compile Include="EsferaSolida.cs" />
+    <Compile Include="IElementoCenario.cs" />
+    <Compile Include="LabirintoFactory.cs" />
+    <Compile Include="Mundo.cs" />
+    <Compile Include="Ponto4D.cs" />
+    <Compile Include="Transformacao4D.cs" />
+    <Compile Include="AntigaImplementacao\Regras\InputManager.cs" />
+    <Compile Include="AntigaImplementacao\Jogo.cs" />
     <Compile Include="Jogo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Regras\Labirinto.cs" />
+    <Compile Include="AntigaImplementacao\Regras\Labirinto.cs" />
+    <Compile Include="Tabuleiro.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

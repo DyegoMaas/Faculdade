@@ -1,4 +1,4 @@
-﻿namespace JogoLabirinto.AntigaImplementacao.EngineGrafica
+﻿namespace JogoLabirinto
 {
     public sealed class Ponto4D
     {

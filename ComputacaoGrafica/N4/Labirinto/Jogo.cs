@@ -1,34 +1,30 @@
-using JogoLabirinto.AntigaImplementacao.Regras;
-using OpenTK;
+Ôªøusing OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Drawing;
 using Tao.FreeGlut;
-using Tao.OpenGl;
 
-namespace JogoLabirinto.AntigaImplementacao
+namespace JogoLabirinto
 {
     public class Jogo : GameWindow
     {
         private const double SensibilidadeMouse = .25d;
         private readonly Mundo mundo = new Mundo(new Camera());
-        private AntigaImplementacao.Regras.Labirinto labirinto;
-        private readonly InputManager input;
-        private AntigaImplementacao.EngineGrafica.CuboSolido cuboSolido;
+        private Labirinto labirinto;
+        private CuboSolido cuboSolido;
 
         private Ponto4D centroTabuleiro;
         public Jogo()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
-            input = new InputManager(this);
             Location = new Point(50, 50);
             Title = "Labyrinth";
 
             Load += (sender, e) =>
             {
                 Glut.glutInit();
-                
+
                 GL.Enable(EnableCap.CullFace);
                 GL.Enable(EnableCap.DepthTest);
 
@@ -45,7 +41,7 @@ namespace JogoLabirinto.AntigaImplementacao
         }
 
         /*  
-         * c = ch„o
+         * c = ch√£o
          * p = parede
          * e = esfera
          */
@@ -63,16 +59,17 @@ namespace JogoLabirinto.AntigaImplementacao
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'p'}
-            }, 
+            },
             tamanhoBlocosPiso: 10,
             tamanhoParede: new Vector3d(1, 1, 1));
 
-            //labirinto = new AntigaImplementacao.Regras.Labirinto(configuracaoLabirinto);
+            //labirinto = new Labirinto(configuracaoLabirinto);
             //centroTabuleiro = labirinto.Centro;
+            ////labirinto.Mover(-50,0,-150);
             //mundo.AdicionarObjetoGrafico(labirinto);
 
 
-            //cuboSolido = new AntigaImplementacao.EngineGrafica.CuboSolido(Color.LawnGreen);
+            //cuboSolido = new CuboSolido(Color.LawnGreen);
             //cuboSolido.Redimensionar(20d, new Ponto4D());
             //mundo.AdicionarObjetoGrafico(cuboSolido);
         }
@@ -83,13 +80,13 @@ namespace JogoLabirinto.AntigaImplementacao
             GL.LoadIdentity();
 
 
-            var alvo = labirinto.Posicao;
-            //a transformaÁ„o do lookAt parece estar interferindo na rotaÁ„o do cen·rio.
-            Glu.gluLookAt(
-                centroTabuleiro.X, centroTabuleiro.Y + 100, centroTabuleiro.Z+70,
-                60d, 50d, 50d,
-                //alvo.X, alvo.Y, alvo.Z,
-                0d, 1d, 0d);
+            //var alvo = labirinto.Posicao;
+            ////a transforma√ß√£o do lookAt parece estar interferindo na rota√ß√£o do cen√°rio.
+            //Glu.gluLookAt(
+            //    centroTabuleiro.X, centroTabuleiro.Y + 100, centroTabuleiro.Z + 70,
+            //    60d, 50d, 50d,
+            //    //alvo.X, alvo.Y, alvo.Z,
+            //    0d, 1d, 0d);
 
             //foreach (var objetoGrafico in mundo.ObjetosGraficos)
             //{
@@ -101,18 +98,18 @@ namespace JogoLabirinto.AntigaImplementacao
             GL.Begin(PrimitiveType.Points);
             {
                 //GL.Vertex3(ponto.X, ponto.Y, ponto.Z);
-                GL.Vertex3(0,0,0);
+                GL.Vertex3(0, 0, 0);
             }
             GL.End();
 
-            
+
 
             SwapBuffers();
         }
 
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-           
+
         }
 
         private Ponto4D ponto = new Ponto4D();
@@ -127,9 +124,9 @@ namespace JogoLabirinto.AntigaImplementacao
             //labirinto.RotacionarNoEixoY(-e.YDelta * SensibilidadeMouse, centroTabuleiro);
             //labirinto.RotacionarNoEixoY(-e.YDelta * SensibilidadeMouse, Ponto4D.Zero);
 
-            
+
             //labirinto.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, centroTabuleiro);
-            labirinto.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, centroTabuleiro);
+            //labirinto.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, centroTabuleiro);
 
             //var pivoCubo = cuboSolido.Posicao.InverterSinal();
             //cuboSolido.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, pivoCubo);
@@ -142,7 +139,7 @@ namespace JogoLabirinto.AntigaImplementacao
 
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-           
+
         }
 
         private void Zoom(KeyboardState teclado)

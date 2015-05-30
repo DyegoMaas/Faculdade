@@ -1,6 +1,6 @@
+using JogoLabirinto.AntigaImplementacao.EngineGrafica;
 using System;
 using System.Drawing;
-using JogoLabirinto.AntigaImplementacao.EngineGrafica;
 
 namespace JogoLabirinto.AntigaImplementacao.Regras
 {
@@ -76,7 +76,7 @@ namespace JogoLabirinto.AntigaImplementacao.Regras
         private void SRU()
         {
             var centro = Centro;
-            var cuboSolido = new CuboSolido(Color.Coral);
+            var cuboSolido = new EngineGrafica.CuboSolido(Color.Coral);
             cuboSolido.Redimensionar(1, 50, 1, centro.InverterSinal());
             cuboSolido.Mover(centro.X, centro.Y, centro.Z);
 
@@ -113,32 +113,32 @@ namespace JogoLabirinto.AntigaImplementacao.Regras
             }
         }
 
-        private CuboSolido ConstruirBlocoPiso(int x, int z)
+        private EngineGrafica.CuboSolido ConstruirBlocoPiso(int x, int z)
         {
             var tamanho = configuracaoLabirinto.TamanhoBlocosPiso;
 
-            var cuboSolido = new CuboSolido(Color.IndianRed);
+            var cuboSolido = new EngineGrafica.CuboSolido(Color.IndianRed);
             cuboSolido.Redimensionar(tamanho, cuboSolido.Posicao.InverterSinal());
             cuboSolido.Mover(x * tamanho, 0, z * tamanho);
 
             return cuboSolido;
         }
 
-        private CuboSolido ConstruirBlocoParede()
+        private EngineGrafica.CuboSolido ConstruirBlocoParede()
         {
             var tamanho = configuracaoLabirinto.TamanhoParede;
 
-            var cuboSolido = new CuboSolido(Color.Black);
+            var cuboSolido = new EngineGrafica.CuboSolido(Color.Black);
             cuboSolido.Redimensionar(tamanho.X, tamanho.Y, tamanho.Z, cuboSolido.Posicao.InverterSinal());
             cuboSolido.Mover(0, 1, 0);
 
             return cuboSolido;
         }
 
-        private EsferaSolida ConstruirEsfera()
+        private EngineGrafica.EsferaSolida ConstruirEsfera()
         {
             var tamanho = configuracaoLabirinto.TamanhoParede;
-            var esferaSolida = new EsferaSolida(Color.Blue);
+            var esferaSolida = new EngineGrafica.EsferaSolida(Color.Blue);
             esferaSolida.Redimensionar(tamanho.X, tamanho.Y, tamanho.Z, esferaSolida.Posicao.InverterSinal());
             esferaSolida.Mover(0, 1, 0);
 

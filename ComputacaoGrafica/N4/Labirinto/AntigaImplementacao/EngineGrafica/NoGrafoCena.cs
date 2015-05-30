@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JogoLabirinto.EngineGrafica
+namespace JogoLabirinto.AntigaImplementacao.EngineGrafica
 {
     public abstract class NoGrafoCena
     {
