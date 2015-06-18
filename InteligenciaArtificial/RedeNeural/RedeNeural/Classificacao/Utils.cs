@@ -11,6 +11,7 @@ namespace RedeNeural.Classificacao
             return paresAmostrais.Select(ExtrairRelacaoAngulos).ToList();
         }
 
+        //http://stackoverflow.com/questions/12891516/math-calculation-to-retrieve-angle-between-two-points
         private static int ExtrairRelacaoAngulos(ParAmostral par)
         {
             ValidarParAmostral(par);
