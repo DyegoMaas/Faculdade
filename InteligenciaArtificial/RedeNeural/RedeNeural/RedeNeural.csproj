@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classificacao\ParAmostral.cs" />
-    <Compile Include="Classificacao\Utils.cs" />
-    <Compile Include="Classificacao\Vector2.cs" />
+    <Compile Include="Classificacao\Entradas\ClassificadorAngulos.cs" />
+    <Compile Include="Classificacao\Entradas\ParAmostral.cs" />
+    <Compile Include="Classificacao\Entradas\ExtratorRelacaoAngulos.cs" />
+    <Compile Include="Classificacao\Entradas\Vector2.cs" />
+    <Compile Include="Classificacao\Saidas\ClasseGeometrica.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

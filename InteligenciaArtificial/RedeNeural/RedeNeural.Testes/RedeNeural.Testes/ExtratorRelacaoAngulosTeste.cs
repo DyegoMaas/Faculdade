@@ -10,8 +10,10 @@ using RedeNeural.Classificacao;
 
 namespace RedeNeural.Testes
 {
-    public class UtilsTeste
+    public class ExtratorRelacaoAngulosTeste
     {
+        private ExtratorRelacaoAngulos extratorRelacaoAngulos;
+
         private class ParAmostralParaTeste
         {
             public ParAmostral Par { get; private set; }
@@ -24,6 +26,12 @@ namespace RedeNeural.Testes
             }
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            extratorRelacaoAngulos = new ExtratorRelacaoAngulos();
+        }
+
         [Test]
         public void calculando_os_angulos_internos_de_uma_forma_geometrica()
         {
@@ -34,13 +42,13 @@ namespace RedeNeural.Testes
                 new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(0, 1)), anguloEsperado:90),
                 new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, 1)), anguloEsperado:135),
                 new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, 0)), anguloEsperado:180),
-                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, -1)), anguloEsperado:225),
-                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(0, -1)), anguloEsperado:270),
-                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(1, -1)), anguloEsperado:315)
+                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, -1)), anguloEsperado:135), //225
+                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(0, -1)), anguloEsperado:90), //270
+                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(1, -1)), anguloEsperado:45) //315
             };
 
             var pares = paresParaTeste.Select(p => p.Par).ToList();
-            IList<int> angulosInternos = Utils.ExtrairRelacaoAngulos(pares);
+            IList<int> angulosInternos = extratorRelacaoAngulos.ExtrairRelacaoAngulos(pares);
 
             angulosInternos.Should().HaveSameCount(paresParaTeste);
             for (var i = 0; i < paresParaTeste.Count; i++)
@@ -55,7 +63,7 @@ namespace RedeNeural.Testes
         {
             var parAmostralComPontosIguais = new ParAmostral(new Vector2(), new Vector2());
 
-            Action acaoExtrairRelacaoAngulos = () => Utils.ExtrairRelacaoAngulos(new[] {parAmostralComPontosIguais});
+            Action acaoExtrairRelacaoAngulos = () => extratorRelacaoAngulos.ExtrairRelacaoAngulos(new[] { parAmostralComPontosIguais });
 
             acaoExtrairRelacaoAngulos.ShouldThrow<Exception>().WithMessage("Não é possível calcular o ângulo entre dois pontos iguais");
         }

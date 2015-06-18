@@ -51,7 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UtilsTeste.cs" />
+    <Compile Include="ClassificadorAngulosTeste.cs" />
+    <Compile Include="ExtratorRelacaoAngulosTeste.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
