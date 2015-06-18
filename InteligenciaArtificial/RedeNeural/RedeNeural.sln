@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeNeural", "RedeNeural\Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindContours", "FindContours\FindContours.csproj", "{8782A25A-DC8B-4C1D-907B-428FFC6FFAD8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D4B81519-6402-4110-AA61-3067ABA896C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedeNeural.Testes", "RedeNeural.Testes\RedeNeural.Testes\RedeNeural.Testes.csproj", "{6960AD44-569E-4C79-89CF-257FCE06F263}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +25,15 @@ Global
 		{8782A25A-DC8B-4C1D-907B-428FFC6FFAD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8782A25A-DC8B-4C1D-907B-428FFC6FFAD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8782A25A-DC8B-4C1D-907B-428FFC6FFAD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6960AD44-569E-4C79-89CF-257FCE06F263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6960AD44-569E-4C79-89CF-257FCE06F263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6960AD44-569E-4C79-89CF-257FCE06F263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6960AD44-569E-4C79-89CF-257FCE06F263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6960AD44-569E-4C79-89CF-257FCE06F263} = {D4B81519-6402-4110-AA61-3067ABA896C3}
 	EndGlobalSection
 EndGlobal
