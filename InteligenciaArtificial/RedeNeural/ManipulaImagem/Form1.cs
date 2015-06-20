@@ -4,12 +4,8 @@ using RedeNeural.Core.Classificacao;
 using RedeNeural.Core.Classificacao.Entradas;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ManipulaImagem
@@ -118,7 +114,6 @@ namespace ManipulaImagem
         private IList<int> EncontrarAngulosDosPares(IList<PointF> pontosEncontrados)
         {
             var lista = new List<int>();
-            //já temos as boras
             var extrator = new ExtratorRelacaoAngulos();
             for (int i = 1; i < pontosEncontrados.Count; i++)
             {
