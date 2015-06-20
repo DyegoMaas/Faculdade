@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RedeNeural.Classificacao
+namespace RedeNeural.Core.Classificacao
 {
     public class ExtratorRelacaoAngulos
     {
@@ -20,8 +20,8 @@ namespace RedeNeural.Classificacao
             var yDiff = par.PontoContorno2.Y - par.PontoContorno1.Y;
             var angulo = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
 
-            //if (angulo < 0)
-            //    angulo += 360;
+            if (angulo < 0)
+                angulo += 360;
 
             return Math.Abs((int)angulo);    
         }

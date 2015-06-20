@@ -1,4 +1,4 @@
-﻿namespace RedeNeural.Classificacao.Saidas
+﻿namespace RedeNeural.Core.Classificacao.Saidas
 {
     public enum ClasseGeometrica
     {

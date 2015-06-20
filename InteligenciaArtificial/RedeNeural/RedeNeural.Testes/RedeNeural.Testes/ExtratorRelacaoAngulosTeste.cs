@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using RedeNeural.Classificacao;
+using RedeNeural.Core.Classificacao;
 
 namespace RedeNeural.Testes
 {
@@ -42,9 +42,9 @@ namespace RedeNeural.Testes
                 new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(0, 1)), anguloEsperado:90),
                 new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, 1)), anguloEsperado:135),
                 new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, 0)), anguloEsperado:180),
-                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, -1)), anguloEsperado:135), //225
-                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(0, -1)), anguloEsperado:90), //270
-                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(1, -1)), anguloEsperado:45) //315
+                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(-1, -1)), anguloEsperado:225), //225
+                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(0, -1)), anguloEsperado:270), //270
+                new ParAmostralParaTeste(new ParAmostral(new Vector2(0, 0), new Vector2(1, -1)), anguloEsperado:315) //315
             };
 
             var pares = paresParaTeste.Select(p => p.Par).ToList();

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using RedeNeural.Classificacao.Saidas;
+using RedeNeural.Core.Classificacao.Saidas;
 
-namespace RedeNeural.Classificacao
+namespace RedeNeural.Core.Classificacao
 {
     public class ClassificadorAngulos
     {
@@ -35,7 +35,7 @@ namespace RedeNeural.Classificacao
             throw new Exception("Não foi possível classificar o angulo informado");
         }
 
-        public void Ate(int angulo, int retornar)
+        internal void Ate(int angulo, int retornar)
         {
             funcoesClassificacao.Add(a =>
             {
@@ -45,7 +45,7 @@ namespace RedeNeural.Classificacao
             });
         }
 
-        public void Entre(int angulo1, int angulo2, int retornar)
+        internal void Entre(int angulo1, int angulo2, int retornar)
         {
             funcoesClassificacao.Add(a =>
             {
@@ -55,7 +55,7 @@ namespace RedeNeural.Classificacao
             });
         }
 
-        public void Apos(int angulo, int retornar)
+        internal void Apos(int angulo, int retornar)
         {
             funcoesClassificacao.Add(a =>
             {

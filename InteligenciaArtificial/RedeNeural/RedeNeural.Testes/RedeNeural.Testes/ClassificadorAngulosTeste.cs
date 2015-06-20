@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using RedeNeural.Classificacao;
+using RedeNeural.Core.Classificacao;
 
 namespace RedeNeural.Testes
 {

@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="encog-core-cs">
-      <HintPath>packages\encog-dotnet-core.3.3.0\lib\net35\encog-core-cs.dll</HintPath>
+      <HintPath>..\packages\encog-dotnet-core.3.3.0\lib\net35\encog-core-cs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,17 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classificacao\Entradas\ClassificadorAngulos.cs" />
-    <Compile Include="Classificacao\Entradas\ParAmostral.cs" />
-    <Compile Include="Classificacao\Entradas\ExtratorRelacaoAngulos.cs" />
-    <Compile Include="Classificacao\Entradas\Vector2.cs" />
-    <Compile Include="Classificacao\Saidas\ClasseGeometrica.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RedeNeural.Core\RedeNeural.Core.csproj">
+      <Project>{fb3dc1ff-d5c8-401a-9a30-56890abb47c2}</Project>
+      <Name>RedeNeural.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
