@@ -1,4 +1,4 @@
-﻿namespace RedeNeural.Core.Classificacao
+﻿namespace RedeNeural.Core.Classificacao.Entradas
 {
     public struct Vector2
     {

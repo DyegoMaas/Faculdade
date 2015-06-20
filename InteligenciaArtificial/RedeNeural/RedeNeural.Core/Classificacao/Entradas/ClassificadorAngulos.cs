@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using RedeNeural.Core.Classificacao.Saidas;
 
-namespace RedeNeural.Core.Classificacao
+namespace RedeNeural.Core.Classificacao.Entradas
 {
     public class ClassificadorAngulos
     {

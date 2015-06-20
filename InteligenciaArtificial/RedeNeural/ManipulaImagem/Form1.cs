@@ -100,7 +100,7 @@ namespace ManipulaImagem
 
             //TODO refatorar para garantir o encadeamento
             var classificador = ClassificadorAngulos.Abordagem1();
-            var angulos = EncontrarAngulosDosPares(pontosEncontrados);
+            var angulos = EncontrarAngulosDosPares(pontosEncontrados, centro);
             var classificacoes = angulos.Select(classificador.Classificar).ToList();
 
             var geradorValor = new GeradorValoresRede();
@@ -164,16 +164,17 @@ namespace ManipulaImagem
             return centro;
         }
 
-        private IList<int> EncontrarAngulosDosPares(IList<PointF> pontosEncontrados)
+        private IEnumerable<int> EncontrarAngulosDosPares(IList<PointF> pontosEncontrados, Point centro)
         {
             var lista = new List<int>();
             var extrator = new ExtratorRelacaoAngulos();
             for (int i = 1; i < pontosEncontrados.Count; i++)
             {
+                var pontoCentral = new Vector2(centro.X, centro.Y);
                 var pontoA = new Vector2(pontosEncontrados[i - 1].X, pontosEncontrados[i - 1].Y);
                 var pontoB = new Vector2(pontosEncontrados[i].X, pontosEncontrados[i].Y);
 
-                var angulo = extrator.ExtrairRelacaoAngulos(new ParAmostral(pontoA, pontoB));
+                var angulo = extrator.ExtrairRelacaoAngulos(new TrianguloAmostral(pontoCentral, pontoA, pontoB));
                 lista.Add(angulo);
             }
 
@@ -184,7 +185,7 @@ namespace ManipulaImagem
         {
             var rect = new Rectangle(0, 0, imagem.Width, imagem.Height);
             if (!rect.Contains(ponto))
-                return false;
+                return true;
 
             var pixel = imagem.GetPixel(ponto.X, ponto.Y);
 
