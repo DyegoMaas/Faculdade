@@ -19,7 +19,7 @@ namespace ManipulaImagem
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btArquivoClassificacao_Click(object sender, EventArgs e)
         {
             var resultado = openFileDialog1.ShowDialog();
             if (resultado == DialogResult.OK || resultado == DialogResult.Yes)
@@ -28,44 +28,73 @@ namespace ManipulaImagem
             }
         }
 
-        private void iniciaTratamentoImagem()
+        private void caminhoArquivo_TextChanged(object sender, System.EventArgs e)
         {
-            //Carrega imagem
+            ClassificarImagem(caminhoArquivo.Text);
+        }
+
+        private void btDiretorioTreinamento_Click(object sender, EventArgs e)
+        {
+            var resultado = folderBrowserDialog1.ShowDialog();
+            if (resultado == DialogResult.OK || resultado == DialogResult.Yes)
+            {
+                tbDiretorioTreinamento.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
+
+        private void tbDiretorioTreinamento_TextChanged(object sender, EventArgs e)
+        {
+            GerarDadosTreinamento(tbDiretorioTreinamento.Text);
+        }
+
+        private void GerarDadosTreinamento(string diretorio)
+        {
+            
+        }
+
+        private int[] ClassificarImagem(string caminhoImagem)
+        {
+            //Carrega a imagem
             Image<Bgr, Byte> img =
-                new Image<Bgr, byte>(caminhoArquivo.Text)
+                new Image<Bgr, byte>(caminhoImagem)
                 .Resize(400, 400, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR, true);
 
-            //Converte pra escala de zinza
+            //Converte pra escala de cinza
             Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
             CvInvoke.cvCvtColor(img, gray, Emgu.CV.CvEnum.COLOR_CONVERSION.BGR2GRAY);
 
+            //Encontra o contorno
             CvInvoke.cvThreshold(gray, gray, 127, 255, Emgu.CV.CvEnum.THRESH.CV_THRESH_BINARY);
-            
-            Contour<Point> contornos = gray.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_NONE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE);
+            Contour<Point> pontosContorno = gray.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_NONE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE);
 
-            var totalPontos = contornos.Total;
-
-            int somatorioX = 0, 
-                somatorioY = 0, 
-                resultadoX, resultadoY;
-
-            for (int i = 0; i < totalPontos; i++)
-            {
-                var ponto = contornos.Pop();
-
-                somatorioX += ponto.X;
-                somatorioY += ponto.Y;
-            }
-
-            resultadoX = somatorioX / totalPontos;
-            resultadoY = somatorioY / totalPontos;
-
-            var centro = new Point(resultadoX, resultadoY);
-            var color = new Bgr(Color.Black);
+            var centro = EncontrarCentroDaFormaGeometrica(pontosContorno);
             var bitmap = img.ToBitmap();
-            var stepAngular = (360d / qtdArestas);
+            const double stepAngular = 360d / qtdArestas;
 
-            List<PointF> pontosEncontrados = new List<PointF>();
+            var pontosEncontrados = EncontrarPontosInteresseNoContorno(centro, bitmap, img, stepAngular);
+
+            CvInvoke.cvCircle(img.Ptr, centro, 4, new Bgr(Color.Black).MCvScalar, 5, Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
+            foreach (var pontoEncontrado in pontosEncontrados)
+            {
+                var pontoDesenho = new Point((int)pontoEncontrado.X, (int)pontoEncontrado.Y);
+                CvInvoke.cvCircle(img.Ptr, pontoDesenho, 4, new Bgr(Color.Blue).MCvScalar, 5, Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
+            }
+            imagem.Image = img;
+
+            //TODO refatorar para garantir o encadeamento
+            var classificador = ClassificadorAngulos.Abordagem1();
+            var angulos = EncontrarAngulosDosPares(pontosEncontrados);
+            var classificacoes = angulos.Select(classificador.Classificar).ToList();
+
+            var geradorValor = new GeradorValoresRede();
+            var bits = geradorValor.GerarValor(classificacoes);
+
+            return bits;
+        }
+
+        private List<PointF> EncontrarPontosInteresseNoContorno(Point centro, Bitmap bitmap, Image<Bgr, byte> img, double stepAngular)
+        {
+            var pontosEncontrados = new List<PointF>();
 
             double angulo = 0;
             while (angulo < 360)
@@ -79,7 +108,7 @@ namespace ManipulaImagem
                     var x = distancia * Math.Sin(anguloRad);
                     var y = distancia * Math.Cos(anguloRad);
 
-                    var pontoB = new Point(centro.X + (int)x, centro.Y + (int)y);
+                    var pontoB = new Point(centro.X + (int) x, centro.Y + (int) y);
                     if (EncontrouBorda(pontoB, bitmap))
                     {
                         pontosEncontrados.Add(new PointF(pontoB.X, pontoB.Y));
@@ -93,22 +122,31 @@ namespace ManipulaImagem
 
                 angulo += stepAngular;
             }
+            return pontosEncontrados;
+        }
 
-            CvInvoke.cvCircle(img.Ptr, centro, 4, color.MCvScalar, 5, Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
-            foreach (var pontoEncontrado in pontosEncontrados)
+        private static Point EncontrarCentroDaFormaGeometrica(Contour<Point> pontosContorno)
+        {
+            var totalPontos = pontosContorno.Total;
+
+            int somatorioX = 0,
+                somatorioY = 0,
+                resultadoX,
+                resultadoY;
+
+            for (int i = 0; i < totalPontos; i++)
             {
-                var pontoDesenho = new Point((int)pontoEncontrado.X, (int)pontoEncontrado.Y);
-                CvInvoke.cvCircle(img.Ptr, pontoDesenho, 4, new Bgr(Color.Blue).MCvScalar, 5, Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
+                var ponto = pontosContorno.Pop();
+
+                somatorioX += ponto.X;
+                somatorioY += ponto.Y;
             }
 
-            var classificador = ClassificadorAngulos.Abordagem1();
-            var angulos = EncontrarAngulosDosPares(pontosEncontrados);
-            var classificacoes = angulos.Select(a => classificador.Classificar(a)).ToList();
+            resultadoX = somatorioX / totalPontos;
+            resultadoY = somatorioY / totalPontos;
 
-            var geradorValor = new GeradorValoresRede();
-            var bits = geradorValor.GerarValor(classificacoes);
-
-            imagem.Image = img;
+            var centro = new Point(resultadoX, resultadoY);
+            return centro;
         }
 
         private IList<int> EncontrarAngulosDosPares(IList<PointF> pontosEncontrados)
