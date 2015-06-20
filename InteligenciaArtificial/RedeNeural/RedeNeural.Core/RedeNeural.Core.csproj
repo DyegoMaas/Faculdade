@@ -44,6 +44,7 @@
     <Compile Include="Classificacao\Entradas\GeradorValoresRede.cs" />
     <Compile Include="Classificacao\Entradas\ParAmostral.cs" />
     <Compile Include="Classificacao\Entradas\Vector2.cs" />
+    <Compile Include="Classificacao\ResultadoIdeal.cs" />
     <Compile Include="Classificacao\Saidas\ClasseGeometrica.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

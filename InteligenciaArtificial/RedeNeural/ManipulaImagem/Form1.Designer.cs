@@ -1,4 +1,5 @@
-﻿namespace ManipulaImagem
+﻿
+namespace ManipulaImagem
 {
     partial class Form1
     {

@@ -2,6 +2,7 @@
 using Emgu.CV.Structure;
 using RedeNeural.Core.Classificacao;
 using RedeNeural.Core.Classificacao.Entradas;
+using RedeNeural.Core.Classificacao.Saidas;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,7 +13,7 @@ namespace ManipulaImagem
 {
     public partial class Form1 : Form
     {
-        private const int qtdArestas = 32;
+        private const int QuantidadeArestas = 32;
 
         public Form1()
         {
@@ -49,7 +50,23 @@ namespace ManipulaImagem
 
         private void GerarDadosTreinamento(string diretorio)
         {
-            
+            var diretorioTreinamento = new DiretorioTreinamento(diretorio);
+
+            var datasetResultadosEsperados = new List<ResultadoIdeal>();
+
+            datasetResultadosEsperados.AddRange(diretorioTreinamento.Elipses.GetFiles().Select(fi => fi.FullName)
+                .Select(ClassificarImagem)
+                .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Elipse)));
+
+            datasetResultadosEsperados.AddRange(diretorioTreinamento.Retangulos.GetFiles().Select(fi => fi.FullName)
+                .Select(ClassificarImagem)
+                .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Retangulo)));
+
+            datasetResultadosEsperados.AddRange(diretorioTreinamento.Triangulos.GetFiles().Select(fi => fi.FullName)
+                .Select(ClassificarImagem)
+                .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Triangulo)));
+
+            //TODO exportar
         }
 
         private int[] ClassificarImagem(string caminhoImagem)
@@ -69,7 +86,7 @@ namespace ManipulaImagem
 
             var centro = EncontrarCentroDaFormaGeometrica(pontosContorno);
             var bitmap = img.ToBitmap();
-            const double stepAngular = 360d / qtdArestas;
+            const double stepAngular = 360d / QuantidadeArestas;
 
             var pontosEncontrados = EncontrarPontosInteresseNoContorno(centro, bitmap, img, stepAngular);
 
@@ -130,11 +147,9 @@ namespace ManipulaImagem
             var totalPontos = pontosContorno.Total;
 
             int somatorioX = 0,
-                somatorioY = 0,
-                resultadoX,
-                resultadoY;
+                somatorioY = 0;
 
-            for (int i = 0; i < totalPontos; i++)
+            for (var i = 0; i < totalPontos; i++)
             {
                 var ponto = pontosContorno.Pop();
 
@@ -142,8 +157,8 @@ namespace ManipulaImagem
                 somatorioY += ponto.Y;
             }
 
-            resultadoX = somatorioX / totalPontos;
-            resultadoY = somatorioY / totalPontos;
+            var resultadoX = somatorioX / totalPontos;
+            var resultadoY = somatorioY / totalPontos;
 
             var centro = new Point(resultadoX, resultadoY);
             return centro;
