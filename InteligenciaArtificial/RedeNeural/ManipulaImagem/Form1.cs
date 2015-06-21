@@ -84,6 +84,7 @@ namespace ManipulaImagem
             {
                 foreach (var resultadosEsperado in datasetResultadosEsperados)
                 {
+                    //TODO precisa da vírgula???
                     var bits = string.Join(",", resultadosEsperado.Bits);
                     var linha = String.Format("{0}={1}", bits, (int) resultadosEsperado.Classe);
                     arquivo.WriteLine(linha);

@@ -42,6 +42,7 @@ namespace ManipulaImagem
             this.tbDiretorioTreinamento = new System.Windows.Forms.TextBox();
             this.btDiretorioTreinamento = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.label2 = new System.Windows.Forms.Label();
             this.Classificacao.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagem)).BeginInit();
@@ -119,6 +120,7 @@ namespace ManipulaImagem
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.tbDiretorioTreinamento);
             this.tabPage2.Controls.Add(this.btDiretorioTreinamento);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -131,7 +133,7 @@ namespace ManipulaImagem
             // 
             // tbDiretorioTreinamento
             // 
-            this.tbDiretorioTreinamento.Location = new System.Drawing.Point(8, 9);
+            this.tbDiretorioTreinamento.Location = new System.Drawing.Point(79, 6);
             this.tbDiretorioTreinamento.Name = "tbDiretorioTreinamento";
             this.tbDiretorioTreinamento.Size = new System.Drawing.Size(373, 20);
             this.tbDiretorioTreinamento.TabIndex = 3;
@@ -139,13 +141,22 @@ namespace ManipulaImagem
             // 
             // btDiretorioTreinamento
             // 
-            this.btDiretorioTreinamento.Location = new System.Drawing.Point(387, 7);
+            this.btDiretorioTreinamento.Location = new System.Drawing.Point(458, 4);
             this.btDiretorioTreinamento.Name = "btDiretorioTreinamento";
             this.btDiretorioTreinamento.Size = new System.Drawing.Size(31, 23);
             this.btDiretorioTreinamento.TabIndex = 0;
             this.btDiretorioTreinamento.Text = "...";
             this.btDiretorioTreinamento.UseVisualStyleBackColor = true;
             this.btDiretorioTreinamento.Click += new System.EventHandler(this.btDiretorioTreinamento_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Gerar dados";
             // 
             // Form1
             // 
@@ -154,7 +165,7 @@ namespace ManipulaImagem
             this.ClientSize = new System.Drawing.Size(806, 657);
             this.Controls.Add(this.Classificacao);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Identificação de Formas Geométricas";
             this.Classificacao.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -178,6 +189,7 @@ namespace ManipulaImagem
         private System.Windows.Forms.TextBox tbDiretorioTreinamento;
         private System.Windows.Forms.Button btDiretorioTreinamento;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.Label label2;
     }
 }
 
