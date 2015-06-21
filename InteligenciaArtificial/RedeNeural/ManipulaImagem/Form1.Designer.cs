@@ -133,7 +133,6 @@ namespace ManipulaImagem
             // 
             this.tbDiretorioTreinamento.Location = new System.Drawing.Point(8, 9);
             this.tbDiretorioTreinamento.Name = "tbDiretorioTreinamento";
-            this.tbDiretorioTreinamento.ReadOnly = true;
             this.tbDiretorioTreinamento.Size = new System.Drawing.Size(373, 20);
             this.tbDiretorioTreinamento.TabIndex = 3;
             this.tbDiretorioTreinamento.TextChanged += new System.EventHandler(this.tbDiretorioTreinamento_TextChanged);

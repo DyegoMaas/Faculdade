@@ -6,6 +6,8 @@ using RedeNeural.Core.Classificacao.Saidas;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -45,10 +47,17 @@ namespace ManipulaImagem
 
         private void tbDiretorioTreinamento_TextChanged(object sender, EventArgs e)
         {
-            GerarDadosTreinamento(tbDiretorioTreinamento.Text);
+            var diretorio = tbDiretorioTreinamento.Text;
+            if (string.IsNullOrWhiteSpace(diretorio) || !Directory.Exists(diretorio))
+                return;
+
+            var dadosTreinamento = GerarDadosTreinamento(diretorio);
+            ExportarArquivoTreinamento(dadosTreinamento, diretorio);
+
+            MessageBox.Show("Dados de treinamento gerados com sucesso.");
         }
 
-        private void GerarDadosTreinamento(string diretorio)
+        private IEnumerable<ResultadoIdeal> GerarDadosTreinamento(string diretorio)
         {
             var diretorioTreinamento = new DiretorioTreinamento(diretorio);
 
@@ -66,11 +75,27 @@ namespace ManipulaImagem
                 .Select(ClassificarImagem)
                 .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Triangulo)));
 
-            //TODO exportar
+            return datasetResultadosEsperados;
         }
+
+        private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, string diretorio)
+        {
+            using (var arquivo = File.CreateText(Path.Combine(diretorio, "treinamento.dat")))
+            {
+                foreach (var resultadosEsperado in datasetResultadosEsperados)
+                {
+                    var bits = string.Join(",", resultadosEsperado.Bits);
+                    var linha = String.Format("{0}={1}", bits, (int) resultadosEsperado.Classe);
+                    arquivo.WriteLine(linha);
+                }
+            }
+        }  
 
         private int[] ClassificarImagem(string caminhoImagem)
         {
+            //AdicionarFundoPreto(caminhoImagem);
+            //return null;
+
             //Carrega a imagem
             Image<Bgr, Byte> img =
                 new Image<Bgr, byte>(caminhoImagem)
@@ -107,6 +132,34 @@ namespace ManipulaImagem
             var bits = geradorValor.GerarValor(classificacoes);
 
             return bits;
+        }
+
+        private static void AdicionarFundoPreto(string caminhoImagem)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                var bitmap1 = new Bitmap(caminhoImagem);
+                using (var graphics = Graphics.FromImage(bitmap1))
+                {
+                    for (int i = 0; i < bitmap1.Width; i++)
+                    {
+                        for (int j = 0; j < bitmap1.Height; j++)
+                        {
+                            var pixel = bitmap1.GetPixel(i, j);
+                            if (pixel.A == 0)
+                                graphics.DrawRectangle(new Pen(Color.Black), new Rectangle(i, j, 1, 1));
+                        }
+                    }
+                    bitmap1.Save(memoryStream, ImageFormat.Png);
+                    bitmap1.Dispose();
+                }
+
+                using (var fileStream = new FileStream(caminhoImagem, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    var bytes = memoryStream.ToArray();
+                    fileStream.Write(bytes, 0, bytes.Length);
+                }
+            }
         }
 
         private List<PointF> EncontrarPontosInteresseNoContorno(Point centro, Bitmap bitmap, Image<Bgr, byte> img, double stepAngular)
