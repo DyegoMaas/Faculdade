@@ -30,30 +30,21 @@ namespace RedeNeural.Testes
             extratorRelacaoAngulos = new ExtratorRelacaoAngulos();
         }
 
-        [Test]
-        public void calculando_os_angulos_internos_de_uma_forma_geometrica()
+        [TestCase(1,1, 1,0, 45)]
+        [TestCase(2,1, 2,0, 63)]
+        public void calculando_os_angulos_internos_de_uma_forma_geometrica(int x1, int y1, int x2, int y2, int anguloEsperado)
         {
             var zero = new Vector2();
             IList<TrianguloAmostralParaTeste> paresParaTeste = new[]
             {
-                new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(1, 1), new Vector2(1, 0)), anguloEsperado:45),
-                //new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(0, 0), new Vector2(0, 1)), anguloEsperado:90),
-                //new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(0, 0), new Vector2(-1, 1)), anguloEsperado:135),
-                //new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(0, 0), new Vector2(-1, 0)), anguloEsperado:180),
-                //new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(0, 0), new Vector2(-1, -1)), anguloEsperado:225), //225
-                //new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(0, 0), new Vector2(0, -1)), anguloEsperado:270), //270
-                //new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(0, 0), new Vector2(1, -1)), anguloEsperado:315) //315
+                new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(x1, y1), new Vector2(x2, y2)), anguloEsperado)
             };
 
             var pares = paresParaTeste.Select(p => p.Triangulo).ToList();
             IList<int> angulosInternos = extratorRelacaoAngulos.ExtrairRelacaoAngulos(pares);
 
             angulosInternos.Should().HaveSameCount(paresParaTeste);
-            for (var i = 0; i < paresParaTeste.Count; i++)
-            {
-                var anguloEsperado = paresParaTeste[i].AnguloEsperado;
-                angulosInternos[i].Should().Be(anguloEsperado);
-            }
+            angulosInternos[0].Should().Be(anguloEsperado);
         }
         
         [Test]

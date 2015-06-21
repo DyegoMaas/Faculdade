@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RedeNeural.Core.Classificacao.Entradas
 {
@@ -7,12 +8,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
     {
         public IList<int> ExtrairRelacaoAngulos(IList<TrianguloAmostral> triangulosAmostrais)
         {
-            var angulos = new List<int>();
-            foreach (var trianguloAmostral in triangulosAmostrais)
-            {
-                angulos.Add(ExtrairRelacaoAngulos(trianguloAmostral));
-            }
-            return angulos;
+            return triangulosAmostrais.Select(ExtrairRelacaoAngulos).ToList();
         }
 
         //http://stackoverflow.com/questions/12891516/math-calculation-to-retrieve-angle-between-two-points
@@ -30,24 +26,15 @@ namespace RedeNeural.Core.Classificacao.Entradas
             var perimetro = (ponto1Ate2 + centroAte1 + centroAte2) / 2;
             var areaTriangulo = Heron(perimetro, ponto1Ate2, centroAte1, centroAte2);
             var angulo = EncontrarAngulo(areaTriangulo, ponto1Ate2, centroAte1);
+            //var angulo2 = EncontrarAngulo(areaTriangulo, ponto1Ate2, centroAte2);
+            //var angulo3 = EncontrarAngulo(areaTriangulo, centroAte1, centroAte2);
 
-            return (int)angulo;
-
-            //var xDiff = triangulo.PontoContorno2.X - triangulo.PontoContorno1.X;
-            //var yDiff = triangulo.PontoContorno2.Y - triangulo.PontoContorno1.Y;
-
-            //var anguloX = Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
-
-            //if (anguloX < 0)
-            //    anguloX += 360;
-
-            //return Math.Abs((int)anguloX);    
+            return (int)Math.Round(angulo); 
         }
 
-        private double EncontrarAngulo(double areaTriangulo, double centroAte1, double ponto1Ate2)
+        private double EncontrarAngulo(double areaTriangulo, double catetoA, double catetoB)
         {
-            //area = a * b * sen
-            var seno = areaTriangulo / centroAte1 * ponto1Ate2;
+            var seno = areaTriangulo / (catetoA * catetoB / 2);
             return Math.Asin(seno) * 180 / Math.PI;
         }
 

@@ -51,16 +51,16 @@ namespace ManipulaImagem
             if (string.IsNullOrWhiteSpace(diretorio) || !Directory.Exists(diretorio))
                 return;
 
-            var dadosTreinamento = GerarDadosTreinamento(diretorio);
-            ExportarArquivoTreinamento(dadosTreinamento, diretorio);
+            var diretorioTreinamento = new DiretorioTreinamento(diretorio);
+
+            var dadosTreinamento = GerarDadosTreinamento(diretorioTreinamento);
+            ExportarArquivoTreinamento(dadosTreinamento, diretorioTreinamento);
 
             MessageBox.Show("Dados de treinamento gerados com sucesso.");
         }
 
-        private IEnumerable<ResultadoIdeal> GerarDadosTreinamento(string diretorio)
+        private IEnumerable<ResultadoIdeal> GerarDadosTreinamento(DiretorioTreinamento diretorioTreinamento)
         {
-            var diretorioTreinamento = new DiretorioTreinamento(diretorio);
-
             var datasetResultadosEsperados = new List<ResultadoIdeal>();
 
             datasetResultadosEsperados.AddRange(diretorioTreinamento.Elipses.GetFiles().Select(fi => fi.FullName)
@@ -78,9 +78,9 @@ namespace ManipulaImagem
             return datasetResultadosEsperados;
         }
 
-        private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, string diretorio)
+        private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, DiretorioTreinamento diretorioTreinamento)
         {
-            using (var arquivo = File.CreateText(Path.Combine(diretorio, "treinamento.dat")))
+            using (var arquivo = File.CreateText(diretorioTreinamento.CaminhoArquivoTreinamento))
             {
                 foreach (var resultadosEsperado in datasetResultadosEsperados)
                 {
@@ -170,7 +170,7 @@ namespace ManipulaImagem
             double angulo = 0;
             while (angulo < 360)
             {
-                double anguloRad = (angulo * Math.PI / 180);
+                var anguloRad = (angulo * Math.PI / 180);
 
                 const double stepDistancia = 1d;
                 double distancia = 0;

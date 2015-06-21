@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classificacao\DiretorioTreinamento.cs" />
     <Compile Include="Classificacao\Entradas\ClassificadorAngulos.cs" />
     <Compile Include="Classificacao\Entradas\ExtratorRelacaoAngulos.cs" />
     <Compile Include="Classificacao\Entradas\GeradorValoresRede.cs" />
