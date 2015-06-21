@@ -32,6 +32,7 @@ namespace RedeNeural.Testes
 
         [TestCase(1,1, 1,0, 45)]
         [TestCase(2,1, 2,0, 63)]
+        [TestCase(0,1, 1,2, 135)]
         public void calculando_os_angulos_internos_de_uma_forma_geometrica(int x1, int y1, int x2, int y2, int anguloEsperado)
         {
             var zero = new Vector2();

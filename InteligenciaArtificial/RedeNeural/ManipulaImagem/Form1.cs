@@ -16,8 +16,6 @@ namespace ManipulaImagem
 {
     public partial class Form1 : Form
     {
-        private const int QuantidadeArestas = 32;
-
         public Form1()
         {
             InitializeComponent();
@@ -37,14 +35,15 @@ namespace ManipulaImagem
         {
             caminhoArquivo.Text = openFileDialog1.FileName;
 
-            while (diretorioCarregado == null)
-            {
-                var resultado = folderBrowserDialog1.ShowDialog();
-                if (resultado == DialogResult.OK || resultado == DialogResult.Yes)
-                {
-                    diretorioCarregado = new DiretorioTreinamento(folderBrowserDialog1.SelectedPath);
-                }
-            }
+            //while (diretorioCarregado == null)
+            //{
+            //    var resultado = folderBrowserDialog1.ShowDialog();
+            //    if (resultado == DialogResult.OK || resultado == DialogResult.Yes)
+            //    {
+            //        diretorioCarregado = new DiretorioTreinamento(folderBrowserDialog1.SelectedPath);
+            //    }
+            //}
+            diretorioCarregado = new DiretorioTreinamento(@"C:\temp\FormasGeometricas");
 
             var bits = ClassificarImagem(caminhoArquivo.Text);
             var classeGeometrica = RedeIdentificadoraFormasGeometricas.Computar(bits, diretorioCarregado);
@@ -117,7 +116,7 @@ namespace ManipulaImagem
                 .Select(ClassificarImagem)
                 .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Triangulo)));
 
-            return datasetResultadosEsperados;
+            return datasetResultadosEsperados.Distinct();
         }
 
         private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, DiretorioTreinamento diretorioTreinamento)
@@ -157,7 +156,7 @@ namespace ManipulaImagem
 
             var centro = EncontrarCentroDaFormaGeometrica(pontosContorno);
             var bitmap = img.ToBitmap();
-            const double stepAngular = 360d / QuantidadeArestas;
+            const double stepAngular = TrianguloAmostral.DiferencaAngular;
 
             var pontosEncontrados = EncontrarPontosInteresseNoContorno(centro, bitmap, img, stepAngular);
 
@@ -273,7 +272,8 @@ namespace ManipulaImagem
                 var pontoA = new Vector2(pontosEncontrados[i - 1].X, pontosEncontrados[i - 1].Y);
                 var pontoB = new Vector2(pontosEncontrados[i].X, pontosEncontrados[i].Y);
 
-                var angulo = extrator.ExtrairRelacaoAngulos(new TrianguloAmostral(pontoCentral, pontoA, pontoB));
+                var trianguloAmostral = new TrianguloAmostral(pontoCentral, pontoA, pontoB);
+                var angulo = extrator.ExtrairRelacaoAngulos(trianguloAmostral);
                 lista.Add(angulo);
             }
 

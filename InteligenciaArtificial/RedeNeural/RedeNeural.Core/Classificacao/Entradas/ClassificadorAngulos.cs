@@ -38,7 +38,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
         {
             funcoesClassificacao.Add(a =>
             {
-                if (a <= angulo)
+                if (a < angulo)
                     return retornar;
                 return NaoClassificado;
             });
@@ -48,7 +48,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
         {
             funcoesClassificacao.Add(a =>
             {
-                if (a > angulo1 && a <= angulo2)
+                if (a >= angulo1 && a < angulo2)
                     return retornar;
                 return NaoClassificado;
             });
@@ -58,7 +58,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
         {
             funcoesClassificacao.Add(a =>
             {
-                if (a > angulo)
+                if (a >= angulo)
                     return retornar;
                 return NaoClassificado;
             });

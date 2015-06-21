@@ -19,28 +19,13 @@ namespace RedeNeural.Core.Classificacao.Entradas
         {
             ValidarTrianguloAmostral(triangulo);
 
-            var ponto1Ate2 = DistanciaEntre(triangulo.PontoContorno1, triangulo.PontoContorno2);
-            var centroAte1 = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno1);
-            var centroAte2 = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno2);
-            
-            var perimetro = (ponto1Ate2 + centroAte1 + centroAte2) / 2;
-            var areaTriangulo = Heron(perimetro, ponto1Ate2, centroAte1, centroAte2);
-            var angulo = EncontrarAngulo(areaTriangulo, ponto1Ate2, centroAte1);
-            //var angulo2 = EncontrarAngulo(areaTriangulo, ponto1Ate2, centroAte2);
-            //var angulo3 = EncontrarAngulo(areaTriangulo, centroAte1, centroAte2);
+            var a = DistanciaEntre(triangulo.PontoContorno1, triangulo.PontoContorno2);
+            var b = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno1);
+            var c = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno2);
+            var coseno = (-(c * c) + a * a + b * b) / 2 / a / b;
+            var anguloC = Math.Acos(coseno) * 180 / Math.PI;
 
-            return (int)Math.Round(angulo); 
-        }
-
-        private double EncontrarAngulo(double areaTriangulo, double catetoA, double catetoB)
-        {
-            var seno = areaTriangulo / (catetoA * catetoB / 2);
-            return Math.Asin(seno) * 180 / Math.PI;
-        }
-
-        private double Heron(double perimetro, double ladoA, double ladoB, double ladoC)
-        {
-            return Math.Sqrt(perimetro * (perimetro - ladoA) * (perimetro - ladoB) * (perimetro - ladoC));
+            return (int)Math.Round(anguloC); 
         }
 
         private void ValidarTrianguloAmostral(TrianguloAmostral triangulo)
