@@ -2,9 +2,8 @@
 {
     public enum ClasseGeometrica
     {
-        Triangulo = 1,
-        Retangulo = 2,
-        Elipse = 3
-        //TODO classe saída para indeterminado???
+        Elipse = 1,
+        Triangulo = 2,
+        Retangulo = 3
     }
 }

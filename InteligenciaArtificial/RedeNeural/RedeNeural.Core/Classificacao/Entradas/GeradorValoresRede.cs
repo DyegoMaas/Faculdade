@@ -9,13 +9,12 @@ namespace RedeNeural.Core.Classificacao.Entradas
         public int[] GerarValor(IList<int> classificacoes)
         {
             var soma = classificacoes.Sum();
-            var stringBinaria = Convert.ToString(soma, 2); //Convert to binary in a string
-
-            var bits= stringBinaria.PadLeft(7, '0') // Add 0's from left
-                 .Select(c => int.Parse(c.ToString())) // convert each char to int
+            var stringBinaria = Convert.ToString(soma, 2); 
+            var bits= stringBinaria.PadLeft(7, '0') 
+                 .Select(c => int.Parse(c.ToString())) 
                  .Reverse()
                  .Take(7)                 
-                 .ToArray(); // Convert IEnumerable from select to Array
+                 .ToArray();
 
             return bits;
         }

@@ -33,9 +33,9 @@ namespace RedeNeural.Core.Classificacao
             get { return new DirectoryInfo(Path.Combine(diretorioBase.FullName, "DadosTreinamento")); }
         }
 
-        public string CaminhoArquivoTreinamento
+        public FileInfo ArquivoTreinamento
         {
-            get { return Path.Combine(DadosTreinamento.FullName, NomeArquivoTreinamento); }
+            get { return new FileInfo(Path.Combine(DadosTreinamento.FullName, NomeArquivoTreinamento)); }
         }
     }
 }

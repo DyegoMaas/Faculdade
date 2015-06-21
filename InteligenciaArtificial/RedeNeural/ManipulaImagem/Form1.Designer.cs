@@ -39,10 +39,14 @@ namespace ManipulaImagem
             this.caminhoArquivo = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.tbDiretorioTreinamento = new System.Windows.Forms.TextBox();
             this.btDiretorioTreinamento = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.label2 = new System.Windows.Forms.Label();
+            this.btTreinar = new System.Windows.Forms.Button();
+            this.lbGeracaoDados = new System.Windows.Forms.Label();
+            this.lbStatusTreinamento = new System.Windows.Forms.Label();
+            this.cbSobrescreverTreinamento = new System.Windows.Forms.CheckBox();
             this.Classificacao.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagem)).BeginInit();
@@ -120,6 +124,10 @@ namespace ManipulaImagem
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.cbSobrescreverTreinamento);
+            this.tabPage2.Controls.Add(this.lbStatusTreinamento);
+            this.tabPage2.Controls.Add(this.lbGeracaoDados);
+            this.tabPage2.Controls.Add(this.btTreinar);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.tbDiretorioTreinamento);
             this.tabPage2.Controls.Add(this.btDiretorioTreinamento);
@@ -130,6 +138,15 @@ namespace ManipulaImagem
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Treinamento";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Gerar dados";
             // 
             // tbDiretorioTreinamento
             // 
@@ -149,14 +166,41 @@ namespace ManipulaImagem
             this.btDiretorioTreinamento.UseVisualStyleBackColor = true;
             this.btDiretorioTreinamento.Click += new System.EventHandler(this.btDiretorioTreinamento_Click);
             // 
-            // label2
+            // btTreinar
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Gerar dados";
+            this.btTreinar.Location = new System.Drawing.Point(11, 32);
+            this.btTreinar.Name = "btTreinar";
+            this.btTreinar.Size = new System.Drawing.Size(75, 23);
+            this.btTreinar.TabIndex = 5;
+            this.btTreinar.Text = "Treinar";
+            this.btTreinar.UseVisualStyleBackColor = true;
+            this.btTreinar.Click += new System.EventHandler(this.btTreinar_Click);
+            // 
+            // lbGeracaoDados
+            // 
+            this.lbGeracaoDados.AutoSize = true;
+            this.lbGeracaoDados.Location = new System.Drawing.Point(496, 9);
+            this.lbGeracaoDados.Name = "lbGeracaoDados";
+            this.lbGeracaoDados.Size = new System.Drawing.Size(0, 13);
+            this.lbGeracaoDados.TabIndex = 6;
+            // 
+            // lbStatusTreinamento
+            // 
+            this.lbStatusTreinamento.AutoSize = true;
+            this.lbStatusTreinamento.Location = new System.Drawing.Point(92, 37);
+            this.lbStatusTreinamento.Name = "lbStatusTreinamento";
+            this.lbStatusTreinamento.Size = new System.Drawing.Size(0, 13);
+            this.lbStatusTreinamento.TabIndex = 7;
+            // 
+            // cbSobrescreverTreinamento
+            // 
+            this.cbSobrescreverTreinamento.AutoSize = true;
+            this.cbSobrescreverTreinamento.Location = new System.Drawing.Point(496, 9);
+            this.cbSobrescreverTreinamento.Name = "cbSobrescreverTreinamento";
+            this.cbSobrescreverTreinamento.Size = new System.Drawing.Size(89, 17);
+            this.cbSobrescreverTreinamento.TabIndex = 8;
+            this.cbSobrescreverTreinamento.Text = "Sobrescrever";
+            this.cbSobrescreverTreinamento.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -190,6 +234,10 @@ namespace ManipulaImagem
         private System.Windows.Forms.Button btDiretorioTreinamento;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbGeracaoDados;
+        private System.Windows.Forms.Button btTreinar;
+        private System.Windows.Forms.Label lbStatusTreinamento;
+        private System.Windows.Forms.CheckBox cbSobrescreverTreinamento;
     }
 }
 

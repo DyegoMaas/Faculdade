@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using RedeNeural.Core;
 using RedeNeural.Core.Classificacao;
 using RedeNeural.Core.Classificacao.Entradas;
 using RedeNeural.Core.Classificacao.Saidas;
@@ -31,9 +32,23 @@ namespace ManipulaImagem
             }
         }
 
+        private DiretorioTreinamento diretorioCarregado;
         private void caminhoArquivo_TextChanged(object sender, System.EventArgs e)
         {
-            ClassificarImagem(caminhoArquivo.Text);
+            caminhoArquivo.Text = openFileDialog1.FileName;
+
+            while (diretorioCarregado == null)
+            {
+                var resultado = folderBrowserDialog1.ShowDialog();
+                if (resultado == DialogResult.OK || resultado == DialogResult.Yes)
+                {
+                    diretorioCarregado = new DiretorioTreinamento(folderBrowserDialog1.SelectedPath);
+                }
+            }
+
+            var bits = ClassificarImagem(caminhoArquivo.Text);
+            var classeGeometrica = RedeIdentificadoraFormasGeometricas.Computar(bits, diretorioCarregado);
+            MessageBox.Show("A figura é: " + classeGeometrica);
         }
 
         private void btDiretorioTreinamento_Click(object sender, EventArgs e)
@@ -52,11 +67,38 @@ namespace ManipulaImagem
                 return;
 
             var diretorioTreinamento = new DiretorioTreinamento(diretorio);
+            if (diretorioTreinamento.ArquivoTreinamento.Exists && !cbSobrescreverTreinamento.Checked)
+                return;
 
+            Escrever(lbGeracaoDados, "Gerando dados de treinamento...");
             var dadosTreinamento = GerarDadosTreinamento(diretorioTreinamento);
             ExportarArquivoTreinamento(dadosTreinamento, diretorioTreinamento);
+            Escrever(lbGeracaoDados, "Dados de treinamento gerados com sucesso.");
+        }
 
-            MessageBox.Show("Dados de treinamento gerados com sucesso.");
+        private void btTreinar_Click(object sender, EventArgs e)
+        {
+            var diretorio = tbDiretorioTreinamento.Text;
+            if (string.IsNullOrWhiteSpace(diretorio) || !Directory.Exists(diretorio))
+                return;
+
+            var diretorioTreinamento = new DiretorioTreinamento(diretorio);
+            if (!diretorioTreinamento.ArquivoTreinamento.Exists)
+            {
+                Escrever(lbStatusTreinamento, "Ainda não foi gerado um arquivo de treinamento.");
+                return;
+            }
+
+            Escrever(lbStatusTreinamento, "Treinando rede neural.");
+            var redeNeural = new RedeIdentificadoraFormasGeometricas(diretorioTreinamento);
+            redeNeural.Treinar();
+            Escrever(lbStatusTreinamento, "Treinamento concluído.");
+        }
+
+        private void Escrever(Label label, string texto)
+        {
+            label.Text = texto;
+            Application.DoEvents();
         }
 
         private IEnumerable<ResultadoIdeal> GerarDadosTreinamento(DiretorioTreinamento diretorioTreinamento)
@@ -80,17 +122,20 @@ namespace ManipulaImagem
 
         private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, DiretorioTreinamento diretorioTreinamento)
         {
-            using (var arquivo = File.CreateText(diretorioTreinamento.CaminhoArquivoTreinamento))
+            var arquivoTreinamento = diretorioTreinamento.ArquivoTreinamento;
+            if(!arquivoTreinamento.Directory.Exists)
+                arquivoTreinamento.Directory.Create();
+
+            using (var arquivo = arquivoTreinamento.CreateText())
             {
                 foreach (var resultadosEsperado in datasetResultadosEsperados)
                 {
-                    //TODO precisa da vírgula???
-                    var bits = string.Join(",", resultadosEsperado.Bits);
+                    var bits = string.Join("", resultadosEsperado.Bits);
                     var linha = String.Format("{0}={1}", bits, (int) resultadosEsperado.Classe);
                     arquivo.WriteLine(linha);
                 }
             }
-        }  
+        }
 
         private int[] ClassificarImagem(string caminhoImagem)
         {
