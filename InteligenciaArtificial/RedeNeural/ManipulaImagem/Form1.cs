@@ -116,7 +116,7 @@ namespace ManipulaImagem
                 .Select(ClassificarImagem)
                 .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Triangulo)));
 
-            return datasetResultadosEsperados.Distinct();
+            return datasetResultadosEsperados;//.Distinct();
         }
 
         private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, DiretorioTreinamento diretorioTreinamento)
@@ -169,7 +169,7 @@ namespace ManipulaImagem
             imagem.Image = img;
 
             //TODO refatorar para garantir o encadeamento
-            var classificador = ClassificadorAngulos.Abordagem1();
+            var classificador = ClassificadorAngulos.Abordagem2();
             var angulos = EncontrarAngulosDosPares(pontosEncontrados, centro);
             var classificacoes = angulos.Select(classificador.Classificar).ToList();
 
