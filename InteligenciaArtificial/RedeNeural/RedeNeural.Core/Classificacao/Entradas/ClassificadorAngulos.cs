@@ -34,6 +34,17 @@ namespace RedeNeural.Core.Classificacao.Entradas
             return classificadorAngulos;
         }
 
+        public static ClassificadorAngulos Abordagem3()
+        {
+            var classificadorAngulos = new ClassificadorAngulos();
+            classificadorAngulos.Ate(angulo: 75, retornar: 2);
+            classificadorAngulos.Entre(angulo1: 75, angulo2: 110, retornar: 3);
+            classificadorAngulos.Entre(angulo1: 110, angulo2: 145, retornar: 1);
+            classificadorAngulos.Apos(angulo: 145, retornar: 0);
+
+            return classificadorAngulos;
+        }
+
         public int Classificar(int angulo)
         {
             foreach (var funcao in funcoesClassificacao)

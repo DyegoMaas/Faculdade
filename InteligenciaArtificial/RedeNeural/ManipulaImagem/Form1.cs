@@ -116,7 +116,7 @@ namespace ManipulaImagem
                 .Select(ClassificarImagem)
                 .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Triangulo)));
 
-            return datasetResultadosEsperados.Distinct();
+            return datasetResultadosEsperados;//.Distinct();
         }
 
         private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, DiretorioTreinamento diretorioTreinamento)
@@ -167,9 +167,11 @@ namespace ManipulaImagem
                 CvInvoke.cvCircle(img.Ptr, pontoDesenho, 4, new Bgr(Color.Blue).MCvScalar, 5, Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
             }
             imagem.Image = img;
+            imagem.Width = bitmap.Width;
+            imagem.Height = bitmap.Height;
 
             //TODO refatorar para garantir o encadeamento
-            var classificador = ClassificadorAngulos.Abordagem2();
+            var classificador = ClassificadorAngulos.Abordagem3();
             var angulos = EncontrarAngulosDosPares(pontosEncontrados, centro);
             var classificacoes = angulos.Select(classificador.Classificar).ToList();
 

@@ -21,30 +21,30 @@ namespace RedeNeural.Core
 	{
 		private readonly DiretorioTreinamento diretorioTreinamento;
 		private readonly IList<ResultadoIdeal> resultadosIdeais = new List<ResultadoIdeal>();
-        //private CPNNetwork redeCPN;
-	    private BasicNetwork rede;
+		//private CPNNetwork redeCPN;
+		private BasicNetwork rede;
 
 		//https://www.wikiwand.com/en/Counterpropagation_network
 		public RedeIdentificadoraFormasGeometricas(DiretorioTreinamento diretorioTreinamento)
 		{
 			this.diretorioTreinamento = diretorioTreinamento;
 			CarregarResultadosIdeais(diretorioTreinamento);
-            //redeCPN = new CPNNetwork(theInputCount: 7, theInstarCount: resultadosIdeais.Count, theOutstarCount: 3, theWinnerCount: 1);
-            //rede = new BasicNetwork();
-            //rede.AddLayer(new BasicLayer(null, true, 7));
-            //rede.AddLayer(new BasicLayer(new ActivationSigmoid(), true, 10));
-            //rede.AddLayer(new BasicLayer(new ActivationSigmoid(), false, 3));
-            //rede.Structure.FinalizeStructure();
+			//redeCPN = new CPNNetwork(theInputCount: 7, theInstarCount: resultadosIdeais.Count, theOutstarCount: 3, theWinnerCount: 1);
+			//rede = new BasicNetwork();
+			//rede.AddLayer(new BasicLayer(null, true, 7));
+			//rede.AddLayer(new BasicLayer(new ActivationSigmoid(), true, 10));
+			//rede.AddLayer(new BasicLayer(new ActivationSigmoid(), false, 3));
+			//rede.Structure.FinalizeStructure();
 
-            var pattern = new FeedForwardPattern
-            {
-                InputNeurons = 7, 
-                OutputNeurons = 3
-            };
-		    pattern.AddHiddenLayer(10);
-            pattern.ActivationFunction = new ActivationSigmoid();
-            rede = (BasicNetwork)pattern.Generate();
-            rede.Reset();
+			var pattern = new FeedForwardPattern
+			{
+				InputNeurons = 7, 
+				OutputNeurons = 3,
+                ActivationFunction = new ActivationSigmoid()//ActivationSteepenedSigmoid() //sigmoed
+			};
+			pattern.AddHiddenLayer(10);
+			rede = (BasicNetwork)pattern.Generate();
+			rede.Reset();
 		}
 
 		private void CarregarResultadosIdeais(DiretorioTreinamento diretorioTreinamento)
@@ -81,54 +81,54 @@ namespace RedeNeural.Core
 			}
 
 			var treinamento = new BasicMLDataSet(inputsParaTreinamento, saidasIdeais);
-            TreinarX(treinamento);
-            //TreinarInstar(redeCPN, treinamento);
-            //TreinarOutstar(redeCPN, treinamento);
+			TreinarX(treinamento);
+			//TreinarInstar(redeCPN, treinamento);
+			//TreinarOutstar(redeCPN, treinamento);
 
-		    var persistBasicNetwork = new PersistBasicNetwork();
-            using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
-            {
-                persistBasicNetwork.Save(stream, rede);
-            }
-		    //var persistCpn = new PersistCPN();
-		    //using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
-		    //{
-		    //    persistCpn.Save(stream, redeCPN);
-		    //}
+			var persistBasicNetwork = new PersistBasicNetwork();
+			using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
+			{
+				persistBasicNetwork.Save(stream, rede);
+			}
+			//var persistCpn = new PersistCPN();
+			//using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
+			//{
+			//    persistCpn.Save(stream, redeCPN);
+			//}
 		}
 
-	    private void TreinarX(BasicMLDataSet treinamento)
-	    {
-            var epoca = 1;
-            var treino = new ResilientPropagation(rede, treinamento);
-            
-	        do
-            {
-                treino.Iteration();
-                Console.WriteLine("Treinando, Epoch #" + epoca + ", Error: " + treino.Error);
-                epoca++;
-            }
-            while (treino.Error > 0.099);
-	    }
+		private void TreinarX(BasicMLDataSet treinamento)
+		{
+			var epoca = 1;
+			var treino = new ResilientPropagation(rede, treinamento);
+			
+			do
+			{
+				treino.Iteration();
+				Console.WriteLine("Treinando, Epoch #" + epoca + ", Error: " + treino.Error);
+				epoca++;
+			}
+			while (epoca < 10000 && treino.Error > 0.001);
+		}
 
-	    public static ClasseGeometrica Computar(int[] bitsEntrada, DiretorioTreinamento diretorioTreinamento)
+		public static ClasseGeometrica Computar(int[] bitsEntrada, DiretorioTreinamento diretorioTreinamento)
 		{
 			var redeIdentificadoraFormasGeometricas = new RedeIdentificadoraFormasGeometricas(diretorioTreinamento);
 
-            var persistCpn = new PersistBasicNetwork();
-            using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
-            {
-                redeIdentificadoraFormasGeometricas.rede = (BasicNetwork)persistCpn.Read(stream);
-            }
-            //var persistCpn = new PersistCPN();
-            //using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
-            //{
-            //    redeIdentificadoraFormasGeometricas.redeCPN = (CPNNetwork)persistCpn.Read(stream);
-            //}
+			var persistCpn = new PersistBasicNetwork();
+			using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
+			{
+				redeIdentificadoraFormasGeometricas.rede = (BasicNetwork)persistCpn.Read(stream);
+			}
+			//var persistCpn = new PersistCPN();
+			//using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
+			//{
+			//    redeIdentificadoraFormasGeometricas.redeCPN = (CPNNetwork)persistCpn.Read(stream);
+			//}
 
 			var input = new BasicMLData(bitsEntrada.Select(Convert.ToDouble).ToArray());
 			var output = redeIdentificadoraFormasGeometricas.rede.Compute(input);
-            //var output = redeIdentificadoraFormasGeometricas.redeCPN.Compute(input);
+			//var output = redeIdentificadoraFormasGeometricas.redeCPN.Compute(input);
 
 			var classe = redeIdentificadoraFormasGeometricas.ObterClasse(output);
 			return classe;
@@ -141,9 +141,9 @@ namespace RedeNeural.Core
 
 		private ClasseGeometrica ObterClasse(IMLData output)
 		{
-            if (output[0] > output[1] && output[0] > output[2]) return ClasseGeometrica.Elipse;
-            if (output[1] > output[0] && output[1] > output[2]) return ClasseGeometrica.Retangulo;
-			return ClasseGeometrica.Triangulo;
+			if (output[0] > output[1] && output[0] > output[2]) return ClasseGeometrica.Elipse;
+			if (output[2] > output[0] && output[2] > output[1]) return ClasseGeometrica.Triangulo;
+			return ClasseGeometrica.Retangulo;
 		}
 
 		private void TreinarInstar(CPNNetwork network, IMLDataSet training) {
@@ -176,9 +176,12 @@ namespace RedeNeural.Core
 		{
 			switch (classe)
 			{
-				case ClasseGeometrica.Elipse: return new[] {1d, 0d, 0d};
-				case ClasseGeometrica.Retangulo: return new[] {0d, 1d, 0d};
-				default: return new[] {0d, 0d, 1d};
+                //case ClasseGeometrica.Elipse: return new[] { 1d, -1d, -1d };
+                //case ClasseGeometrica.Retangulo: return new[] { -1d, 1d, -1d };
+                //default: return new[] { -1d, -1d, 1d };
+                case ClasseGeometrica.Elipse: return new[] { 1d, 0d, 0d };
+                case ClasseGeometrica.Retangulo: return new[] { 0d, 1d, 0d };
+                default: return new[] { 0d, 0d, 1d };
 			}
 		}
 
