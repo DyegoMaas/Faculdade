@@ -15,6 +15,12 @@ namespace RedeNeural.Core.Classificacao.Entradas
         //https://www.grc.nasa.gov/www/k-12/airplane/Images/tablsin.gif
         //https://br.answers.yahoo.com/question/index?qid=20070808135702AAieQL4
         //http://objetoseducacionais2.mec.gov.br/bitstream/handle/mec/10396/geo0304.htm
+
+        //https://www.khanacademy.org/math/linear-algebra/vectors_and_spaces/dot_cross_products/v/defining-the-angle-between-vectors
+        //https://www.mathsisfun.com/algebra/trig-cosine-law.html
+        //https://www.mathsisfun.com/algebra/trig-solving-triangles.html
+        //http://www.calculatorsoup.com/calculators/geometry-plane/triangle-theorems.php
+        //https://www.youtube.com/watch?v=50XUgGKd8pw
         public int ExtrairRelacaoAngulos(TrianguloAmostral triangulo)
         {
             ValidarTrianguloAmostral(triangulo);
