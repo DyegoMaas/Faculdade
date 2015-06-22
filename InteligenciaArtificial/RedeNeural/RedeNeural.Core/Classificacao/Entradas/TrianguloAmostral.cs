@@ -2,7 +2,7 @@
 {
     public class TrianguloAmostral
     {
-        private const int NumeroPontosNaBorda = 32;
+        private const int NumeroPontosNaBorda = 40;
         public const double DiferencaAngular = 360d / NumeroPontosNaBorda;
 
         public Vector2 Centro { get; private set; }
