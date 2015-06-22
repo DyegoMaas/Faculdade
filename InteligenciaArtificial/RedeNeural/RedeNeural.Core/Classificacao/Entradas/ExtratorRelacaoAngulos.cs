@@ -23,6 +23,11 @@ namespace RedeNeural.Core.Classificacao.Entradas
             var b = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno1);
             var c = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno2);
             var coseno = (-(c * c) + a * a + b * b) / 2 / a / b;
+            //var uDotV = triangulo.PontoContorno1.X * triangulo.PontoContorno2.X +
+            //        triangulo.PontoContorno1.Y * triangulo.PontoContorno2.Y; //P1->P2
+            //var u = Math.Sqrt(triangulo.PontoContorno1.X * triangulo.PontoContorno1.X + triangulo.PontoContorno1.Y * triangulo.PontoContorno1.Y);
+            //var v = Math.Sqrt(triangulo.PontoContorno2.X * triangulo.PontoContorno2.X + triangulo.PontoContorno2.Y * triangulo.PontoContorno2.Y);
+            //var coseno = uDotV / (u * v);
             var anguloC = Math.Acos(coseno) * 180 / Math.PI;
 
             return (int)Math.Round(anguloC); 

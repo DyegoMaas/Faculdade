@@ -65,7 +65,7 @@ namespace RedeNeural.Core
 			TreinarOutstar(redeCPN, treinamento);
 
 			var persistCpn = new PersistCPN();
-			using (var stream = File.Create(Path.Combine(diretorioTreinamento.DadosTreinamento.FullName, "rede.dat")))
+			using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
 			{
 				persistCpn.Save(stream, redeCPN);
 			}
@@ -75,7 +75,7 @@ namespace RedeNeural.Core
 		{
 			var redeIdentificadoraFormasGeometricas = new RedeIdentificadoraFormasGeometricas(diretorioTreinamento);
 			var persistCpn = new PersistCPN();
-			using (var stream = File.Open(Path.Combine(diretorioTreinamento.DadosTreinamento.FullName, "rede.dat"), FileMode.Open))
+			using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
 			{
 				redeIdentificadoraFormasGeometricas.redeCPN = (CPNNetwork)persistCpn.Read(stream);
 			}
@@ -85,6 +85,11 @@ namespace RedeNeural.Core
 
 			var classe = redeIdentificadoraFormasGeometricas.ObterClasse(output);
 			return classe;
+		}
+
+		private static string ObterCaminhoArquivoPersistencia(DiretorioTreinamento diretorioTreinamento)
+		{
+			return Path.Combine(diretorioTreinamento.DadosTreinamento.FullName, "rede.dat");
 		}
 
 		private ClasseGeometrica ObterClasse(IMLData output)
