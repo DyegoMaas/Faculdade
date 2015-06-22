@@ -18,7 +18,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
             classificadorAngulos.Ate(angulo: 90, retornar: 5);
             classificadorAngulos.Entre(angulo1: 90, angulo2: 120, retornar: 2);
             classificadorAngulos.Entre(angulo1: 120, angulo2: 150, retornar: 1);
-            classificadorAngulos.Apos(angulo: 150, retornar: 1);
+            classificadorAngulos.Apos(angulo: 150, retornar: 0);
             
             return classificadorAngulos;
         }
@@ -29,7 +29,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
             classificadorAngulos.Ate(angulo: 90, retornar: 3);
             classificadorAngulos.Entre(angulo1: 90, angulo2: 120, retornar: 2);
             classificadorAngulos.Entre(angulo1: 120, angulo2: 150, retornar: 1);
-            classificadorAngulos.Apos(angulo: 150, retornar: 1);
+            classificadorAngulos.Apos(angulo: 150, retornar: 0);
 
             return classificadorAngulos;
         }
