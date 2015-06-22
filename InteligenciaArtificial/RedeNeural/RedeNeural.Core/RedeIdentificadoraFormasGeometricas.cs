@@ -37,6 +37,12 @@ namespace RedeNeural.Core
 			pattern.AddHiddenLayer(10);
 			rede = (BasicNetwork)pattern.Generate();
 			rede.Reset();
+			
+			//10=   0,075706949503846
+			//11=   0,0757267228307505
+			//09=   0,0757645945021646
+			//08=   0,0757714972102258
+			//10+3= 0,0759034873516048
 		}
 
 		private void CarregarResultadosIdeais(DiretorioTreinamento diretorioTreinamento)
@@ -93,19 +99,16 @@ namespace RedeNeural.Core
 		
 		public static ClasseGeometrica Computar(int[] bitsEntrada, DiretorioTreinamento diretorioTreinamento)
 		{
-			var redeIdentificadoraFormasGeometricas = new RedeIdentificadoraFormasGeometricas(diretorioTreinamento);
-
 			var persistCpn = new PersistBasicNetwork();
 			using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
 			{
-				redeIdentificadoraFormasGeometricas.rede = (BasicNetwork)persistCpn.Read(stream);
+				var rede = (BasicNetwork)persistCpn.Read(stream);
+				var input = new BasicMLData(bitsEntrada.Select(Convert.ToDouble).ToArray());
+				var output = rede.Compute(input);
+
+				var classe = ObterClasse(output);
+				return classe;
 			}
-
-			var input = new BasicMLData(bitsEntrada.Select(Convert.ToDouble).ToArray());
-			var output = redeIdentificadoraFormasGeometricas.rede.Compute(input);
-
-			var classe = redeIdentificadoraFormasGeometricas.ObterClasse(output);
-			return classe;
 		}
 
 		private static string ObterCaminhoArquivoPersistencia(DiretorioTreinamento diretorioTreinamento)
@@ -113,7 +116,7 @@ namespace RedeNeural.Core
 			return Path.Combine(diretorioTreinamento.DadosTreinamento.FullName, "rede.dat");
 		}
 
-		private ClasseGeometrica ObterClasse(IMLData output)
+		private static ClasseGeometrica ObterClasse(IMLData output)
 		{
 			if (output[0] > output[1] && output[0] > output[2]) return ClasseGeometrica.Elipse;
 			if (output[2] > output[0] && output[2] > output[1]) return ClasseGeometrica.Triangulo;
