@@ -19,18 +19,26 @@ namespace RedeNeural.Core.Classificacao.Entradas
         {
             ValidarTrianguloAmostral(triangulo);
 
-            var a = DistanciaEntre(triangulo.PontoContorno1, triangulo.PontoContorno2);
-            var b = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno1);
-            var c = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno2);
+            var a = DistanciaEntre(triangulo.PontoContorno2, triangulo.PontoContorno3);
+            var b = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno2);
+            var c = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno3);
             var coseno = (-(c * c) + a * a + b * b) / 2 / a / b;
+            var angulo23 = Math.Acos(coseno) * 180 / Math.PI;
+
+
+            var a2 = DistanciaEntre(triangulo.PontoContorno1, triangulo.PontoContorno2);
+            var b2 = b;
+            var c2 = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno1);
+            coseno = (-(c2 * c2) + a2 * a2 + b2 * b2) / 2 / a2 / b2;
+            var angulo21 = Math.Acos(coseno) * 180 / Math.PI;
             //var uDotV = triangulo.PontoContorno1.X * triangulo.PontoContorno2.X +
             //        triangulo.PontoContorno1.Y * triangulo.PontoContorno2.Y; //P1->P2
             //var u = Math.Sqrt(triangulo.PontoContorno1.X * triangulo.PontoContorno1.X + triangulo.PontoContorno1.Y * triangulo.PontoContorno1.Y);
             //var v = Math.Sqrt(triangulo.PontoContorno2.X * triangulo.PontoContorno2.X + triangulo.PontoContorno2.Y * triangulo.PontoContorno2.Y);
             //var coseno = uDotV / (u * v);
-            var anguloC = Math.Acos(coseno) * 180 / Math.PI;
 
-            return (int)Math.Round(anguloC); 
+            var angulo = (int)Math.Round(angulo21) + (int)Math.Round(angulo23);
+            return angulo; 
         }
 
         private void ValidarTrianguloAmostral(TrianguloAmostral triangulo)

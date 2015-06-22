@@ -38,7 +38,7 @@ namespace RedeNeural.Testes
             var zero = new Vector2();
             IList<TrianguloAmostralParaTeste> paresParaTeste = new[]
             {
-                new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(x1, y1), new Vector2(x2, y2)), anguloEsperado)
+                new TrianguloAmostralParaTeste(new TrianguloAmostral(zero, new Vector2(x1, y1), new Vector2(x2, y2), new Vector2()), anguloEsperado)
             };
 
             var pares = paresParaTeste.Select(p => p.Triangulo).ToList();
@@ -51,7 +51,7 @@ namespace RedeNeural.Testes
         [Test]
         public void calculando_o_angulo_entre_dois_pontos_iguais()
         {
-            var parAmostralComPontosIguais = new TrianguloAmostral(new Vector2(), new Vector2(), new Vector2());
+            var parAmostralComPontosIguais = new TrianguloAmostral(new Vector2(), new Vector2(), new Vector2(), new Vector2());
 
             Action acaoExtrairRelacaoAngulos = () => extratorRelacaoAngulos.ExtrairRelacaoAngulos(new[] { parAmostralComPontosIguais });
 
