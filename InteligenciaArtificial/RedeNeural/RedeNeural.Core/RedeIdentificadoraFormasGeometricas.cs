@@ -2,6 +2,7 @@
 using Encog.Engine.Network.Activation;
 using Encog.ML.Data;
 using Encog.ML.Data.Basic;
+using Encog.Neural.Data.Basic;
 using Encog.Neural.Networks;
 using Encog.Neural.Networks.Training.Propagation.Resilient;
 using Encog.Neural.Pattern;
@@ -71,7 +72,7 @@ namespace RedeNeural.Core
 				saidasIdeais[i] = MontarArrayResultado(resultadosIdeais[i].Classe);
 			}
 
-			var treinamento = new BasicMLDataSet(inputsParaTreinamento, saidasIdeais);
+			var treinamento = new BasicNeuralDataSet(inputsParaTreinamento, saidasIdeais);
 			var treino = new ResilientPropagation(rede, treinamento);
 
 			var epoca = 1;
