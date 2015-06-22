@@ -116,7 +116,7 @@ namespace ManipulaImagem
                 .Select(ClassificarImagem)
                 .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Triangulo)));
 
-            return datasetResultadosEsperados;//.Distinct();
+            return datasetResultadosEsperados.Distinct();
         }
 
         private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, DiretorioTreinamento diretorioTreinamento)

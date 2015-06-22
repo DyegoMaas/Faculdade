@@ -30,13 +30,16 @@ namespace RedeNeural.Core.Classificacao
                     return false;
             }
 
+            if (Classe != other.Classe)
+                return false;
+
             return true;
         }
 
         public override int GetHashCode()
         {
             var stringBits = string.Join("", Bits);
-            return stringBits.GetHashCode();
+            return stringBits.GetHashCode() ^ Classe.ToString().GetHashCode();
         }
     }
 }
