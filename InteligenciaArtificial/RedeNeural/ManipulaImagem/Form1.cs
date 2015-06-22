@@ -282,9 +282,9 @@ namespace ManipulaImagem
                 //var pontoC = new Vector2(pontosEncontrados[i].X, pontosEncontrados[i].Y);
                 var nodoPontoA = linkedList.Find(listaVector2[i]);
                 var pontoCentral = new Vector2(centro.X, centro.Y);
-                var pontoA = nodoPontoA.Value;
-                var pontoB = i == pontosEncontrados.Count - 1 ? linkedList.First.Value : nodoPontoA.Next.Value;
-                var pontoC = i == 0 ? linkedList.Last.Value : nodoPontoA.Previous.Value;
+                var pontoA = i == 0 ? linkedList.Last.Value : nodoPontoA.Previous.Value;
+                var pontoB = nodoPontoA.Value;
+                var pontoC = i == pontosEncontrados.Count - 1 ? linkedList.First.Value : nodoPontoA.Next.Value;
 
                 var trianguloAmostral = new TrianguloAmostral(pontoCentral, pontoA, pontoB, pontoC);
                 var angulo = extrator.ExtrairRelacaoAngulos(trianguloAmostral);

@@ -1,8 +1,12 @@
 ﻿using Encog;
+using Encog.Engine.Network.Activation;
 using Encog.ML.Data;
 using Encog.ML.Data.Basic;
 using Encog.Neural.CPN;
 using Encog.Neural.CPN.Training;
+using Encog.Neural.Networks;
+using Encog.Neural.Networks.Training.Propagation.Resilient;
+using Encog.Neural.Pattern;
 using RedeNeural.Core.Classificacao;
 using RedeNeural.Core.Classificacao.Saidas;
 using System;
@@ -17,14 +21,30 @@ namespace RedeNeural.Core
 	{
 		private readonly DiretorioTreinamento diretorioTreinamento;
 		private readonly IList<ResultadoIdeal> resultadosIdeais = new List<ResultadoIdeal>();
-		private CPNNetwork redeCPN;
+        //private CPNNetwork redeCPN;
+	    private BasicNetwork rede;
 
 		//https://www.wikiwand.com/en/Counterpropagation_network
 		public RedeIdentificadoraFormasGeometricas(DiretorioTreinamento diretorioTreinamento)
 		{
 			this.diretorioTreinamento = diretorioTreinamento;
 			CarregarResultadosIdeais(diretorioTreinamento);
-			redeCPN = new CPNNetwork(theInputCount: 7, theInstarCount: resultadosIdeais.Count, theOutstarCount: 3, theWinnerCount: 1);
+            //redeCPN = new CPNNetwork(theInputCount: 7, theInstarCount: resultadosIdeais.Count, theOutstarCount: 3, theWinnerCount: 1);
+            //rede = new BasicNetwork();
+            //rede.AddLayer(new BasicLayer(null, true, 7));
+            //rede.AddLayer(new BasicLayer(new ActivationSigmoid(), true, 10));
+            //rede.AddLayer(new BasicLayer(new ActivationSigmoid(), false, 3));
+            //rede.Structure.FinalizeStructure();
+
+            var pattern = new FeedForwardPattern
+            {
+                InputNeurons = 7, 
+                OutputNeurons = 3
+            };
+		    pattern.AddHiddenLayer(10);
+            pattern.ActivationFunction = new ActivationSigmoid();
+            rede = (BasicNetwork)pattern.Generate();
+            rede.Reset();
 		}
 
 		private void CarregarResultadosIdeais(DiretorioTreinamento diretorioTreinamento)
@@ -40,7 +60,7 @@ namespace RedeNeural.Core
 					var bits = par[0].Select(c => new string(c, 1))
 						.Select(s => Convert.ToInt32(s))
 						.ToArray();
-					var classeEsperada = (ClasseGeometrica) Convert.ToInt32(linha[1]);
+					var classeEsperada = (ClasseGeometrica)Convert.ToInt32(par[1]);
 
 					resultadosIdeais.Add(new ResultadoIdeal(bits, classeEsperada));
 				}
@@ -61,27 +81,54 @@ namespace RedeNeural.Core
 			}
 
 			var treinamento = new BasicMLDataSet(inputsParaTreinamento, saidasIdeais);
-			TreinarInstar(redeCPN, treinamento);
-			TreinarOutstar(redeCPN, treinamento);
+            TreinarX(treinamento);
+            //TreinarInstar(redeCPN, treinamento);
+            //TreinarOutstar(redeCPN, treinamento);
 
-			var persistCpn = new PersistCPN();
-			using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
-			{
-				persistCpn.Save(stream, redeCPN);
-			}
+		    var persistBasicNetwork = new PersistBasicNetwork();
+            using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
+            {
+                persistBasicNetwork.Save(stream, rede);
+            }
+		    //var persistCpn = new PersistCPN();
+		    //using (var stream = File.Create(ObterCaminhoArquivoPersistencia(diretorioTreinamento)))
+		    //{
+		    //    persistCpn.Save(stream, redeCPN);
+		    //}
 		}
 
-		public static ClasseGeometrica Computar(int[] bitsEntrada, DiretorioTreinamento diretorioTreinamento)
+	    private void TreinarX(BasicMLDataSet treinamento)
+	    {
+            var epoca = 1;
+            var treino = new ResilientPropagation(rede, treinamento);
+            
+	        do
+            {
+                treino.Iteration();
+                Console.WriteLine("Treinando, Epoch #" + epoca + ", Error: " + treino.Error);
+                epoca++;
+            }
+            while (treino.Error > 0.099);
+	    }
+
+	    public static ClasseGeometrica Computar(int[] bitsEntrada, DiretorioTreinamento diretorioTreinamento)
 		{
 			var redeIdentificadoraFormasGeometricas = new RedeIdentificadoraFormasGeometricas(diretorioTreinamento);
-			var persistCpn = new PersistCPN();
-			using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
-			{
-				redeIdentificadoraFormasGeometricas.redeCPN = (CPNNetwork)persistCpn.Read(stream);
-			}
+
+            var persistCpn = new PersistBasicNetwork();
+            using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
+            {
+                redeIdentificadoraFormasGeometricas.rede = (BasicNetwork)persistCpn.Read(stream);
+            }
+            //var persistCpn = new PersistCPN();
+            //using (var stream = File.Open(ObterCaminhoArquivoPersistencia(diretorioTreinamento), FileMode.Open))
+            //{
+            //    redeIdentificadoraFormasGeometricas.redeCPN = (CPNNetwork)persistCpn.Read(stream);
+            //}
 
 			var input = new BasicMLData(bitsEntrada.Select(Convert.ToDouble).ToArray());
-			var output = redeIdentificadoraFormasGeometricas.redeCPN.Compute(input);
+			var output = redeIdentificadoraFormasGeometricas.rede.Compute(input);
+            //var output = redeIdentificadoraFormasGeometricas.redeCPN.Compute(input);
 
 			var classe = redeIdentificadoraFormasGeometricas.ObterClasse(output);
 			return classe;
@@ -94,8 +141,8 @@ namespace RedeNeural.Core
 
 		private ClasseGeometrica ObterClasse(IMLData output)
 		{
-			if(output[0] == 1d) return ClasseGeometrica.Elipse;
-			if(output[1] == 1d) return ClasseGeometrica.Retangulo;
+            if (output[0] > output[1] && output[0] > output[2]) return ClasseGeometrica.Elipse;
+            if (output[1] > output[0] && output[1] > output[2]) return ClasseGeometrica.Retangulo;
 			return ClasseGeometrica.Triangulo;
 		}
 
