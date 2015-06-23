@@ -14,7 +14,7 @@ namespace RedeNeural.Testes
         [TestCase(180, 1)]
         public void configurando_as_entradas_(int angulo, int classificacaoEsperada)
         {
-            var classificadorAngulos = ClassificadorAngulos.Abordagem1();
+            var classificadorAngulos = ClassificadorFuzzy.Abordagem1();
 
             var classificacao = classificadorAngulos.Classificar(angulo);
 

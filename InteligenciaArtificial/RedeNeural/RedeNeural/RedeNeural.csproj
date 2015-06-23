@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedeIdentificadoraFormasGeometricas.cs" />
+    <Compile Include="ExemploXOR.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

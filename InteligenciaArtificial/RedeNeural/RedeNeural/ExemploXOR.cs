@@ -8,7 +8,7 @@ using System;
 
 namespace RedeNeural
 {
-    public class RedeIdentificadoraFormasGeometricas
+    public class ExemploXOR
     {
         public static double[][] XORInput = new[]
         {

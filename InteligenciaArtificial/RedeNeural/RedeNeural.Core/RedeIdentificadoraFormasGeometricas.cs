@@ -21,7 +21,7 @@ namespace RedeNeural.Core
 	{
 		private readonly DiretorioTreinamento diretorioTreinamento;
 		private readonly IList<ResultadoIdeal> resultadosIdeais = new List<ResultadoIdeal>();
-		private BasicNetwork rede;
+		private readonly BasicNetwork rede;
 
 		public RedeIdentificadoraFormasGeometricas(DiretorioTreinamento diretorioTreinamento)
 		{
@@ -37,7 +37,6 @@ namespace RedeNeural.Core
 			pattern.AddHiddenLayer(10);
 			rede = (BasicNetwork)pattern.Generate();
 			rede.Reset();
-			
 			//10=   0,075706949503846
 			//11=   0,0757267228307505
 			//09=   0,0757645945021646
