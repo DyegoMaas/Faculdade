@@ -116,7 +116,7 @@ namespace ManipulaImagem
                 .Select(ClassificarImagem)
                 .Select(bits => new ResultadoIdeal(bits, ClasseGeometrica.Triangulo)));
 
-            return datasetResultadosEsperados;//.Distinct();
+            return datasetResultadosEsperados;
         }
 
         private void ExportarArquivoTreinamento(IEnumerable<ResultadoIdeal> datasetResultadosEsperados, DiretorioTreinamento diretorioTreinamento)
@@ -271,15 +271,11 @@ namespace ManipulaImagem
             var listaVector2 = pontosEncontrados.Select(p => new Vector2(p.X, p.Y)).ToList();
             for (int i = 0; i < pontosEncontrados.Count; i++)
             {
-                var linkedListNode = linkedList.AddLast(listaVector2[i]);
+                linkedList.AddLast(listaVector2[i]);
             }
 
             for (int i = 0; i < pontosEncontrados.Count; i++)
             {
-                //var pontoCentral = new Vector2(centro.X, centro.Y);
-                //var pontoA = new Vector2(pontosEncontrados[i - 2].X, pontosEncontrados[i - 2].Y);
-                //var pontoB = new Vector2(pontosEncontrados[i - 1].X, pontosEncontrados[i - 1].Y);
-                //var pontoC = new Vector2(pontosEncontrados[i].X, pontosEncontrados[i].Y);
                 var nodoPontoA = linkedList.Find(listaVector2[i]);
                 var pontoCentral = new Vector2(centro.X, centro.Y);
                 var pontoA = i == 0 ? linkedList.Last.Value : nodoPontoA.Previous.Value;
@@ -290,30 +286,6 @@ namespace ManipulaImagem
                 var angulo = extrator.ExtrairRelacaoAngulos(trianguloAmostral);
                 lista.Add(angulo);
             }
-            
-            //var doublyLinkedList = new DLinkedList<PointF>();
-            //for (int i = 0; i < pontosEncontrados.Count; i++)
-            //{
-            //    doublyLinkedList.InsertNext(pontosEncontrados[i]);
-            //}
-
-
-            //var linkedList = new LinkedList<PointF>();
-            //for (int i = 0; i < pontosEncontrados.Count; i++)
-            //{
-            //    if (i == 0)
-            //    {
-            //        linkedList.AddFirst(pontosEncontrados[i]);
-            //    }
-            //    var pontoCentral = new Vector2(centro.X, centro.Y);
-            //    var pontoA = new Vector2(pontosEncontrados[i - 2].X, pontosEncontrados[i - 2].Y);
-            //    var pontoB = new Vector2(pontosEncontrados[i - 1].X, pontosEncontrados[i - 1].Y);
-            //    var pontoC = new Vector2(pontosEncontrados[i].X, pontosEncontrados[i].Y);
-
-            //    var trianguloAmostral = new TrianguloAmostral(pontoCentral, pontoA, pontoB, pontoC);
-            //    var angulo = extrator.ExtrairRelacaoAngulos(trianguloAmostral);
-            //    lista.Add(angulo);
-            //}
 
             return lista;
         }
@@ -329,11 +301,6 @@ namespace ManipulaImagem
             return pixel.R == 0 &&
                 pixel.G == 0 &&
                 pixel.B == 0;
-        }
-
-        private void tabPage2_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
