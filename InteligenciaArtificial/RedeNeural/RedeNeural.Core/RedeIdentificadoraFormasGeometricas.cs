@@ -37,11 +37,13 @@ namespace RedeNeural.Core
 			pattern.AddHiddenLayer(10);
 			rede = (BasicNetwork)pattern.Generate();
 			rede.Reset();
-			//10=   0,075706949503846
-			//11=   0,0757267228307505
-			//09=   0,0757645945021646
-			//08=   0,0757714972102258
-			//10+3= 0,0759034873516048
+            //10=   0,0756553302132277  //ResilientPropagation + 1000 iterações
+            //10=   0,075706949503846   //ResilientPropagation + 3000 iterações
+            //10=   0,07571620027285    //BackPropagation + 30000 iterações
+            //11=   0,0757267228307505  //ResilientPropagation + 3000 iterações
+            //09=   0,0757645945021646  //ResilientPropagation + 3000 iterações
+            //08=   0,0757714972102258  //ResilientPropagation + 3000 iterações
+            //10+3= 0,0759034873516048  //ResilientPropagation + 3000 iterações
 		}
 
 		private void CarregarResultadosIdeais(DiretorioTreinamento diretorioTreinamento)

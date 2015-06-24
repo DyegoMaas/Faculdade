@@ -156,7 +156,7 @@ namespace ManipulaImagem
 
             var centro = EncontrarCentroDaFormaGeometrica(pontosContorno);
             var bitmap = img.ToBitmap();
-            const double stepAngular = TrianguloAmostral.DiferencaAngular;
+            const double stepAngular = GrupoAmostralAmostral.DiferencaAngular;
 
             var pontosEncontrados = EncontrarPontosInteresseNoContorno(centro, bitmap, img, stepAngular);
 
@@ -282,7 +282,7 @@ namespace ManipulaImagem
                 var pontoB = nodoPontoA.Value;
                 var pontoC = i == pontosEncontrados.Count - 1 ? linkedList.First.Value : nodoPontoA.Next.Value;
 
-                var trianguloAmostral = new TrianguloAmostral(pontoCentral, pontoA, pontoB, pontoC);
+                var trianguloAmostral = new GrupoAmostralAmostral(pontoCentral, pontoA, pontoB, pontoC);
                 var angulo = extrator.ExtrairRelacaoAngulos(trianguloAmostral);
                 lista.Add(angulo);
             }

@@ -6,7 +6,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
 {
     public class GeradorValoresRede
     {
-        public const int NumeroBits = 8;
+        public const int NumeroBits = 7;
         public int[] GerarValor(IList<int> classificacoes)
         {
             var soma = classificacoes.Sum();

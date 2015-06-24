@@ -6,7 +6,7 @@ namespace RedeNeural.Core.Classificacao.Entradas
 {
     public class ExtratorRelacaoAngulos
     {
-        public IList<int> ExtrairRelacaoAngulos(IList<TrianguloAmostral> triangulosAmostrais)
+        public IList<int> ExtrairRelacaoAngulos(IList<GrupoAmostralAmostral> triangulosAmostrais)
         {
             return triangulosAmostrais.Select(ExtrairRelacaoAngulos).ToList();
         }
@@ -21,35 +21,35 @@ namespace RedeNeural.Core.Classificacao.Entradas
         //https://www.mathsisfun.com/algebra/trig-solving-triangles.html
         //http://www.calculatorsoup.com/calculators/geometry-plane/triangle-theorems.php
         //https://www.youtube.com/watch?v=50XUgGKd8pw
-        public int ExtrairRelacaoAngulos(TrianguloAmostral triangulo)
+        public int ExtrairRelacaoAngulos(GrupoAmostralAmostral grupo)
         {
-            ValidarTrianguloAmostral(triangulo);
+            ValidarTrianguloAmostral(grupo);
 
-            var a = DistanciaEntre(triangulo.PontoContorno2, triangulo.PontoContorno3);
-            var b = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno2);
-            var c = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno3);
+            var a = DistanciaEntre(grupo.PontoContorno2, grupo.PontoContorno3);
+            var b = DistanciaEntre(grupo.Centro, grupo.PontoContorno2);
+            var c = DistanciaEntre(grupo.Centro, grupo.PontoContorno3);
             var coseno = (-(c * c) + a * a + b * b) / 2 / a / b;
             var angulo23 = Math.Acos(coseno) * 180 / Math.PI;
 
 
-            var a2 = DistanciaEntre(triangulo.PontoContorno1, triangulo.PontoContorno2);
+            var a2 = DistanciaEntre(grupo.PontoContorno1, grupo.PontoContorno2);
             var b2 = b;
-            var c2 = DistanciaEntre(triangulo.Centro, triangulo.PontoContorno1);
+            var c2 = DistanciaEntre(grupo.Centro, grupo.PontoContorno1);
             coseno = (-(c2 * c2) + a2 * a2 + b2 * b2) / 2 / a2 / b2;
             var angulo21 = Math.Acos(coseno) * 180 / Math.PI;
-            //var uDotV = triangulo.PontoContorno1.X * triangulo.PontoContorno2.X +
-            //        triangulo.PontoContorno1.Y * triangulo.PontoContorno2.Y; //P1->P2
-            //var u = Math.Sqrt(triangulo.PontoContorno1.X * triangulo.PontoContorno1.X + triangulo.PontoContorno1.Y * triangulo.PontoContorno1.Y);
-            //var v = Math.Sqrt(triangulo.PontoContorno2.X * triangulo.PontoContorno2.X + triangulo.PontoContorno2.Y * triangulo.PontoContorno2.Y);
+            //var uDotV = Grupo.PontoContorno1.X * Grupo.PontoContorno2.X +
+            //        Grupo.PontoContorno1.Y * Grupo.PontoContorno2.Y; //P1->P2
+            //var u = Math.Sqrt(Grupo.PontoContorno1.X * Grupo.PontoContorno1.X + Grupo.PontoContorno1.Y * Grupo.PontoContorno1.Y);
+            //var v = Math.Sqrt(Grupo.PontoContorno2.X * Grupo.PontoContorno2.X + Grupo.PontoContorno2.Y * Grupo.PontoContorno2.Y);
             //var coseno = uDotV / (u * v);
 
             var angulo = (int)Math.Round(angulo21) + (int)Math.Round(angulo23);
             return angulo; 
         }
 
-        private void ValidarTrianguloAmostral(TrianguloAmostral triangulo)
+        private void ValidarTrianguloAmostral(GrupoAmostralAmostral grupo)
         {
-            if (triangulo.PontoContorno1.X == triangulo.PontoContorno2.X && triangulo.PontoContorno1.Y == triangulo.PontoContorno2.Y)
+            if (grupo.PontoContorno1.X == grupo.PontoContorno2.X && grupo.PontoContorno1.Y == grupo.PontoContorno2.Y)
                 throw new Exception("Não é possível calcular o ângulo entre dois pontos iguais");
         }
 
