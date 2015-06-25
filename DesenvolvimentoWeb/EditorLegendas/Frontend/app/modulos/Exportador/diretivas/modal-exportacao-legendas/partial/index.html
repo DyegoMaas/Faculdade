@@ -1,0 +1,44 @@
+<style>
+    a.link-desabilitado[data-disabled] {
+        text-decoration: line-through;
+    }
+</style>
+
+<div id="modalExportacaoLegendas" class="modal modal-fixed-footer">
+	<div class="modal-content">
+        <h4>Exportar legenda</h4>
+        <div>
+            <div class="row">
+                <div class="input-field col s6">
+                	<input type="text" id="nomeArquivo"
+                        data-ng-model="exportador.nomeArquivo" 
+                        class="validate"
+                        required> 
+                    <label for="nomeArquivo" class="active">Nome Arquivo</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <a href="#!" 
+                    data-ng-click="exportador.exportarLegendas()" 
+                    data-ng-disabled="!exportador.exportacaoEstahHabilidada()"
+                    data-ng-class="!exportador.exportacaoEstahHabilidada() ? 'disabled' : ''"
+                    class="waves-effect waves-light btn">
+                    Criar arquivo
+                </a>
+            </div>
+
+            <div class="row">
+                <a id="linkDownload" draggable="true" 
+                    data-ng-class="!exportador.linkDownloadDisponivel ? 'link-desabilitado' : ''"
+                    data-ng-disabled="!exportador.linkDownloadDisponivel"
+                    data-ng-show="exportador.linkDownloadEstaDisponivel()"
+                    data-ng-click="exportador.baixarArquivo()">
+                </a>
+            </div>
+        </div>        
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+    </div>
+</div>

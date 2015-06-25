@@ -1,0 +1,69 @@
+<style>
+	#filedragVideo
+	{
+		display: none;
+		font-weight: bold;
+		text-align: center;
+		padding: 1em 0;
+		margin: 1em 0;
+		color: #555;
+		border: 2px dashed #555;
+		border-radius: 7px;
+		cursor: default;
+	}
+
+	#filedragVideo.hover
+	{
+		color: #f00;
+		border-color: #f00;
+		border-style: solid;
+		box-shadow: inset 0 3px 4px #888;
+	}
+</style>
+
+<div data-ng-controller="PlayerController as player">
+	<style>
+		#legenda { 
+			position: absolute;
+			font-size: 14px; 
+			color: yellow;
+			margin-top: -50px;
+			width: 100%
+		}
+	</style>
+
+	<div data-ng-show="player.estaVisivel()">dfafafds</div>
+<!--http://stackoverflow.com/questions/8885701/play-local-hard-drive-video-file-with-html5-video-tag-->
+	<div style="position: relative;">
+		<video id="video" class="responsive-video" style="width: 100%"
+			controls > 
+			<!-- <source src="http://videos.mozilla.org/serv/webmademovies/wtfpopcorn.mp4"> -->
+		</video>
+
+		<div id="legenda" class="center-align"></div>
+
+	</div>
+
+	<a href="#!" data-ng-click="player.play()" class="waves-effect waves-light btn">Play</a>
+
+</div>
+
+
+<!-- <form method="POST" enctype="multipart/form-data" action="#"> -->
+<form method="POST" action="#">
+	<fieldset>
+		<legend>Arquivo de vídeo</legend>
+
+		<div class="file-field input-field">
+	      	<input class="file-path validate" type="text"/>
+	      	<div class="btn">
+	        	<span><i class="mdi-action-search"></i></span>
+	        	<input type="file" id="fileselectVideo" name="fileselect[]" multiple="false"/>
+	      	</div>
+	    </div>
+
+	    <p class="center-align" style="width: 100%">ou</p>
+
+		<div id="filedragVideo">arraste o vídeo aqui</div>
+	</fieldset>
+</form>

@@ -1,0 +1,32 @@
+<!-- <img id="player" src="public/img/the-godfather.jpg" class="responsive-img"/> -->
+
+<!-- <div class="position:relative">
+	<video id="video" width:"500" height="300">
+		<source src="http://videos.mozilla.org/serv/webmademovies/wtfpopcorn.mp4">
+	</video>
+	<div id="legenda" style="color: red; font-size:60px; position: absolute; left: 20px; top: 20px"></div>
+</div> -->
+
+<style>
+	#legenda { 
+		position: absolute;
+		font-size: 14px; 
+		color: yellow;
+		margin-top: -50px;
+		width: 100%
+	}
+</style>
+
+<div style="position: relative;">
+	<video id="video" class="responsive-video" style="width: 100%"> <!--força o vídeo a ocupar todo o espaço horizontal-->
+		<source src="http://videos.mozilla.org/serv/webmademovies/wtfpopcorn.mp4">
+	</video>
+
+	<div id="legenda" class="center-align"></div>
+
+</div>
+
+<a href="#!" data-bind="click: play" class="waves-effect waves-light btn">Play</a>
+
+<!-- <span data-bind="text: texto"></span> -->
+<!-- http://videos.mozilla.org/serv/webmademovies/wtfpopcorn.mp4 -->

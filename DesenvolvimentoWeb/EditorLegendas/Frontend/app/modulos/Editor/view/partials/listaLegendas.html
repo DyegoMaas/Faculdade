@@ -1,0 +1,148 @@
+<style type="text/css">
+	.titulo {
+		font-weight: bold;
+	}
+
+	.linha-legenda {
+		background-color: #FFFFFF;
+		height: 47px;
+	}
+
+	.barra-rolagem {
+		overflow-y: scroll;
+		height: 500px;
+	}
+
+	.pointer {
+    	cursor: pointer;
+	}
+
+	.texto-edicao-legenda {
+		font-size: 16px;
+		font-weight: bold
+	}
+</style>
+
+<!-- controles em lote -->
+<div data-ng-show="lista.acoesEmLoteHabilitadas()">
+	<div class="row">
+		 <div class="input-field col s4">
+	        <input type="number" id="segundosEdicao" min="0" class="validate"
+	            data-ng-model="lista.segundosEdicao">
+	        <label class="active" for="segundosEdicao">Segundos</label>
+	    </div>
+	    <div class="input-field col s4">
+	        <input type="number" id="milisegundosEdicao" min="0" max="999" class="validate"
+	            data-ng-model="lista.milisegundosEdicao">
+	        <label class="active" for="milisegundosEdicao">Milisegundos</label>
+	    </div>
+	    <div class="col s4"></div>
+	</div>
+
+	<div class="row">
+		<div class="col s12">	
+			<a href="#!" 
+				data-ng-click="lista.atrasarEmLote()" 
+				class="waves-effect waves-light btn">
+				Atrasar
+			</a>
+			<a href="#!" 
+				data-ng-click="lista.adiantarEmLote()" 
+				class="waves-effect waves-light btn">
+				Adiantar
+			</a>
+			<a class="waves-effect waves-light btn modal-trigger"
+				href="#modalExportacaoLegendas">
+				Exportar
+			</a>
+		</div>
+	</div>
+</div>
+<!-- fim controles em lote -->
+
+<div class="row linha-legenda valign-wrapper" style="width: 100%">
+	<div class="col s1 m1 l1 left-align titulo valign">#</div>
+	<div class="col s2 m2 l2 left-align titulo valign">Início</div>
+	<div class="col s2 m2 l2 left-align titulo valign">Fim</div>
+	<div class="col s6 m6 l6 left-align titulo valign center-align">Texto</div>
+	<div class="col s1 m1 l1"></div>
+</div>
+
+<div class="barra-rolagem" style="margin-top: -15px">
+	<!--https://github.com/kamilkp/angular-vs-repeat-->
+	<div vs-repeat="50" vs-scroll-parent=".barra-rolagem" vs-excess="10">
+		<div ng-repeat="legenda in lista.legendas | orderBy: 'id'" 
+			class="row linha-legenda valign-wrapper" style="width: 100%;" 
+			data-ng-mouseover="lista.ativarBotoesAdicao(legenda)"
+			data-ng-mouseleave="lista.inativarBotoesAdicao(legenda)"
+			>
+			<div class="col s1 m1 l1 valign">
+				{{ legenda.id }}
+			</div>
+
+			<!--tempo inicial-->
+			<div class="col s2 m2 l2 valign" 
+				data-ng-click="lista.editarLegenda(legenda)">
+				<span class="pointer">{{ legenda.tempoInicio }}</span>
+			</div>			
+
+			<!--tempo final-->
+			<div class="col s2 m2 l2 valign"
+				data-ng-click="lista.editarLegenda(legenda)">
+				<span class="pointer">{{ legenda.tempoFim }}</span>
+			</div>
+
+			<div class="col s6 m6 l6 valign center-align">
+				<div contenteditable="true" ng-model="legenda.texto"></div> 
+			</div>
+
+			<div class="col s1 m1 l1">
+				<a href="#!" class="btn-floating btn-flat modal-trigger"
+					data-ng-click="lista.excluirLegenda(legenda)">
+					<i class="mdi-content-clear tiny grey-text text-darken-3" style="font-size: 1rem;"></i>
+				</a>
+			</div>
+
+			<div style="position: absolute; left: 50%;" data-ng-show="lista.exibirBotoesAdicao(legenda)">
+		        <div style="position: relative; left: -50%; top: -20px;">
+		            <a href="#!" class="btn-floating btn-flat"
+						data-ng-click="lista.criarLegendaAntes(legenda)">
+						<i class="mdi-content-add-circle-outline tiny grey-text text-darken-3" style="font-size: 2rem;"></i>
+					</a>
+		        </div>
+		        <div style="position: relative; left: -50%; top: -8px; z-index: 10000">
+		            <a href="#!" class="btn-floating btn-flat"
+						data-ng-click="lista.criarLegendaDepois(legenda)">
+						<i class="mdi-content-add-circle-outline tiny grey-text text-darken-3" style="font-size: 2rem;"></i>
+					</a>
+		        </div>
+		    </div>
+		</div>		
+	</div>	
+
+	<!-- botão p/ criar primeira legenda -->
+	<div class="row" data-ng-show="!lista.acoesEmLoteHabilitadas()">
+		<div class="col offset-s5 s7">	
+            <a class="btn-floating btn-flat" href="javascript:;"
+				data-ng-click="lista.criarPrimeiraLegenda()">
+				<i class="mdi-content-add-circle-outline tiny grey-text text-darken-3" style="font-size: 2rem;"></i>
+			</a>
+			<span>Criar legenda</span>		       
+		</div>
+	</div>
+</div>
+
+<modal-criacao-legenda></modal-criacao-legenda>
+<modal-edicao-legenda legenda="lista.legendaEmEdicao"></modal-edicao-legenda>
+<modal-exportacao-legendas></modal-exportacao-legendas>
+
+<script>
+	$(document).ready(function () {
+	    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+		$('.modal-trigger').leanModal({
+			// dismissible: false,
+			// ready: function () { alert('abriu {{lista.legendaEmEdicao.tempoInicio}}'); },
+			// complete: function () { alert('fechou'); }
+		});
+	});
+</script>

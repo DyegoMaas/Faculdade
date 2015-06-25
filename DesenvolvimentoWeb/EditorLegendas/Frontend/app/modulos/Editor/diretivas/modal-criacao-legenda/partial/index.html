@@ -1,0 +1,66 @@
+<div id="modalCriacaoLegenda" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Nova Legenda #{{ legenda.idLegenda }}</h4>
+      <div>
+
+        <div class="row">
+            <div class="input-field col s4">
+                <input type="number" id="segundosEdicaoCriacao" min="0" class="validate"
+                    data-ng-model="legenda.segundosEdicao">
+                <label class="active" for="segundosEdicaoCriacao">Segundos</label>
+            </div>
+            <div class="input-field col s4">
+                <input type="number" id="milisegundosEdicaoCriacao" min="0" max="999" class="validate"
+                    data-ng-model="legenda.milisegundosEdicao">
+                <label class="active" for="milisegundosEdicaoCriacao">Milisegundos</label>
+            </div>
+            <div class="col s4"></div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s4">
+                <input type="text" id="tempoInicioNovaLegenda"
+                    data-ng-model="legenda.tempoInicio" 
+                    class="validate" 
+                    required pattern="\d{2}:\d{2}:\d{2},\d{3}">
+                <label class="active" for="tempoInicioNovaLegenda">Inicia em</label>
+            </div>
+           
+
+            <div class="input-field col s4">
+                <input type="text" id="tempoFimNovaLegenda"
+                    data-ng-model="legenda.tempoFim" 
+                    class="validate" 
+                    required pattern="\d{2}:\d{2}:\d{2},\d{3}">
+                <label class="active" for="tempoFimNovaLegenda">Finaliza em</label>
+            </div>
+          
+        </div>
+
+        <div class="row">            
+            <div class="col s4 texto-edicao-legenda">
+                <a href="#!" data-ng-click="legenda.adiantarTempoInicio()" class="waves-effect waves-light btn">-</a>
+                <a href="#!" data-ng-click="legenda.atrasarTempoInicio()" class="waves-effect waves-light btn">+</a>
+            </div>
+
+            <div class="col s4 texto-edicao-legenda">
+                <a href="#!" data-ng-click="legenda.adiantarTempoFim()" class="waves-effect waves-light btn">-</a>
+                <a href="#!" data-ng-click="legenda.atrasarTempoFim()" class="waves-effect waves-light btn">+</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea type="text" id="textoNovaLegenda" rows="2"
+                    data-ng-model="legenda.texto"
+                    class="materialize-textarea validate"></textarea>
+                <label for="textoNovaLegenda">Texto</label>
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="waves-effect waves-light btn" data-ng-click="legenda.salvar()">Salvar</a>
+    </div>
+</div>

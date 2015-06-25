@@ -1,0 +1,54 @@
+<div id="modalEdicaoLegenda" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Edição da Legenda #{{editor.legendaEmEdicao.id}}</h4>
+      <div>
+
+        <div class="row">
+            <div class="input-field col s4">
+                <input type="number" id="segundosEdicao" min="0" class="validate"
+                    data-ng-model="editor.segundosEdicaoIndividual">
+                <label class="active" for="segundosEdicao">Segundos</label>
+            </div>
+            <div class="input-field col s4">
+                <input type="number" id="milisegundosEdicao" min="0" max="999" class="validate"
+                    data-ng-model="editor.milisegundosEdicaoIndividual">
+                <label class="active" for="milisegundosEdicao">Milisegundos</label>
+            </div>
+            <div class="col s4"></div>
+        </div>
+
+        <div class="row">
+            <div class="col s1 texto-edicao-legenda">Início:</div>
+            <div class="col s2">
+                <span>{{editor.legendaEmEdicao.tempoInicio}}</span>
+            </div>
+            <div class="col s9 texto-edicao-legenda">
+                <a href="#!" data-ng-click="editor.adiantarTempoInicio()" class="waves-effect waves-light btn">-</a>
+                <a href="#!" data-ng-click="editor.atrasarTempoInicio()" class="waves-effect waves-light btn">+</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s1 texto-edicao-legenda">Fim:</div>
+            <div class="col s2">
+                <span>{{editor.legendaEmEdicao.tempoFim}}</span>
+            </div>
+            <div class="col s9 texto-edicao-legenda">
+                <a href="#!" data-ng-click="editor.adiantarTempoFim()" class="waves-effect waves-light btn">-</a>
+                <a href="#!" data-ng-click="editor.atrasarTempoFim()" class="waves-effect waves-light btn">+</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s1 texto-edicao-legenda">Texto:</div>
+            <div class="col s11">
+                <div contenteditable="true" ng-model="legenda.texto"></div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+    </div>
+</div>
