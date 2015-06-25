@@ -1,23 +1,29 @@
 var LoginController = (function () {
 	"use strict";
 
-	function LoginController($scope) {
-		var viewModel = this;
+	function LoginController($scope, editorHttp, armazenadorLocal) {
+        var viewModel = this;
 
-		console.log('controller de login');
+        viewModel.nomeUsuario = '';
+        viewModel.senha = '';
 
-		viewModel.nomeUsuario = 'asdf';
-		viewModel.senha = 'asdf';
-		viewModel.autenticar = _autenticar;
+        viewModel.autenticar = function () {
+            editorHttp.post('/auth', {
+                nomeUsuario: viewModel.nomeUsuario,
+                senha: viewModel.senha
+            }).then(
+                function (resultadoAutenticacao) {
+                	armazenadorLocal.salvarToken(resultadoAutenticacao.token);
 
-		$scope.$watch(
-			function() { return viewModel.senha;}, 
-			function (newValue, old) {console.log(newValue, old);})
-
-		var _autenticar = function () {
-			console.log('autenticando como ',viewModel.nomeUsuario,viewModel.senha);
-		};
-	}
+                	editorHttp.get('/auth/validation').then(
+                		function (resultado) {
+                			console.log(resultado);
+                		}
+            		);					
+                }
+            );
+        };
+    }
 
 	return LoginController;
 })();

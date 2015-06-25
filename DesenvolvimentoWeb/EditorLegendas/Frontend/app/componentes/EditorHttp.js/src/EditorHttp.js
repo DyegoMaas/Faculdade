@@ -54,7 +54,10 @@ var EditorHttp = (function () {
                     if (callback) {
                         return callback(razao);
                     } else {
-                    	alert('Houve algum erro ao tentar realizar esta ação. Por favor, tente novamente.');
+                    	if(razao.status = 401) //não autorizado
+                    		alert('Usuário ou senha incorretos.');
+                    	else
+                    		alert('Houve algum erro ao tentar realizar esta ação. Por favor, tente novamente.');
                     }
                 }
             );
