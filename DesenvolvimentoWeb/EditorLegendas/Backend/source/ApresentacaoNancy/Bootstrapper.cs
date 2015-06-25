@@ -1,13 +1,14 @@
-﻿using System.Globalization;
-using System.Reflection;
-using System.Threading;
-using Core;
+﻿using Core;
 using log4net;
 using Nancy;
+using Nancy.Authentication.Token;
 using Nancy.Bootstrapper;
 using Nancy.Responses;
 using Nancy.Responses.Negotiation;
 using Nancy.TinyIoc;
+using System.Globalization;
+using System.Reflection;
+using System.Threading;
 
 namespace ApresentacaoNancy
 {
@@ -23,8 +24,7 @@ namespace ApresentacaoNancy
                 {
                     x.ResponseProcessors = new[]
                     {
-                        typeof(JsonProcessor),
-                        typeof(ViewProcessor)
+                        typeof(JsonProcessor)
                     };
                 });
             }
@@ -33,6 +33,11 @@ namespace ApresentacaoNancy
         protected override void ConfigureApplicationContainer(TinyIoCContainer container)
         {
             ConfigurarIoCContainer(container);
+        }
+
+        protected override void ConfigureRequestContainer(TinyIoCContainer container, NancyContext context)
+        {
+            base.ConfigureRequestContainer(container, context);
         }
 
         private void ConfigurarIoCContainer(TinyIoCContainer container)
@@ -48,6 +53,8 @@ namespace ApresentacaoNancy
                 return null;
             });
             pipelines.AfterRequest.AddItemToEndOfPipeline(ctx => ConfigurarCabecalhos(ctx.Response));
+
+
 
             pipelines.OnError.AddItemToEndOfPipeline((ctx, excecao) =>
             {
@@ -91,6 +98,12 @@ namespace ApresentacaoNancy
                 "Content-type"
             };
             return string.Join(", ", parametrosFixos);
+        }
+
+        protected override void RequestStartup(TinyIoCContainer container, IPipelines pipelines, NancyContext context)
+        {
+            var tokenizer = container.Resolve<ITokenizer>();
+            TokenAuthentication.Enable(pipelines, new TokenAuthenticationConfiguration(tokenizer));
         }
     }
 }

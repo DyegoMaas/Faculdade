@@ -35,26 +35,20 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentValidation">
-      <HintPath>..\..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy">
+    <Reference Include="Nancy, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Nancy.1.2.0\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Authentication.Token">
+    <Reference Include="Nancy.Authentication.Token, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Nancy.Authentication.Token.1.2.0\lib\net40\Nancy.Authentication.Token.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Hosting.Self">
+    <Reference Include="Nancy.Hosting.Self, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Nancy.Hosting.Self.1.2.0\lib\net40\Nancy.Hosting.Self.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Validation.DataAnnotations">
-      <HintPath>..\..\packages\Nancy.Validation.DataAnnotations.1.2.0\lib\net40\Nancy.Validation.DataAnnotations.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Validation.FluentValidation">
-      <HintPath>..\..\packages\Nancy.Validation.FluentValidation.1.2.0\lib\net40\Nancy.Validation.FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -98,10 +92,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-if $(ConfigurationName) == Debug (
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.2.0\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin\"
-xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.2.0\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
-)</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

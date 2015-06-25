@@ -37,7 +37,7 @@ namespace ApresentacaoNancy.Modules
 
             Get["/admin"] = _ =>
             {
-                this.RequiresClaims(new[] { "admin" });
+                this.RequiresClaims(new[] { Permissoes.PermissaoGerenciarProjetos, Permissoes.PermissaoGerenciarUsuarios });
                 return "Yay! You are authorized!";
             };
         }
@@ -53,6 +53,9 @@ namespace ApresentacaoNancy.Modules
 
         public static IUserIdentity ValidarUsuario(string nomeUsuario, string senha)
         {
+            if (string.IsNullOrWhiteSpace(nomeUsuario) || string.IsNullOrWhiteSpace(senha))
+                return null;
+
             var usuario = Usuarios.FirstOrDefault(u => u.NomeUsuario == nomeUsuario && u.Senha == senha);
             if (usuario == null)
                 return null;
@@ -99,18 +102,21 @@ namespace ApresentacaoNancy.Modules
         }
     }
 
-    public class IdentidadeUsuarioFactory
+    public class Permissoes
     {
         public const string PermissaoGerenciarUsuarios = "GerenciarUsuarios";
-        public const string PermissaoGerenciarProjetos = "GerenciarProjetos";
+        public const string PermissaoGerenciarProjetos = "GerenciarProjetos";   
+    }
 
+    public class IdentidadeUsuarioFactory
+    {
         public static IUserIdentity Admin(string nomeUsuario)
         {
             var administrador = new IdentidadeUsuario(nomeUsuario);
             administrador.PossuiPermissoes(new []
             {
-                PermissaoGerenciarUsuarios,
-                PermissaoGerenciarProjetos
+                Permissoes.PermissaoGerenciarUsuarios,
+                Permissoes.PermissaoGerenciarProjetos
             });
             return administrador;
         }
@@ -120,7 +126,7 @@ namespace ApresentacaoNancy.Modules
             var usuarioComum = new IdentidadeUsuario(nomeUsuario);
             usuarioComum.PossuiPermissoes(new[]
             {
-                PermissaoGerenciarProjetos
+                Permissoes.PermissaoGerenciarProjetos
             });
             return usuarioComum;
         }

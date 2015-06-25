@@ -1,3 +1,4 @@
+using Nancy.Authentication.Token;
 using Nancy.TinyIoc;
 
 namespace ApresentacaoNancy
@@ -6,6 +7,7 @@ namespace ApresentacaoNancy
     {
         public static void Instalar(TinyIoCContainer container)
         {
+            container.Register<ITokenizer>(new Tokenizer());
         }
     }
 }
