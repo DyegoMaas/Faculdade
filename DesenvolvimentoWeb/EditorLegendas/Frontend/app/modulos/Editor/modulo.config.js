@@ -7,9 +7,9 @@
             // For any unmatched url, send to /route1
             // $urlRouterProvider.otherwise("/")
 
-            $urlRouterProvider.when('/editor', ['$state', function ($state) {
-                $state.go('editor');console.log('asfadffsdf');
-            }]);
+            // $urlRouterProvider.when('/editor', ['$state', function ($state) {
+            //     $state.go('editor');console.log('asfadffsdf');
+            // }]);
             // $stateProvider.state('editor', {
             //     url: '/editor',
             //     templateUrl: 'app/modulos/Editor/view/index.html'
@@ -26,7 +26,7 @@
             // });
             $stateProvider.state('editor', {
                 url: '/editor',
-                // templateUrl: 'app/modulos/Editor/view/index.html',
+                //templateUrl: 'app/modulos/Editor/view/index.html',
                 views: {
                     "topoEditor": { 
                         template: "<navbar></navbar>",

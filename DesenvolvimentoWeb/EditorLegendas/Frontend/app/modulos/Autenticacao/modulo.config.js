@@ -16,7 +16,7 @@
                     controllerAs: 'login'
                 });
         }])
-        .service('servicoAutenticacao', ['editorHttp', 'armazenadorLocal', ServicoAutenticacao])
+        .service('servicoAutenticacao', ['editorHttp', 'armazenadorLocal', '$state', ServicoAutenticacao])
         .controller('LoginController', ['$scope', '$state', 'servicoAutenticacao', 'editorHttp', LoginController]);
 
 })(angular);

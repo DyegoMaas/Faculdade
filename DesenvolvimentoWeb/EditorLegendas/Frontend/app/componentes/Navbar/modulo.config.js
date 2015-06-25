@@ -3,8 +3,6 @@
 
     angular.module('componentes.navbar', [])
     
-        .directive('navbar', [           
-            Navbar
-        ]);
+        .directive('navbar', ['servicoAutenticacao', Navbar]);
 
 })(angular);

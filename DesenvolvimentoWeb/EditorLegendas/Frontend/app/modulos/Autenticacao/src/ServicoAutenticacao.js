@@ -1,9 +1,10 @@
 var ServicoAutenticacao = (function () {
 	"use strict";
 
-	function ServicoAutenticacao(editorHttp, armazenadorLocal) {
+	function ServicoAutenticacao(editorHttp, armazenadorLocal, $state) {
 		this._editorHttp = editorHttp;
 		this._armazenadorLocal = armazenadorLocal;
+		this._$state = $state;
 	}
 
 	ServicoAutenticacao.prototype = {
@@ -22,6 +23,7 @@ var ServicoAutenticacao = (function () {
 		},
 		logoff: function () {
 			this._armazenadorLocal.removerToken();
+			this._$state.go('login');
 		}
 	};
 
