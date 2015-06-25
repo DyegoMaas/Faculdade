@@ -6,7 +6,7 @@
 		.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
             // For any unmatched url, send to /login
-            $urlRouterProvider.otherwise("/login")
+            // $urlRouterProvider.otherwise("/login"); //estava fazendo com que sempre voltasse para o login.
 
             $stateProvider
                 .state('login', {
@@ -16,7 +16,7 @@
                     controllerAs: 'login'
                 });
         }])
-
-        .controller('LoginController', ['$scope', 'editorHttp', 'armazenadorLocal', LoginController]);
+        .service('servicoAutenticacao', ['editorHttp', 'armazenadorLocal', ServicoAutenticacao])
+        .controller('LoginController', ['$scope', '$state', 'servicoAutenticacao', 'editorHttp', LoginController]);
 
 })(angular);

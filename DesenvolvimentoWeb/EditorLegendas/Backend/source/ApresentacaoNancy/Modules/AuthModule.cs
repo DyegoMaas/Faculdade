@@ -41,7 +41,7 @@ namespace ApresentacaoNancy.Modules
                 this.RequiresAuthentication();
                 return "Yay! You are authenticated!";
             };
-
+            
             Get["/admin"] = _ =>
             {
                 this.RequiresClaims(new[] { Permissoes.PermissaoGerenciarProjetos, Permissoes.PermissaoGerenciarUsuarios });

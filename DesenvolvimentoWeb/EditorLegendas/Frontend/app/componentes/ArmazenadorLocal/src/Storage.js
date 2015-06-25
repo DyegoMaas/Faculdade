@@ -32,6 +32,21 @@ var Storage = (function () {
             }
 
             return deferred.promise();
+        },
+        remover: function (chave) {
+            var deferred = $.Deferred();
+
+            if (_ehUmaChromeApp()) {
+                chrome.storage.local.remove(chave, function (objeto) {
+                    return deferred.resolve();
+                });
+            }
+            else if (_localStorageEstahDisponivel()) {
+                var valor = localStorage.removeItem(chave);
+                return deferred.resolve();
+            }
+
+            return deferred.promise();
         }
     };
 

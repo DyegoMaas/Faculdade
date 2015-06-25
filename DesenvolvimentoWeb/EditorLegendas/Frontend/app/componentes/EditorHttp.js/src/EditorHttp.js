@@ -1,7 +1,7 @@
 var EditorHttp = (function () {
     "use strict";
 
-    function EditorHttp($http) {
+    function EditorHttp($http, armazenadorLocal) {
         var $public = {};
         var $private = {};
 
@@ -35,51 +35,60 @@ var EditorHttp = (function () {
         $private.requisicao = function (metodo, dadosRequisicao, callback) {
             var deferred = $.Deferred();
 
-            var requisicao = $private.montarRequisicao(metodo, dadosRequisicao);
-            $http(requisicao).then(
-                function (resultado) {
-                    if (callback) {
-                        return callback(resultado.data);
-                    } else {
-                        if (resultado.data.sucesso) {
-                            deferred.resolve(resultado.data.dados);
-                        } else {
-                        	alert(resultado.data.erros);
+            $private.montarRequisicao(metodo, dadosRequisicao).then(
+                function (requisicao) {
+                    $http(requisicao).then(
+                        function (resultado) {
+                            if (callback) {
+                                return callback(resultado.data);
+                            } else {
+                                if (resultado.data.sucesso) {
+                                    deferred.resolve(resultado.data.dados);
+                                } else {
+                                	alert(resultado.data.erros);
 
-                            throw resultado.data.erros;
+                                    throw resultado.data.erros;
+                                }
+                            }
+                        },
+                        function (razao) {
+                            if (callback) {
+                                return callback(razao);
+                            } else {
+                            	if(razao.status = 401) //não autorizado
+                            		alert('Usuário ou senha incorretos.');
+                            	else
+                            		alert('Houve algum erro ao tentar realizar esta ação. Por favor, tente novamente.');
+                            }
                         }
-                    }
-                },
-                function (razao) {
-                    if (callback) {
-                        return callback(razao);
-                    } else {
-                    	if(razao.status = 401) //não autorizado
-                    		alert('Usuário ou senha incorretos.');
-                    	else
-                    		alert('Houve algum erro ao tentar realizar esta ação. Por favor, tente novamente.');
-                    }
+                    );
                 }
             );
 
             return deferred.promise();
         };
 
-        $private.montarRequisicao = function (metodo, dadosRequisicao) {            
-        	var urlBase = $private.obterUrlBase();
-            var requisicao = {
-                method: metodo,
-                url: urlBase + dadosRequisicao.url,
-                headers: {}
-            };
+        $private.montarRequisicao = function (metodo, dadosRequisicao) {     
+            return armazenadorLocal.obterToken().then(
+                function (token) {
+                	var urlBase = $private.obterUrlBase();
+                    var requisicao = {
+                        method: metodo,
+                        url: urlBase + dadosRequisicao.url,
+                        headers: {
+                            "Authentication": "Token " + token
+                        }
+                    };
 
-            if ($private.ehPost(metodo) || $private.ehPut(metodo)) {
-                requisicao.data = dadosRequisicao.dados;
-            } else {
-                requisicao.params = dadosRequisicao.dados;
-            }
+                    if ($private.ehPost(metodo) || $private.ehPut(metodo)) {
+                        requisicao.data = dadosRequisicao.dados;
+                    } else {
+                        requisicao.params = dadosRequisicao.dados;
+                    }
 
-            return requisicao;
+                    return requisicao;
+                }
+            );
         };
 
         $private.obterUrlBase = function () {

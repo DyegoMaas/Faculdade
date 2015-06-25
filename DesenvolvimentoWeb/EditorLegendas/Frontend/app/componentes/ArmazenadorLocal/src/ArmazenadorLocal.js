@@ -15,6 +15,13 @@ var ArmazenadorLocal = (function () {
                     return token;
                 }
             );
+        },
+        removerToken: function () {
+          return this._storage.remover('Token').then(
+                function (token) {
+                    return token;
+                }
+            );  
         }
     };
 

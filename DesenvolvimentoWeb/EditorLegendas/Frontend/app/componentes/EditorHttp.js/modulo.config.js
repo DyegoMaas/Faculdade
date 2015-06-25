@@ -3,6 +3,6 @@
 
     angular.module('componentes.editorHttp', [])
     
-        .service('editorHttp', ['$http', EditorHttp]);
+        .service('editorHttp', ['$http', 'armazenadorLocal', EditorHttp]);
 
 })(angular);

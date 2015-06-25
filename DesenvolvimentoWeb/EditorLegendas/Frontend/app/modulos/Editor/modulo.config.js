@@ -7,23 +7,43 @@
             // For any unmatched url, send to /route1
             // $urlRouterProvider.otherwise("/")
 
-            $stateProvider
-                .state('editor', {
-                    url: '/editor',
-                    views: {
-                        "listaLegendas": { 
-                            templateUrl: "app/modulos/Editor/view/partials/listaLegendas.html",
-                            controller: 'ListaLegendasController',
-                            controllerAs: 'lista'
-                        },
-                        "player": { templateUrl: "app/modulos/Editor/view/partials/player.html" },
-                        "carregadorLegendas": { 
-                            templateUrl: "app/modulos/Editor/view/partials/carregadorLegendas.html",
-                            controller: 'CarregadorLegendasController',
-                            controllerAs: 'carregadorLegendas'
-                        }
+            $urlRouterProvider.when('/editor', ['$state', function ($state) {
+                $state.go('editor');console.log('asfadffsdf');
+            }]);
+            // $stateProvider.state('editor', {
+            //     url: '/editor',
+            //     templateUrl: 'app/modulos/Editor/view/index.html'
+            // }).state('editor.listaLegendas', {
+            //     templateUrl: "app/modulos/Editor/view/partials/listaLegendas.html",
+            //     controller: 'ListaLegendasController',
+            //     controllerAs: 'lista'
+            // }).state('editor.player', { 
+            //     templateUrl: "app/modulos/Editor/view/partials/player.html" 
+            // }).state('editor.carregadorLegendas', { 
+            //     templateUrl: "app/modulos/Editor/view/partials/carregadorLegendas.html",
+            //     controller: 'CarregadorLegendasController',
+            //     controllerAs: 'carregadorLegendas'
+            // });
+            $stateProvider.state('editor', {
+                url: '/editor',
+                // templateUrl: 'app/modulos/Editor/view/index.html',
+                views: {
+                    "topoEditor": { 
+                        template: "<navbar></navbar>",
+                    },
+                    "listaLegendas": { 
+                        templateUrl: "app/modulos/Editor/view/partials/listaLegendas.html",
+                        controller: 'ListaLegendasController',
+                        controllerAs: 'lista'
+                    },
+                    "player": { templateUrl: "app/modulos/Editor/view/partials/player.html" },
+                    "carregadorLegendas": { 
+                        templateUrl: "app/modulos/Editor/view/partials/carregadorLegendas.html",
+                        controller: 'CarregadorLegendasController',
+                        controllerAs: 'carregadorLegendas'
                     }
-                });
+                }
+            });
         }])
 
         .factory('ListaLegendas', [function (player) {
