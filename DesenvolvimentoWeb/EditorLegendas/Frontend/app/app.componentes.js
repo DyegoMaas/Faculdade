@@ -3,7 +3,8 @@
 
     angular.module('subtitleCannon.componentes', [
         'componentes.navbar',
-        'componentes.contenteditable'
+        'componentes.contenteditable',
+        'componentes.editorHttp'
     ]);
 
 })(angular);

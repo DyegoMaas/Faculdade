@@ -1,11 +1,22 @@
 ﻿using Nancy;
 using Nancy.Authentication.Token;
+using Nancy.ModelBinding;
 using Nancy.Security;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace ApresentacaoNancy.Modules
 {
+    public class LoginRequestModel
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "É obrigatório informar o nome de usuário")]
+        public string NomeUsuario { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "É obrigatório informar a senha")]
+        public string Senha { get; set; }
+    }
+
     public class AuthModule : NancyModule
     {
         public AuthModule(ITokenizer tokenizer)
@@ -13,20 +24,16 @@ namespace ApresentacaoNancy.Modules
         {
             Post["/"] = x =>
             {
-                string nomeUsuario = Request.Form.nomeUsuario;
-                string senha = Request.Form.senha;
+                var requestModel = this.BindAndValidate<LoginRequestModel>();
 
-                var identidadeUsuario = RepositorioUsuarios.ValidarUsuario(nomeUsuario, senha);
+                var identidadeUsuario = RepositorioUsuarios.ValidarUsuario(requestModel.NomeUsuario, requestModel.Senha);
                 if (identidadeUsuario == null)
                 {
                     return HttpStatusCode.Unauthorized;
                 }
 
                 var token = tokenizer.Tokenize(identidadeUsuario, Context);
-                return new
-                {
-                    Token = token,
-                };
+                return ResultadoOperacao.ComSucesso(new { Token = token });
             };
 
             Get["/validation"] = _ =>
