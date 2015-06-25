@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-ng-app="SubtitleCannon">
+<head>
+	<meta charset="UTF-8">
+	<title>Subtitle Cannon</title>
+	<link rel="stylesheet" href="assets/vendor/materialize/dist/css/materialize.min.css">
+	<link rel="stylesheet" href="assets/css/editor-lengendas.css">  
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+	<style type="text/css">
+		.fundo-pagina {
+			background-color: #eeeeee
+		}
+	</style>
+</head>
+<body class="fundo-pagina">
+	<navbar></navbar>
+
+	<div class="row">
+		<div class="col s7 m7 l7">
+			<div ui-view="listaLegendas"></div>
+		</div>
+		<div class="col s5 m5 l5">
+			<div ui-view="player"></div>
+			<div ui-view="carregadorLegendas"></div>
+		</div>
+	</div>
+
+	<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
+	<script src="assets/vendor/materialize/dist/js/materialize.min.js"></script>
+	
+	<script src="assets/vendor/angular/angular.min.js"></script>
+	<script src="assets/vendor/angular-route/angular-route.min.js"></script>
+	<script src="assets/vendor/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="assets/vendor/angular-vs-repeat/src/angular-vs-repeat.js"></script>
+
+	<script src="assets/vendor/popcorn-complete/popcorn-complete.js"></script>
+	<script src="assets/vendor/moment/min/moment-with-locales.min.js"></script>
+	<script src="concatenado.js"></script>
+
+	<script>
+		$(document).ready(function(){
+		    $('.collapsible').collapsible({
+		      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+		    });
+
+		    $('.dropdown-button').dropdown({
+				inDuration: 300,
+				outDuration: 225,
+				constrain_width: false, // Does not change width of dropdown to that of the activator
+				hover: true, // Activate on hover
+				gutter: 0, // Spacing from edge
+				belowOrigin: false // Displays dropdown below the button
+		    });
+
+            moment.locale('pt-BR');
+		});
+	</script>
+	
+</body>
+</html>

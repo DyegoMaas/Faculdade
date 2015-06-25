@@ -1,0 +1,9 @@
+*.crx
+*.pem
+.sass-cache
+.idea
+
+concatenado.js
+node_modules
+assets/vendor
+tmp
