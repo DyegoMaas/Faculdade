@@ -4,19 +4,13 @@ var Navbar = (function () {
     function Navbar() {
         return {
             restrict: 'E',
-            templateUrl: 'app/componentes/Navbar/diretivas/navbar/partials/index.html',
-            controller: NavbarController,
-            controlleAs: 'navbar'
+            controller: function (servicoAutenticacao, $scope) {
+            	$scope.logoff = function () {
+					servicoAutenticacao.logoff();
+            	}
+            },
+            templateUrl: 'app/componentes/Navbar/diretivas/navbar/partials/index.html'
         }
-    }
-
-    function NavbarController(servicoAutenticacao) {
-    	var vm = this;
-
-    	vm.logoff = function () {
-    		console.log('sdfsdfsdfsd');
-			servicoAutenticacao.logoff();
-    	};
     }
 
     return Navbar;
