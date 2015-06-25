@@ -13,8 +13,8 @@ namespace ApresentacaoNancy.Modules
         {
             Post["/"] = x =>
             {
-                var nomeUsuario = (string)Request.Form.NomeUsuario;
-                var senha = (string)Request.Form.Senha;
+                string nomeUsuario = Request.Form.nomeUsuario;
+                string senha = Request.Form.senha;
 
                 var identidadeUsuario = RepositorioUsuarios.ValidarUsuario(nomeUsuario, senha);
                 if (identidadeUsuario == null)

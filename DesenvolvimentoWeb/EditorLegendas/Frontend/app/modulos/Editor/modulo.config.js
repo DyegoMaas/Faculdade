@@ -5,7 +5,7 @@
         .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
             // For any unmatched url, send to /route1
-            $urlRouterProvider.otherwise("/editor")
+            // $urlRouterProvider.otherwise("/")
 
             $stateProvider
                 .state('editor', {

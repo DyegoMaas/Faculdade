@@ -4,7 +4,8 @@
     angular.module('subtitleCannon.modulos', [
         'modulo.editor',
         'modulo.exportacao',
-        'modulo.cinema'
+        'modulo.cinema',
+        'modulo.auth'
     ]);
 
 })(angular);

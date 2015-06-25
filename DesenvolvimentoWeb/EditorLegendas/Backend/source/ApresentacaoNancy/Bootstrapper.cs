@@ -3,6 +3,7 @@ using log4net;
 using Nancy;
 using Nancy.Authentication.Token;
 using Nancy.Bootstrapper;
+using Nancy.Conventions;
 using Nancy.Responses;
 using Nancy.Responses.Negotiation;
 using Nancy.TinyIoc;
@@ -104,6 +105,12 @@ namespace ApresentacaoNancy
         {
             var tokenizer = container.Resolve<ITokenizer>();
             TokenAuthentication.Enable(pipelines, new TokenAuthenticationConfiguration(tokenizer));
+        }
+
+        protected override void ConfigureConventions(NancyConventions nancyConventions)
+        {
+            base.ConfigureConventions(nancyConventions);
+            nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("/", @"static"));
         }
     }
 }

@@ -1,0 +1,37 @@
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="row valign-wrapper">
+    <form class="col offset-l4 l4 valign" data-ng-submit="login.autenticar()">
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="nomeUsuario" name="nomeUsuario"
+          	data-ng-model="login.nomeUsuario" 
+          	type="text" class="validate" required>
+          <label for="nomeUsuario">Usuário</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="senha" name="senha" 
+          	data-ng-model="login.senha"
+          	type="password" class="validate" required>
+          <label for="senha">Senha</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn waves-effect waves-light right" data-ng-click="login.autenticar()">Login</button>
+    </form>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$("#nomeUsuario").focus();
+	});
+</script>

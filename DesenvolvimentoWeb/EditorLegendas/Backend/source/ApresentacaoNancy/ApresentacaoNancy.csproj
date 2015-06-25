@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Modules\AuthModule.cs" />
+    <Compile Include="Modules\IndexModule.cs" />
     <Compile Include="ResultadoOperacao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
