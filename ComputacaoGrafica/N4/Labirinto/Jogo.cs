@@ -50,7 +50,7 @@ namespace JogoLabirinto
             var configuracaoLabirinto = new ConfiguracaoLabirinto(new[,]
             {
                 {'p', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'e', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'j', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
@@ -152,6 +152,40 @@ namespace JogoLabirinto
             {
                 mundo.Camera.FatorZoom -= .01f;
             }
+        }
+    }
+
+    public class Labirinto
+    {
+        public Labirinto(ConfiguracaoLabirinto configuracao)
+        {
+            var matrizConfiguracao = configuracao.MatrizConfiguracao;
+            for (int i = 0; i < matrizConfiguracao.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrizConfiguracao.GetLength(1); j++)
+                {
+                    var config = matrizConfiguracao[i, j];
+                    TipoConteudoCasaTabuleiro tipoConteudo = TipoConteudo(config);
+
+                }
+            }
+        }
+
+        private TipoConteudoCasaTabuleiro TipoConteudo(char config)
+        {
+            switch (config)
+            {
+                case 'c': return TipoConteudoCasaTabuleiro.Chao;
+                case 'p': return TipoConteudoCasaTabuleiro.ChaoComParede;
+                default: return TipoConteudoCasaTabuleiro.ChaoComBolinha;
+            }
+        }
+
+        private enum TipoConteudoCasaTabuleiro
+        {
+            Chao = 1,
+            ChaoComParede = 2,
+            ChaoComBolinha = 3
         }
     }
 }
