@@ -1,11 +1,8 @@
-﻿using System.Drawing.Drawing2D;
-using System.Linq;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Exercicio01.Editor;
+using System.Linq;
 
 namespace Exercicio01.EngineGrafica
 {

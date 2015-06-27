@@ -2,8 +2,11 @@
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Tao.FreeGlut;
+using Tao.OpenGl;
 
 namespace JogoLabirinto
 {
@@ -11,6 +14,7 @@ namespace JogoLabirinto
     {
         private const double SensibilidadeMouse = .25d;
         private readonly Mundo mundo = new Mundo(new Camera());
+        private Tabuleiro tabuleiro;
         //private Labirinto labirinto;
         private CuboSolido cuboSolido;
 
@@ -56,12 +60,14 @@ namespace JogoLabirinto
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'b', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'p'}
             },
-            tamanhoBlocosPiso: 10,
+            escala: 10,
             tamanhoParede: new Vector3d(1, 1, 1));
+
+            tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
 
             //labirinto = new Labirinto(configuracaoLabirinto);
             //centroTabuleiro = labirinto.Centro;
@@ -82,25 +88,13 @@ namespace JogoLabirinto
 
             //var alvo = labirinto.Posicao;
             ////a transformação do lookAt parece estar interferindo na rotação do cenário.
-            //Glu.gluLookAt(
-            //    centroTabuleiro.X, centroTabuleiro.Y + 100, centroTabuleiro.Z + 70,
-            //    60d, 50d, 50d,
-            //    //alvo.X, alvo.Y, alvo.Z,
-            //    0d, 1d, 0d);
+            Glu.gluLookAt(
+                30, 30, 30,
+                0, 0, 0,
+                //alvo.X, alvo.Y, alvo.Z,
+                0d, 1d, 0d);
 
-            //foreach (var objetoGrafico in mundo.ObjetosGraficos)
-            //{
-            //    objetoGrafico.DesenharObjetoGrafico();
-            //}
-
-            GL.Color3(Color.Blue);
-            GL.PointSize(5f);
-            GL.Begin(PrimitiveType.Points);
-            {
-                //GL.Vertex3(ponto.X, ponto.Y, ponto.Z);
-                GL.Vertex3(0, 0, 0);
-            }
-            GL.End();
+            tabuleiro.Desenhar();
 
 
 
@@ -155,29 +149,57 @@ namespace JogoLabirinto
         }
     }
 
-    public class Labirinto
+    public static class GeradorCenario
     {
-        public Labirinto(ConfiguracaoLabirinto configuracao)
+        public static Tabuleiro GerarCenario(ConfiguracaoLabirinto configuracao)
         {
             var matrizConfiguracao = configuracao.MatrizConfiguracao;
-            for (int i = 0; i < matrizConfiguracao.GetLength(0); i++)
+            var escala = configuracao.Escala;
+            var numeroBlocosEmX = matrizConfiguracao.GetLength(1);
+            var numeroBlocosEmZ = matrizConfiguracao.GetLength(0);
+            var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX * escala, numeroBlocosEmZ * escala));
+            
+            for (var x = 0; x < numeroBlocosEmX; x++)
             {
-                for (int j = 0; j < matrizConfiguracao.GetLength(1); j++)
+                for (var z = 0; z < numeroBlocosEmZ; z++)
                 {
-                    var config = matrizConfiguracao[i, j];
-                    TipoConteudoCasaTabuleiro tipoConteudo = TipoConteudo(config);
+                    var config = matrizConfiguracao[x, z];
+                    var tipoConteudo = TipoConteudo(config);
 
+                    var posicaoInicial = new Ponto4D(2d * x, 0, 2 * z);
+                    switch (tipoConteudo)
+                    {
+                        case TipoConteudoCasaTabuleiro.Cacapa:
+                            objetosCenario.Cacapa = new Cacapa(posicaoInicial);
+                            break;
+                        case TipoConteudoCasaTabuleiro.Chao:
+                            objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
+                            break;
+
+                        case TipoConteudoCasaTabuleiro.ChaoComEsfera:
+                            objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
+                            objetosCenario.Esfera = new Esfera(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z));
+                            break;
+
+                        case TipoConteudoCasaTabuleiro.ChaoComParede:
+                            objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
+                            objetosCenario.AdicionarParede(new Parede(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z)));
+                            break;
+                    }
                 }
             }
+
+            return objetosCenario;
         }
 
-        private TipoConteudoCasaTabuleiro TipoConteudo(char config)
+        private static TipoConteudoCasaTabuleiro TipoConteudo(char config)
         {
             switch (config)
             {
                 case 'c': return TipoConteudoCasaTabuleiro.Chao;
                 case 'p': return TipoConteudoCasaTabuleiro.ChaoComParede;
-                default: return TipoConteudoCasaTabuleiro.ChaoComBolinha;
+                case 'j': return TipoConteudoCasaTabuleiro.ChaoComEsfera;
+                default: return TipoConteudoCasaTabuleiro.Cacapa;
             }
         }
 
@@ -185,7 +207,402 @@ namespace JogoLabirinto
         {
             Chao = 1,
             ChaoComParede = 2,
-            ChaoComBolinha = 3
+            ChaoComEsfera = 3,
+            Cacapa
         }
     }
+
+
+    public abstract class ComponenteTabuleiro : ObjetoGrafico
+    {
+        protected readonly Ponto4D Posicao;
+
+        protected ComponenteTabuleiro(Ponto4D posicao)
+        {
+            Posicao = posicao;
+            AntesDeDesenhar(() => GL.Translate(posicao.X, posicao.Y, posicao.Z));
+        }
+    }
+
+    public class Parede : ComponenteTabuleiro //TODO fazer um desenho próprio
+    {
+        public Parede(Ponto4D posicao)
+            : base(posicao)
+        {
+        }
+
+        protected override void DesenharObjeto()
+        {
+            //TODO desenhar uma esfera
+        }
+    }
+
+    public class Esfera : ComponenteTabuleiro
+    {
+        public Esfera(Ponto4D posicao) : base(posicao)
+        {
+        }
+
+        protected override void DesenharObjeto()
+        {
+            //TODO desenhar uma esfera
+        }
+    }
+
+    public class Cacapa : ComponenteTabuleiro
+    {
+        public Cacapa(Ponto4D posicao) : base(posicao)
+        {
+        }
+
+        protected override void DesenharObjeto()
+        {
+            //por enquanto o buraco não vai ser desenhado.
+            //TODO desenhar uma forma geométrica que pareça um buraco
+        }
+    }
+
+    public class Chao : ComponenteTabuleiro
+    {
+        public Chao(Ponto4D posicao) : base(posicao)
+        {
+        }
+
+        protected override void DesenharObjeto()
+        {
+            GL.Color3(Color.SaddleBrown);
+            GL.Begin(PrimitiveType.Quads);
+            {
+                //topo
+                GL.Normal3(0, 0, 1);
+                GL.Vertex3(-1.0f, -1.0f, 1.0f);
+                GL.Vertex3(1.0f, -1.0f, 1.0f);
+                GL.Vertex3(1.0f, 1.0f, 1.0f);
+                GL.Vertex3(-1.0f, 1.0f, 1.0f);
+                
+                // Back Face
+                GL.Normal3(0, 0, -1);
+                GL.Vertex3(-1.0f, -1.0f, -1.0f);
+                GL.Vertex3(-1.0f, 1.0f, -1.0f);
+                GL.Vertex3(1.0f, 1.0f, -1.0f);
+                GL.Vertex3(1.0f, -1.0f, -1.0f);
+
+                // Top Face
+                GL.Normal3(0, 1, 0);
+                GL.Vertex3(-1.0f, 1.0f, -1.0f);
+                GL.Vertex3(-1.0f, 1.0f, 1.0f);
+                GL.Vertex3(1.0f, 1.0f, 1.0f);
+                GL.Vertex3(1.0f, 1.0f, -1.0f);
+                
+                // Bottom Face
+                GL.Normal3(0, -1, 0);
+                GL.Vertex3(-1.0f, -1.0f, -1.0f);
+                GL.Vertex3(1.0f, -1.0f, -1.0f);
+                GL.Vertex3(1.0f, -1.0f, 1.0f);
+                GL.Vertex3(-1.0f, -1.0f, 1.0f);
+                
+                // Right face
+                GL.Normal3(1, 0, 0);
+                GL.Vertex3(1.0f, -1.0f, -1.0f);
+                GL.Vertex3(1.0f, 1.0f, -1.0f);
+                GL.Vertex3(1.0f, 1.0f, 1.0f);
+                GL.Vertex3(1.0f, -1.0f, 1.0f);
+                
+                // Left Face
+                GL.Normal3(-1, 0, 0);
+                GL.Vertex3(-1.0f, -1.0f, -1.0f);
+                GL.Vertex3(-1.0f, -1.0f, 1.0f);
+                GL.Vertex3(-1.0f, 1.0f, 1.0f);
+                GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            }
+            GL.End();
+
+            GL.LineWidth(1);
+            GL.Color3(Color.Black);
+            GL.Begin(PrimitiveType.Lines);
+            {
+                //topo
+                GL.Vertex3(-1.0f, -1.0f, 1.0f);
+                GL.Vertex3(1.0f, -1.0f, 1.0f);
+                GL.Vertex3(1.0f, 1.0f, 1.0f);
+                GL.Vertex3(-1.0f, 1.0f, 1.0f);
+
+                // Back Face
+                GL.Vertex3(-1.0f, -1.0f, -1.0f);
+                GL.Vertex3(-1.0f, 1.0f, -1.0f);
+                GL.Vertex3(1.0f, 1.0f, -1.0f);
+                GL.Vertex3(1.0f, -1.0f, -1.0f);
+
+                // Top Face
+                GL.Vertex3(-1.0f, 1.0f, -1.0f);
+                GL.Vertex3(-1.0f, 1.0f, 1.0f);
+                GL.Vertex3(1.0f, 1.0f, 1.0f);
+                GL.Vertex3(1.0f, 1.0f, -1.0f);
+
+                // Bottom Face
+                GL.Vertex3(-1.0f, -1.0f, -1.0f);
+                GL.Vertex3(1.0f, -1.0f, -1.0f);
+                GL.Vertex3(1.0f, -1.0f, 1.0f);
+                GL.Vertex3(-1.0f, -1.0f, 1.0f);
+
+                // Right face
+                GL.Vertex3(1.0f, -1.0f, -1.0f);
+                GL.Vertex3(1.0f, 1.0f, -1.0f);
+                GL.Vertex3(1.0f, 1.0f, 1.0f);
+                GL.Vertex3(1.0f, -1.0f, 1.0f);
+
+                // Left Face
+                GL.Vertex3(-1.0f, -1.0f, -1.0f);
+                GL.Vertex3(-1.0f, -1.0f, 1.0f);
+                GL.Vertex3(-1.0f, 1.0f, 1.0f);
+                GL.Vertex3(-1.0f, 1.0f, -1.0f);
+            }
+            GL.End();
+        }
+    }
+
+    public class Tabuleiro : ObjetoGrafico
+    {
+        public SizeD Tamanho { get; private set; } //TODO verificar se é necessário guardar
+        private readonly List<IObjetoGrafico> todosObjetos = new List<IObjetoGrafico>(); 
+
+        private readonly List<IObjetoGrafico> blocosChao = new List<IObjetoGrafico>();
+        private readonly List<IObjetoGrafico> paredes = new List<IObjetoGrafico>();
+        private IObjetoGrafico cacapa;
+        private IObjetoGrafico esfera;
+
+        public IObjetoGrafico Esfera
+        {
+            get { return esfera; }
+            set
+            {
+                esfera = value;
+                todosObjetos.Add(value);
+            }
+        }
+
+        public IObjetoGrafico Cacapa
+        {
+            get { return cacapa; }
+            set
+            {
+                cacapa = value;
+                todosObjetos.Add(value);
+            }
+        }
+
+        public Tabuleiro(SizeD tamanho)
+        {
+            Tamanho = tamanho;
+
+            var centro = new Ponto4D(tamanho.Comprimento / 2, tamanho.Largura / 2);
+            //Redimensionar(tamanho.Comprimento, 1, tamanho.Largura, centro.InverterSinal());
+        }
+
+        public void AdicionarBlocoChao(IObjetoGrafico bloco) //TODO mudar para tipo concreto
+        {
+            blocosChao.Add(bloco);
+            todosObjetos.Add(bloco);
+        }
+
+        public void AdicionarParede(IObjetoGrafico parede) //TODO mudar para tipo concreto
+        {
+            paredes.Add(parede);
+            todosObjetos.Add(parede);
+        }
+
+        //public void Desenhar()
+        //{
+        //    //TODO transformar para o centro (-tamanho/2)
+
+        //    GL.MatrixMode(MatrixMode.Modelview);
+        //    GL.PushMatrix();
+        //    {
+        //        GL.MultMatrix(Transformacao.Data);
+        //        DesenharObjeto();
+        //        //GL.Begin(BeginMode.Triangles);
+        //        //{
+        //        //    foreach (var vertice in vertices)
+        //        //    {
+        //        //        GL.Vertex3(vertice.X, vertice.Y, vertice.Z);
+        //        //    }
+        //        //}
+        //        //GL.End();
+
+        //        foreach (var objetoGrafico in ObjetosFilhos())
+        //        {
+        //            objetoGrafico.Desenhar();
+        //        }
+        //    }
+        //    GL.PopMatrix();
+
+        //    Cacapa.Desenhar();
+        //    blocosChao.ForEach(b => b.Desenhar());
+        //    paredes.ForEach(p => p.Desenhar());
+        //    Esfera.Desenhar();
+        //}
+
+
+        //protected override IEnumerable<IObjetoGrafico> ObjetosFilhos()
+        //{
+        //    return todosObjetos;
+        //}
+
+        protected override void DesenharObjeto()
+        {
+            //TODO adornos no tabuleiro???
+            cacapa.Desenhar();
+            blocosChao.ForEach(b => b.Desenhar());
+            paredes.ForEach(p => p.Desenhar());
+            esfera.Desenhar();
+        }
+    }
+
+    public abstract class ObjetoGrafico : IObjetoGrafico
+    {
+        private readonly List<Action> acoes = new List<Action>(); 
+        public void Desenhar()
+        {
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            {
+                acoes.ForEach(acao => acao.Invoke());
+                DesenharObjeto();
+            }
+            GL.PopMatrix();
+        }
+
+        protected abstract void DesenharObjeto();
+
+        protected void AntesDeDesenhar(Action operacaoAntesDesenhar)
+        {
+            acoes.Add(operacaoAntesDesenhar);
+        }
+    }
+
+    public interface IObjetoGrafico
+    {
+        void Desenhar();
+    }
+
+    public struct SizeD
+    {
+        public readonly double Comprimento;
+        public readonly double Largura;
+
+        public SizeD(double comprimento, double largura)
+        {
+            Comprimento = comprimento;
+            Largura = largura;
+        }
+    }
+
+
+    /*IMPLEMENTAÇÃO ANTIGA
+     * 
+     * public abstract class ObjetoGrafico : IObjetoGrafico
+    {
+        public Transformacao4D Transformacao { get; private set; }
+
+        private static readonly Transformacao4D MatrizTmpTranslacao = new Transformacao4D();
+        private static readonly Transformacao4D MatrizTmpTranslacaoInversa = new Transformacao4D();
+        private static readonly Transformacao4D MatrizTmpEscala = new Transformacao4D();
+        private static readonly Transformacao4D MatrizTmpRotacaoZ = new Transformacao4D();
+        private static Transformacao4D matrizGlobal = new Transformacao4D();
+
+        private readonly IList<Ponto4D> vertices = new List<Ponto4D>();
+        public IEnumerable<Ponto4D> Vertices { get { return vertices; } }
+
+        protected ObjetoGrafico()
+        {
+            Transformacao = new Transformacao4D();
+        }
+
+        public void Desenhar()
+        {
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            {
+                GL.MultMatrix(Transformacao.Data);
+                DesenharObjeto();
+
+                foreach (var objetoGrafico in ObjetosFilhos())
+                {
+                    objetoGrafico.Desenhar();
+                }
+            }
+            GL.PopMatrix();
+        }
+
+        protected abstract void DesenharObjeto();
+
+        protected abstract IEnumerable<IObjetoGrafico> ObjetosFilhos();
+
+        #region Transformações
+
+        /// <summary>
+        /// Move o objeto
+        /// </summary>
+        /// <param name="x">Distância em que o objeto será movido no eixo X</param>
+        /// <param name="y">Distância em que o objeto será movido no eixo Y</param>
+        /// <param name="z">Distância em que o objeto será movido no eixo Z</param>
+        public void Mover(double x, double y, double z)
+        {
+            var matrizTranslacao = new Transformacao4D();
+            matrizTranslacao.AtribuirTranslacao(x, y, z);
+
+            Transformacao = matrizTranslacao.TransformarMatriz(Transformacao);
+        }
+
+        /// <summary>
+        /// Redimensiona o objeto em relação ao pivô
+        /// </summary>
+        /// <param name="escala">A escala pela qual o objeto será redimensionado</param>
+        /// <param name="pivo">Ponto ao redor do qual o objeto será redimensionado</param>
+        public void Redimensionar(double escalaX, double escalaY, double escalaZ, Ponto4D pivo)
+        {
+            matrizGlobal.AtribuirIdentidade();
+
+            ExecutarEmRelacaoAoPivo(pivo, () =>
+            {
+                MatrizTmpEscala.AtribuirEscala(escalaX, escalaY, escalaZ);
+                matrizGlobal = MatrizTmpEscala.TransformarMatriz(matrizGlobal);
+            });
+
+            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+        }
+
+        /// <summary>
+        /// Rotaciona o objeto em relação ao pivô
+        /// </summary>
+        /// <param name="angulo">Ângulo em graus</param>
+        /// <param name="pivo">Ponto ao redor do qual o objeto será rotacionado</param>
+        public void RotacionarNoEixoZ(double angulo, Ponto4D pivo)
+        {
+            matrizGlobal.AtribuirIdentidade();
+
+            ExecutarEmRelacaoAoPivo(pivo, () =>
+            {
+                MatrizTmpRotacaoZ.AtribuirRotacaoZ(angulo * Transformacao4D.DegToRad);
+                matrizGlobal = MatrizTmpRotacaoZ.TransformarMatriz(matrizGlobal);
+            });
+
+            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
+        }
+
+        private void ExecutarEmRelacaoAoPivo(Ponto4D pivo, Action operacaoAntesDesenhar)
+        {
+            MatrizTmpTranslacao.AtribuirTranslacao(pivo.X, pivo.Y, pivo.Z);
+            matrizGlobal = MatrizTmpTranslacao.TransformarMatriz(matrizGlobal);
+
+            operacaoAntesDesenhar.Invoke();
+
+            pivo.InverterSinal();
+            MatrizTmpTranslacaoInversa.AtribuirTranslacao(pivo.X, pivo.Y, pivo.Z);
+            matrizGlobal = MatrizTmpTranslacaoInversa.TransformarMatriz(matrizGlobal);
+        }
+
+        #endregion Transformações
+    }
+*/
 }

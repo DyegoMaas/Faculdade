@@ -6,13 +6,13 @@ namespace JogoLabirinto
     {
         private readonly char[,] matrizConfiguracao;
         
-        public readonly int TamanhoBlocosPiso;
+        public readonly double Escala;
         public readonly Vector3d TamanhoParede;
 
-        public ConfiguracaoLabirinto(char[,] matrizConfiguracao, int tamanhoBlocosPiso, Vector3d tamanhoParede)
+        public ConfiguracaoLabirinto(char[,] matrizConfiguracao, double escala, Vector3d tamanhoParede)
         {
             this.matrizConfiguracao = matrizConfiguracao;
-            TamanhoBlocosPiso = tamanhoBlocosPiso;
+            Escala = escala;
             TamanhoParede = tamanhoParede;
         }
 
