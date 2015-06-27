@@ -178,12 +178,12 @@ namespace JogoLabirinto
 
                         case TipoConteudoCasaTabuleiro.ChaoComEsfera:
                             objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
-                            objetosCenario.Esfera = new Esfera(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z));
+                            objetosCenario.Esfera = new Esfera(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z));
                             break;
 
                         case TipoConteudoCasaTabuleiro.ChaoComParede:
                             objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
-                            objetosCenario.AdicionarParede(new Parede(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z)));
+                            objetosCenario.AdicionarParede(new Parede(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z)));
                             break;
                     }
                 }
@@ -233,7 +233,8 @@ namespace JogoLabirinto
 
         protected override void DesenharObjeto()
         {
-            //TODO desenhar uma esfera
+            GL.Color3(Color.DimGray);
+            GraphicUtils.DesenharCubo(adicionarContornos: true);
         }
     }
 
@@ -246,6 +247,8 @@ namespace JogoLabirinto
         protected override void DesenharObjeto()
         {
             //TODO desenhar uma esfera
+            GL.Color3(Color.Aqua);
+            GraphicUtils.DesenharCubo();
         }
     }
 
@@ -257,8 +260,8 @@ namespace JogoLabirinto
 
         protected override void DesenharObjeto()
         {
-            //por enquanto o buraco não vai ser desenhado.
-            //TODO desenhar uma forma geométrica que pareça um buraco
+            GL.Color3(Color.Black);
+            GraphicUtils.DesenharCubo(escalaY:.1f);
         }
     }
 
@@ -271,93 +274,7 @@ namespace JogoLabirinto
         protected override void DesenharObjeto()
         {
             GL.Color3(Color.SaddleBrown);
-            GL.Begin(PrimitiveType.Quads);
-            {
-                //topo
-                GL.Normal3(0, 0, 1);
-                GL.Vertex3(-1.0f, -1.0f, 1.0f);
-                GL.Vertex3(1.0f, -1.0f, 1.0f);
-                GL.Vertex3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(-1.0f, 1.0f, 1.0f);
-                
-                // Back Face
-                GL.Normal3(0, 0, -1);
-                GL.Vertex3(-1.0f, -1.0f, -1.0f);
-                GL.Vertex3(-1.0f, 1.0f, -1.0f);
-                GL.Vertex3(1.0f, 1.0f, -1.0f);
-                GL.Vertex3(1.0f, -1.0f, -1.0f);
-
-                // Top Face
-                GL.Normal3(0, 1, 0);
-                GL.Vertex3(-1.0f, 1.0f, -1.0f);
-                GL.Vertex3(-1.0f, 1.0f, 1.0f);
-                GL.Vertex3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(1.0f, 1.0f, -1.0f);
-                
-                // Bottom Face
-                GL.Normal3(0, -1, 0);
-                GL.Vertex3(-1.0f, -1.0f, -1.0f);
-                GL.Vertex3(1.0f, -1.0f, -1.0f);
-                GL.Vertex3(1.0f, -1.0f, 1.0f);
-                GL.Vertex3(-1.0f, -1.0f, 1.0f);
-                
-                // Right face
-                GL.Normal3(1, 0, 0);
-                GL.Vertex3(1.0f, -1.0f, -1.0f);
-                GL.Vertex3(1.0f, 1.0f, -1.0f);
-                GL.Vertex3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(1.0f, -1.0f, 1.0f);
-                
-                // Left Face
-                GL.Normal3(-1, 0, 0);
-                GL.Vertex3(-1.0f, -1.0f, -1.0f);
-                GL.Vertex3(-1.0f, -1.0f, 1.0f);
-                GL.Vertex3(-1.0f, 1.0f, 1.0f);
-                GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            }
-            GL.End();
-
-            GL.LineWidth(1);
-            GL.Color3(Color.Black);
-            GL.Begin(PrimitiveType.Lines);
-            {
-                //topo
-                GL.Vertex3(-1.0f, -1.0f, 1.0f);
-                GL.Vertex3(1.0f, -1.0f, 1.0f);
-                GL.Vertex3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(-1.0f, 1.0f, 1.0f);
-
-                // Back Face
-                GL.Vertex3(-1.0f, -1.0f, -1.0f);
-                GL.Vertex3(-1.0f, 1.0f, -1.0f);
-                GL.Vertex3(1.0f, 1.0f, -1.0f);
-                GL.Vertex3(1.0f, -1.0f, -1.0f);
-
-                // Top Face
-                GL.Vertex3(-1.0f, 1.0f, -1.0f);
-                GL.Vertex3(-1.0f, 1.0f, 1.0f);
-                GL.Vertex3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(1.0f, 1.0f, -1.0f);
-
-                // Bottom Face
-                GL.Vertex3(-1.0f, -1.0f, -1.0f);
-                GL.Vertex3(1.0f, -1.0f, -1.0f);
-                GL.Vertex3(1.0f, -1.0f, 1.0f);
-                GL.Vertex3(-1.0f, -1.0f, 1.0f);
-
-                // Right face
-                GL.Vertex3(1.0f, -1.0f, -1.0f);
-                GL.Vertex3(1.0f, 1.0f, -1.0f);
-                GL.Vertex3(1.0f, 1.0f, 1.0f);
-                GL.Vertex3(1.0f, -1.0f, 1.0f);
-
-                // Left Face
-                GL.Vertex3(-1.0f, -1.0f, -1.0f);
-                GL.Vertex3(-1.0f, -1.0f, 1.0f);
-                GL.Vertex3(-1.0f, 1.0f, 1.0f);
-                GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            }
-            GL.End();
+            GraphicUtils.DesenharCubo(adicionarContornos:true);
         }
     }
 
@@ -395,7 +312,7 @@ namespace JogoLabirinto
         {
             Tamanho = tamanho;
 
-            var centro = new Ponto4D(tamanho.Comprimento / 2, tamanho.Largura / 2);
+            //var centro = new Ponto4D(tamanho.Comprimento / 2, tamanho.Largura / 2);
             //Redimensionar(tamanho.Comprimento, 1, tamanho.Largura, centro.InverterSinal());
         }
 
@@ -494,6 +411,104 @@ namespace JogoLabirinto
         {
             Comprimento = comprimento;
             Largura = largura;
+        }
+    }
+
+    public static class GraphicUtils
+    {
+        public static void DesenharCubo(float escalaX = 1f, float escalaY = 1f, float escalaZ = 1f, bool adicionarContornos = false)
+        {
+            float x = escalaX,
+                y = escalaY,
+                z = escalaZ;
+
+            GL.Begin(PrimitiveType.Quads);
+            {
+                // Front Face
+                GL.Normal3(0, 0, 1);
+                GL.Vertex3(-x, -y, z);
+                GL.Vertex3(x, -y, z);
+                GL.Vertex3(x, y, z);
+                GL.Vertex3(-x, y, z);
+
+                // Back Face
+                GL.Normal3(0, 0, -1);
+                GL.Vertex3(-x, -y, -z);
+                GL.Vertex3(-x, y, -z);
+                GL.Vertex3(x, y, -z);
+                GL.Vertex3(x, -y, -z);
+
+                // Top Face
+                GL.Normal3(0, 1, 0);
+                GL.Vertex3(-x, y, -z);
+                GL.Vertex3(-x, y, z);
+                GL.Vertex3(x, y, z);
+                GL.Vertex3(x, y, -z);
+
+                // Bottom Face
+                GL.Normal3(0, -1, 0);
+                GL.Vertex3(-x, -y, -z);
+                GL.Vertex3(x, -y, -z);
+                GL.Vertex3(x, -y, z);
+                GL.Vertex3(-x, -y, z);
+
+                // Right face
+                GL.Normal3(1, 0, 0);
+                GL.Vertex3(x, -y, -z);
+                GL.Vertex3(x, y, -z);
+                GL.Vertex3(x, y, z);
+                GL.Vertex3(x, -y, z);
+
+                // Left Face
+                GL.Normal3(-1, 0, 0);
+                GL.Vertex3(-x, -y, -z);
+                GL.Vertex3(-x, -y, z);
+                GL.Vertex3(-x, y, z);
+                GL.Vertex3(-x, y, -z);
+            }
+            GL.End();
+
+            GL.LineWidth(1);
+            GL.Color3(Color.Black);
+            GL.Begin(PrimitiveType.Lines);
+            {
+               // Front Face
+                GL.Vertex3(-x, -y, z);
+                GL.Vertex3(x, -y, z);
+                GL.Vertex3(x, y, z);
+                GL.Vertex3(-x, y, z);
+
+                // Back Face
+                GL.Vertex3(-x, -y, -z);
+                GL.Vertex3(-x, y, -z);
+                GL.Vertex3(x, y, -z);
+                GL.Vertex3(x, -y, -z);
+
+                // Top Face
+                GL.Vertex3(-x, y, -z);
+                GL.Vertex3(-x, y, z);
+                GL.Vertex3(x, y, z);
+                GL.Vertex3(x, y, -z);
+
+                // Bottom Face
+                GL.Vertex3(-x, -y, -z);
+                GL.Vertex3(x, -y, -z);
+                GL.Vertex3(x, -y, z);
+                GL.Vertex3(-x, -y, z);
+
+                // Right face
+                GL.Vertex3(x, -y, -z);
+                GL.Vertex3(x, y, -z);
+                GL.Vertex3(x, y, z);
+                GL.Vertex3(x, -y, z);
+
+                // Left Face
+                GL.Vertex3(-x, -y, -z);
+                GL.Vertex3(-x, -y, z);
+                GL.Vertex3(-x, y, z);
+                GL.Vertex3(-x, y, -z);
+            }
+            GL.End();
         }
     }
 
