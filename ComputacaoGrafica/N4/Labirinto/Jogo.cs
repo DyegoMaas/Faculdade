@@ -64,7 +64,7 @@ namespace JogoLabirinto
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'p'}
             },
-            escala: 10,
+            escala: 2,
             tamanhoParede: new Vector3d(1, 1, 1));
 
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
@@ -94,11 +94,24 @@ namespace JogoLabirinto
                 //alvo.X, alvo.Y, alvo.Z,
                 0d, 1d, 0d);
 
+            DesenharEixoY();
             tabuleiro.Desenhar();
 
 
 
             SwapBuffers();
+        }
+
+        private void DesenharEixoY()
+        {
+            GL.LineWidth(5);
+            GL.Color3(Color.LawnGreen);
+            GL.Begin(PrimitiveType.Lines);
+            {
+                GL.Vertex3(0,0,0);
+                GL.Vertex3(0,10,0);
+            }
+            GL.End();
         }
 
         void OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -166,7 +179,7 @@ namespace JogoLabirinto
                     var config = matrizConfiguracao[x, z];
                     var tipoConteudo = TipoConteudo(config);
 
-                    var posicaoInicial = new Ponto4D(2d * x, 0, 2 * z);
+                    var posicaoInicial = new Ponto4D(escala * x, 0, escala * z);
                     switch (tipoConteudo)
                     {
                         case TipoConteudoCasaTabuleiro.Cacapa:
@@ -367,11 +380,18 @@ namespace JogoLabirinto
 
         protected override void DesenharObjeto()
         {
-            //TODO adornos no tabuleiro???
-            cacapa.Desenhar();
-            blocosChao.ForEach(b => b.Desenhar());
-            paredes.ForEach(p => p.Desenhar());
-            esfera.Desenhar();
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.PushMatrix();
+            {
+                GL.Translate(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
+            
+                //TODO adornos no tabuleiro???
+                cacapa.Desenhar();
+                blocosChao.ForEach(b => b.Desenhar());
+                paredes.ForEach(p => p.Desenhar());
+                esfera.Desenhar();
+            }
+            GL.PopMatrix();
         }
     }
 
