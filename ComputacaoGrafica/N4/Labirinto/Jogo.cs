@@ -128,6 +128,7 @@ namespace JogoLabirinto
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
+            tabuleiro.Atualizar();
         }
 
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
@@ -177,7 +178,7 @@ namespace JogoLabirinto
 
                         case TipoConteudoCasaTabuleiro.ChaoComEsfera:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
-                            objetosCenario.Esfera = new Esfera(new Vector3d(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z));
+                            objetosCenario.Esfera = new Esfera(new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z));
                             break;
 
                         case TipoConteudoCasaTabuleiro.ChaoComParede:
@@ -211,15 +212,14 @@ namespace JogoLabirinto
         }
     }
 
-
     public abstract class ComponenteTabuleiro : ObjetoGrafico
     {
-        protected readonly Vector3d Posicao;
+        protected Vector3d Posicao;
 
         protected ComponenteTabuleiro(Vector3d posicao)
         {
             Posicao = posicao;
-            AntesDeDesenhar(() => GL.Translate(posicao.X, posicao.Y, posicao.Z));
+            AntesDeDesenhar(() => GL.Translate(Posicao));
         }
     }
 
@@ -237,11 +237,14 @@ namespace JogoLabirinto
         }
     }
 
-    public class Esfera : ComponenteTabuleiro
+    public class Esfera : ComponenteTabuleiro, IObjetoInteligente
     {
+        public Vector3d Velocidade { get; set; }
+        
         public Esfera(Vector3d posicao)
             : base(posicao)
         {
+            AntesDeDesenhar(() => GL.Translate(posicao));
         }
 
         protected override void DesenharObjeto()
@@ -249,6 +252,11 @@ namespace JogoLabirinto
             //TODO desenhar uma esfera
             GL.Color3(Color.Aqua);
             GraphicUtils.DesenharCubo();
+        }
+
+        public void Atualizar()
+        {
+            Posicao = Vector3d.Add(Posicao, Velocidade);
         }
     }
 
@@ -281,13 +289,15 @@ namespace JogoLabirinto
 
     public class Tabuleiro : ObjetoGrafico, IObjetoInteligente
     {
+        private const double FatorAceleracaoEsfera = 0.003;
+
         public SizeD Tamanho { get; private set; }
         public double RotacaoX { get; set; }
         public double RotacaoZ { get; set; }
 
         public readonly List<IObjetoGrafico> BlocosChao = new List<IObjetoGrafico>();
         public readonly List<IObjetoGrafico> Paredes = new List<IObjetoGrafico>();
-        public IObjetoGrafico Esfera { get; set; }
+        public Esfera Esfera { get; set; }
         public IObjetoGrafico Cacapa { get; set; }
 
         public Tabuleiro(SizeD tamanho)
@@ -297,7 +307,13 @@ namespace JogoLabirinto
 
         public void Atualizar()
         {
-            throw new NotImplementedException();
+            Esfera.Velocidade = CalcularVelocidadeEsfera();
+            Esfera.Atualizar();
+        }
+
+        private Vector3d CalcularVelocidadeEsfera()
+        {
+            return new Vector3d(RotacaoX * FatorAceleracaoEsfera, 0, RotacaoZ * FatorAceleracaoEsfera);
         }
 
         protected override void DesenharObjeto()
