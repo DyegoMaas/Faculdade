@@ -75,7 +75,7 @@ namespace JogoLabirinto
             GL.LoadIdentity();
 
             Glu.gluLookAt(
-                30, 30, 0,
+                20, 25, 20,
                 0, 0, 0,
                 0d, 1d, 0d);
 
