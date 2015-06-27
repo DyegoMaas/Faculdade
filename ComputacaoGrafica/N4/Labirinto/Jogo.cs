@@ -89,7 +89,7 @@ namespace JogoLabirinto
             //var alvo = labirinto.Posicao;
             ////a transformação do lookAt parece estar interferindo na rotação do cenário.
             Glu.gluLookAt(
-                30, 30, 30,
+                30, 30, 0,
                 0, 0, 0,
                 //alvo.X, alvo.Y, alvo.Z,
                 0d, 1d, 0d);
@@ -105,11 +105,22 @@ namespace JogoLabirinto
         private void DesenharEixoY()
         {
             GL.LineWidth(5);
-            GL.Color3(Color.LawnGreen);
             GL.Begin(PrimitiveType.Lines);
             {
-                GL.Vertex3(0,0,0);
-                GL.Vertex3(0,10,0);
+                //x
+                GL.Color3(Color.Red);
+                GL.Vertex3(-10, 0, 0);
+                GL.Vertex3(10, 0, 0);
+
+                //y
+                GL.Color3(Color.LawnGreen);
+                GL.Vertex3(0, -10, 0);
+                GL.Vertex3(0, 10, 0);
+
+                //x
+                GL.Color3(Color.Blue);
+                GL.Vertex3(0, 0, -10);
+                GL.Vertex3(0, 0, 10);
             }
             GL.End();
         }
@@ -119,12 +130,18 @@ namespace JogoLabirinto
 
         }
 
-        private Ponto4D ponto = new Ponto4D();
+        private double rotacaoX, rotacaoZ;
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
-            if (e.YDelta > 10 || e.XDelta > 10)
-                return;
+            //if (e.XDelta >  1) rotacaoX += .5f;
+            //if (e.XDelta < -1) rotacaoX -= .5f;
+            //if (e.YDelta >  1) rotacaoZ += .5f;
+            //if (e.YDelta < -1) rotacaoZ -= .5f;
 
+            rotacaoX += (e.XDelta * SensibilidadeMouse);
+            rotacaoX = rotacaoX.Clamp(-25, 25);
+            tabuleiro.RotacaoX = rotacaoX;
+            tabuleiro.RotacaoZ = rotacaoZ;
             //var pivoLabirinto = new Ponto4D(200, 100, 200).InverterSinal();
             //var pivoLabirinto = labirinto.Centro.InverterSinal();
             //ponto = pivoLabirinto.InverterSinal();
@@ -294,6 +311,8 @@ namespace JogoLabirinto
     public class Tabuleiro : ObjetoGrafico
     {
         public SizeD Tamanho { get; private set; }
+        public double RotacaoX { get; set; }
+        public double RotacaoZ { get; set; }
 
         public readonly List<IObjetoGrafico> BlocosChao = new List<IObjetoGrafico>();
         public readonly List<IObjetoGrafico> Paredes = new List<IObjetoGrafico>();
@@ -310,6 +329,8 @@ namespace JogoLabirinto
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
             {
+                GL.Rotate(RotacaoX, Vector3d.UnitX);
+                GL.Rotate(RotacaoZ, Vector3d.UnitZ);
                 GL.Translate(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
             
                 //TODO adornos no tabuleiro???
@@ -457,114 +478,12 @@ namespace JogoLabirinto
             }
             GL.End();
         }
+
+        public static double Clamp(this double valor, double min, double max)
+        {
+            if (valor < min) return min;
+            if (valor > max) return max;
+            return valor;
+        }
     }
-
-
-    /*IMPLEMENTAÇÃO ANTIGA
-     * 
-     * public abstract class ObjetoGrafico : IObjetoGrafico
-    {
-        public Transformacao4D Transformacao { get; private set; }
-
-        private static readonly Transformacao4D MatrizTmpTranslacao = new Transformacao4D();
-        private static readonly Transformacao4D MatrizTmpTranslacaoInversa = new Transformacao4D();
-        private static readonly Transformacao4D MatrizTmpEscala = new Transformacao4D();
-        private static readonly Transformacao4D MatrizTmpRotacaoZ = new Transformacao4D();
-        private static Transformacao4D matrizGlobal = new Transformacao4D();
-
-        private readonly IList<Ponto4D> vertices = new List<Ponto4D>();
-        public IEnumerable<Ponto4D> Vertices { get { return vertices; } }
-
-        protected ObjetoGrafico()
-        {
-            Transformacao = new Transformacao4D();
-        }
-
-        public void Desenhar()
-        {
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.PushMatrix();
-            {
-                GL.MultMatrix(Transformacao.Data);
-                DesenharObjeto();
-
-                foreach (var objetoGrafico in ObjetosFilhos())
-                {
-                    objetoGrafico.Desenhar();
-                }
-            }
-            GL.PopMatrix();
-        }
-
-        protected abstract void DesenharObjeto();
-
-        protected abstract IEnumerable<IObjetoGrafico> ObjetosFilhos();
-
-        #region Transformações
-
-        /// <summary>
-        /// Move o objeto
-        /// </summary>
-        /// <param name="x">Distância em que o objeto será movido no eixo X</param>
-        /// <param name="y">Distância em que o objeto será movido no eixo Y</param>
-        /// <param name="z">Distância em que o objeto será movido no eixo Z</param>
-        public void Mover(double x, double y, double z)
-        {
-            var matrizTranslacao = new Transformacao4D();
-            matrizTranslacao.AtribuirTranslacao(x, y, z);
-
-            Transformacao = matrizTranslacao.TransformarMatriz(Transformacao);
-        }
-
-        /// <summary>
-        /// Redimensiona o objeto em relação ao pivô
-        /// </summary>
-        /// <param name="escala">A escala pela qual o objeto será redimensionado</param>
-        /// <param name="pivo">Ponto ao redor do qual o objeto será redimensionado</param>
-        public void Redimensionar(double escalaX, double escalaY, double escalaZ, Ponto4D pivo)
-        {
-            matrizGlobal.AtribuirIdentidade();
-
-            ExecutarEmRelacaoAoPivo(pivo, () =>
-            {
-                MatrizTmpEscala.AtribuirEscala(escalaX, escalaY, escalaZ);
-                matrizGlobal = MatrizTmpEscala.TransformarMatriz(matrizGlobal);
-            });
-
-            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
-        }
-
-        /// <summary>
-        /// Rotaciona o objeto em relação ao pivô
-        /// </summary>
-        /// <param name="angulo">Ângulo em graus</param>
-        /// <param name="pivo">Ponto ao redor do qual o objeto será rotacionado</param>
-        public void RotacionarNoEixoZ(double angulo, Ponto4D pivo)
-        {
-            matrizGlobal.AtribuirIdentidade();
-
-            ExecutarEmRelacaoAoPivo(pivo, () =>
-            {
-                MatrizTmpRotacaoZ.AtribuirRotacaoZ(angulo * Transformacao4D.DegToRad);
-                matrizGlobal = MatrizTmpRotacaoZ.TransformarMatriz(matrizGlobal);
-            });
-
-            Transformacao = matrizGlobal.TransformarMatriz(Transformacao);
-        }
-
-        private void ExecutarEmRelacaoAoPivo(Ponto4D pivo, Action operacaoAntesDesenhar)
-        {
-            MatrizTmpTranslacao.AtribuirTranslacao(pivo.X, pivo.Y, pivo.Z);
-            matrizGlobal = MatrizTmpTranslacao.TransformarMatriz(matrizGlobal);
-
-            operacaoAntesDesenhar.Invoke();
-
-            pivo.InverterSinal();
-            MatrizTmpTranslacaoInversa.AtribuirTranslacao(pivo.X, pivo.Y, pivo.Z);
-            matrizGlobal = MatrizTmpTranslacaoInversa.TransformarMatriz(matrizGlobal);
-        }
-
-        #endregion Transformações
-    }
-*/
 }
