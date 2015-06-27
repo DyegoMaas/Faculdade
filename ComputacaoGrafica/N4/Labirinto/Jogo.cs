@@ -186,17 +186,17 @@ namespace JogoLabirinto
                             objetosCenario.Cacapa = new Cacapa(posicaoInicial);
                             break;
                         case TipoConteudoCasaTabuleiro.Chao:
-                            objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
+                            objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
                             break;
 
                         case TipoConteudoCasaTabuleiro.ChaoComEsfera:
-                            objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
+                            objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
                             objetosCenario.Esfera = new Esfera(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z));
                             break;
 
                         case TipoConteudoCasaTabuleiro.ChaoComParede:
-                            objetosCenario.AdicionarBlocoChao(new Chao(posicaoInicial));
-                            objetosCenario.AdicionarParede(new Parede(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z)));
+                            objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
+                            objetosCenario.Paredes.Add(new Parede(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z)));
                             break;
                     }
                 }
@@ -293,90 +293,17 @@ namespace JogoLabirinto
 
     public class Tabuleiro : ObjetoGrafico
     {
-        public SizeD Tamanho { get; private set; } //TODO verificar se é necessário guardar
-        private readonly List<IObjetoGrafico> todosObjetos = new List<IObjetoGrafico>(); 
+        public SizeD Tamanho { get; private set; }
 
-        private readonly List<IObjetoGrafico> blocosChao = new List<IObjetoGrafico>();
-        private readonly List<IObjetoGrafico> paredes = new List<IObjetoGrafico>();
-        private IObjetoGrafico cacapa;
-        private IObjetoGrafico esfera;
-
-        public IObjetoGrafico Esfera
-        {
-            get { return esfera; }
-            set
-            {
-                esfera = value;
-                todosObjetos.Add(value);
-            }
-        }
-
-        public IObjetoGrafico Cacapa
-        {
-            get { return cacapa; }
-            set
-            {
-                cacapa = value;
-                todosObjetos.Add(value);
-            }
-        }
+        public readonly List<IObjetoGrafico> BlocosChao = new List<IObjetoGrafico>();
+        public readonly List<IObjetoGrafico> Paredes = new List<IObjetoGrafico>();
+        public IObjetoGrafico Esfera { get; set; }
+        public IObjetoGrafico Cacapa { get; set; }
 
         public Tabuleiro(SizeD tamanho)
         {
             Tamanho = tamanho;
-
-            //var centro = new Ponto4D(tamanho.Comprimento / 2, tamanho.Largura / 2);
-            //Redimensionar(tamanho.Comprimento, 1, tamanho.Largura, centro.InverterSinal());
         }
-
-        public void AdicionarBlocoChao(IObjetoGrafico bloco) //TODO mudar para tipo concreto
-        {
-            blocosChao.Add(bloco);
-            todosObjetos.Add(bloco);
-        }
-
-        public void AdicionarParede(IObjetoGrafico parede) //TODO mudar para tipo concreto
-        {
-            paredes.Add(parede);
-            todosObjetos.Add(parede);
-        }
-
-        //public void Desenhar()
-        //{
-        //    //TODO transformar para o centro (-tamanho/2)
-
-        //    GL.MatrixMode(MatrixMode.Modelview);
-        //    GL.PushMatrix();
-        //    {
-        //        GL.MultMatrix(Transformacao.Data);
-        //        DesenharObjeto();
-        //        //GL.Begin(BeginMode.Triangles);
-        //        //{
-        //        //    foreach (var vertice in vertices)
-        //        //    {
-        //        //        GL.Vertex3(vertice.X, vertice.Y, vertice.Z);
-        //        //    }
-        //        //}
-        //        //GL.End();
-
-        //        foreach (var objetoGrafico in ObjetosFilhos())
-        //        {
-        //            objetoGrafico.Desenhar();
-        //        }
-        //    }
-        //    GL.PopMatrix();
-
-        //    Cacapa.Desenhar();
-        //    blocosChao.ForEach(b => b.Desenhar());
-        //    paredes.ForEach(p => p.Desenhar());
-        //    Esfera.Desenhar();
-        //}
-
-
-        //protected override IEnumerable<IObjetoGrafico> ObjetosFilhos()
-        //{
-        //    return todosObjetos;
-        //}
 
         protected override void DesenharObjeto()
         {
@@ -386,10 +313,10 @@ namespace JogoLabirinto
                 GL.Translate(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
             
                 //TODO adornos no tabuleiro???
-                cacapa.Desenhar();
-                blocosChao.ForEach(b => b.Desenhar());
-                paredes.ForEach(p => p.Desenhar());
-                esfera.Desenhar();
+                Cacapa.Desenhar();
+                BlocosChao.ForEach(b => b.Desenhar());
+                Paredes.ForEach(p => p.Desenhar());
+                Esfera.Desenhar();
             }
             GL.PopMatrix();
         }
