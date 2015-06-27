@@ -252,11 +252,38 @@ namespace JogoLabirinto
             //TODO desenhar uma esfera
             GL.Color3(Color.Aqua);
             GraphicUtils.DesenharCubo();
+
+            DesenharVetorVelocidade();
+        }
+
+        private void DesenharVetorVelocidade()
+        {
+            const int tamahoEixos = 400;
+
+            GL.LineWidth(5);
+            GL.Begin(PrimitiveType.Lines);
+            {
+                //x
+                GL.Color3(Color.Red);
+                GL.Vertex3(0, 0, 0);
+                GL.Vertex3(Velocidade.X * tamahoEixos, 0, 0);
+
+                //y
+                GL.Color3(Color.LawnGreen);
+                GL.Vertex3(0, 0, 0);
+                GL.Vertex3(0, Velocidade.Y * tamahoEixos, 0);
+
+                //x
+                GL.Color3(Color.Blue);
+                GL.Vertex3(0, 0, 0);
+                GL.Vertex3(0, 0, Velocidade.Z * tamahoEixos);
+            }
+            GL.End();
         }
 
         public void Atualizar()
         {
-            Posicao = Vector3d.Add(Posicao, Velocidade);
+            Posicao = Posicao + Velocidade;
         }
     }
 
@@ -313,7 +340,7 @@ namespace JogoLabirinto
 
         private Vector3d CalcularVelocidadeEsfera()
         {
-            return new Vector3d(RotacaoX * FatorAceleracaoEsfera, 0, RotacaoZ * FatorAceleracaoEsfera);
+            return new Vector3d(-RotacaoZ * FatorAceleracaoEsfera, 0, RotacaoX * FatorAceleracaoEsfera);
         }
 
         protected override void DesenharObjeto()
