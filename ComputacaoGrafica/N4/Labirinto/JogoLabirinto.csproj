@@ -87,11 +87,6 @@
   <ItemGroup>
     <Compile Include="ConfiguracaoLabirinto.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="CuboSolido.cs" />
-    <Compile Include="EsferaSolida.cs" />
-    <Compile Include="Mundo.cs" />
-    <Compile Include="Ponto4D.cs" />
-    <Compile Include="Transformacao4D.cs" />
     <Compile Include="Jogo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

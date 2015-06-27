@@ -13,7 +13,8 @@ namespace JogoLabirinto
     public class Jogo : GameWindow
     {
         private const double SensibilidadeMouse = .25d;
-        private readonly Mundo mundo = new Mundo(new Camera());
+        private const int AnguloLimiteRotacao = 15;
+        private readonly Camera camera = new Camera();
         private Tabuleiro tabuleiro;
 
         public Jogo()
@@ -33,7 +34,7 @@ namespace JogoLabirinto
 
                 ConfigurarCena();
             };
-            Resize += (sender, e) => mundo.Camera.Reshape(ClientSize.Width, ClientSize.Height);
+            Resize += (sender, e) => camera.Reshape(ClientSize.Width, ClientSize.Height);
             UpdateFrame += OnUpdateFrame;
             RenderFrame += OnRenderFrame;
             KeyDown += OnKeyDown;
@@ -73,8 +74,6 @@ namespace JogoLabirinto
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
-
-            //var alvo = labirinto.Posicao;
             Glu.gluLookAt(
                 30, 30, 0,
                 0, 0, 0,
@@ -118,10 +117,10 @@ namespace JogoLabirinto
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
             rotacaoX += (e.XDelta * SensibilidadeMouse);
-            rotacaoX = rotacaoX.Clamp(-15, 15);
+            rotacaoX = rotacaoX.Clamp(-AnguloLimiteRotacao, AnguloLimiteRotacao);
 
             rotacaoZ += (e.YDelta * SensibilidadeMouse);
-            rotacaoZ = rotacaoZ.Clamp(-15, 15);
+            rotacaoZ = rotacaoZ.Clamp(-AnguloLimiteRotacao, AnguloLimiteRotacao);
 
             tabuleiro.RotacaoX = rotacaoX;
             tabuleiro.RotacaoZ = rotacaoZ;
@@ -140,11 +139,11 @@ namespace JogoLabirinto
         {
             if (teclado.IsKeyDown(Key.I))
             {
-                mundo.Camera.FatorZoom += .01f;
+                camera.FatorZoom += .01f;
             }
             if (teclado.IsKeyDown(Key.O))
             {
-                mundo.Camera.FatorZoom -= .01f;
+                camera.FatorZoom -= .01f;
             }
         }
     }
@@ -166,7 +165,7 @@ namespace JogoLabirinto
                     var config = matrizConfiguracao[x, z];
                     var tipoConteudo = TipoConteudo(config);
 
-                    var posicaoInicial = new Ponto4D(escala * x, 0, escala * z);
+                    var posicaoInicial = new Vector3d(escala * x, 0, escala * z);
                     switch (tipoConteudo)
                     {
                         case TipoConteudoCasaTabuleiro.Cacapa:
@@ -178,12 +177,12 @@ namespace JogoLabirinto
 
                         case TipoConteudoCasaTabuleiro.ChaoComEsfera:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
-                            objetosCenario.Esfera = new Esfera(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z));
+                            objetosCenario.Esfera = new Esfera(new Vector3d(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z));
                             break;
 
                         case TipoConteudoCasaTabuleiro.ChaoComParede:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
-                            objetosCenario.Paredes.Add(new Parede(new Ponto4D(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z)));
+                            objetosCenario.Paredes.Add(new Parede(new Vector3d(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z)));
                             break;
                     }
                 }
@@ -215,9 +214,9 @@ namespace JogoLabirinto
 
     public abstract class ComponenteTabuleiro : ObjetoGrafico
     {
-        protected readonly Ponto4D Posicao;
+        protected readonly Vector3d Posicao;
 
-        protected ComponenteTabuleiro(Ponto4D posicao)
+        protected ComponenteTabuleiro(Vector3d posicao)
         {
             Posicao = posicao;
             AntesDeDesenhar(() => GL.Translate(posicao.X, posicao.Y, posicao.Z));
@@ -226,7 +225,7 @@ namespace JogoLabirinto
 
     public class Parede : ComponenteTabuleiro //TODO fazer um desenho próprio
     {
-        public Parede(Ponto4D posicao)
+        public Parede(Vector3d posicao)
             : base(posicao)
         {
         }
@@ -240,7 +239,8 @@ namespace JogoLabirinto
 
     public class Esfera : ComponenteTabuleiro
     {
-        public Esfera(Ponto4D posicao) : base(posicao)
+        public Esfera(Vector3d posicao)
+            : base(posicao)
         {
         }
 
@@ -254,7 +254,8 @@ namespace JogoLabirinto
 
     public class Cacapa : ComponenteTabuleiro
     {
-        public Cacapa(Ponto4D posicao) : base(posicao)
+        public Cacapa(Vector3d posicao)
+            : base(posicao)
         {
         }
 
@@ -267,7 +268,7 @@ namespace JogoLabirinto
 
     public class Chao : ComponenteTabuleiro
     {
-        public Chao(Ponto4D posicao) : base(posicao)
+        public Chao(Vector3d posicao) : base(posicao)
         {
         }
 
@@ -278,7 +279,7 @@ namespace JogoLabirinto
         }
     }
 
-    public class Tabuleiro : ObjetoGrafico
+    public class Tabuleiro : ObjetoGrafico, IObjetoInteligente
     {
         public SizeD Tamanho { get; private set; }
         public double RotacaoX { get; set; }
@@ -292,6 +293,11 @@ namespace JogoLabirinto
         public Tabuleiro(SizeD tamanho)
         {
             Tamanho = tamanho;
+        }
+
+        public void Atualizar()
+        {
+            throw new NotImplementedException();
         }
 
         protected override void DesenharObjeto()
@@ -338,6 +344,11 @@ namespace JogoLabirinto
     public interface IObjetoGrafico
     {
         void Desenhar();
+    }
+
+    public interface IObjetoInteligente
+    {
+        void Atualizar();
     }
 
     public struct SizeD
@@ -454,6 +465,17 @@ namespace JogoLabirinto
             if (valor < min) return min;
             if (valor > max) return max;
             return valor;
+        }
+
+        public static bool EstaProximo(this Vector3d ponto, Vector3d outroPonto, double tolerancia)
+        {
+            return outroPonto.X >= ponto.X - tolerancia && outroPonto.X <= ponto.X + tolerancia &&
+                   outroPonto.Y >= ponto.Y - tolerancia && outroPonto.Y <= ponto.Y + tolerancia;
+        }
+
+        public static Vector3d InverterSinal(this Vector3d ponto)
+        {
+            return new Vector3d(-ponto.X, - ponto.Y, - ponto.Z);
         }
     }
 }
