@@ -15,10 +15,7 @@ namespace JogoLabirinto
         private const double SensibilidadeMouse = .25d;
         private readonly Mundo mundo = new Mundo(new Camera());
         private Tabuleiro tabuleiro;
-        //private Labirinto labirinto;
-        private CuboSolido cuboSolido;
 
-        private Ponto4D centroTabuleiro;
         public Jogo()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
         {
@@ -47,7 +44,8 @@ namespace JogoLabirinto
         /*  
          * c = chão
          * p = parede
-         * e = esfera
+         * j = esfera
+         * b = buraco/caçapa
          */
         private void ConfigurarCena()
         {
@@ -68,16 +66,6 @@ namespace JogoLabirinto
             tamanhoParede: new Vector3d(1, 1, 1));
 
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
-
-            //labirinto = new Labirinto(configuracaoLabirinto);
-            //centroTabuleiro = labirinto.Centro;
-            ////labirinto.Mover(-50,0,-150);
-            //mundo.AdicionarObjetoGrafico(labirinto);
-
-
-            //cuboSolido = new CuboSolido(Color.LawnGreen);
-            //cuboSolido.Redimensionar(20d, new Ponto4D());
-            //mundo.AdicionarObjetoGrafico(cuboSolido);
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -87,22 +75,18 @@ namespace JogoLabirinto
 
 
             //var alvo = labirinto.Posicao;
-            ////a transformação do lookAt parece estar interferindo na rotação do cenário.
             Glu.gluLookAt(
                 30, 30, 0,
                 0, 0, 0,
-                //alvo.X, alvo.Y, alvo.Z,
                 0d, 1d, 0d);
 
-            DesenharEixoY();
+            DesenharEixos();
             tabuleiro.Desenhar();
-
-
 
             SwapBuffers();
         }
 
-        private void DesenharEixoY()
+        private void DesenharEixos()
         {
             GL.LineWidth(5);
             GL.Begin(PrimitiveType.Lines);
@@ -133,28 +117,14 @@ namespace JogoLabirinto
         private double rotacaoX, rotacaoZ;
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
-            //if (e.XDelta >  1) rotacaoX += .5f;
-            //if (e.XDelta < -1) rotacaoX -= .5f;
-            //if (e.YDelta >  1) rotacaoZ += .5f;
-            //if (e.YDelta < -1) rotacaoZ -= .5f;
-
             rotacaoX += (e.XDelta * SensibilidadeMouse);
-            rotacaoX = rotacaoX.Clamp(-25, 25);
+            rotacaoX = rotacaoX.Clamp(-15, 15);
+
+            rotacaoZ += (e.YDelta * SensibilidadeMouse);
+            rotacaoZ = rotacaoZ.Clamp(-15, 15);
+
             tabuleiro.RotacaoX = rotacaoX;
             tabuleiro.RotacaoZ = rotacaoZ;
-            //var pivoLabirinto = new Ponto4D(200, 100, 200).InverterSinal();
-            //var pivoLabirinto = labirinto.Centro.InverterSinal();
-            //ponto = pivoLabirinto.InverterSinal();
-            //labirinto.RotacionarNoEixoY(-e.YDelta * SensibilidadeMouse, centroTabuleiro);
-            //labirinto.RotacionarNoEixoY(-e.YDelta * SensibilidadeMouse, Ponto4D.Zero);
-
-
-            //labirinto.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, centroTabuleiro);
-            //labirinto.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, centroTabuleiro);
-
-            //var pivoCubo = cuboSolido.Posicao.InverterSinal();
-            //cuboSolido.RotacionarNoEixoX(-e.YDelta * SensibilidadeMouse, pivoCubo);
-            //cuboSolido.RotacionarNoEixoZ(e.XDelta * SensibilidadeMouse, pivoCubo);
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
