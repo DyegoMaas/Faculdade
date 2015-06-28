@@ -240,27 +240,40 @@ namespace JogoLabirinto
         }
     }
 
-    public abstract class ComponenteTabuleiro : ObjetoGrafico
+    public abstract class ComponenteTabuleiro : ObjetoGrafico, IObjetoInteligente
     {
-        protected Vector3d Posicao;
+        private Vector3d posicao;
+        protected Vector3d Posicao
+        {
+            get { return posicao; }
+            set
+            {
+                posicao = value;
+                AtualizarMatrizTranslacao();
+            }
+        }
+
         public BoundingBox BoundingBox { get; set; }
 
         protected ComponenteTabuleiro(Vector3d posicao)
         {
             Posicao = posicao;
-            
-            //AplicarTransformacao(translacao);
+            AtualizarMatrizTranslacao();
+
             AntesDeDesenhar(() =>
             {
-                var translacao = Matrix4d.CreateTranslation(Posicao);
-                //GL.Translate(Posicao);
-                GL.MultMatrix(ref translacao);
-
                 if(BoundingBox != null)
                     BoundingBox.Desenhar();
-                    //GraphicUtils.DesenharBoundingBox(BoundingBox);
             });
         }
+
+        private void AtualizarMatrizTranslacao()
+        {
+            var translacao = Matrix4d.CreateTranslation(Posicao);
+            AplicarTransformacao(translacao);
+        }
+
+        public abstract void Atualizar();
     }
 
     public class Parede : ComponenteTabuleiro
@@ -277,6 +290,10 @@ namespace JogoLabirinto
             //GL.Color3(Color.DimGray);
             //GraphicUtils.DesenharCubo(adicionarContornos: true);
         }
+
+        public override void Atualizar()
+        {
+        }
     }
 
     public class Chao : ComponenteTabuleiro
@@ -292,9 +309,14 @@ namespace JogoLabirinto
             //GL.Color3(Color.SaddleBrown);
             //GraphicUtils.DesenharCubo(Faces, adicionarContornos:true);
         }
+
+        public override void Atualizar()
+        {
+            
+        }
     }
 
-    public class Esfera : ComponenteTabuleiro, IObjetoInteligente
+    public class Esfera : ComponenteTabuleiro
     {
         public Vector3d Velocidade { get; set; }
         
@@ -348,7 +370,7 @@ namespace JogoLabirinto
             GL.End();
         }
 
-        public void Atualizar()
+        public override void Atualizar()
         {
             Posicao = Posicao + Velocidade;
         }
@@ -364,6 +386,10 @@ namespace JogoLabirinto
         protected override void DesenharObjeto()
         {
             GL.Color3(Color.Black);
+        }
+
+        public override void Atualizar()
+        {
         }
     }
 
@@ -498,7 +524,7 @@ namespace JogoLabirinto
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
             {
-                //GL.MultMatrix(ref matrizTransformacao);
+                GL.MultMatrix(ref matrizTransformacao);
 
                 acoes.ForEach(acao => acao.Invoke());
 
