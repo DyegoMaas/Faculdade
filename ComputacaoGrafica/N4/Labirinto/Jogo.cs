@@ -15,10 +15,9 @@ namespace JogoLabirinto
         private const int AnguloLimiteRotacao = 15;
         private readonly Camera camera = new Camera();
         private Tabuleiro tabuleiro;
-        private LinhasGuia linhasGuia;
+        private LinhasReferencia linhasReferencia;
 
         public Jogo()
-            : base() //800, 800, new GraphicsMode(32, 24, 8, 0)
         {
             Location = new Point(50, 50);
             Title = "Labyrinth";
@@ -68,8 +67,7 @@ namespace JogoLabirinto
             tamanhoParede: new Vector3d(1, 1, 1));
 
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
-            linhasGuia = new LinhasGuia(400, 2);
-
+            linhasReferencia = new LinhasReferencia(numeroLinhas:400, distanciaEntreLinhas:2);
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -83,7 +81,7 @@ namespace JogoLabirinto
                 0d, 1d, 0d);
 
             DesenharEixos();
-            linhasGuia.Desenhar();
+            linhasReferencia.Desenhar();
             tabuleiro.Desenhar();
 
             SwapBuffers();
@@ -163,7 +161,8 @@ namespace JogoLabirinto
             var escala = configuracao.Escala;
             var numeroBlocosEmX = matrizConfiguracao.GetLength(1);
             var numeroBlocosEmZ = matrizConfiguracao.GetLength(0);
-            var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX * escala, numeroBlocosEmZ * escala));
+            var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX * escala, numeroBlocosEmZ * escala), escala);
+            //var vetorEscala = new Vector3d(escala,0,escala);
 
             for (var x = 0; x < numeroBlocosEmX; x++)
             {
@@ -172,7 +171,8 @@ namespace JogoLabirinto
                     var config = matrizConfiguracao[x, z];
                     var tipoConteudo = TipoConteudo(config);
 
-                    var posicaoInicial = new Vector3d(escala * x, 0, escala * z);
+                    //var posicaoInicial = new Vector3d(escala * x, 0, escala * z);
+                    var posicaoInicial = new Vector3d(x, 0, z);
                     switch (tipoConteudo)
                     {
                         case TipoConteudoCasaTabuleiro.Cacapa:
@@ -184,12 +184,25 @@ namespace JogoLabirinto
 
                         case TipoConteudoCasaTabuleiro.ChaoComEsfera:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
-                            objetosCenario.Esfera = new Esfera(new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z));
+
+                            var posicaoEsfera = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1f, posicaoInicial.Z);
+
+                            objetosCenario.Esfera = new Esfera(posicaoEsfera)
+                            {
+                                //BoundingBox = new BoundingBox(posicaoEsfera - vetorEscala, posicaoEsfera + vetorEscala)
+                            };
                             break;
 
                         case TipoConteudoCasaTabuleiro.ChaoComParede:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
-                            objetosCenario.Paredes.Add(new Parede(new Vector3d(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z)));
+
+                            var posicaoParede = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1f, posicaoInicial.Z);
+                            //var min = new Vector3d(posicaoInicial.X - escala / 2, posicaoInicial.Y - escala / 2, posicaoInicial.Z - escala / 2);
+                            //var max = new Vector3d(posicaoInicial.X + escala / 2, posicaoInicial.Y + escala / 2, posicaoInicial.Z + escala / 2);
+                            objetosCenario.Paredes.Add(new Parede(posicaoParede)
+                            {
+                                //BoundingBox = new BoundingBox(min, max)
+                            });
                             break;
                     }
                 }
@@ -221,15 +234,22 @@ namespace JogoLabirinto
     public abstract class ComponenteTabuleiro : ObjetoGrafico
     {
         protected Vector3d Posicao;
+        public BoundingBox BoundingBox { get; set; }
 
         protected ComponenteTabuleiro(Vector3d posicao)
         {
             Posicao = posicao;
-            AntesDeDesenhar(() => GL.Translate(Posicao));
+            AntesDeDesenhar(() =>
+            {
+                GL.Translate(Posicao);
+
+                if(BoundingBox != null)
+                    GraphicUtils.DesenharBoundingBox(BoundingBox);
+            });
         }
     }
 
-    public class Parede : ComponenteTabuleiro //TODO fazer um desenho próprio
+    public class Parede : ComponenteTabuleiro
     {
         public Parede(Vector3d posicao)
             : base(posicao)
@@ -250,7 +270,6 @@ namespace JogoLabirinto
         public Esfera(Vector3d posicao)
             : base(posicao)
         {
-            AntesDeDesenhar(() => GL.Translate(posicao));
         }
 
         protected override void DesenharObjeto()
@@ -258,7 +277,6 @@ namespace JogoLabirinto
             //TODO desenhar uma esfera
             GL.Color3(Color.Aqua);
             GraphicUtils.DesenharCubo();
-
             DesenharVetorVelocidade();
         }
 
@@ -266,23 +284,33 @@ namespace JogoLabirinto
         {
             const int tamahoEixos = 400;
 
+            var velX = new Vector3d(Velocidade.X * tamahoEixos, 0, 0);
+            var velY = new Vector3d(0, Velocidade.Y * tamahoEixos, 0);
+            var velZ = new Vector3d(0, 0, Velocidade.Z * tamahoEixos);
+            var direcao = velX + velY + velZ;
+
             GL.LineWidth(5);
             GL.Begin(PrimitiveType.Lines);
             {
                 //x
                 GL.Color3(Color.Red);
                 GL.Vertex3(0, 0, 0);
-                GL.Vertex3(Velocidade.X * tamahoEixos, 0, 0);
+                GL.Vertex3(velX);
 
                 //y
                 GL.Color3(Color.LawnGreen);
                 GL.Vertex3(0, 0, 0);
-                GL.Vertex3(0, Velocidade.Y * tamahoEixos, 0);
+                GL.Vertex3(velY);
 
-                //x
+                //z
                 GL.Color3(Color.Blue);
                 GL.Vertex3(0, 0, 0);
-                GL.Vertex3(0, 0, Velocidade.Z * tamahoEixos);
+                GL.Vertex3(velZ);
+
+                //dir
+                GL.Color3(Color.DarkBlue);
+                GL.Vertex3(0, 0, 0);
+                GL.Vertex3(direcao);
             }
             GL.End();
         }
@@ -307,12 +335,12 @@ namespace JogoLabirinto
         }
     }
 
-    public class LinhasGuia : ObjetoGrafico
+    public class LinhasReferencia : ObjetoGrafico
     {
         private readonly int numeroLinhas;
         private readonly int distanciaEntreLinhas;
 
-        public LinhasGuia(int numeroLinhas, int distanciaEntreLinhas)
+        public LinhasReferencia(int numeroLinhas, int distanciaEntreLinhas)
         {
             this.numeroLinhas = numeroLinhas;
             this.distanciaEntreLinhas = distanciaEntreLinhas;
@@ -352,6 +380,7 @@ namespace JogoLabirinto
 
     public class Tabuleiro : ObjetoGrafico, IObjetoInteligente
     {
+        private readonly double escala;
         private const double FatorAceleracaoEsfera = 0.003;
 
         public SizeD Tamanho { get; private set; }
@@ -363,8 +392,9 @@ namespace JogoLabirinto
         public Esfera Esfera { get; set; }
         public IObjetoGrafico Cacapa { get; set; }
 
-        public Tabuleiro(SizeD tamanho)
+        public Tabuleiro(SizeD tamanho, double escala)
         {
+            this.escala = escala;
             Tamanho = tamanho;
         }
 
@@ -387,12 +417,14 @@ namespace JogoLabirinto
                 GL.Rotate(RotacaoX, Vector3d.UnitX);
                 GL.Rotate(RotacaoZ, Vector3d.UnitZ);
                 GL.Translate(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
-            
+                GL.Scale(escala, escala, escala);
+
                 //TODO adornos no tabuleiro???
                 Cacapa.Desenhar();
                 BlocosChao.ForEach(b => b.Desenhar());
                 Paredes.ForEach(p => p.Desenhar());
                 Esfera.Desenhar();
+
             }
             GL.PopMatrix();
         }
@@ -444,7 +476,7 @@ namespace JogoLabirinto
 
     public static class GraphicUtils
     {
-        public static void DesenharCubo(float escalaX = 1f, float escalaY = 1f, float escalaZ = 1f, bool adicionarContornos = false)
+        public static void DesenharCubo(float escalaX = .5f, float escalaY = .5f, float escalaZ = .5f, bool adicionarContornos = false)
         {
             float x = escalaX,
                 y = escalaY,
@@ -500,7 +532,9 @@ namespace JogoLabirinto
             GL.Color3(Color.Black);
             GL.Begin(PrimitiveType.Lines);
             {
-               // Front Face
+                //TODO remover arestas duplicadas
+
+                // Front Face
                 GL.Vertex3(-x, -y, z);
                 GL.Vertex3(x, -y, z);
                 GL.Vertex3(x, y, z);
@@ -539,6 +573,54 @@ namespace JogoLabirinto
             GL.End();
         }
 
+        public static void DesenharBoundingBox(BoundingBox bBox)
+        {
+            var min = bBox.Min;
+            var max = bBox.Max;
+            GL.LineWidth(1);
+            GL.Color3(Color.BurlyWood);
+            GL.Begin(PrimitiveType.Lines);
+            {
+                //TODO remover arestas duplicadas
+                // Front Face
+                GL.Vertex3(min.X, min.Y, max.Z);
+                GL.Vertex3(max.X, min.Y, max.Z);
+                GL.Vertex3(max.X, max.Y, max.Z);
+                GL.Vertex3(min.X, max.Y, max.Z);
+
+                // Back Face
+                GL.Vertex3(min.X, min.Y, min.Z);
+                GL.Vertex3(min.X, max.Y, min.Z);
+                GL.Vertex3(max.X, max.Y, min.Z);
+                GL.Vertex3(max.X, min.Y, min.Z);
+
+                // Top Face
+                GL.Vertex3(min.X, max.Y, min.Z);
+                GL.Vertex3(min.X, max.Y, max.Z);
+                GL.Vertex3(max.X, max.Y, max.Z);
+                GL.Vertex3(max.X, max.Y, min.Z);
+
+                // Bottom Face
+                GL.Vertex3(min.X, min.Y, min.Z);
+                GL.Vertex3(max.X, min.Y, min.Z);
+                GL.Vertex3(max.X, min.Y, max.Z);
+                GL.Vertex3(min.X, min.Y, max.Z);
+
+                // Right face
+                GL.Vertex3(max.X, min.Y, min.Z);
+                GL.Vertex3(max.X, max.Y, min.Z);
+                GL.Vertex3(max.X, max.Y, max.Z);
+                GL.Vertex3(max.X, min.Y, max.Z);
+
+                // Left Face
+                GL.Vertex3(min.X, min.Y, min.Z);
+                GL.Vertex3(min.X, min.Y, max.Z);
+                GL.Vertex3(min.X, max.Y, max.Z);
+                GL.Vertex3(min.X, max.Y, min.Z);
+            }
+            GL.End();
+        }
+
         public static double Clamp(this double valor, double min, double max)
         {
             if (valor < min) return min;
@@ -557,4 +639,97 @@ namespace JogoLabirinto
             return new Vector3d(-ponto.X, - ponto.Y, - ponto.Z);
         }
     }
+
+    public class BoundingBox
+    {
+        Vector3d min = Vector3d.Zero, max = Vector3d.Zero;
+
+        public Vector3d Min
+        {
+            set { min = value; }
+            get { return min; }
+        }
+
+        public Vector3d Max
+        {
+            set { max = value; }
+            get { return max; }
+        }
+
+        public Vector3d Centro
+        {
+            set
+            {
+                var dist = value - Centro;
+                min += dist;
+                max += dist;
+            }
+            get { return (min + max) / 2.0f; }
+        }
+
+        public Vector3d HalfSize
+        {
+            set
+            {
+                Vector3d cent = Centro;
+                max = cent + value;
+                min = cent - value;
+            }
+            get { return (max - min) / 2.0f; }
+        }
+
+        public void Scale(Vector3d scale)
+        {
+            var halfSize = HalfSize;
+
+            halfSize.X *= scale.X;
+            halfSize.Y *= scale.Y;
+            halfSize.Z *= scale.Z;
+
+            HalfSize = halfSize;
+        }
+
+        public BoundingBox()
+        {
+        }
+
+        public BoundingBox(BoundingBox box)
+        {
+            min = box.Min;
+            max = box.Max;
+        }
+
+        public BoundingBox(Vector3d min, Vector3d max)
+        {
+            this.min = min;
+            this.max = max;
+        }
+
+        //public BoundingBox(IMesh mesh)
+        //{
+        //    min = new Vector3d(9999.0f, 9999.0f, 9999.0f); //...
+        //    max = -min;
+
+        //    foreach (var vertice in mesh.Vertices)
+        //    {
+        //        if (max.X < vertice.X)
+        //            max.X = vertice.X;
+               
+        //        if (max.Z < vertice.Z)
+        //            max.Z = vertice.Z;
+
+        //        if (min.X > vertice.X)
+        //            min.X = vertice.X;
+                
+        //        if (min.Z > vertice.Z)
+        //            min.Z = vertice.Z;
+        //    }
+        //}
+    }
+
+    ////TODO precisa??
+    //public interface IMesh
+    //{
+    //    Vector3d[] Vertices { get; set; }
+    //}
 }
