@@ -1,5 +1,4 @@
 ﻿using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System;
@@ -16,6 +15,7 @@ namespace JogoLabirinto
         private const int AnguloLimiteRotacao = 15;
         private readonly Camera camera = new Camera();
         private Tabuleiro tabuleiro;
+        private LinhasGuia linhasGuia;
 
         public Jogo()
             : base(800, 800, new GraphicsMode(32, 24, 8, 0))
@@ -67,6 +67,8 @@ namespace JogoLabirinto
             tamanhoParede: new Vector3d(1, 1, 1));
 
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
+            linhasGuia = new LinhasGuia(400, 2);
+
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -80,6 +82,7 @@ namespace JogoLabirinto
                 0d, 1d, 0d);
 
             DesenharEixos();
+            linhasGuia.Desenhar();
             tabuleiro.Desenhar();
 
             SwapBuffers();
@@ -114,6 +117,7 @@ namespace JogoLabirinto
         }
 
         private double rotacaoX, rotacaoZ;
+
         void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
             rotacaoX += (e.XDelta * SensibilidadeMouse);
@@ -158,7 +162,7 @@ namespace JogoLabirinto
             var numeroBlocosEmX = matrizConfiguracao.GetLength(1);
             var numeroBlocosEmZ = matrizConfiguracao.GetLength(0);
             var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX * escala, numeroBlocosEmZ * escala));
-            
+
             for (var x = 0; x < numeroBlocosEmX; x++)
             {
                 for (var z = 0; z < numeroBlocosEmZ; z++)
@@ -298,6 +302,36 @@ namespace JogoLabirinto
         {
             GL.Color3(Color.Black);
             GraphicUtils.DesenharCubo(escalaY:.1f);
+        }
+    }
+
+    public class LinhasGuia : ObjetoGrafico
+    {
+        private readonly int numeroLinhas;
+        private readonly int distanciaEntreLinhas;
+
+        public LinhasGuia(int numeroLinhas, int distanciaEntreLinhas)
+        {
+            this.numeroLinhas = numeroLinhas;
+            this.distanciaEntreLinhas = distanciaEntreLinhas;
+        }
+
+        protected override void DesenharObjeto()
+        {
+            GL.Color3(Color.Black);
+            GL.LineWidth(1);
+            GL.Begin(PrimitiveType.Lines);
+            {
+                for (var i = -numeroLinhas / 2; i < numeroLinhas / 2; i += distanciaEntreLinhas)
+                {
+                    GL.Vertex3(-1000, -10, i);
+                    GL.Vertex3(1000, -10, i);
+
+                    GL.Vertex3(i, -10, -1000);
+                    GL.Vertex3(i, -10, 1000);
+                }
+            }
+            GL.End();
         }
     }
 
