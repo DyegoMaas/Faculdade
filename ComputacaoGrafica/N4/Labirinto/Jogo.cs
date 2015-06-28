@@ -18,13 +18,14 @@ namespace JogoLabirinto
         private LinhasGuia linhasGuia;
 
         public Jogo()
-            : base(800, 800, new GraphicsMode(32, 24, 8, 0))
+            : base() //800, 800, new GraphicsMode(32, 24, 8, 0)
         {
             Location = new Point(50, 50);
             Title = "Labyrinth";
 
             Load += (sender, e) =>
             {
+                WindowState = WindowState.Fullscreen;
                 Glut.glutInit();
 
                 GL.Enable(EnableCap.CullFace);
@@ -137,7 +138,8 @@ namespace JogoLabirinto
 
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-
+            if(e.Key == Key.Escape)
+                Exit();
         }
 
         private void Zoom(KeyboardState teclado)
