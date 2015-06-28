@@ -158,11 +158,9 @@ namespace JogoLabirinto
         public static Tabuleiro GerarCenario(ConfiguracaoLabirinto configuracao)
         {
             var matrizConfiguracao = configuracao.MatrizConfiguracao;
-            var escala = configuracao.Escala;
             var numeroBlocosEmX = matrizConfiguracao.GetLength(1);
             var numeroBlocosEmZ = matrizConfiguracao.GetLength(0);
-            var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX * escala, numeroBlocosEmZ * escala), escala);
-            //var vetorEscala = new Vector3d(escala,0,escala);
+            var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX, numeroBlocosEmZ), configuracao.Escala);
 
             for (var x = 0; x < numeroBlocosEmX; x++)
             {
@@ -171,7 +169,6 @@ namespace JogoLabirinto
                     var config = matrizConfiguracao[x, z];
                     var tipoConteudo = TipoConteudo(config);
 
-                    //var posicaoInicial = new Vector3d(escala * x, 0, escala * z);
                     var posicaoInicial = new Vector3d(x, 0, z);
                     switch (tipoConteudo)
                     {
@@ -185,23 +182,35 @@ namespace JogoLabirinto
                         case TipoConteudoCasaTabuleiro.ChaoComEsfera:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
 
-                            var posicaoEsfera = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1f, posicaoInicial.Z);
+                            //var posicaoEsfera = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z);
+                            var posicaoEsfera = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z);
 
                             objetosCenario.Esfera = new Esfera(posicaoEsfera)
                             {
-                                //BoundingBox = new BoundingBox(posicaoEsfera - vetorEscala, posicaoEsfera + vetorEscala)
+                                BoundingBox = new BoundingBox(posicaoEsfera)
+
+                                //BoundingBox = new BoundingBox(posicaoEsfera - new Vector3d(1.5f), posicaoEsfera - new Vector3d(.5f))
+                                //BoundingBox = new BoundingBox(posicaoEsfera - new Vector3d(1f), posicaoEsfera + new Vector3d(1f))
                             };
                             break;
 
                         case TipoConteudoCasaTabuleiro.ChaoComParede:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
 
-                            var posicaoParede = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1f, posicaoInicial.Z);
+                            var posicaoParede = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z);
+                            //var posicaoBBox = new Vector3d(x/2, posicaoInicial.Y + 1, z/2);
+                            var min = new Vector3d(x -1, 0, z) - new Vector3d(.5d);
+                            var max = new Vector3d(x -1, 0, z) + new Vector3d(.5d);
                             //var min = new Vector3d(posicaoInicial.X - escala / 2, posicaoInicial.Y - escala / 2, posicaoInicial.Z - escala / 2);
                             //var max = new Vector3d(posicaoInicial.X + escala / 2, posicaoInicial.Y + escala / 2, posicaoInicial.Z + escala / 2);
                             objetosCenario.Paredes.Add(new Parede(posicaoParede)
                             {
+                                BoundingBox = new BoundingBox(posicaoParede)
                                 //BoundingBox = new BoundingBox(min, max)
+                                //BoundingBox = new BoundingBox(posicaoBBox - new Vector3d(1f), posicaoBBox - new Vector3d(.5f))
+                                //BoundingBox = new BoundingBox(posicaoParede - new Vector3d(1.5f), posicaoParede - new Vector3d(.5f))
+                                //BoundingBox = new BoundingBox(posicaoParede - new Vector3d(2f), posicaoParede + new Vector3d(1f))
+                                //BoundingBox = new BoundingBox(new Vector3d(posicaoParede.X/escala) - new Vector3d(.5f, .5f, .5f), posicaoParede + new Vector3d(.5f, .5f, .5f))
                             });
                             break;
                     }
@@ -239,12 +248,17 @@ namespace JogoLabirinto
         protected ComponenteTabuleiro(Vector3d posicao)
         {
             Posicao = posicao;
+            
+            //AplicarTransformacao(translacao);
             AntesDeDesenhar(() =>
             {
-                GL.Translate(Posicao);
+                var translacao = Matrix4d.CreateTranslation(Posicao);
+                //GL.Translate(Posicao);
+                GL.MultMatrix(ref translacao);
 
                 if(BoundingBox != null)
-                    GraphicUtils.DesenharBoundingBox(BoundingBox);
+                    BoundingBox.Desenhar();
+                    //GraphicUtils.DesenharBoundingBox(BoundingBox);
             });
         }
     }
@@ -254,12 +268,29 @@ namespace JogoLabirinto
         public Parede(Vector3d posicao)
             : base(posicao)
         {
+            GraphicUtils.TransformarEmCubo(this);
+            AntesDeDesenhar(() => GL.Color3(Color.DimGray));
         }
 
         protected override void DesenharObjeto()
         {
-            GL.Color3(Color.DimGray);
-            GraphicUtils.DesenharCubo(adicionarContornos: true);
+            //GL.Color3(Color.DimGray);
+            //GraphicUtils.DesenharCubo(adicionarContornos: true);
+        }
+    }
+
+    public class Chao : ComponenteTabuleiro
+    {
+        public Chao(Vector3d posicao) : base(posicao)
+        {
+            GraphicUtils.TransformarEmCubo(this);
+            AntesDeDesenhar(() => GL.Color3(Color.SaddleBrown));
+        }
+
+        protected override void DesenharObjeto()
+        {
+            //GL.Color3(Color.SaddleBrown);
+            //GraphicUtils.DesenharCubo(Faces, adicionarContornos:true);
         }
     }
 
@@ -270,13 +301,15 @@ namespace JogoLabirinto
         public Esfera(Vector3d posicao)
             : base(posicao)
         {
+            GraphicUtils.TransformarEmCubo(this);
+            AntesDeDesenhar(() => GL.Color3(Color.Aqua));
         }
 
         protected override void DesenharObjeto()
         {
             //TODO desenhar uma esfera
-            GL.Color3(Color.Aqua);
-            GraphicUtils.DesenharCubo();
+            //GL.Color3(Color.Aqua);
+            //GraphicUtils.DesenharCubo();
             DesenharVetorVelocidade();
         }
 
@@ -331,7 +364,6 @@ namespace JogoLabirinto
         protected override void DesenharObjeto()
         {
             GL.Color3(Color.Black);
-            GraphicUtils.DesenharCubo(escalaY:.1f);
         }
     }
 
@@ -365,22 +397,8 @@ namespace JogoLabirinto
         }
     }
 
-    public class Chao : ComponenteTabuleiro
-    {
-        public Chao(Vector3d posicao) : base(posicao)
-        {
-        }
-
-        protected override void DesenharObjeto()
-        {
-            GL.Color3(Color.SaddleBrown);
-            GraphicUtils.DesenharCubo(adicionarContornos:true);
-        }
-    }
-
     public class Tabuleiro : ObjetoGrafico, IObjetoInteligente
     {
-        private readonly double escala;
         private const double FatorAceleracaoEsfera = 0.003;
 
         public SizeD Tamanho { get; private set; }
@@ -389,6 +407,7 @@ namespace JogoLabirinto
 
         public readonly List<IObjetoGrafico> BlocosChao = new List<IObjetoGrafico>();
         public readonly List<IObjetoGrafico> Paredes = new List<IObjetoGrafico>();
+        private double escala;
         public Esfera Esfera { get; set; }
         public IObjetoGrafico Cacapa { get; set; }
 
@@ -396,6 +415,14 @@ namespace JogoLabirinto
         {
             this.escala = escala;
             Tamanho = tamanho;
+
+            var rotacaoX = Matrix4d.CreateRotationX(RotacaoX);
+            var rotacaoZ = Matrix4d.CreateRotationZ(RotacaoZ);
+            var translacao = Matrix4d.CreateTranslation(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
+            var matrizEscala = Matrix4d.Scale(escala, escala, escala);
+            var resultado = rotacaoX * rotacaoZ * translacao * matrizEscala;
+            //var resultado = translacao * matrizEscala * rotacaoX * rotacaoZ;
+            //AplicarTransformacao(resultado);
         }
 
         public void Atualizar()
@@ -414,31 +441,71 @@ namespace JogoLabirinto
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
             {
-                GL.Rotate(RotacaoX, Vector3d.UnitX);
-                GL.Rotate(RotacaoZ, Vector3d.UnitZ);
-                GL.Translate(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
-                GL.Scale(escala, escala, escala);
+
+            GL.Rotate(RotacaoX, Vector3d.UnitX);
+            GL.Rotate(RotacaoZ, Vector3d.UnitZ);
+            GL.Rotate(RotacaoZ, Vector3d.UnitZ);
+            GL.Translate(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
+            GL.Scale(escala, escala, escala);
+                //var rotacaoX = Matrix4d.CreateRotationZ(RotacaoX);
+                //var rotacaoZ = Matrix4d.CreateRotationZ(RotacaoZ);
+                //var translacao = Matrix4d.CreateTranslation(-Tamanho.Comprimento / 2, 0, -Tamanho.Largura / 2);
+                //var matrizEscala = Matrix4d.Scale(escala);
+                //MatrizTransformacao = rotacaoX * rotacaoZ * translacao * matrizEscala;
 
                 //TODO adornos no tabuleiro???
                 Cacapa.Desenhar();
                 BlocosChao.ForEach(b => b.Desenhar());
                 Paredes.ForEach(p => p.Desenhar());
                 Esfera.Desenhar();
-
             }
             GL.PopMatrix();
         }
     }
 
+    public class Face
+    {
+        public Vector3d Normal { get; private set; }
+        public IList<Vector3d> Vertices { get; private set; }
+
+        public Face(Vector3d normal, IList<Vector3d> vertices)
+        {
+            Normal = normal;
+            Vertices = vertices;
+        }
+    }
+
     public abstract class ObjetoGrafico : IObjetoGrafico
     {
-        private readonly List<Action> acoes = new List<Action>(); 
+        private readonly List<Action> acoes = new List<Action>();
+        public readonly IList<Face> Faces = new List<Face>();
+        protected bool Wireframe { get; set; }
+
+        private Matrix4d matrizTransformacao;
+
+        protected ObjetoGrafico()
+        {
+            matrizTransformacao = Matrix4d.Identity;
+        }
+
+        protected void AplicarTransformacao(Matrix4d novaMatrizTransformacao)
+        {
+            matrizTransformacao = novaMatrizTransformacao;
+        }
+
         public void Desenhar()
         {
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
             {
+                //GL.MultMatrix(ref matrizTransformacao);
+
                 acoes.ForEach(acao => acao.Invoke());
+
+                foreach (var face in Faces)
+                {
+                    GraphicUtils.DesenharFace(face, Wireframe);
+                }
                 DesenharObjeto();
             }
             GL.PopMatrix();
@@ -476,102 +543,109 @@ namespace JogoLabirinto
 
     public static class GraphicUtils
     {
-        public static void DesenharCubo(float escalaX = .5f, float escalaY = .5f, float escalaZ = .5f, bool adicionarContornos = false)
+        public static void DesenharCubo(IList<Face> faces, bool adicionarContornos = false)
         {
-            float x = escalaX,
-                y = escalaY,
-                z = escalaZ;
-
-            GL.Begin(PrimitiveType.Quads);
+            foreach (var face in faces)
             {
-                // Front Face
-                GL.Normal3(0, 0, 1);
-                GL.Vertex3(-x, -y, z);
-                GL.Vertex3(x, -y, z);
-                GL.Vertex3(x, y, z);
-                GL.Vertex3(-x, y, z);
-
-                // Back Face
-                GL.Normal3(0, 0, -1);
-                GL.Vertex3(-x, -y, -z);
-                GL.Vertex3(-x, y, -z);
-                GL.Vertex3(x, y, -z);
-                GL.Vertex3(x, -y, -z);
-
-                // Top Face
-                GL.Normal3(0, 1, 0);
-                GL.Vertex3(-x, y, -z);
-                GL.Vertex3(-x, y, z);
-                GL.Vertex3(x, y, z);
-                GL.Vertex3(x, y, -z);
-
-                // Bottom Face
-                GL.Normal3(0, -1, 0);
-                GL.Vertex3(-x, -y, -z);
-                GL.Vertex3(x, -y, -z);
-                GL.Vertex3(x, -y, z);
-                GL.Vertex3(-x, -y, z);
-
-                // Right face
-                GL.Normal3(1, 0, 0);
-                GL.Vertex3(x, -y, -z);
-                GL.Vertex3(x, y, -z);
-                GL.Vertex3(x, y, z);
-                GL.Vertex3(x, -y, z);
-
-                // Left Face
-                GL.Normal3(-1, 0, 0);
-                GL.Vertex3(-x, -y, -z);
-                GL.Vertex3(-x, -y, z);
-                GL.Vertex3(-x, y, z);
-                GL.Vertex3(-x, y, -z);
+               DesenharFace(face);
             }
-            GL.End();
-
-            GL.LineWidth(1);
-            GL.Color3(Color.Black);
-            GL.Begin(PrimitiveType.Lines);
-            {
-                //TODO remover arestas duplicadas
-
-                // Front Face
-                GL.Vertex3(-x, -y, z);
-                GL.Vertex3(x, -y, z);
-                GL.Vertex3(x, y, z);
-                GL.Vertex3(-x, y, z);
-
-                // Back Face
-                GL.Vertex3(-x, -y, -z);
-                GL.Vertex3(-x, y, -z);
-                GL.Vertex3(x, y, -z);
-                GL.Vertex3(x, -y, -z);
-
-                // Top Face
-                GL.Vertex3(-x, y, -z);
-                GL.Vertex3(-x, y, z);
-                GL.Vertex3(x, y, z);
-                GL.Vertex3(x, y, -z);
-
-                // Bottom Face
-                GL.Vertex3(-x, -y, -z);
-                GL.Vertex3(x, -y, -z);
-                GL.Vertex3(x, -y, z);
-                GL.Vertex3(-x, -y, z);
-
-                // Right face
-                GL.Vertex3(x, -y, -z);
-                GL.Vertex3(x, y, -z);
-                GL.Vertex3(x, y, z);
-                GL.Vertex3(x, -y, z);
-
-                // Left Face
-                GL.Vertex3(-x, -y, -z);
-                GL.Vertex3(-x, -y, z);
-                GL.Vertex3(-x, y, z);
-                GL.Vertex3(-x, y, -z);
-            }
-            GL.End();
         }
+        //public static void DesenharCubo(float escalaX = .5f, float escalaY = .5f, float escalaZ = .5f, bool adicionarContornos = false)
+        //{
+        //    float x = escalaX,
+        //        y = escalaY,
+        //        z = escalaZ;
+
+        //    GL.Begin(PrimitiveType.Quads);
+        //    {
+        //        // Front Face
+        //        GL.Normal3(0, 0, 1);
+        //        GL.Vertex3(-x, -y, z);
+        //        GL.Vertex3(x, -y, z);
+        //        GL.Vertex3(x, y, z);
+        //        GL.Vertex3(-x, y, z);
+
+        //        // Back Face
+        //        GL.Normal3(0, 0, -1);
+        //        GL.Vertex3(-x, -y, -z);
+        //        GL.Vertex3(-x, y, -z);
+        //        GL.Vertex3(x, y, -z);
+        //        GL.Vertex3(x, -y, -z);
+
+        //        // Top Face
+        //        GL.Normal3(0, 1, 0);
+        //        GL.Vertex3(-x, y, -z);
+        //        GL.Vertex3(-x, y, z);
+        //        GL.Vertex3(x, y, z);
+        //        GL.Vertex3(x, y, -z);
+
+        //        // Bottom Face
+        //        GL.Normal3(0, -1, 0);
+        //        GL.Vertex3(-x, -y, -z);
+        //        GL.Vertex3(x, -y, -z);
+        //        GL.Vertex3(x, -y, z);
+        //        GL.Vertex3(-x, -y, z);
+
+        //        // Right face
+        //        GL.Normal3(1, 0, 0);
+        //        GL.Vertex3(x, -y, -z);
+        //        GL.Vertex3(x, y, -z);
+        //        GL.Vertex3(x, y, z);
+        //        GL.Vertex3(x, -y, z);
+
+        //        // Left Face
+        //        GL.Normal3(-1, 0, 0);
+        //        GL.Vertex3(-x, -y, -z);
+        //        GL.Vertex3(-x, -y, z);
+        //        GL.Vertex3(-x, y, z);
+        //        GL.Vertex3(-x, y, -z);
+        //    }
+        //    GL.End();
+
+        //    GL.LineWidth(1);
+        //    GL.Color3(Color.Black);
+        //    GL.Begin(PrimitiveType.Lines);
+        //    {
+        //        //TODO remover arestas duplicadas
+
+        //        // Front Face
+        //        GL.Vertex3(-x, -y, z);
+        //        GL.Vertex3(x, -y, z);
+        //        GL.Vertex3(x, y, z);
+        //        GL.Vertex3(-x, y, z);
+
+        //        // Back Face
+        //        GL.Vertex3(-x, -y, -z);
+        //        GL.Vertex3(-x, y, -z);
+        //        GL.Vertex3(x, y, -z);
+        //        GL.Vertex3(x, -y, -z);
+
+        //        // Top Face
+        //        GL.Vertex3(-x, y, -z);
+        //        GL.Vertex3(-x, y, z);
+        //        GL.Vertex3(x, y, z);
+        //        GL.Vertex3(x, y, -z);
+
+        //        // Bottom Face
+        //        GL.Vertex3(-x, -y, -z);
+        //        GL.Vertex3(x, -y, -z);
+        //        GL.Vertex3(x, -y, z);
+        //        GL.Vertex3(-x, -y, z);
+
+        //        // Right face
+        //        GL.Vertex3(x, -y, -z);
+        //        GL.Vertex3(x, y, -z);
+        //        GL.Vertex3(x, y, z);
+        //        GL.Vertex3(x, -y, z);
+
+        //        // Left Face
+        //        GL.Vertex3(-x, -y, -z);
+        //        GL.Vertex3(-x, -y, z);
+        //        GL.Vertex3(-x, y, z);
+        //        GL.Vertex3(-x, y, -z);
+        //    }
+        //    GL.End();
+        //}
 
         public static void DesenharBoundingBox(BoundingBox bBox)
         {
@@ -579,6 +653,52 @@ namespace JogoLabirinto
             var max = bBox.Max;
             GL.LineWidth(1);
             GL.Color3(Color.BurlyWood);
+
+            //float x = .5f, 
+            //    y = .5f, 
+            //    z = .5f;
+            //GL.Begin(PrimitiveType.Lines);
+            //{
+            //    //TODO remover arestas duplicadas
+
+            //    // Front Face
+            //    GL.Vertex3(-x, -y, z);
+            //    GL.Vertex3(x, -y, z);
+            //    GL.Vertex3(x, y, z);
+            //    GL.Vertex3(-x, y, z);
+
+            //    // Back Face
+            //    GL.Vertex3(-x, -y, -z);
+            //    GL.Vertex3(-x, y, -z);
+            //    GL.Vertex3(x, y, -z);
+            //    GL.Vertex3(x, -y, -z);
+
+            //    // Top Face
+            //    GL.Vertex3(-x, y, -z);
+            //    GL.Vertex3(-x, y, z);
+            //    GL.Vertex3(x, y, z);
+            //    GL.Vertex3(x, y, -z);
+
+            //    // Bottom Face
+            //    GL.Vertex3(-x, -y, -z);
+            //    GL.Vertex3(x, -y, -z);
+            //    GL.Vertex3(x, -y, z);
+            //    GL.Vertex3(-x, -y, z);
+
+            //    // Right face
+            //    GL.Vertex3(x, -y, -z);
+            //    GL.Vertex3(x, y, -z);
+            //    GL.Vertex3(x, y, z);
+            //    GL.Vertex3(x, -y, z);
+
+            //    // Left Face
+            //    GL.Vertex3(-x, -y, -z);
+            //    GL.Vertex3(-x, -y, z);
+            //    GL.Vertex3(-x, y, z);
+            //    GL.Vertex3(-x, y, -z);
+            //}
+            //GL.End();
+
             GL.Begin(PrimitiveType.Lines);
             {
                 //TODO remover arestas duplicadas
@@ -638,9 +758,79 @@ namespace JogoLabirinto
         {
             return new Vector3d(-ponto.X, - ponto.Y, - ponto.Z);
         }
+
+        public static void DesenharFace(Face face, bool desenharWireframe = false)
+        {
+            var primitiva = desenharWireframe 
+                ? PrimitiveType.Lines 
+                : PrimitiveType.Quads;
+
+            if (primitiva == PrimitiveType.Quads)
+                GL.Normal3(face.Normal);
+
+            GL.Begin(primitiva);
+            {
+                foreach (var vertice in face.Vertices)
+                {
+                    GL.Vertex3(vertice);
+                }    
+            }
+            GL.End();
+        }
+
+        public static void TransformarEmCubo(ObjetoGrafico objetoGrafico)
+        {
+            const float x = .5f;
+            const float y = .5f;
+            const float z = .5f;
+
+            objetoGrafico.Faces.Add(new Face(new Vector3d(0, 0, 1), new[]
+            {
+                new Vector3d(-x, -y, z),
+                new Vector3d(x, -y, z),
+                new Vector3d(x, y, z),
+                new Vector3d(-x, y, z)    
+            }));
+
+            // Back Face
+            objetoGrafico.Faces.Add(new Face(new Vector3d(0, 0, -1), new[]
+            {
+                new Vector3d(-x, -y, -z),
+                new Vector3d(-x, y, -z),
+                new Vector3d(x, y, -z),
+                new Vector3d(x, -y, -z)
+            }));
+
+            // Top Face
+            objetoGrafico.Faces.Add(new Face(new Vector3d(0, 1, 0), new[]
+            {
+                new Vector3d(-x, y, -z),
+                new Vector3d(-x, y, z),
+                new Vector3d(x, y, z),
+                new Vector3d(x, y, -z)
+            }));
+
+            // Bottom Face
+            objetoGrafico.Faces.Add(new Face(new Vector3d(0, -1, 0), new[]
+            {
+                new Vector3d(-x, -y, -z),
+                new Vector3d(x, -y, -z),
+                new Vector3d(x, -y, z),
+                new Vector3d(-x, -y, z)
+            }));
+
+            // Right face
+            objetoGrafico.Faces.Add(new Face(new Vector3d(1, 0, 0), new[]
+            {
+                new Vector3d(x, -y, -z),
+                new Vector3d(x, y, -z),
+                new Vector3d(x, y, z),
+                new Vector3d(x, -y, z)
+            }));
+        }
     }
 
-    public class BoundingBox
+    public class BoundingBox : ObjetoGrafico
     {
         Vector3d min = Vector3d.Zero, max = Vector3d.Zero;
 
@@ -689,17 +879,24 @@ namespace JogoLabirinto
             HalfSize = halfSize;
         }
 
-        public BoundingBox()
+        public BoundingBox(Vector3d posicao)
+            : base()
         {
+            new Matrix4d();
+            GraphicUtils.TransformarEmCubo(this);
+            Wireframe = true;
+            AntesDeDesenhar(() => GL.Color3(Color.DarkKhaki));
         }
 
-        public BoundingBox(BoundingBox box)
+        public BoundingBox(Vector3d posicao, BoundingBox box) 
+            : this(posicao)
         {
             min = box.Min;
             max = box.Max;
         }
 
-        public BoundingBox(Vector3d min, Vector3d max)
+        public BoundingBox(Vector3d posicao, Vector3d min, Vector3d max)
+            : this(posicao)
         {
             this.min = min;
             this.max = max;
@@ -710,7 +907,7 @@ namespace JogoLabirinto
         //    min = new Vector3d(9999.0f, 9999.0f, 9999.0f); //...
         //    max = -min;
 
-        //    foreach (var vertice in mesh.Vertices)
+        //    foreach (var vertice in mesh.Faces)
         //    {
         //        if (max.X < vertice.X)
         //            max.X = vertice.X;
@@ -725,11 +922,15 @@ namespace JogoLabirinto
         //            min.Z = vertice.Z;
         //    }
         //}
+        protected override void DesenharObjeto()
+        {
+            //TODO desenhar
+        }
     }
 
     ////TODO precisa??
     //public interface IMesh
     //{
-    //    Vector3d[] Vertices { get; set; }
+    //    Vector3d[] Faces { get; set; }
     //}
 }
