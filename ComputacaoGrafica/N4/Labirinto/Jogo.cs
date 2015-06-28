@@ -24,7 +24,7 @@ namespace JogoLabirinto
 
             Load += (sender, e) =>
             {
-                //WindowState = WindowState.Fullscreen;
+                WindowState = WindowState.Fullscreen;
                 Glut.glutInit();
 
                 GL.Enable(EnableCap.CullFace);
@@ -52,16 +52,26 @@ namespace JogoLabirinto
         {
             var configuracaoLabirinto = new ConfiguracaoLabirinto(new[,]
             {
-                {'p', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'j', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'b', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
-                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'p'}
+                {'p', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p', 'p', 'c', 'c', 'p', 'c', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'j', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'b', 'p', 'c', 'c', 'b', 'p', 'b', 'p', 'c', 'c', 'b', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'}
             },
             escala: 2,
             tamanhoParede: new Vector3d(1, 1, 1));
@@ -76,8 +86,9 @@ namespace JogoLabirinto
             GL.LoadIdentity();
 
             Glu.gluLookAt(
-                20, 25, 20,
-                0, 0, 0,
+                30, 40, 30,
+                //0, 0, 0,
+                tabuleiro.Esfera.Posicao.X, tabuleiro.Esfera.Posicao.Y, tabuleiro.Esfera.Posicao.Z,
                 0d, 1d, 0d);
 
             DesenharEixos();
@@ -143,7 +154,7 @@ namespace JogoLabirinto
         private bool rodando = false;
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter || e.Key == Key.Space)
                 rodando = !rodando;
             if(e.Key == Key.Escape)
                 Exit();
@@ -167,8 +178,8 @@ namespace JogoLabirinto
         public static Tabuleiro GerarCenario(ConfiguracaoLabirinto configuracao)
         {
             var matrizConfiguracao = configuracao.MatrizConfiguracao;
-            var numeroBlocosEmX = matrizConfiguracao.GetLength(1);
-            var numeroBlocosEmZ = matrizConfiguracao.GetLength(0);
+            var numeroBlocosEmX = matrizConfiguracao.GetLength(0);
+            var numeroBlocosEmZ = matrizConfiguracao.GetLength(1);
             var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX, numeroBlocosEmZ), configuracao.Escala);
 
             for (var x = 0; x < numeroBlocosEmX; x++)
