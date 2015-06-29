@@ -53,8 +53,8 @@ namespace JogoLabirinto
             var configuracaoLabirinto = new ConfiguracaoLabirinto(new[,]
             {
                 {'p', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p', 'p', 'c', 'c', 'p', 'c', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'j', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'j', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
@@ -77,7 +77,7 @@ namespace JogoLabirinto
             tamanhoParede: new Vector3d(1, 1, 1));
 
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
-            linhasReferencia = new LinhasReferencia(numeroLinhas:400, distanciaEntreLinhas:2);
+            linhasReferencia = new LinhasReferencia(numeroLinhas:1000, distanciaEntreLinhas:10);
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -87,7 +87,6 @@ namespace JogoLabirinto
 
             Glu.gluLookAt(
                 30, 40, 30,
-                //0, 0, 0,
                 tabuleiro.Esfera.Posicao.X, tabuleiro.Esfera.Posicao.Y, tabuleiro.Esfera.Posicao.Z,
                 0d, 1d, 0d);
 
@@ -193,7 +192,7 @@ namespace JogoLabirinto
                     switch (tipoConteudo)
                     {
                         case TipoConteudoCasaTabuleiro.Cacapa:
-                            objetosCenario.Cacapa = new Cacapa(posicaoInicial);
+                            objetosCenario.Cacapas.Add(new Cacapa(posicaoInicial));
                             break;
                         case TipoConteudoCasaTabuleiro.Chao:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
@@ -206,7 +205,7 @@ namespace JogoLabirinto
 
                             var esfera = new Esfera(posicaoEsfera)
                             {
-                                BoundingBox = new BoundingBox()
+                                //BoundingBox = new BoundingBox()
                             };
                             objetosCenario.Esfera = esfera;
                             MotorColisoes.Esfera = esfera;
@@ -218,7 +217,7 @@ namespace JogoLabirinto
                             var posicaoParede = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z);
                             var parede = new Parede(posicaoParede)
                             {
-                                BoundingBox = new BoundingBox()
+                                //BoundingBox = new BoundingBox()
                             };
                             objetosCenario.Paredes.Add(parede);
                             MotorColisoes.Paredes.Add(parede);
@@ -291,14 +290,13 @@ namespace JogoLabirinto
         public Parede(Vector3d posicao)
             : base(posicao)
         {
+            Wireframe = true;
             GraphicUtils.TransformarEmCubo(this);
             AntesDeDesenhar(() => GL.Color3(Color.DimGray));
         }
 
         protected override void DesenharObjeto()
         {
-            //GL.Color3(Color.DimGray);
-            //GraphicUtils.DesenharCubo(adicionarContornos: true);
         }
 
         public override void Atualizar()
@@ -310,14 +308,13 @@ namespace JogoLabirinto
     {
         public Chao(Vector3d posicao) : base(posicao)
         {
+            Wireframe = true;
             GraphicUtils.TransformarEmCubo(this);
             AntesDeDesenhar(() => GL.Color3(Color.SaddleBrown));
         }
 
         protected override void DesenharObjeto()
         {
-            //GL.Color3(Color.SaddleBrown);
-            //GraphicUtils.DesenharCubo(Faces, adicionarContornos:true);
         }
 
         public override void Atualizar()
@@ -333,15 +330,15 @@ namespace JogoLabirinto
         public Esfera(Vector3d posicao)
             : base(posicao)
         {
-            GraphicUtils.TransformarEmCubo(this);
-            AntesDeDesenhar(() => GL.Color3(Color.Aqua));
+            AntesDeDesenhar(() =>
+            {
+                GL.Color3(Color.Aqua);
+                Glut.glutSolidSphere(.5f, 10, 10);
+            });
         }
 
         protected override void DesenharObjeto()
         {
-            //TODO desenhar uma esfera
-            //GL.Color3(Color.Aqua);
-            //GraphicUtils.DesenharCubo();
             DesenharVetorVelocidade();
         }
 
@@ -445,6 +442,7 @@ namespace JogoLabirinto
         public Cacapa(Vector3d posicao)
             : base(posicao)
         {
+            GraphicUtils.TransformarEmCubo(this, y: .25f);
         }
 
         protected override void DesenharObjeto()
@@ -476,11 +474,11 @@ namespace JogoLabirinto
             {
                 for (var i = -numeroLinhas / 2; i < numeroLinhas / 2; i += distanciaEntreLinhas)
                 {
-                    GL.Vertex3(-1000, -10, i);
-                    GL.Vertex3(1000, -10, i);
+                    GL.Vertex3(-1000, -50, i);
+                    GL.Vertex3(1000, -50, i);
 
-                    GL.Vertex3(i, -10, -1000);
-                    GL.Vertex3(i, -10, 1000);
+                    GL.Vertex3(i, -50, -1000);
+                    GL.Vertex3(i, -50, 1000);
                 }
             }
             GL.End();
@@ -497,9 +495,9 @@ namespace JogoLabirinto
 
         public readonly List<IObjetoGrafico> BlocosChao = new List<IObjetoGrafico>();
         public readonly List<IObjetoGrafico> Paredes = new List<IObjetoGrafico>();
+        public readonly List<IObjetoGrafico> Cacapas = new List<IObjetoGrafico>();
         private double escala;
         public Esfera Esfera { get; set; }
-        public IObjetoGrafico Cacapa { get; set; }
 
         public Tabuleiro(SizeD tamanho, double escala)
         {
@@ -537,7 +535,7 @@ namespace JogoLabirinto
                 GL.Scale(escala, escala, escala);
 
                 //TODO adornos no tabuleiro???
-                Cacapa.Desenhar();
+                Cacapas.ForEach(c => c.Desenhar());
                 BlocosChao.ForEach(b => b.Desenhar());
                 Paredes.ForEach(p => p.Desenhar());
                 Esfera.Desenhar();
@@ -587,9 +585,19 @@ namespace JogoLabirinto
 
                 foreach (var face in Faces)
                 {
-                    GraphicUtils.DesenharFace(face, Wireframe);
+                    GraphicUtils.DesenharFace(face);
                 }
+
                 DesenharObjeto();
+
+                if (Wireframe)
+                {
+                    GL.Color3(Color.Black);
+                    foreach (var face in Faces)
+                    {
+                        GraphicUtils.DesenharWireframe(face);
+                    }
+                }
             }
             GL.PopMatrix();
         }
@@ -631,6 +639,12 @@ namespace JogoLabirinto
             foreach (var face in faces)
             {
                DesenharFace(face);
+            }
+
+            GL.Color3(Color.Black);
+            if (adicionarContornos)
+            {
+                Glut.glutWireCube(1);
             }
         }
 
@@ -701,17 +715,11 @@ namespace JogoLabirinto
             return new Vector3d(-ponto.X, - ponto.Y, - ponto.Z);
         }
 
-        public static void DesenharFace(Face face, bool desenharWireframe = false)
+        public static void DesenharFace(Face face)
         {
-            var primitiva = desenharWireframe 
-                ? PrimitiveType.Lines 
-                : PrimitiveType.Quads;
-
-            if (primitiva == PrimitiveType.Quads)
-                GL.Normal3(face.Normal);
-
-            GL.Begin(primitiva);
+            GL.Begin(PrimitiveType.Quads);
             {
+                GL.Normal3(face.Normal);
                 foreach (var vertice in face.Vertices)
                 {
                     GL.Vertex3(vertice);
@@ -720,12 +728,20 @@ namespace JogoLabirinto
             GL.End();
         }
 
-        public static void TransformarEmCubo(ObjetoGrafico objetoGrafico)
+        public static void DesenharWireframe(Face face)
         {
-            const float x = .5f;
-            const float y = .5f;
-            const float z = .5f;
+            GL.Begin(PrimitiveType.Lines);
+            {
+                foreach (var vertice in face.Vertices)
+                {
+                    GL.Vertex3(vertice);
+                }
+            }
+            GL.End();
+        }
 
+        public static void TransformarEmCubo(ObjetoGrafico objetoGrafico, float x = .5f, float y = .5f, float z = .5f)
+        {
             // Front Face
             objetoGrafico.Faces.Add(new Face(new Vector3d(0, 0, 1), new[]
             {
