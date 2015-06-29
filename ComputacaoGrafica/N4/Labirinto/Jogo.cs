@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System;
@@ -17,6 +18,8 @@ namespace JogoLabirinto
         private Tabuleiro tabuleiro;
         private LinhasReferencia linhasReferencia;
 
+        private bool ligarLuzes = true;
+
         public Jogo()
         {
             Location = new Point(50, 50);
@@ -32,19 +35,22 @@ namespace JogoLabirinto
                 var corLuzAmbiente = new[] { 0.4f, 0.4f, 0.4f, 1.0f };
                 GL.LightModel(LightModelParameter.LightModelAmbient, corLuzAmbiente);
 
-                 //Add positioned light
-                //var lightColor0 = new []{ 0.5f, 0.5f, 0.5f, 1.0f };
                 var lightColor0 = new []{ .8f, .8f, .8f, 1.0f };
                 var lightPos0 = new[] { 5.0f, 10f, 10.0f, 0.0f };
                 GL.Light(LightName.Light0, LightParameter.Diffuse, lightColor0);
                 GL.Light(LightName.Light0, LightParameter.Position, lightPos0);
 	            GL.Enable(EnableCap.Light0);
 
-                GL.ColorMaterial(MaterialFace.Front, ColorMaterialParameter.AmbientAndDiffuse);
+                var lightColor1 = new[] { .8f, .8f, .8f, 1.0f };
+                var lightPos1 = new[] { -10.0f, 10f, 10.0f, 0.0f };
+                GL.Light(LightName.Light1, LightParameter.Diffuse, lightColor1);
+                GL.Light(LightName.Light1, LightParameter.Position, lightPos1);
+                GL.Enable(EnableCap.Light1);
+
+                GL.ColorMaterial(MaterialFace.Front, ColorMaterialParameter.AmbientAndDiffuse); // depende do GL_COLOR_MATERIAL
 
                 GL.Enable(EnableCap.CullFace);
                 GL.Enable(EnableCap.DepthTest);
-
 
                 ConfigurarCena();
             };
@@ -66,26 +72,26 @@ namespace JogoLabirinto
         {
             var configuracaoLabirinto = new ConfiguracaoLabirinto(new[,]
             {
-                {'p', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p', 'p', 'c', 'c', 'p', 'c', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'j', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'b', 'p', 'c', 'c', 'b', 'p', 'b', 'p', 'c', 'c', 'b', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'p', 'c', 'p', 'c', 'c', 'c', 'p'}
+                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'j', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'b', 'b', 'p', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'b', 'b', 'p', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
             },
             escala: 2,
             tamanhoParede: new Vector3d(1, 1, 1));
@@ -99,8 +105,25 @@ namespace JogoLabirinto
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
-            GL.Enable(EnableCap.ColorMaterial);
-            GL.Enable(EnableCap.Lighting);
+            if (ligarLuzes)
+            {
+                GL.Enable(EnableCap.Lighting);
+                GL.Enable(EnableCap.ColorMaterial); // https://www.opengl.org/sdk/docs/man2/xhtml/glColorMaterial.xml
+                GL.Color3(Color.White);
+            }
+            else
+            {
+                //if (colorMaterial)
+                //{
+                //    gl.glEnable(GL.GL_COLOR_MATERIAL); // https://www.opengl.org/sdk/docs/man2/xhtml/glColorMaterial.xml
+                //    gl.glColor3f(cor[0], cor[1], cor[2]);
+                //}
+                //else
+                //{
+                GL.Material(MaterialFace.Front, MaterialParameter.AmbientAndDiffuse, Color4.White);
+                    // https://www.opengl.org/sdk/docs/man2/xhtml/glMaterial.xml  	
+                //}
+            }
 
             Glu.gluLookAt(
                 30, 40, 30,
@@ -111,6 +134,7 @@ namespace JogoLabirinto
             linhasReferencia.Desenhar();
             tabuleiro.Desenhar();
 
+            GL.Disable(EnableCap.Lighting);
             SwapBuffers();
         }
 
@@ -172,8 +196,12 @@ namespace JogoLabirinto
         {
             if (e.Key == Key.Enter || e.Key == Key.Space)
                 rodando = !rodando;
+
             if(e.Key == Key.Escape)
                 Exit();
+
+            if (e.Key == Key.L)
+                ligarLuzes = !ligarLuzes;
         }
 
         private void Zoom(KeyboardState teclado)
@@ -194,10 +222,11 @@ namespace JogoLabirinto
         public static Tabuleiro GerarCenario(ConfiguracaoLabirinto configuracao)
         {
             var matrizConfiguracao = configuracao.MatrizConfiguracao;
-            var numeroBlocosEmX = matrizConfiguracao.GetLength(0);
-            var numeroBlocosEmZ = matrizConfiguracao.GetLength(1);
+            var numeroBlocosEmX = matrizConfiguracao.GetLength(1);
+            var numeroBlocosEmZ = matrizConfiguracao.GetLength(0);
             var objetosCenario = new Tabuleiro(new SizeD(numeroBlocosEmX, numeroBlocosEmZ), configuracao.Escala);
 
+            int nTochas = 0;
             for (var x = 0; x < numeroBlocosEmX; x++)
             {
                 for (var z = 0; z < numeroBlocosEmZ; z++)
@@ -230,20 +259,38 @@ namespace JogoLabirinto
 
                         case TipoConteudoCasaTabuleiro.ChaoComParede:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
+                            AdicionarParede(posicaoInicial, objetosCenario);
+                            break;
 
-                            var posicaoParede = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z);
-                            var parede = new Parede(posicaoParede)
-                            {
-                                //BoundingBox = new BoundingBox()
-                            };
-                            objetosCenario.Paredes.Add(parede);
-                            MotorColisoes.Paredes.Add(parede);
+                        case TipoConteudoCasaTabuleiro.ChaoComParedeETocha:
+                            objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
+                            AdicionarParede(posicaoInicial, objetosCenario);
+                            AdicionarTocha(posicaoInicial, objetosCenario, nTochas++);
+
                             break;
                     }
                 }
             }
 
             return objetosCenario;
+        }
+
+        private static void AdicionarParede(Vector3d posicaoInicial, Tabuleiro objetosCenario)
+        {
+            var posicaoParede = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z);
+            var parede = new Parede(posicaoParede)
+            {
+                //BoundingBox = new BoundingBox()
+            };
+            objetosCenario.Paredes.Add(parede);
+            MotorColisoes.Paredes.Add(parede);
+        }
+
+        private static void AdicionarTocha(Vector3d posicaoInicial, Tabuleiro objetosCenario, int indiceTocha)
+        {
+            var posicaoParede = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 2, posicaoInicial.Z);
+            var parede = new Tocha(posicaoParede, indiceTocha);
+            objetosCenario.Tochas.Add(parede);
         }
 
         private static TipoConteudoCasaTabuleiro TipoConteudo(char config)
@@ -253,6 +300,7 @@ namespace JogoLabirinto
                 case 'c': return TipoConteudoCasaTabuleiro.Chao;
                 case 'p': return TipoConteudoCasaTabuleiro.ChaoComParede;
                 case 'j': return TipoConteudoCasaTabuleiro.ChaoComEsfera;
+                case 'f': return TipoConteudoCasaTabuleiro.ChaoComParedeETocha;
                 default: return TipoConteudoCasaTabuleiro.Cacapa;
             }
         }
@@ -262,7 +310,8 @@ namespace JogoLabirinto
             Chao = 1,
             ChaoComParede = 2,
             ChaoComEsfera = 3,
-            Cacapa
+            ChaoComParedeETocha = 4,
+            Cacapa = 5
         }
     }
 
@@ -300,6 +349,43 @@ namespace JogoLabirinto
         }
 
         public abstract void Atualizar();
+    }
+
+    internal class Tocha : ComponenteTabuleiro
+    {
+        public int IndiceTocha { get; private set; }
+
+        public Tocha(Vector3d posicao, int indiceTocha) : base(posicao)
+        {
+            IndiceTocha = indiceTocha;
+            GraphicUtils.TransformarEmCubo(this, x:.2f, y: .3f, z:.2f);
+            AntesDeDesenhar(() =>
+            {
+                GL.Color3(Color.Yellow);
+
+                var luz = (LightName)((int) LightName.Light1 + IndiceTocha);
+                var luzCap = (EnableCap)((int)EnableCap.Light1 + IndiceTocha);
+                var lightPos1 = new[] { (float)posicao.X, (float)posicao.Y + 3, (float)posicao.Z, 0.0f };
+                GL.Enable(luzCap);
+                GL.Light(luz, LightParameter.Position, lightPos1);
+                GL.Light(luz, LightParameter.Diffuse, Color.White);
+                //GL.Light(luz, LightParameter.SpotExponent, .9f);
+                GL.Light(luz, LightParameter.SpotCutoff, 30);
+                GL.Light(luz, LightParameter.SpotDirection, new Vector4(0, -1, 0, 0));
+                GL.Light(luz, LightParameter.Specular, new Vector4(3, 3, 3, 1));
+                //GL.Light(luz, LightParameter.LinearAttenuation, 1);
+                //GL.Light(luz, LightParameter.QuadraticAttenuation, 1);
+                GL.Light(luz, LightParameter.ConstantAttenuation, 1);
+            });
+        }
+
+        protected override void DesenharObjeto()
+        {
+        }
+
+        public override void Atualizar()
+        {
+        }
     }
 
     public class Parede : ComponenteTabuleiro
@@ -460,11 +546,11 @@ namespace JogoLabirinto
             : base(posicao)
         {
             GraphicUtils.TransformarEmCubo(this, y: .25f);
+            AntesDeDesenhar(() => GL.Color3(Color.Black));
         }
 
         protected override void DesenharObjeto()
         {
-            GL.Color3(Color.Black);
         }
 
         public override void Atualizar()
@@ -513,6 +599,7 @@ namespace JogoLabirinto
         public readonly List<IObjetoGrafico> BlocosChao = new List<IObjetoGrafico>();
         public readonly List<IObjetoGrafico> Paredes = new List<IObjetoGrafico>();
         public readonly List<IObjetoGrafico> Cacapas = new List<IObjetoGrafico>();
+        public readonly List<IObjetoGrafico> Tochas = new List<IObjetoGrafico>();
         private double escala;
         public Esfera Esfera { get; set; }
 
@@ -555,6 +642,7 @@ namespace JogoLabirinto
                 Cacapas.ForEach(c => c.Desenhar());
                 BlocosChao.ForEach(b => b.Desenhar());
                 Paredes.ForEach(p => p.Desenhar());
+                Tochas.ForEach(p => p.Desenhar());
                 Esfera.Desenhar();
             }
             GL.PopMatrix();
