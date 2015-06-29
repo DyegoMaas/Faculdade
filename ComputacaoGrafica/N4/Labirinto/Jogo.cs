@@ -25,12 +25,26 @@ namespace JogoLabirinto
             Load += (sender, e) =>
             {
                 WindowState = WindowState.Fullscreen;
+
                 Glut.glutInit();
+                GL.ClearColor(Color.CornflowerBlue);
+
+                var corLuzAmbiente = new[] { 0.4f, 0.4f, 0.4f, 1.0f };
+                GL.LightModel(LightModelParameter.LightModelAmbient, corLuzAmbiente);
+
+                 //Add positioned light
+                //var lightColor0 = new []{ 0.5f, 0.5f, 0.5f, 1.0f };
+                var lightColor0 = new []{ .8f, .8f, .8f, 1.0f };
+                var lightPos0 = new[] { 5.0f, 10f, 10.0f, 0.0f };
+                GL.Light(LightName.Light0, LightParameter.Diffuse, lightColor0);
+                GL.Light(LightName.Light0, LightParameter.Position, lightPos0);
+	            GL.Enable(EnableCap.Light0);
+
+                GL.ColorMaterial(MaterialFace.Front, ColorMaterialParameter.AmbientAndDiffuse);
 
                 GL.Enable(EnableCap.CullFace);
                 GL.Enable(EnableCap.DepthTest);
 
-                GL.ClearColor(Color.CornflowerBlue);
 
                 ConfigurarCena();
             };
@@ -84,6 +98,9 @@ namespace JogoLabirinto
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
+
+            GL.Enable(EnableCap.ColorMaterial);
+            GL.Enable(EnableCap.Lighting);
 
             Glu.gluLookAt(
                 30, 40, 30,
@@ -332,7 +349,7 @@ namespace JogoLabirinto
         {
             AntesDeDesenhar(() =>
             {
-                GL.Color3(Color.Aqua);
+                GL.Color3(Color.Red);
                 Glut.glutSolidSphere(.5f, 10, 10);
             });
         }
