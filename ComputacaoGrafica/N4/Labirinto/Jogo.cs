@@ -726,6 +726,7 @@ namespace JogoLabirinto
             const float y = .5f;
             const float z = .5f;
 
+            // Front Face
             objetoGrafico.Faces.Add(new Face(new Vector3d(0, 0, 1), new[]
             {
                 new Vector3d(-x, -y, z),
@@ -768,6 +769,15 @@ namespace JogoLabirinto
                 new Vector3d(x, y, -z),
                 new Vector3d(x, y, z),
                 new Vector3d(x, -y, z)
+            }));
+
+            // Left face
+            objetoGrafico.Faces.Add(new Face(new Vector3d(1, 0, 0), new[]
+            {
+                new Vector3d(-x, -y, -z),
+                new Vector3d(-x, -y, z),
+                new Vector3d(-x, y, z),
+                new Vector3d(-x, y, -z)
             }));
         }
     }
