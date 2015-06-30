@@ -83,12 +83,12 @@ namespace JogoLabirinto
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'b', 'b', 'p', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'b', 'b', 'p', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'b', 'b', 'p', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'b', 'b', 'c', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
@@ -202,6 +202,12 @@ namespace JogoLabirinto
 
             if (e.Key == Key.L)
                 ligarLuzes = !ligarLuzes;
+
+            if (e.Key == Key.R)
+            {
+                rodando = false;
+                ConfigurarCena();
+            }
         }
 
         private void Zoom(KeyboardState teclado)
@@ -221,6 +227,8 @@ namespace JogoLabirinto
     {
         public static Tabuleiro GerarCenario(ConfiguracaoLabirinto configuracao)
         {
+            MotorColisoes.Reiniciar();
+
             var matrizConfiguracao = configuracao.MatrizConfiguracao;
             var numeroBlocosEmX = matrizConfiguracao.GetLength(1);
             var numeroBlocosEmZ = matrizConfiguracao.GetLength(0);
@@ -238,7 +246,9 @@ namespace JogoLabirinto
                     switch (tipoConteudo)
                     {
                         case TipoConteudoCasaTabuleiro.Cacapa:
-                            objetosCenario.Cacapas.Add(new Cacapa(posicaoInicial));
+                            var cacapa = new Cacapa(posicaoInicial);
+                            objetosCenario.Cacapas.Add(cacapa);
+                            MotorColisoes.Alvos.Add(cacapa);
                             break;
                         case TipoConteudoCasaTabuleiro.Chao:
                             objetosCenario.BlocosChao.Add(new Chao(posicaoInicial));
@@ -428,13 +438,18 @@ namespace JogoLabirinto
 
     public class Esfera : ComponenteTabuleiro
     {
+        private const double FatorQueda = .03;
         public Vector3d Velocidade { get; set; }
+        private bool visivel = true;
         
         public Esfera(Vector3d posicao)
             : base(posicao)
         {
             AntesDeDesenhar(() =>
             {
+                if (!visivel)
+                    return;
+
                 GL.Color3(Color.Red);
                 Glut.glutSolidSphere(.5f, 10, 10);
             });
@@ -442,7 +457,8 @@ namespace JogoLabirinto
 
         protected override void DesenharObjeto()
         {
-            DesenharVetorVelocidade();
+            if (visivel)
+                DesenharVetorVelocidade();
         }
 
         private void DesenharVetorVelocidade()
@@ -480,9 +496,25 @@ namespace JogoLabirinto
             GL.End();
         }
 
+        private bool encontrouAlvo;
         public override void Atualizar()
         {
+            if (encontrouAlvo)
+            {
+                if (Posicao.Y < -1)
+                    visivel = false;
+                else
+                    Posicao -= Vector3d.UnitY * FatorQueda;
+                return;
+            }
+
             Posicao = MotorColisoes.NovaPosicaoDaEsfera(Posicao, Velocidade);
+
+            if (MotorColisoes.EncontrouOAlvo(Posicao))
+            {
+                Console.WriteLine("Encontrou o alvo");
+                encontrouAlvo = true;
+            }
         }
     }
 
@@ -490,14 +522,19 @@ namespace JogoLabirinto
     {
         public static Esfera Esfera { get; set; }
         public static IList<Parede> Paredes { get; set; }
-
-        public delegate void AoEncontrarOAlvo();
-
-        public event AoEncontrarOAlvo EventoEncontrarAlvo; //TODO verificar se bateu no buraco da mesma forma como é feito com os quadrados.
+        public static IList<Cacapa> Alvos { get; set; }
 
         static MotorColisoes()
         {
             Paredes = new List<Parede>();
+            Alvos = new List<Cacapa>();
+        }
+
+        public static void Reiniciar()
+        {
+            Esfera = null;
+            Paredes.Clear();
+            Alvos.Clear();
         }
 
         public static Vector3d NovaPosicaoDaEsfera(Vector3d posicaoAtual, Vector3d velocidade)
@@ -507,24 +544,45 @@ namespace JogoLabirinto
             {
                 var parede = Paredes[i];
 
+                var count = 0;
+                calculoColisao:
                 var distancia = novaPosicaoDaEsfera - parede.Posicao;
                 var distanciaAbs = new Vector3d(Math.Abs(distancia.X), Math.Abs(distancia.Y), Math.Abs(distancia.Z));
                 
                 if (distanciaAbs.X < 1 && distanciaAbs.Z < 1) //entrou no objeto
                 {
-                    if (distanciaAbs.X > distanciaAbs.Z)
-                        novaPosicaoDaEsfera.X = posicaoAtual.X;
-                    else if (distanciaAbs.X < distanciaAbs.Z)
-                        novaPosicaoDaEsfera.Z = posicaoAtual.Z;
-                    else
-                    {
-                        novaPosicaoDaEsfera.Z = posicaoAtual.Z;
-                        novaPosicaoDaEsfera.X = posicaoAtual.X;
-                    }
                     Console.WriteLine("atravessou a parede {0} por {1}", i, distanciaAbs);
+
+                    if (distanciaAbs.X > distanciaAbs.Z)
+                        velocidade.X = 0;
+                    if (distanciaAbs.X < distanciaAbs.Z)
+                        velocidade.Z = 0;
+
+                    novaPosicaoDaEsfera = posicaoAtual + velocidade;
+                    if (++count > 1)
+                        return posicaoAtual;
+
+                    goto calculoColisao;
                 }
             }
             return novaPosicaoDaEsfera;
+        }
+
+        public static bool EncontrouOAlvo(Vector3d posicaoAtual)
+        {
+            for (int i = 0; i < Alvos.Count; i++)
+            {
+                var alvo = Alvos[i];
+
+                var distancia = posicaoAtual - alvo.Posicao;
+                var distanciaAbs = new Vector3d(Math.Abs(distancia.X), Math.Abs(distancia.Y), Math.Abs(distancia.Z));
+
+                if (distanciaAbs.X < .5 && distanciaAbs.Z < .5) //entrou no objeto
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
