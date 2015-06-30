@@ -483,14 +483,17 @@ namespace JogoLabirinto
         public override void Atualizar()
         {
             Posicao = MotorColisoes.NovaPosicaoDaEsfera(Posicao, Velocidade);
-            //Posicao = Posicao + Velocidade;
         }
     }
 
-    public static class MotorColisoes
+    public class MotorColisoes
     {
         public static Esfera Esfera { get; set; }
         public static IList<Parede> Paredes { get; set; }
+
+        public delegate void AoEncontrarOAlvo();
+
+        public event AoEncontrarOAlvo EventoEncontrarAlvo; //TODO verificar se bateu no buraco da mesma forma como é feito com os quadrados.
 
         static MotorColisoes()
         {
@@ -507,36 +510,21 @@ namespace JogoLabirinto
                 var distancia = novaPosicaoDaEsfera - parede.Posicao;
                 var distanciaAbs = new Vector3d(Math.Abs(distancia.X), Math.Abs(distancia.Y), Math.Abs(distancia.Z));
                 
-                if (distanciaAbs.X < 1 && distanciaAbs.Z < 1)
+                if (distanciaAbs.X < 1 && distanciaAbs.Z < 1) //entrou no objeto
                 {
-                    if (distanciaAbs.X < 1)
+                    if (distanciaAbs.X > distanciaAbs.Z)
                         novaPosicaoDaEsfera.X = posicaoAtual.X;
-
-                    if (distanciaAbs.Z < 1)
+                    else if (distanciaAbs.X < distanciaAbs.Z)
                         novaPosicaoDaEsfera.Z = posicaoAtual.Z;
+                    else
+                    {
+                        novaPosicaoDaEsfera.Z = posicaoAtual.Z;
+                        novaPosicaoDaEsfera.X = posicaoAtual.X;
+                    }
                     Console.WriteLine("atravessou a parede {0} por {1}", i, distanciaAbs);
                 }
             }
-
             return novaPosicaoDaEsfera;
-        }
-
-        private static Vector3d multVectorByMatrix(Matrix4d matrix, Vector3d vector)
-        {
-            var result = new Vector3d();
-            result.X = (matrix[0,0] * vector.X) +
-                       (matrix[1,0] * vector.Y) + 
-                       (matrix[2,0] * vector.Z) +
-                        matrix[3,0];
-            result.Y = (matrix[0,1] * vector.X) +
-                       (matrix[1,1] * vector.Y) + 
-                       (matrix[2,1] * vector.Z) +
-                        matrix[3,1];
-            result.Z = (matrix[0,2] * vector.X) +
-                       (matrix[1,2] * vector.Y) + 
-                       (matrix[2,2] * vector.Z) +
-                        matrix[3,2];
-            return result;
         }
     }
 
