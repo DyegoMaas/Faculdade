@@ -50,8 +50,11 @@ namespace JogoLabirinto
         private Vector3d alvo = Vector3d.Zero;
         public void OlharPara(double targetX, double targetY, double targetZ)
         {
+            var posInicial = Comportamento == ComportamentoCamera.Estatico
+                ? new Vector3d(raio)
+                : posicao;
             Glu.gluLookAt(
-                raio, raio, raio,
+                posInicial.X, posInicial.Y, posInicial.Z,
                 targetX, targetY, targetZ,
                 0d, 1d, 0d);
 
