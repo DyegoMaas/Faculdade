@@ -83,18 +83,18 @@ namespace JogoLabirinto
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'b', 'b', 'p', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'b', 'b', 'c', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'p'},
-                {'p', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'c', 'c', 'c', 'c', 'c', 'p', 'p', 'b', 'b', 'c', 'p', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'p', 'p', 'c', 'b', 'b', 'c', 'c', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'p'},
+                {'p', 'c', 'c', 'c', 'p', 'p', 'p', 'p', 'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'p'},
                 {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}
             },
-            escala: 2,
-            tamanhoParede: new Vector3d(1, 1, 1));
+           escala: 2,
+           tamanhoParede: new Vector3d(1, 1, 1));
 
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
             linhasReferencia = new LinhasReferencia(numeroLinhas:1000, distanciaEntreLinhas:10);
