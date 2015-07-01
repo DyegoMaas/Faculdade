@@ -27,6 +27,7 @@ namespace JogoLabirinto
         }
 
         private const float FOV60 = 1.04f; //60º
+        private const float FOV120 = 2 * FOV60; //120º
         private float FOV = FOV60; 
         private Vector2 tamanhoTela = Vector2.Zero;
         public void Reshape(int largura, int altura)
@@ -84,39 +85,80 @@ namespace JogoLabirinto
             }
             else
             {
-                //TODO zoom out enquanto se aproxima
-                if (aproximando)
+                if (dollyEffectAtivo)
                 {
-                    const double fatorDiminuicaoDistancia = .000002d;
+                    const double fatorDiminuicaoDistancia = .000008d;
 
                     //aproximando a câmera
-                    if (zoomIn)
+                    if (reverse)
                     {
-                        raio *= fatorDistancia;
-                        fatorDistancia -= fatorDiminuicaoDistancia;
-
-                        if (zoomOut) //Dolly effect
+                        if (zoomIn) 
                         {
-                            var x = raio / RaioMaximo;
-                            FOV = FOV60 / (float)x;
+                            //distanciando a câmera
+                            raio *= fatorDistancia;
+                            fatorDistancia += fatorDiminuicaoDistancia;
+
+                            if (zoomOut) //Dolly effect
+                            {
+                                var x = RaioMaximo / raio;
+                                FOV = FOV60 * (float)x;
+                                ConfigurarPerspectiva();
+                            }
+                        }
+                        else if (zoomOut)
+                        {
+                            //diminuindo o FOV
+                            fatorZoomOut -= fatorDiminuicaoDistancia;
+                            FOV = Math.Min((float)(FOV * fatorZoomOut), 1.6f);
                             ConfigurarPerspectiva();
                         }
-                    }
-                    else if (zoomOut)
-                    {
-                        //aumentando o FOV
-                        fatorZoomOut += fatorDiminuicaoDistancia;
-                        FOV = Math.Min((float) (FOV * fatorZoomOut), 1.6f);
-                        ConfigurarPerspectiva();
-                    }
 
-                    var raioMinimo = zoomOut ? 15 : 10;
-                    if (raio < raioMinimo)
+                        if (raio > RaioMaximo)
+                        {
+                            raio = RaioMaximo;
+                            fatorZoomOut = 1;
+                            fatorDistancia = 1;
+
+                            if (zoomIn && zoomOut)
+                            {
+                                reverse = false;
+                            }
+                        }
+                    }
+                    else
                     {
-                        raio = raioMinimo;
-                        fatorZoomOut = 1;
-                        fatorDistancia = 1;
-                        aproximando = false;
+                        if (zoomIn)
+                        {
+                            raio *= fatorDistancia;
+                            fatorDistancia -= fatorDiminuicaoDistancia;
+
+                            if (zoomOut) //Dolly effect
+                            {
+                                var x = raio/RaioMaximo;
+                                FOV = FOV60/(float) x;
+                                ConfigurarPerspectiva();
+                            }
+                        }
+                        else if (zoomOut)
+                        {
+                            //aumentando o FOV
+                            fatorZoomOut += fatorDiminuicaoDistancia;
+                            FOV = Math.Min((float) (FOV*fatorZoomOut), 1.6f);
+                            ConfigurarPerspectiva();
+                        }
+                        
+                        var raioMinimo = zoomOut ? 15 : 10;
+                        if (raio < raioMinimo)
+                        {
+                            raio = raioMinimo;
+                            fatorZoomOut = 1;
+                            fatorDistancia = 1;
+
+                            if (zoomIn && zoomOut)
+                            {
+                                reverse = true;
+                            }
+                        }
                     }
                 }
             }
@@ -130,10 +172,11 @@ namespace JogoLabirinto
             raio = (novaPosicao.X + novaPosicao.Z ) / 2;
         }
 
-        private bool aproximando, zoomIn, zoomOut;
+        private bool dollyEffectAtivo, reverse;
+        private bool zoomIn, zoomOut;
         public void AproximarComEfeito(bool zoomIn, bool zoomOut)
         {
-            aproximando = true;
+            dollyEffectAtivo = true;
             this.zoomIn = zoomIn;
             this.zoomOut = zoomOut;
         }
