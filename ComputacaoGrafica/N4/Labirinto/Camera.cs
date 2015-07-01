@@ -26,7 +26,8 @@ namespace JogoLabirinto
             Reshape(largura, altura);
         }
 
-        private float FOV = 1.04f;
+        private const float FOV60 = 1.04f; //60º
+        private float FOV = FOV60; 
         private Vector2 tamanhoTela = Vector2.Zero;
         public void Reshape(int largura, int altura)
         {
@@ -64,8 +65,9 @@ namespace JogoLabirinto
 
         private const double PontosCircunferencia = 720;
         private const double IncrementoAngular = .5d;
+        private const double RaioMaximo = 30d;
         private double anguloAtual = 0;
-        private double raio = 30;
+        private double raio = RaioMaximo;
         public void Atualizar()
         {
             if (Comportamento == ComportamentoCamera.RotacionarAoRedor)
@@ -89,9 +91,15 @@ namespace JogoLabirinto
                     {
                         raio *= fatorDistancia;
                         fatorDistancia -= fatorDiminuicaoDistancia;
-                    }
 
-                    if (zoomOut)
+                        if (zoomOut) //Dolly effect
+                        {
+                            var x = raio / RaioMaximo;
+                            FOV = FOV60 / (float)x;
+                            ConfigurarPerspectiva();
+                        }
+                    }
+                    else if (zoomOut)
                     {
                         //aumentando o FOV
                         fatorZoomOut += fatorDiminuicaoDistancia;

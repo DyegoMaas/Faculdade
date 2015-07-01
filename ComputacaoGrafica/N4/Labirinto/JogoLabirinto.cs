@@ -214,7 +214,7 @@ namespace JogoLabirinto
             
             if (e.Key == Key.Number3) camera.AproximarComEfeito(zoomIn:true, zoomOut:false);
             if (e.Key == Key.Number4) camera.AproximarComEfeito(zoomIn:false, zoomOut:true);
-            if (e.Key == Key.Number5) camera.AproximarComEfeito(zoomIn:true, zoomOut:true);
+            if (e.Key == Key.Number5) camera.AproximarComEfeito(zoomIn:true, zoomOut:true); // Dolly effect, utilizada no filme Vertigo
         }
 
         private void Zoom(KeyboardState teclado)
