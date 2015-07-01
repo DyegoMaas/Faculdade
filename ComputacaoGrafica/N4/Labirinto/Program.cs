@@ -8,7 +8,7 @@ namespace JogoLabirinto
     {
         public static void Main(string[] args)
         {
-            var n4 = new Jogo();
+            var n4 = new JogoLabirinto();
             n4.Run(120, 60);
         }
     }

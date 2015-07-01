@@ -1,5 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Tao.OpenGl;
 
 namespace JogoLabirinto
 {
@@ -26,6 +27,14 @@ namespace JogoLabirinto
             GL.LoadMatrix(ref perspectiva);
 
             GL.MatrixMode(MatrixMode.Modelview);
+        }
+
+        public void OlharPara(double eyeX, double eyeY, double eyeZ, double targetX, double targetY, double targetZ)
+        {
+            Glu.gluLookAt(
+                eyeX, eyeY, eyeZ,
+                targetX, targetY, targetZ,
+                0d, 1d, 0d);
         }
     }
 }
