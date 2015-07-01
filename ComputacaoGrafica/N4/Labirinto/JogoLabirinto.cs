@@ -107,6 +107,16 @@ namespace JogoLabirinto
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
+            GL.PushMatrix();
+            {
+                GL.Translate(0, 0, 0);
+                GL.Scale(2,2,2);
+                GL.Color4(1,1,1,1);
+                Glut.glutStrokeString(Glut.GLUT_STROKE_ROMAN, "lalalala");
+                Glut.glutStrokeLength(Glut.GLUT_STROKE_ROMAN, "lalalala");
+            }
+            GL.PopMatrix();
+
             if (ligarLuzes)
             {
                 GL.Enable(EnableCap.Lighting);
@@ -123,11 +133,13 @@ namespace JogoLabirinto
                 //else
                 //{
                 GL.Material(MaterialFace.Front, MaterialParameter.AmbientAndDiffuse, Color4.White);
-                    // https://www.opengl.org/sdk/docs/man2/xhtml/glMaterial.xml  	
+                // https://www.opengl.org/sdk/docs/man2/xhtml/glMaterial.xml  	
                 //}
             }
 
             camera.OlharPara(tabuleiro.Esfera.Posicao.X, tabuleiro.Esfera.Posicao.Y, tabuleiro.Esfera.Posicao.Z);
+
+
 
             DesenharEixos();
             linhasReferencia.Desenhar();
@@ -162,7 +174,6 @@ namespace JogoLabirinto
 
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-
         }
 
         private double rotacaoX, rotacaoZ;
