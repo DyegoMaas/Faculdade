@@ -107,6 +107,7 @@
     <Compile Include="ObjetosGraficos\SizeD.cs" />
     <Compile Include="ObjetosGraficos\Tabuleiro.cs" />
     <Compile Include="ObjetosGraficos\Tocha.cs" />
+    <Compile Include="Utils\MathUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

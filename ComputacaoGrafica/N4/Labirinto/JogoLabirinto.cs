@@ -14,7 +14,7 @@ namespace JogoLabirinto
     {
         private const double SensibilidadeMouse = .25d;
         private const int AnguloLimiteRotacao = 15;
-        private readonly Camera camera = new Camera();
+        private Camera camera;
         private Tabuleiro tabuleiro;
         private LinhasReferencia linhasReferencia;
 
@@ -23,7 +23,7 @@ namespace JogoLabirinto
         public JogoLabirinto()
         {
             Location = new Point(50, 50);
-            Title = "Labyrinth";
+            Title = "Labirinto 42";
 
             Load += (sender, e) =>
             {
@@ -98,6 +98,8 @@ namespace JogoLabirinto
 
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
             linhasReferencia = new LinhasReferencia(numeroLinhas:1000, distanciaEntreLinhas:10);
+
+            camera = new Camera(new Vector3d(30, 40, 30));
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -125,8 +127,7 @@ namespace JogoLabirinto
                 //}
             }
 
-            camera.OlharPara(30, 40, 30,
-                tabuleiro.Esfera.Posicao.X, tabuleiro.Esfera.Posicao.Y, tabuleiro.Esfera.Posicao.Z);
+            camera.OlharPara(tabuleiro.Esfera.Posicao.X, tabuleiro.Esfera.Posicao.Y, tabuleiro.Esfera.Posicao.Z);
 
             DesenharEixos();
             linhasReferencia.Desenhar();
@@ -187,9 +188,10 @@ namespace JogoLabirinto
                 return;
 
             tabuleiro.Atualizar();
+            camera.Atualizar();
         }
 
-        private bool rodando = false;
+        private bool rodando;
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
             if (e.Key == Key.Enter || e.Key == Key.Space)
@@ -206,6 +208,9 @@ namespace JogoLabirinto
                 rodando = false;
                 ConfigurarCena();
             }
+
+            if (e.Key == Key.Number1) camera.Comportamento = ComportamentoCamera.Estatico;
+            if (e.Key == Key.Number2) camera.Comportamento = ComportamentoCamera.RotacionarAoRedor;
         }
 
         private void Zoom(KeyboardState teclado)
