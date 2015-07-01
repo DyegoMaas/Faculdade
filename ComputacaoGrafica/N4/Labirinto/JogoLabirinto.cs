@@ -99,7 +99,7 @@ namespace JogoLabirinto
             tabuleiro = GeradorCenario.GerarCenario(configuracaoLabirinto);
             linhasReferencia = new LinhasReferencia(numeroLinhas:1000, distanciaEntreLinhas:10);
 
-            camera = new Camera(new Vector3d(30, 40, 30));
+            camera = new Camera(new Vector3d(30, 40, 30), Width, Height);
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -211,6 +211,10 @@ namespace JogoLabirinto
 
             if (e.Key == Key.Number1) camera.Comportamento = ComportamentoCamera.Estatico;
             if (e.Key == Key.Number2) camera.Comportamento = ComportamentoCamera.RotacionarAoRedor;
+            
+            if (e.Key == Key.Number3) camera.AproximarComEfeito(zoomIn:true, zoomOut:false);
+            if (e.Key == Key.Number4) camera.AproximarComEfeito(zoomIn:false, zoomOut:true);
+            if (e.Key == Key.Number5) camera.AproximarComEfeito(zoomIn:true, zoomOut:true);
         }
 
         private void Zoom(KeyboardState teclado)
