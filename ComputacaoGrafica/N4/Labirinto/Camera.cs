@@ -87,7 +87,7 @@ namespace JogoLabirinto
             {
                 if (dollyEffectAtivo)
                 {
-                    const double fatorDiminuicaoDistancia = .000008d; 
+                    const double fatorDiminuicaoDistancia = .00008d; 
 
                     //aproximando a câmera
                     if (reverse)

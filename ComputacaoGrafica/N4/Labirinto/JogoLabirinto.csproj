@@ -91,6 +91,7 @@
     <Compile Include="ObjetosGraficos\ComponenteTabuleiro.cs" />
     <Compile Include="Jogo\GeracaoCenarios\ConfiguracaoLabirinto.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="ObjetosGraficos\ContentManager.cs" />
     <Compile Include="ObjetosGraficos\Esfera.cs" />
     <Compile Include="ObjetosGraficos\Face.cs" />
     <Compile Include="Jogo\GeracaoCenarios\GeradorCenario.cs" />

@@ -33,22 +33,10 @@ namespace JogoLabirinto
                 Glut.glutInit();
                 GL.ClearColor(Color.CornflowerBlue);
 
-                var corLuzAmbiente = new[] { 0.4f, 0.4f, 0.4f, 1.0f };
-                GL.LightModel(LightModelParameter.LightModelAmbient, corLuzAmbiente);
+                //var corLuzAmbiente = new[] { 0.4f, 0.4f, 0.4f, 1.0f };
+                //GL.LightModel(LightModelParameter.LightModelAmbient, corLuzAmbiente);
 
-                var lightColor0 = new []{ .8f, .8f, .8f, 1.0f };
-                var lightPos0 = new[] { 5.0f, 10f, 10.0f, 0.0f };
-                GL.Light(LightName.Light0, LightParameter.Diffuse, lightColor0);
-                GL.Light(LightName.Light0, LightParameter.Position, lightPos0);
-	            GL.Enable(EnableCap.Light0);
-
-                var lightColor1 = new[] { .8f, .8f, .8f, 1.0f };
-                var lightPos1 = new[] { -10.0f, 10f, 10.0f, 0.0f };
-                GL.Light(LightName.Light1, LightParameter.Diffuse, lightColor1);
-                GL.Light(LightName.Light1, LightParameter.Position, lightPos1);
-                GL.Enable(EnableCap.Light1);
-
-                GL.ColorMaterial(MaterialFace.Front, ColorMaterialParameter.AmbientAndDiffuse); // depende do GL_COLOR_MATERIAL
+                GL.Material(MaterialFace.FrontAndBack, MaterialParameter.AmbientAndDiffuse, Color4.White); // depende do GL_COLOR_MATERIAL
 
                 GL.Enable(EnableCap.CullFace);
                 GL.Enable(EnableCap.DepthTest);
@@ -124,12 +112,32 @@ namespace JogoLabirinto
             if (ligarLuzes)
             {
                 GL.Enable(EnableCap.Lighting);
+
+                var lightColor0 = new[] { .8f, .8f, .8f, 1.0f };
+                var lightPos0 = new[] { 5.0f, 10f, 10.0f, 0.0f };
+                GL.Light(LightName.Light0, LightParameter.Diffuse, lightColor0);
+                GL.Light(LightName.Light0, LightParameter.Position, lightPos0);
+                GL.Enable(EnableCap.Light0);
+
+                var lightColor1 = new[] { 1f, 1f, 1f, 1.0f };
+                var lightPos1 = new[] { -10.0f, 10f, 10.0f, 0.0f };
+                GL.Light(LightName.Light1, LightParameter.Diffuse, lightColor1);
+                GL.Light(LightName.Light1, LightParameter.Position, lightPos1);
+                GL.Enable(EnableCap.Light1);
+
+                //GL.Light(LightName.Light2, LightParameter.Diffuse, lightColor1);
+                //GL.Light(LightName.Light2, LightParameter.Position, lightPos1);
+                //GL.Enable(EnableCap.Light2);
+
                 GL.Enable(EnableCap.ColorMaterial); // https://www.opengl.org/sdk/docs/man2/xhtml/glColorMaterial.xml
+                GL.Material(MaterialFace.FrontAndBack, MaterialParameter.AmbientAndDiffuse, Color4.White);
+
                 GL.Color3(Color.White);
             }
             else
             {
-                GL.Material(MaterialFace.Front, MaterialParameter.AmbientAndDiffuse, Color4.White);
+                GL.Disable(EnableCap.ColorMaterial);
+                //GL.Material(MaterialFace.Front, MaterialParameter.AmbientAndDiffuse, Color4.White);
             }
 
             camera.OlharPara(tabuleiro.Esfera.Posicao.X, tabuleiro.Esfera.Posicao.Y, tabuleiro.Esfera.Posicao.Z);

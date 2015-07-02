@@ -18,18 +18,25 @@ namespace JogoLabirinto.ObjetosGraficos
         {
             AntesDeDesenhar(() =>
             {
-                if (!visivel)
-                    return;
+                if (visivel)
+                {
+                    //DesenharVetorVelocidade();
 
-                GL.Color3(Color.Red);
-                Glut.glutSolidSphere(.5f, 10, 10);
+                    GL.Color3(Color.Red);
+                    Glut.glutSolidSphere(.5f, 10, 10);
+                }
             });
         }
 
         protected override void DesenharObjeto()
         {
             if (visivel)
+            {
                 DesenharVetorVelocidade();
+
+                //GL.Color3(Color.Red);
+                //Glut.glutSolidSphere(.5f, 10, 10);
+            }
         }
 
         private void DesenharVetorVelocidade()
