@@ -39,10 +39,7 @@ namespace JogoLabirinto.Jogo.GeracaoCenarios
 
                             var posicaoEsfera = new Vector3d(posicaoInicial.X, posicaoInicial.Y + 1, posicaoInicial.Z);
 
-                            var esfera = new Esfera(posicaoEsfera)
-                            {
-                                //BoundingBox = new BoundingBox()
-                            };
+                            var esfera = new Esfera(posicaoEsfera);
                             objetosCenario.Esfera = esfera;
                             MotorColisoes.Esfera = esfera;
                             break;

@@ -128,23 +128,11 @@ namespace JogoLabirinto
             }
             else
             {
-                //if (colorMaterial)
-                //{
-                //    gl.glEnable(GL.GL_COLOR_MATERIAL); // https://www.opengl.org/sdk/docs/man2/xhtml/glColorMaterial.xml
-                //    gl.glColor3f(cor[0], cor[1], cor[2]);
-                //}
-                //else
-                //{
                 GL.Material(MaterialFace.Front, MaterialParameter.AmbientAndDiffuse, Color4.White);
-                // https://www.opengl.org/sdk/docs/man2/xhtml/glMaterial.xml  	
-                //}
             }
 
             camera.OlharPara(tabuleiro.Esfera.Posicao.X, tabuleiro.Esfera.Posicao.Y, tabuleiro.Esfera.Posicao.Z);
 
-
-
-            //DesenharEixos();
             skybox.Desenhar();
             tabuleiro.Desenhar();
 
