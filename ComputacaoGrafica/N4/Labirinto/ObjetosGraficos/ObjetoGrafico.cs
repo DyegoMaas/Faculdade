@@ -39,6 +39,7 @@ namespace JogoLabirinto.ObjetosGraficos
                     GraphicUtils.DesenharFace(face);
                 }
 
+                GL.LineWidth(1);
                 DesenharObjeto();
 
                 if (Wireframe)

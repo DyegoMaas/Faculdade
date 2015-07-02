@@ -145,9 +145,11 @@ namespace JogoLabirinto
 
 
             //DesenharEixos();
-            linhasReferencia.Desenhar();
             skybox.Desenhar();
             tabuleiro.Desenhar();
+
+            if(exibirLinhasReferencia)
+                linhasReferencia.Desenhar();
 
             GL.Disable(EnableCap.Lighting);
             SwapBuffers();
@@ -206,7 +208,7 @@ namespace JogoLabirinto
             camera.Atualizar();
         }
 
-        private bool rodando;
+        private bool rodando, exibirLinhasReferencia = false;
         void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
             if (e.Key == Key.Enter || e.Key == Key.Space)
@@ -230,6 +232,9 @@ namespace JogoLabirinto
             if (e.Key == Key.Number3) camera.AproximarComEfeito(zoomIn:true, zoomOut:false);
             if (e.Key == Key.Number4) camera.AproximarComEfeito(zoomIn:false, zoomOut:true);
             if (e.Key == Key.Number5) camera.AproximarComEfeito(zoomIn:true, zoomOut:true); // Dolly effect, utilizada no filme Vertigo
+
+            if (e.Key == Key.F1)
+                exibirLinhasReferencia = !exibirLinhasReferencia;
         }
 
         private void Zoom(KeyboardState teclado)
