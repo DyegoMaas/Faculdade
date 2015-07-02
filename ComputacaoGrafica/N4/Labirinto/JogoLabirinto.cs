@@ -102,7 +102,8 @@ namespace JogoLabirinto
 
             camera = new Camera(new Vector3d(30, 40, 30), Width, Height);
             skybox = new Skybox();
-            skybox.CarregarTexturas();
+
+            ContentManager.CarregarTexturas();
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
