@@ -17,6 +17,7 @@ namespace JogoLabirinto
         private Camera camera;
         private Tabuleiro tabuleiro;
         private LinhasReferencia linhasReferencia;
+        private Skybox skybox;
 
         private bool ligarLuzes = true;
 
@@ -100,6 +101,8 @@ namespace JogoLabirinto
             linhasReferencia = new LinhasReferencia(numeroLinhas:1000, distanciaEntreLinhas:10);
 
             camera = new Camera(new Vector3d(30, 40, 30), Width, Height);
+            skybox = new Skybox();
+            skybox.CarregarTexturas();
         }
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
@@ -107,15 +110,15 @@ namespace JogoLabirinto
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
-            GL.PushMatrix();
-            {
-                GL.Translate(0, 0, 0);
-                GL.Scale(2,2,2);
-                GL.Color4(1,1,1,1);
-                Glut.glutStrokeString(Glut.GLUT_STROKE_ROMAN, "lalalala");
-                Glut.glutStrokeLength(Glut.GLUT_STROKE_ROMAN, "lalalala");
-            }
-            GL.PopMatrix();
+            //GL.PushMatrix();
+            //{
+            //    GL.Translate(10, 0, 0);
+            //    GL.Scale(2,2,2);
+            //    GL.Color4(1,1,1,1);
+            //    Glut.glutStrokeString(Glut.GLUT_STROKE_ROMAN, "lalalala");
+            //    Glut.glutStrokeCharacter(Glut.GLUT_STROKE_ROMAN, 'a');
+            //}
+            //GL.PopMatrix();
 
             if (ligarLuzes)
             {
@@ -141,8 +144,9 @@ namespace JogoLabirinto
 
 
 
-            DesenharEixos();
+            //DesenharEixos();
             linhasReferencia.Desenhar();
+            skybox.Desenhar();
             tabuleiro.Desenhar();
 
             GL.Disable(EnableCap.Lighting);

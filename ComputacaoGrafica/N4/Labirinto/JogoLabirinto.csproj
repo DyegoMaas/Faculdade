@@ -94,6 +94,7 @@
     <Compile Include="ObjetosGraficos\Esfera.cs" />
     <Compile Include="ObjetosGraficos\Face.cs" />
     <Compile Include="Jogo\GeracaoCenarios\GeradorCenario.cs" />
+    <Compile Include="ObjetosGraficos\Skybox.cs" />
     <Compile Include="Utils\GraphicUtils.cs" />
     <Compile Include="ObjetosGraficos\IObjetoGrafico.cs" />
     <Compile Include="Jogo\IObjetoInteligente.cs" />
@@ -118,7 +119,26 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Imagens\Night_01A_back.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Imagens\Night_01A_down.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Imagens\Night_01A_front.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Imagens\Night_01A_left.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Imagens\Night_01A_right.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Imagens\Night_01A_up.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
