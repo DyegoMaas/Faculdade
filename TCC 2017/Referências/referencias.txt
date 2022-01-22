@@ -1,0 +1,79 @@
+Recursos para implementação:
+-broker de testes da eclipse
+-gist sobre pagina de credencias: https://gist.github.com/dogrocker/f998dde4dbac923c47c1
+-https://github.com/Toshik/TickerScheduler
+
+
+
+----------------------------------
+
+Protocolos para IoT (CoAP e MQTT e outros): http://embedded-computing.com/articles/internet-things-requirements-protocols/
+
+EPE_Relatorio_Final_BEN_2016_balanco_energetico_nacional.pdf - https://ben.epe.gov.br/downloads/Relatorio_Final_BEN_2016.pdf
+
+COBEE = Congresso Brasileiro de Eficiência Elétrica
+Contribuição da Eficiência Energética na Expansão da Oferta de Energia (13º COBEE, 2016, p25) - https://www.slideshare.net/slides-mci/contribuio-da-eficincia-energtica-na-expanso-da-oferta-de-energia?ref=http://www.cobee.com.br/apresentacoes.php
+
+
+
+ABESCO
+ABESCO faz levantamento e mostra o tamanho do desperdício energético do país – Revista EXAME
+http://www.abesco.com.br/pt/novidade/quisque-placerat-auctor-consectetur/
+Brasil desperdiça R$ 12 bi em 5 anos (2015) - http://www.abesco.com.br/pt/novidade/brasil-desperdica-r-12-bi-em-5-anos/
+
+Greenpeace
+Relatório das Hidrelétricas no Brasil - http://www.greenpeace.org/brasil/Global/brasil/documentos/2016/relatorio_hidreletricas_na_amazonia.pdf
+
+
+Observação: no primeiro parágrafo, pode ser citado esse artigo:
+[Alternativamente, citar reportagem de O Globo em http://blogs.oglobo.globo.com/panorama-politico/post/producao-de-energia-e-preservacao-ambiental.html]
+
+
+----------------------------------
+GREENPEACE - A Hidrelétrica de São Luiz do Tapajós: 13 – Barragem, hidrovia e falsas promessas
+http://amazoniareal.com.br/a-hidreletrica-de-sao-luiz-do-tapajos-13-barragem-hidrovia-e-falsas-promessas/
+
+NOTAS
+
+[1] CNEC Worley Parsons Engenharia, S.A. 2014. EIA: AHE São Luiz do Tapajós; Estudo de Impacto Ambiental, Aproveitamento Hidrelétrico São Luiz do Tapajós. CNEC (Consórcio Nacional dos Engenheiros Consultores), São Paulo, SP. 25 Vols. + anexos. http://licenciamento.ibama.gov.br/Hidreletricas/São%20Luiz%20do%20Tapajos/EIA_RIMA/
+
+[2] Fariello, D. 2014. Governo marca leilão para hidrelétrica no Rio Tapajós, mas não consulta Funai: Parecer da entidade é necessário para emissão de licença ambiental em obras que afetam terras indígenas. O Globo. 13/09/2014 http://oglobo.globo.com/economia/infraestrutura/governo-marca-leilao-para-hidreletrica-no-rio-tapajos-mas-nao-consulta-funai-13925833
+
+[3] Fonseca, B. 2014. Entenda como se desenvolveu a disputa pelo futuro da bacia do Tapajós, um dos últimos grandes rios da Amazônia de potencial hidrelétrico inexplorado. Publica, 11 de dezembro de 2014. http://apublica.org/linha-do-tempo-decadas-de-luta-pelo-tapajos/
+
+[4] Borges, A. 2014. Hidrelétrica no Tapajós é adiada para 2020. O Estado de São Paulo, 01 de outubro de 2014. http://economia.estadao.com.br/noticias/geral,hidreletrica-no-tapajos-e-adiada-para-2020-imp-,1568849
+
+[5] Borges, A. 2015. Hidrelétrica do Tapajós vai a leilão no 2º semestre de 2016. O Estado de São Paulo, 25 de dezembro de 2015. http://economia.estadao.com.br/noticias/geral,hidreletrica-do-tapajos-vai-a-leilao-no-2o-semestre-de-2016,1815305
+
+[6] G1. 2016. Funai reconhece ocupação indígena em área de construção de usina no PA. G1, Globo Comunicação e Participações S.A., 20 de abril de 2016. http://g1.globo.com/pa/para/noticia/2016/04/funai-reconhece-ocupacao-indigena-em-area-de-construcao-de-usina-no-pa.html
+
+[7] G1. 2016. Ibama suspende licença ambiental da hidrelétrica de São Luiz do Tapajós. G1, Globo Comunicação e Participações S.A., 22 de abril de 2016. http://g1.globo.com/pa/para/noticia/2016/04/ibama-suspende-licenca-ambiental-da-hidreletrica-de-sao-luiz-do-tapajos.html
+
+[8] ISA (Instituto Socioambiental). 2016. Ministério da Justiça declara mais três Terras Indígenas. ISA, 25 de abril de 2016. https://www.socioambiental.org/pt-br/blog/blog-do-monitoramento/ministerio-da-justica-declara-mais-tres-terras-indigenas
+
+[9] ISA (Instituto Socioambiental). 2016. Governo declara duas Terras Indígenas e identifica quatro. ISA, 20 de abril de 2016. https://www.socioambiental.org/pt-br/noticias-socioambientais/governo-declara-duas-terras-indigenas-e-identifica-quatro
+
+[10] Bergamon, M. 2016. “Nenhum direito é absoluto, e país precisa funcionar” Folha de São Paulo, 16 de maio de 2016, p. A-14.
+
+[11] Brasil, MT (Ministério dos Transportes). 2010. Diretrizes da Política Nacional de Transporte Hidroviário. MT, Secretaria de Política Nacional de Transportes, Brasília, DF. http://www2.transportes.gov.br/Modal/Hidroviario/PNHidroviario.pdf
+
+[12] Fearnside, P.M. 2015. Amazon dams and waterways: Brazil’s Tapajós Basin plans. Ambio 44: 426-439. doi: 10.1007/s13280-015-0642-z
+
+[13] CNEC Worley Parsons Engenharia, S.A. 2014. Estudo de Viabilidade do AHE São Luiz do Tapajós. CNEC (Consórcio Nacional dos Engenheiros Consultores), São Paulo, SP. 11 Vols. + anexos.
+
+[14] Isto é uma tradução parcial atualizada de Fearnside, P.M. 2015. Brazil’s São Luiz do Tapajós Dam: The art of cosmetic environmental impact assessments. Water Alternatives 8(3): 373-396, disponível aqui. As pesquisas do autor são financiadas por: Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq) (processos nº305880/2007-1, nº304020/2010-9, nº573810/2008-7, nº575853/2008-5), Fundação de Amparo à Pesquisa do Estado do Amazonas (FAPEAM) (processo nº 708565) e Instituto Nacional de Pesquisas da Amazônia (INPA) (PRJ13.03). O Greenpeace custeou despesas de viagem no Tapajós [15]. M.A. dos Santos Junior fez os mapas. N. Hamada e P.M.L.A. Graça contribuíram comentários. Agradeço especialmente aos Mundurukus.
+
+[15] Fearnside, P.M. 2015. Impactos nas comunidades indígenas e tradicionais. p. 19-29 In: R. Nitta & L.N. Naka (eds.) Barragens do rio Tapajós: Uma avaliação crítica do Estudo e Relatório de Impacto Ambiental (EIA/RIMA) do Aproveitamento Hidrelétrico São Luiz do Tapajós. Greenpeace Brasil, São Paulo, SP. 99 p. http://greenpeace.org.br/tapajos/docs/analise-eia-rima.pdf
+
+------------------------------------------------
+
+
+
+
+
+CNEC Worley Parsons (2014a) : volume 13 parte I: 149
+
+http://www.gazetadopovo.com.br/economia/aparelho-em-stand-by-eleva-conta-em-ate-20-0rneb09bnlyfyop0gc3sq1k78
+https://www.espacoacademico.com.br/005/05mendes.htm (revista digital)
+
+SILVA FILHO, Antônio Mendes da. O Consumo de Energia no Modo Standby. Disponível em: <https://www.espacoacademico.com.br/005/05mendes.htm>. Acesso em: 25 mar. 2017.

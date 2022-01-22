@@ -1,0 +1,31 @@
+Roteiro da apresentação:
+
+0 - Abrir Connectify com as seguintes configurações:
+ - Sem compartilhamento de Internet 
+ - Roteado
+
+1 - Subir a imagem docker: 
+docker run -it -p 1883:1883 -p 9001:9001 eclipse-mosquitto
+
+2 - Subir o backend:
+Smarthings\Service.exe
+
+3 - Abrir o PgAdmin III
+
+4 - Subir a aplicação web:
+static -a 192.168.137.1
+
+5.0 - Conectar o celular na rede do Connectify;
+5.1 - Abrir o Vysor no notebook;
+5.2 - Conectar o celular no notebook com o cabo branco;
+5.3 - Acessar a interface no celular através do atalho da área de trabalho
+
+6.0 - Resetar a configuração do plugue
+6.1 - Resetar credenciais
+6.2 - Desativar o plugue atual
+
+192.168.137.1
+
+
+
+obs.: adicionar referência do porquê de um 1W

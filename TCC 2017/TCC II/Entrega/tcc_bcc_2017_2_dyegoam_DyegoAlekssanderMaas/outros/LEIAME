@@ -1,0 +1,2 @@
+Caso não seja possível restaurar os pacotes nuget, descompacte o arquivo 'bibliotecas-aplicacao-backend.zip' no diretório 'Aplicacao/packages'.
+Caso não seja possível instalar as bibliotecas de frontend com o Bower, descompacte o arquivo 'bibliotecas-webinterface-vendor.zip' no diretório 'WebInterface/vendor'.

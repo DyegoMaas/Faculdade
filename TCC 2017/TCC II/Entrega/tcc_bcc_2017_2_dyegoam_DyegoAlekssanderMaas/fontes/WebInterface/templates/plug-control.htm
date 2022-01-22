@@ -1,0 +1,74 @@
+<script id="plug-control" type="text/html">
+    <div class="col-lg-4">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                {{name}}
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <span>Estado</span>
+                            <input type="checkbox" name="switch" id="plugState_{{plugId}}" {{#isOn}}checked{{/isOn}}>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-cog"></i> Novo agendamento
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label>Ação</label>
+                                    <select class="form-control" id="selectAction_{{plugId}}">
+                                        <option value="1" selected>Ligar</option>
+                                        <option value="2">Desligar</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Executar em</label>
+                                    <input class="form-control" placeholder="Ex.: 10" id="executeIn_{{plugId}}" onkeypress="return isNumber(event)" />
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="selectPeriodicity_{{plugId}}">
+                                        <option value="1" selected>Segundos</option>
+                                        <option value="2">Minutos</option>
+                                        <option value="3">Horas</option>
+                                        <option value="4">Dias</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-outline btn-success pull-right" id="btnScheduleAction_{{plugId}}">Criar agendamento</button>
+                            </div>                            
+                        </div>                        
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-calendar-o"></i> Agendamentos
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="list-group" id="schedulingsFor_{{plugId}}">
+                                    
+                                </div>
+                                <!-- /.list-group -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                    </div>
+                </div>                
+            </div>   
+            <div class="panel-foot">
+                <span>{{plugId}}</span>
+            </div>    
+        </div>
+    </div>
+</script>

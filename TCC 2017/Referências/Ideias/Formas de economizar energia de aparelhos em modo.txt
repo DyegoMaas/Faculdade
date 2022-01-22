@@ -1,0 +1,21 @@
+Formas de economizar energia de aparelhos em modo standby:
+
+-Quando se está dentro de casa
+O app avisa ao usuário (diagnóstico) quais aparelhos estão consumindo energia elétrica em modo standby e faz uma previsão de quanto isso vai custar no fim do ano.
+O usuário pode ligar/desligar manualmente, ou agendar horários em que gostaria que determinados aparelhos estivessem disponíveis em modo standby.
+
+-Quando se está fora de casa
+Quando os plugues identificam que nenhum usuário está em casa, podem passar para o comportamento no perfil Away Mode. 
+Neste perfil, todos os plugues serão desligados, exceto aqueles que o usuário determinar que devem permanecer conectados (como geladeira ou computador).
+
+-Formas de identificar se tem alguém em casa
+Manual: 
+	-O usuário identifica no aplicativo que saiu/chegou em casa. (Alternativamente, poderia ser feito com um Amazon Button)
+Automático:
+	-GPS: requer que todos os usuários da casa tenham GPS ligado. (INVIÁVEL)
+	-Bluetooth: todos os usuários da casa conectam aos plugues via Bluetooth. Através do RSSI é possível identificar se não tem ninguém. 
+
+Conclusões
+Os plugues terão modos de trabalho diferentes para quando o usuário estiver ou não em casa.
+A forma mais simples de identificar se o usuário está em casa, é deixar que o usuário informe que não tem ninguém em casa.
+Seria interessante suportar múltiplos usuários controlando os plugues (perfis familiares), mas não é mandatório para o protótipo.

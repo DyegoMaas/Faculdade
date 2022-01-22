@@ -1,0 +1,23 @@
+﻿<Window x:Class="Analisador.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Reconhecedor de Linguagens Regulares" Height="565" Width="800">
+    <Grid>       
+        <StackPanel Height="Auto" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" ClipToBounds="False" UseLayoutRounding="False">
+            <TextBox Name="txtEntrada" TextWrapping="Wrap" Width="Auto" Height="200" AcceptsReturn="True" AcceptsTab="True" />
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Analisar" Height="23" HorizontalAlignment="Left" Margin="0,0,0,0" Name="btAnalisar" VerticalAlignment="Top" Width="75" Click="btAnalisar_Click" />
+                <Button Content="Limpar" Height="23" Width="75" Margin="5,0,0,0" Name="btLimpar" Click="btLimpar_Click" />
+                <Button Content="Equipe" Height="23" Width="75" Margin="5,0,0,0" Name="btEquipe" Click="btEquipe_Click" />
+            </StackPanel>
+            <DataGrid Height="300" Name="dgDados" AutoGenerateColumns="False" RowBackground="Azure" AlternatingRowBackground="LightSteelBlue">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Linha" Width="50" Binding="{Binding Linha}" />
+                    <DataGridTextColumn Header="Resultado" Width="150" Binding="{Binding Resultado}" />
+                    <DataGridTextColumn Header="Sequência" Width="300" Binding="{Binding Sequencia}" />
+                    <DataGridTextColumn Header="Reconhecimento" Width="300" Binding="{Binding Reconhecimento}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Window>
