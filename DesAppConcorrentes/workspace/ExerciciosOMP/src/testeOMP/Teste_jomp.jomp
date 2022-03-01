@@ -1,0 +1,31 @@
+package testeOMP;
+
+import jomp.runtime.*;
+
+public class Teste_jomp {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		int[][] array = new int[50][100];
+		
+		int myid, x;
+		OMP.setNumThreads(5);
+		
+		//omp parallel private(myid) shared(x) 
+		{
+			for(x = 0; x < array.length; x++) {
+				myid = OMP.getThreadNum();
+				System.out.println("My ID is" + myid);
+	//			for(int y = 0; y < array[x].length; y++) {
+	//				
+	//			}
+			}
+		}
+		
+		
+		
+	}
+
+}

@@ -1,0 +1,1 @@
+Para rodar o programa, é necessário colocar o arquivo texto no diretório raiz.

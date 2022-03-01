@@ -1,0 +1,35 @@
+package testeOMP;
+
+import jomp.runtime.*;
+
+public class TesteSoma_jomp {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		int somaCorreta = 0;
+		int[] array = new int[50];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = i * 2;
+			somaCorreta += array[i];
+		}
+		
+		int myid, soma = 0;
+		OMP.setNumThreads(50);
+		
+		//omp parallel private(mydid, soma) reduction(+:soma) 
+		{					
+			myid = OMP.getThreadNum();
+			soma = array[myid];		
+			System.out.println("Eu (" + myid + ") somei " + array[myid]);
+		}
+		
+		int sum2 = 0;
+		for (int i = 0; i < array.length; i++) {
+			sum2 += array[i];
+		}
+		
+		System.out.println("Soma: " + soma + ", somaCorreta: " + somaCorreta);
+	}
+}
